@@ -1,0 +1,5 @@
+backup
+node_modules
+coverage/
+lib/
+lib-types/
