@@ -1,1 +1,1 @@
-export { sum } from "@/temp"
+export * from "./note"
