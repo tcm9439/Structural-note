@@ -12,22 +12,22 @@ function compareComponentsOrder(components: OrderedComponents<Note>, note_ids: N
 
 describe('OrderedComponents', () => {
     let components: OrderedComponents<Note>
-    let note_ids: Note[]
+    let notes: Note[]
 
     beforeEach(() => {
         components = new OrderedComponents()
-        note_ids = []
+        notes = []
         let note: Note = new Note("Title 1")
         components.add(note)
-        note_ids.push(note)
+        notes.push(note)
 
         note = new Note("Title 2")
         components.add(note)
-        note_ids.push(note)
+        notes.push(note)
 
         note = new Note("Title 3")
         components.add(note)
-        note_ids.push(note)
+        notes.push(note)
     })
 
 	it('constructor', () => {
@@ -35,14 +35,14 @@ describe('OrderedComponents', () => {
 	})
 
     it('order', () => {
-        compareComponentsOrder(components, note_ids, [0, 1, 2])
+        compareComponentsOrder(components, notes, [0, 1, 2])
     })
 
     it('add', () => {
         const note = new Note("Title 4")
         components.add(note)
-        note_ids.push(note)
-        compareComponentsOrder(components, note_ids, [0, 1, 2, 3])
+        notes.push(note)
+        compareComponentsOrder(components, notes, [0, 1, 2, 3])
 
         expect(() => components.add(note)).toThrowError(/already exists/)
         expect(components.length()).toBe(4)
@@ -51,11 +51,11 @@ describe('OrderedComponents', () => {
     it('remove', () => {
         const note = new Note("Title 4")
         components.add(note)
-        note_ids.push(note)
-        compareComponentsOrder(components, note_ids, [0, 1, 2, 3])
+        notes.push(note)
+        compareComponentsOrder(components, notes, [0, 1, 2, 3])
 
         components.remove(note)
-        compareComponentsOrder(components, note_ids, [0, 1, 2])
+        compareComponentsOrder(components, notes, [0, 1, 2])
 
         expect(() => components.remove(note)).toThrowError(/not exist/)
         expect(components.length()).toBe(3)
@@ -69,26 +69,30 @@ describe('OrderedComponents', () => {
         expect(components.get(note.id)).toBe(note)
     })
 
+    it("get ordered components", () => {
+        expect(components.orderedComponents).toStrictEqual(notes)
+    })
+
     it('moveUp', () => {
-        components.moveUp(note_ids[1])
-        compareComponentsOrder(components, note_ids, [1, 0, 2])
+        components.moveUp(notes[1])
+        compareComponentsOrder(components, notes, [1, 0, 2])
 
-        components.moveUp(note_ids[0])
-        compareComponentsOrder(components, note_ids, [0, 1, 2])
+        components.moveUp(notes[0])
+        compareComponentsOrder(components, notes, [0, 1, 2])
 
-        components.moveUp(note_ids[0])
-        compareComponentsOrder(components, note_ids, [0, 1, 2])
+        components.moveUp(notes[0])
+        compareComponentsOrder(components, notes, [0, 1, 2])
     })
 
     it('moveDown', () => {
-        components.moveDown(note_ids[1])
-        compareComponentsOrder(components, note_ids, [0, 2, 1])
+        components.moveDown(notes[1])
+        compareComponentsOrder(components, notes, [0, 2, 1])
 
-        components.moveDown(note_ids[0])
-        compareComponentsOrder(components, note_ids, [2, 0, 1])
+        components.moveDown(notes[0])
+        compareComponentsOrder(components, notes, [2, 0, 1])
 
-        components.moveDown(note_ids[1])
-        compareComponentsOrder(components, note_ids, [2, 0, 1])
+        components.moveDown(notes[1])
+        compareComponentsOrder(components, notes, [2, 0, 1])
     })
 
     it('getter', () => {

@@ -14,6 +14,13 @@ export class OrderedComponents<T extends ComponentBase> {
         return this._components
     }
 
+    /**
+     * Return a list of components according to the order.
+     */
+    get orderedComponents(): T[] {
+        return this.order.order.map(id => this._components.get(id) as T)
+    }
+
     length(): number {
         return this._order.length()
     }

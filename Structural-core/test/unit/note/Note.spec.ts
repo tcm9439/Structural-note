@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest"
 import { Note } from '@/note'
-import { TextAreaSection } from '@/note/section'
+import { NoteSection } from '@/note/section'
 
 describe('Note', () => {
     let note: Note 
@@ -22,7 +22,7 @@ describe('Note', () => {
         expect(note.sections).not.toBeUndefined()
         expect(note.sections.length()).toBe(0)
 
-        let section1 = new TextAreaSection("Section 1")
+        let section1 = new NoteSection("Section 1")
         note.sections.add(section1)
         expect(note.sections.length()).toBe(1)
         expect(note.sections.get(section1.id)).toBe(section1)

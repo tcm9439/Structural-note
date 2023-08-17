@@ -1,10 +1,12 @@
-import { ComponentBase } from "@/note/common"
+import { ComponentBase, OrderedComponents } from "@/note/common"
+import { NoteElement } from "@/note/element"
 
 /**
  * A section of a note.
  */
-export abstract class NoteSection extends ComponentBase {
+export class NoteSection extends ComponentBase {
     private _title: string
+    private _elements: OrderedComponents<NoteElement> = new OrderedComponents()
 
     constructor(title: string) {
         super()
@@ -13,5 +15,9 @@ export abstract class NoteSection extends ComponentBase {
 
     get title(): string {
         return this._title
+    }
+
+    get elements(): OrderedComponents<NoteElement> {
+        return this._elements
     }
 }
