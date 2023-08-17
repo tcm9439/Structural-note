@@ -11,6 +11,7 @@ echo "Unistalling..."
 echo ======================
 npm uninstall ../Structural-core 
 rm -rf ./node_modules/.vite
+rm -f ./node_modules/structural-core
 
 echo
 echo ======================
@@ -23,4 +24,4 @@ echo
 echo ======================
 echo "Checking..."
 echo ======================
-ls -lah ./Structural-app/node_modules/ | grep structural-core
+ls -lah ../Structural-app/node_modules/ | grep structural-core

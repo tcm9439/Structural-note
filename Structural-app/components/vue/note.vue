@@ -8,8 +8,13 @@ const props = defineProps<{
 </script>
 
 <template>
-    <h1>{{ props.note.title }}</h1>
-    <template  v-for="(value, index) of props.note.sections.components" :key="value[0]">
-        <vue-section-text-section :text_section="value[1]" />
+    <Card>
+        <template #title>
+            {{ props.note.title }}
+        </template>
+    
+        <template  v-for="(value, index) of props.note.sections.orderedComponents" :key="value.id">
+        <vue-section-note-section :section="value" />
     </template>
+    </Card>    
 </template>
