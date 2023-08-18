@@ -1,4 +1,5 @@
-import { UUID } from "crypto"
+import { UUID } from "@/common/CommonTypes"
+import { v4 as uuidv4 } from 'uuid';
 
 export abstract class ComponentBase {
     private readonly _id: UUID
@@ -12,6 +13,6 @@ export abstract class ComponentBase {
     }
 
     public static generateNewId(): UUID {
-        return crypto.randomUUID()
+        return uuidv4()
     }
 }

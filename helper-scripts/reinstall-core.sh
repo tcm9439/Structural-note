@@ -10,8 +10,10 @@ echo ======================
 echo "Unistalling..."
 echo ======================
 npm uninstall ../Structural-core 
-rm -rf ./node_modules/.vite
+npx nuxi clean
+# rm -rf ./node_modules/.vite
 rm -f ./node_modules/structural-core
+# rm -f ./node_modules/.cache/vite/client/deps/structural-core.js*
 
 echo
 echo ======================

@@ -1,4 +1,4 @@
-import { UUID } from "crypto"
+import { UUID } from "@/common/CommonTypes"
 import { OrderedList } from "@/common/OrderedList"
 import { ComponentBase } from "@/note/common"
 

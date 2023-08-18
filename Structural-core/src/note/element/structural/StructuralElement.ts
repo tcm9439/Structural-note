@@ -1,4 +1,4 @@
-import { UUID } from "crypto"
+import { UUID } from "@/common/CommonTypes"
 import { AttributeValue, StructureDefinition } from "@/note/element/structural"
 import { NoteElement } from "@/note/element"
 /**

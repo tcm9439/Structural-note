@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Note } from "structural-core"
+import { Note, StructuralSection } from "structural-core"
 
 const props = defineProps<{
     note: Note,
@@ -14,7 +14,12 @@ const props = defineProps<{
         </template>
     
         <template  v-for="(value, index) of props.note.sections.orderedComponents" :key="value.id">
-        <vue-section-note-section :section="value" />
-    </template>
+            <template v-if="(value instanceof StructuralSection)">
+                <vue-section-structural-section :section="value" />
+            </template>
+            <template v-else>
+                <vue-section-note-section :section="value" />
+            </template>
+        </template>
     </Card>    
 </template>

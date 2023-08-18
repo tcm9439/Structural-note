@@ -4,10 +4,6 @@ import { AttributeDefinition, StringAttribute } from '@/note/element/structural/
 describe('AttributeDefinition', () => {
 	let definition: AttributeDefinition<string>
 
-    // beforeEach(() => {
-    //     definition = new AttributeDefinition("test", StringAttribute.instance)
-    // })
-
     it('constructor & getter', () => {
         definition = new AttributeDefinition("test", StringAttribute.instance)
         expect(definition.name).toBe("test")
