@@ -12,14 +12,16 @@ const props = defineProps<{
         <template #title>
             {{ props.note.title }}
         </template>
-    
-        <template  v-for="(value, index) of props.note.sections.orderedComponents" :key="value.id">
-            <template v-if="(value instanceof StructuralSection)">
-                <vue-section-structural-section :section="value" />
-            </template>
-            <template v-else>
-                <vue-section-note-section :section="value" />
-            </template>
+        
+        <template v-for="(value, index) of props.note.sections.ordered_components" :key="value.id">
+            <Form>
+                <template v-if="(value instanceof StructuralSection)">
+                    <vue-section-structural :section="value" />
+                </template>
+                <template v-else>
+                    <vue-section-base :section="value" />
+                </template>
+            </Form>
         </template>
     </Card>    
 </template>

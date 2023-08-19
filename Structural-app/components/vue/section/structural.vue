@@ -7,9 +7,9 @@ const props = defineProps<{
 </script>
 
 <template>
-    <vue-section-note-section :section="props.section">
+    <vue-section-base :section="props.section">
         <template #operations>
             <Button type="primary">TODO</Button>
         </template>
-    </vue-section-note-section>
+    </vue-section-base>
 </template>

@@ -15,12 +15,12 @@ const props = defineProps<{
 
         <slot name="operations"></slot>
     
-        <template v-for="(value, index) of props.section.elements.orderedComponents" :key="value.id">
+        <template v-for="(value, index) of props.section.elements.ordered_components" :key="value.id">
             <template v-if="(value instanceof TextElement)">
-                <vue-element-text-element :text="value" />
+                <vue-element-text :text="value" />
             </template>
             <template v-else-if="(value instanceof StructuralElement)">
-                <div>TODO</div>
+                <vue-element-structural :struct_element="value" />
             </template>
         </template>
     </Card>
