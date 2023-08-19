@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach } from "vitest"
 import { OrderedList } from "@/common/OrderedList"
 import { OrderedComponents } from '@/note/common/OrderedComponents'
-import { Note } from "@/note"
+import { Note } from "@/note/Note"
+import { UUID } from "@/common/CommonTypes"
 
 function compareComponentsOrder(components: OrderedComponents<Note>, note_ids: Note[], expected_order_index: number[]): void {
     expect(components.length()).toBe(expected_order_index.length)
@@ -70,7 +71,15 @@ describe('OrderedComponents', () => {
     })
 
     it("get ordered components", () => {
-        expect(components.orderedComponents).toStrictEqual(notes)
+        expect(components.ordered_components).toStrictEqual(notes)
+    })
+
+    it("orderByList", () => {
+        const order = new OrderedList<UUID>()
+        order.add(notes[2].id)
+        order.add(notes[0].id)
+        order.add(notes[1].id)
+        expect(OrderedComponents.orderByList(components.components, order)).toStrictEqual([notes[2], notes[0], notes[1]])
     })
 
     it('moveUp', () => {

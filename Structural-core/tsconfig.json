@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "target": "es6",
-        "module": "commonjs",
+        "module": "nodenext",
         "strict": true,
         "sourceMap": true,
         "esModuleInterop": true,

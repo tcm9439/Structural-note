@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { AttributeDefinition, NumberAttribute } from "@/note/element/structural"
+import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
+import { NumberAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
 
 describe('NumberAttribute', () => {
 	it("instance", () => {

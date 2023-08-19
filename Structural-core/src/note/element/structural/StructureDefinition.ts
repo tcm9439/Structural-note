@@ -1,5 +1,5 @@
-import { OrderedComponents } from "@/note/common"
-import { AttributeDefinition } from "@/note/element/structural"
+import { OrderedComponents } from "@/note/common/OrderedComponents"
+import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
 
 /**
  * A structure definition is a collection of attribute definitions.

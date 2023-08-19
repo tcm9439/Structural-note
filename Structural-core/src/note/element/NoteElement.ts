@@ -1,4 +1,4 @@
-import { ComponentBase } from "@/note/common"
+import { ComponentBase } from "@/note/common/ComponentBase"
 
 /**
  * An element of a section.

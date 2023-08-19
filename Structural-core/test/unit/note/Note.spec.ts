@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { Note } from '@/note'
-import { NoteSection } from '@/note/section'
+import { Note } from '@/note/Note'
+import { NoteSection } from '@/note/section/NoteSection'
 
 describe('Note', () => {
     let note: Note 

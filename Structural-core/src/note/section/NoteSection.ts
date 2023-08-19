@@ -1,5 +1,6 @@
-import { ComponentBase, OrderedComponents } from "@/note/common"
-import { NoteElement } from "@/note/element"
+import { ComponentBase } from "@/note/common/ComponentBase"
+import { NoteElement } from "@/note/element/NoteElement"
+import { OrderedComponents } from '@/note/common/OrderedComponents';
 
 /**
  * A section of a note.

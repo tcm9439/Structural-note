@@ -1,5 +1,6 @@
-import { ComponentBase } from "@/note/common"
-import { AttributeType, AttributeValue } from "@/note/element/structural/attribute"
+import { ComponentBase } from "@/note/common/ComponentBase"
+import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
+import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
 
 export class AttributeDefinition<T> extends ComponentBase {
     private _name: string

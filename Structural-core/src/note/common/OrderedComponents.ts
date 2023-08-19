@@ -1,6 +1,6 @@
 import { UUID } from "@/common/CommonTypes"
 import { OrderedList } from "@/common/OrderedList"
-import { ComponentBase } from "@/note/common"
+import { ComponentBase } from "@/note/common/ComponentBase"
 
 export class OrderedComponents<T extends ComponentBase> {
     private _components: Map<UUID, T> = new Map()
@@ -17,8 +17,12 @@ export class OrderedComponents<T extends ComponentBase> {
     /**
      * Return a list of components according to the order.
      */
-    get orderedComponents(): T[] {
-        return this.order.order.map(id => this._components.get(id) as T)
+    get ordered_components(): T[] {
+        return OrderedComponents.orderByList(this._components, this._order)
+    }
+
+    public static orderByList<T extends ComponentBase>(components: Map<UUID, T>, order: OrderedList<UUID>): T[] {
+        return order.order.map(id => components.get(id) as T)
     }
 
     length(): number {

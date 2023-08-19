@@ -1,5 +1,5 @@
-import { NoteSection } from "@/note/section"
-import { StructureDefinition } from "@/note/element/structural"
+import { NoteSection } from "@/note/section/NoteSection"
+import { StructureDefinition } from "@/note/element/structural/StructureDefinition"
 
 /**
  * A note section that

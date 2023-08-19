@@ -1,4 +1,7 @@
-import { AttributeDefinition, AttributeType, AttributeValue, StringAttribute } from "@/note/element/structural/attribute"
+import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
+import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
+import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
+import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
 
 export class BooleanAttribute extends AttributeType<boolean> {
     public static readonly TYPE: string = "NUMBER"

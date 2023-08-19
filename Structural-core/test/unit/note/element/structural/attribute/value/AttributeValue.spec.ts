@@ -1,5 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { AttributeValue, AttributeDefinition, StringAttribute } from "@/note/element/structural"
+import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
+import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
+import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
 
 describe('AttributeValue', () => {
 	let value: AttributeValue<any>
@@ -16,6 +18,8 @@ describe('AttributeValue', () => {
 
     it('definition', () => {
         expect(value.definition).toBe(definition)
+        expect(value.definition_id).toBe(definition.id)
+        expect(value.definition_type).toBe("STRING")
     })
 
     it('value getter setter', () => {

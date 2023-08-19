@@ -1,6 +1,7 @@
-import { AttributeValue, AttributeDefinition } from "@/note/element/structural/attribute"
-import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/note/element/structural/attribute/exception"
 import { ID } from "@/common/CommonTypes"
+import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
+import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
+import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/note/element/structural/attribute/exception/AttributeException"
 
 export interface AttributeValueConverter<OriType,NewType> {
     (value: OriType, mode?: any): NewType
@@ -49,22 +50,22 @@ export abstract class AttributeType<T> {
         }
     }
 
-    convertTo(value: T, attr_def: AttributeDefinition<T>, mode: ID = 0): AttributeValue<any> {
-        const type_str: string = attr_def.attributeType.type
-        const type: AttributeType<any> = attr_def.attributeType
+    convertTo<N>(value: T, new_attr_def: AttributeDefinition<N>, mode: ID = 0): AttributeValue<N> {
+        const new_type_str: string = new_attr_def.attributeType.type
+        const new_type: AttributeType<any> = new_attr_def.attributeType
 
-        if (this.isConvertibleTo(type_str)) {
-            const converter = this._converters.get(type_str)?.get(mode)
+        if (this.isConvertibleTo(new_type_str)) {
+            const converter = this._converters.get(new_type_str)?.get(mode)
             if (converter){
                 try {
                     let converted_value = converter(value, mode)
-                    return type.create(attr_def, converted_value)
+                    return new_type.create(new_attr_def, converted_value)
                 } catch (e) {
-                    throw new InvalidTypeConversionForDataException(this._type, type_str, value)
+                    throw new InvalidTypeConversionForDataException(this._type, new_type_str, value)
                 }   
             }
         }
-        throw new InvalidTypeConversionException(this._type, type_str)
+        throw new InvalidTypeConversionException(this._type, new_type_str)
     }
 
     abstract create(definition: AttributeDefinition<T>, value: T): AttributeValue<T>

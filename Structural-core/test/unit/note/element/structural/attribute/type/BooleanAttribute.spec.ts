@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { AttributeDefinition, BooleanAttribute } from "@/note/element/structural"
+import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
+import { BooleanAttribute } from "@/note/element/structural/attribute/type/BooleanAttribute"
 
 describe('BooleanAttribute', () => {
 	it("instance", () => {

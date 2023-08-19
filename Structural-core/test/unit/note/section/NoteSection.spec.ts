@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { NoteSection } from "@/note/section/"
-import { TextElement } from "@/note/element"
+import { NoteSection } from "@/note/section/NoteSection"
+import { TextElement } from "@/note/element/TextElement"
 
 describe("TextAreaSection", () => {
     let note_section: NoteSection
@@ -23,7 +23,7 @@ describe("TextAreaSection", () => {
     it("get elements", () => {
         expect(note_section.elements.length()).toBe(2)
 
-        let element = note_section.elements.orderedComponents[0] as TextElement
+        let element = note_section.elements.ordered_components[0] as TextElement
         expect(element.content).toBe("Content 1")
     })
 })

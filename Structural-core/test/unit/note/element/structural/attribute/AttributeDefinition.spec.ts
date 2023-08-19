@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { AttributeDefinition, StringAttribute } from '@/note/element/structural/attribute'
+import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
+import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
 
 describe('AttributeDefinition', () => {
 	let definition: AttributeDefinition<string>

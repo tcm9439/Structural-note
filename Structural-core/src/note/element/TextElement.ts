@@ -1,4 +1,4 @@
-import { NoteElement } from "@/note/element"
+import { NoteElement } from "@/note/element/NoteElement"
 
 /**
  * A note element that is 

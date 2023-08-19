@@ -1,6 +1,10 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { AttributeDefinition, AttributeType, AttributeValue, NumberAttribute, StringAttribute } from "@/note/element/structural/attribute"
-import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/note/element/structural/attribute/exception"
+import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
+import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
+import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
+import { NumberAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
+import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
+import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/note/element/structural/attribute/exception/AttributeException"
 
 class TestAttribute extends AttributeType<boolean> {
     public static readonly TYPE: string = "TEST"
@@ -22,7 +26,7 @@ class TestAttribute extends AttributeType<boolean> {
         return this._instance
     }
 
-    create(definition: AttributeDefinition, value: boolean): AttributeValue<boolean> {
+    create(definition: AttributeDefinition<boolean>, value: boolean): AttributeValue<boolean> {
         return new AttributeValue<boolean>(definition, value)
     }
 }
