@@ -1,6 +1,4 @@
 import { ID } from "@/common/CommonTypes"
-import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
-import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
 import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/note/element/structural/attribute/exception/AttributeException"
 
 export interface AttributeValueConverter<OriType,NewType> {
@@ -26,47 +24,52 @@ export abstract class AttributeType<T> {
     }
 
     get convertibleTo(): IterableIterator<string> {
-        return this._converters.keys()
+        return this.converters.keys()
     }
 
     get type(): string {
         return this._type
     }
 
+    private get converters(): Map<string, Map<ID, AttributeValueConverter<T, any>>> {
+        return this._converters
+    }
+
     isConvertibleTo(type: string): boolean {
-        return this._converters.has(type)
+        return this.converters.has(type)
     }
 
     addConvertibleType(type: string, convertFunction: AttributeValueConverter<T, any>, mode: ID = 0): void {
         // check if the type already has > 1 converters
-        if (this._converters.has(type)) {
+        if (this.converters.has(type)) {
             // add to the TYPE => converter map
-            this._converters.get(type)?.set(mode, convertFunction)
+            this.converters.get(type)?.set(mode, convertFunction)
         } else {
             // create the TYPE => converter map
             let converter_map = new Map()
             converter_map.set(mode, convertFunction)
-            this._converters.set(type, converter_map)
+            this.converters.set(type, converter_map)
         }
     }
 
-    convertTo<N>(value: T, new_attr_def: AttributeDefinition<N>, mode: ID = 0): AttributeValue<N> {
-        const new_type_str: string = new_attr_def.attributeType.type
-        const new_type: AttributeType<any> = new_attr_def.attributeType
+    convertTo<N>(new_attr_type: AttributeType<N>, value: T, mode: ID = 0): N {
+        const new_type_str: string = new_attr_type.type
+
+        // return the ori value if they are in the same type
+        if (this.type === new_type_str) {
+            return value as unknown as N
+        }
 
         if (this.isConvertibleTo(new_type_str)) {
-            const converter = this._converters.get(new_type_str)?.get(mode)
+            const converter = this.converters.get(new_type_str)?.get(mode)
             if (converter){
                 try {
-                    let converted_value = converter(value, mode)
-                    return new_type.create(new_attr_def, converted_value)
+                    return converter(value, mode)
                 } catch (e) {
                     throw new InvalidTypeConversionForDataException(this._type, new_type_str, value)
                 }   
             }
         }
-        throw new InvalidTypeConversionException(this._type, new_type_str)
+        throw new InvalidTypeConversionException(this.type, new_type_str)
     }
-
-    abstract create(definition: AttributeDefinition<T>, value: T): AttributeValue<T>
 }

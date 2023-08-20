@@ -1,5 +1,3 @@
-import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
-import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
 
@@ -24,9 +22,5 @@ export class NumberAttribute extends AttributeType<number> {
             this._instance = new NumberAttribute()
         }
         return this._instance
-    }
-
-    create(definition: AttributeDefinition<number>, value: number): AttributeValue<number> {
-        return new AttributeValue<number>(definition, value)
     }
 }

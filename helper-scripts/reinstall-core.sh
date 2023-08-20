@@ -1,3 +1,7 @@
+# cd to the dir of this file 
+# so that the following relative path will work even this script is called from other dir
+cd $(dirname $0)
+
 echo ======================
 echo "Building..."
 echo ======================

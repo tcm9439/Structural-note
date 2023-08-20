@@ -1,5 +1,3 @@
-import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
-import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
 import { NumberAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
 import { InvalidTypeConversionException } from '@/note/element/structural/attribute/exception/AttributeException'
@@ -26,9 +24,5 @@ export class StringAttribute extends AttributeType<string> {
             this._instance = new StringAttribute()
         }
         return this._instance
-    }
-
-    create(definition: AttributeDefinition<string>, value: string): AttributeValue<string> {
-        return new AttributeValue<string>(definition, value)
     }
 }

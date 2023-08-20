@@ -7,13 +7,14 @@
     "main": "./lib/index.js",
     "types": "./lib/api-index.d.js",
     "scripts": {
-        "test": "vitest --run  --globals --config ./vitest.config.js",
+        "test": "vitest --run --globals --config ./vitest.config.js",
         "test-ui": "vitest --ui",
         "test-c": "vitest run --coverage",
         "build": "tsc --project tsconfig-build.json && tsc-alias -p tsconfig-build.json",
         "build-types": "api-extractor run",
         "build-all": "npm run build && npm run build-types && npm run minify",
-        "minify": "minify-all-js ./lib"
+        "minify": "minify-all-js ./lib",
+        "dep": "ts_dependency_graph --start src/index.ts --graph_folder | dot -T svg > test/out/dependency-graph.svg"
     },
     "keywords": [],
     "author": "MaisyT",
@@ -25,6 +26,7 @@
         "@vitest/coverage-v8": "^0.34.1",
         "@vitest/ui": "^0.33.0",
         "minify-all-js": "^0.1.9",
+        "ts_dependency_graph": "^2.0.0",
         "tsc-alias": "^1.8.7",
         "typescript": "^5.1.6",
         "vitest": "^0.33.0"

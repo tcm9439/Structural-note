@@ -10,17 +10,13 @@ describe('AttributeDefinition', () => {
         expect(definition.name).toBe("test")
         expect(definition.description).toBe("")
         expect(definition.optional).toBe(false)
-        expect(definition.attributeType).toBe(StringAttribute.instance)
+        expect(definition.attribute_type).toBe(StringAttribute.instance)
+        expect(definition.attribute_type.type).toBe("STRING")
 
         definition = new AttributeDefinition("test", StringAttribute.instance, true, "description")
         expect(definition.name).toBe("test")
         expect(definition.description).toBe("description")
         expect(definition.optional).toBe(true)
-        expect(definition.attributeType).toBe(StringAttribute.instance)
-    })
-
-    it('create', () => {
-        definition = new AttributeDefinition("test", StringAttribute.instance)
-        expect(definition.create("test").value).toBe("test")
+        expect(definition.attribute_type).toBe(StringAttribute.instance)
     })
 })

@@ -1,4 +1,4 @@
-import { UUID } from "@/common/CommonTypes"
+import { UUID, ID } from "@/common/CommonTypes"
 import { ComponentBase } from "@/note/common/ComponentBase"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
 
@@ -20,11 +20,11 @@ export class AttributeValue<T> extends ComponentBase {
     }
 
     get definition_id(): UUID {
-        return this._definition.id
+        return this.definition.id
     }
 
-    get definition_type(): string {
-        return this._definition.attributeType.type
+    get definition_type_str(): string {
+        return this.definition.attribute_type.type
     }
 
     get value(): T {
@@ -33,5 +33,10 @@ export class AttributeValue<T> extends ComponentBase {
 
     set value(value: T) {
         this._value = value
+    }
+
+    convertTo<N>(new_attr_def: AttributeDefinition<N>, mode: ID = 0): AttributeValue<N> {
+        const new_value: N = this.definition.attribute_type.convertTo(new_attr_def.attribute_type, this.value, mode)
+        return new AttributeValue(new_attr_def, new_value)
     }
 }

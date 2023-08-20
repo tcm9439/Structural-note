@@ -4,6 +4,7 @@ import { NumberAttribute } from "@/note/element/structural/attribute/type/Number
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
 import { StructuralElement } from "@/note/element/structural/StructuralElement"
 import { StructureDefinition } from "@/note/element/structural/StructureDefinition"
+import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
 
 describe('StructuralElement', () => {
     let element: StructuralElement
@@ -27,16 +28,15 @@ describe('StructuralElement', () => {
 
     it('value getter setter', () => {
         expect(element.values).toBeInstanceOf(Map)
-
-        const str_value = str_attr.create("test")
+        const str_value = new AttributeValue(str_attr, "test")
         element.addValue(str_attr, str_value)
         expect(element.values.get(str_attr.id)).toBe(str_value)
     })
 
     it('ordered_elements', () => {
-        const num_value = num_attr.create(1)
+        const num_value = new AttributeValue(num_attr, 1)
         element.addValue(num_attr, num_value)
-        const str_value = str_attr.create("test")
+        const str_value = new AttributeValue(str_attr, "test")
         element.addValue(str_attr, str_value)
 
         expect(element.ordered_values).toEqual([str_value, num_value])

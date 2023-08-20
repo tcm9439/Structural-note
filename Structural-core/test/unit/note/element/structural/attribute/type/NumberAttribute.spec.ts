@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
 import { NumberAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
+import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
 
 describe('NumberAttribute', () => {
 	it("instance", () => {
@@ -16,7 +17,7 @@ describe('NumberAttribute', () => {
 
     it("create", () => {
         let definition = new AttributeDefinition("test", NumberAttribute.instance)
-        let value = NumberAttribute.instance.create(definition, 109)
+        let value = new AttributeValue(definition, 109)
         
         expect(value.definition).toBe(definition)
         expect(value.value).toBe(109)

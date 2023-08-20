@@ -1,6 +1,5 @@
 import { ComponentBase } from "@/note/common/ComponentBase"
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
-import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
 
 export class AttributeDefinition<T> extends ComponentBase {
     private _name: string
@@ -17,7 +16,7 @@ export class AttributeDefinition<T> extends ComponentBase {
         this._description = description || ""
     }
 
-    get attributeType(): AttributeType<T> {
+    get attribute_type(): AttributeType<T> {
         return this._attribute_type
     }
 
@@ -31,9 +30,5 @@ export class AttributeDefinition<T> extends ComponentBase {
 
     get optional(): boolean {
         return this._optional
-    }
-
-    create(value: T): AttributeValue<T> {
-        return this._attribute_type.create(this, value)
     }
 }

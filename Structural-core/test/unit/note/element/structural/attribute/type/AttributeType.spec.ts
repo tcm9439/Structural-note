@@ -1,13 +1,12 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
-import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
 import { NumberAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
 import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/note/element/structural/attribute/exception/AttributeException"
 
-class TestAttribute extends AttributeType<boolean> {
+class TestAttribute extends AttributeType<number> {
     public static readonly TYPE: string = "TEST"
+    public static readonly INVALID_VALUE: number = -999
     private static _instance: TestAttribute
 
     constructor() {
@@ -15,7 +14,10 @@ class TestAttribute extends AttributeType<boolean> {
         this.addConvertibleType(StringAttribute.TYPE, this.convertToString)
     }
 
-    convertToString(value: boolean, mode?: any): string {
+    convertToString(value: number, mode?: any): string {
+        if (value === TestAttribute.INVALID_VALUE) {
+            throw new InvalidTypeConversionForDataException(this.type, StringAttribute.TYPE, value)
+        }
         return String(value)
     }
 
@@ -24,10 +26,6 @@ class TestAttribute extends AttributeType<boolean> {
             this._instance = new TestAttribute()
         }
         return this._instance
-    }
-
-    create(definition: AttributeDefinition<boolean>, value: boolean): AttributeValue<boolean> {
-        return new AttributeValue<boolean>(definition, value)
     }
 }
 
@@ -39,6 +37,7 @@ describe('AttributeType', () => {
 	it('type getter', () => {
         expect(TestAttribute.instance.type).toBe("TEST")
     })
+
 	it('convertibleTo getter', () => {
         expect(Array.from(TestAttribute.instance.convertibleTo)).toEqual([StringAttribute.TYPE])
     })
@@ -53,19 +52,29 @@ describe('AttributeType', () => {
         expect(TestAttribute.instance.isConvertibleTo("TEST2")).toBe(false)
         TestAttribute.instance.addConvertibleType("TEST2", x => x)
         expect(TestAttribute.instance.isConvertibleTo("TEST2")).toBe(true)
+    })
 
-        // todo: mode
+    it('addConvertibleType of different mode', () => {
+        // TODO
     })
 
     it('convertTo', () => {
-        const attr_def = new AttributeDefinition("test", StringAttribute.instance)
-        const attr_val = TestAttribute.instance.convertTo(true, attr_def)
-        expect(attr_val).toBeInstanceOf(AttributeValue)
-        expect(attr_val.value).toBe("true")
+        const attr_val = TestAttribute.instance.convertTo(StringAttribute.instance, 111)
+        expect(attr_val).toBe("111")
+    })
+
+    it('convertTo same type', () => {
+        const attr_val = TestAttribute.instance.convertTo(TestAttribute.instance, 111)
+        expect(attr_val).toBe(111)
     })
 
     it('convertTo - invalid type', () => {
-        const attr_def = new AttributeDefinition("test", NumberAttribute.instance)
-        expect(() => TestAttribute.instance.convertTo(true, attr_def)).toThrow(InvalidTypeConversionException)
+        expect(() => TestAttribute.instance.convertTo(NumberAttribute.instance, 234)).toThrow(InvalidTypeConversionException)
+    })
+
+    it('convertTo - invalid value', () => {
+        expect(() => 
+            TestAttribute.instance.convertTo(StringAttribute.instance, TestAttribute.INVALID_VALUE))
+            .toThrow(InvalidTypeConversionForDataException)
     })
 })
