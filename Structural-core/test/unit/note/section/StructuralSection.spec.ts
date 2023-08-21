@@ -1,11 +1,25 @@
 import { describe, it, expect, beforeEach } from "vitest"
 import { StructuralSection } from '@/note/section/StructuralSection'
+import { EditPath } from "@/note/util/EditPath"
+import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
+import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
+import { TextElement } from "@/note/element/TextElement"
 
 describe('StructuralSection', () => {
     let section : StructuralSection
+    let attr_definition : AttributeDefinition<string>
+    let txt_element : TextElement
 
     beforeEach(() => {
         section = new StructuralSection('title')
+
+        // add definition
+        attr_definition = new AttributeDefinition("Str Attr", StringAttribute.instance)
+        section.definition.attributes.add(attr_definition)
+
+        // add element
+        txt_element = new TextElement("text")
+        section.elements.add(txt_element)
     })
 
 	it('constructor', () => {
@@ -14,5 +28,28 @@ describe('StructuralSection', () => {
 
     it('get definition', () => {
         expect(section.definition).toBeDefined()
+    })
+
+    it("getNextEditPathNode", () => {
+        expect(section.getNextEditPathNode(section.definition.id)).toBe(section.definition)
+        expect(section.getNextEditPathNode("NA")).toBeUndefined()
+    })
+
+    it("stepInEachChildren DEFINITION_FILTER_MODE", () => {
+        let edit_path = section.stepInEachChildren(new EditPath(), StructuralSection.DEFINITION_FILTER_MODE)
+        expect(edit_path.length).toBe(1)
+        expect(edit_path[0].getLastStep()).toBe(section.definition.id)
+    })
+
+    it("stepInEachChildren ELEMENT_FILTER_MODE", () => {
+        let edit_path = section.stepInEachChildren(new EditPath(), StructuralSection.ELEMENT_FILTER_MODE)
+        expect(edit_path.length).toBe(1)
+        expect(edit_path[0].getLastStep()).toBe(txt_element.id)
+    })
+
+    it("stepInEachChildren no mode specified", () => {
+        let edit_path = section.stepInEachChildren(new EditPath())
+        expect(edit_path.length).toBe(1)
+        expect(edit_path[0].getLastStep()).toBe(txt_element.id)
     })
 })

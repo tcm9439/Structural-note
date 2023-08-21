@@ -28,7 +28,7 @@ export class NoteSection extends ComponentBase implements EditPathNode {
         return this._elements.get(index)
     }
 
-    stepInEachChildren(edit_path: EditPath): EditPath[] {
+    stepInEachChildren(edit_path: EditPath, filter_mode?: number): EditPath[] {
         return this.elements.order.order.map((element_id) => {
             return edit_path.clone().append(element_id)
         })

@@ -10,7 +10,7 @@ export abstract class NoteElement extends ComponentBase implements EditPathNode 
         throw new EndOfEditPathError("NoteElement")
     }
 
-    stepInEachChildren(edit_path: EditPath): EditPath[] {
+    stepInEachChildren(edit_path: EditPath, filter_mode?: number): EditPath[] {
         throw new EndOfEditPathError("NoteElement")
     }
 }

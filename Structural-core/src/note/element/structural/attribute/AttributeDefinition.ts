@@ -1,7 +1,8 @@
 import { ComponentBase } from "@/note/util/ComponentBase"
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
+import { EditPath, EditPathNode, EndOfEditPathError } from "@/note/util/EditPath"
 
-export class AttributeDefinition<T> extends ComponentBase {
+export class AttributeDefinition<T> extends ComponentBase implements EditPathNode {
     private _name: string
     private _description: string
     private _optional: boolean
@@ -30,5 +31,13 @@ export class AttributeDefinition<T> extends ComponentBase {
 
     get optional(): boolean {
         return this._optional
+    }
+
+    getNextEditPathNode(index: string): EditPathNode | undefined {
+        throw new EndOfEditPathError("AttributeDefinition")
+    }
+
+    stepInEachChildren(edit_path: EditPath, filter_mode?: number): EditPath[] {
+        throw new EndOfEditPathError("AttributeDefinition")
     }
 }

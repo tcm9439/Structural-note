@@ -10,7 +10,7 @@ class TestNode implements EditPathNode {
         this.id = id
     }
 
-    stepInEachChildren(edit_path: EditPath): EditPath[] {
+    stepInEachChildren(edit_path: EditPath, filter_mode?: number): EditPath[] {
         return []
     }
 

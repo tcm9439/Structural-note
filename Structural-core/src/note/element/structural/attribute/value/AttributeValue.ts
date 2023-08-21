@@ -45,7 +45,7 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
         throw new EndOfEditPathError("AttributeValue")
     }
 
-    stepInEachChildren(edit_path: EditPath): EditPath[] {
+    stepInEachChildren(edit_path: EditPath, filter_mode?: number): EditPath[] {
         throw new EndOfEditPathError("AttributeValue")
     }
 }

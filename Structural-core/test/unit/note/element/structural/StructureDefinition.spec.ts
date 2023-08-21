@@ -3,14 +3,19 @@ import { StructureDefinition } from '@/note/element/structural/StructureDefiniti
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
 import { BooleanAttribute } from "@/note/element/structural/attribute/type/BooleanAttribute"
+import { EditPath } from "@/note/util/EditPath"
 
 describe('StructureDefinition', () => {
 	let definition: StructureDefinition
+    let str_attr: AttributeDefinition<string>
+    let bool_attr: AttributeDefinition<boolean>
 
     beforeEach(() => {
         definition = new StructureDefinition()
-        definition.attributes.add(new AttributeDefinition("Str Attr", StringAttribute.instance))
-        definition.attributes.add(new AttributeDefinition("Bool Attr2", BooleanAttribute.instance))
+        str_attr = new AttributeDefinition("Str Attr", StringAttribute.instance)
+        definition.attributes.add(str_attr)
+        bool_attr = new AttributeDefinition("Bool Attr", BooleanAttribute.instance)
+        definition.attributes.add(bool_attr)
     })
 
     it('constructor', () => {
@@ -20,5 +25,22 @@ describe('StructureDefinition', () => {
     it("get attributes", () => {
         expect(definition.attributes).not.toBeNull()
         expect(definition.attributes.length()).toBe(2)
+    })
+
+    it("getNextEditPathNode", () => {
+        let new_attr_def = new AttributeDefinition("attr-definition", StringAttribute.instance)
+        expect(definition.getNextEditPathNode(new_attr_def.id)).toBeUndefined()
+        
+        definition.attributes.add(new_attr_def)
+        expect(definition.attributes.length()).toBe(3)
+        expect(definition.getNextEditPathNode(new_attr_def.id)).toBe(new_attr_def)
+    })
+
+    it("stepInEachChildren", () => {
+        let edit_path = new EditPath()
+        let edit_paths = definition.stepInEachChildren(edit_path)
+        expect(edit_paths.length).toBe(2)
+        expect(edit_paths[0].getLastStep()).toBe(str_attr.id)
+        expect(edit_paths[1].getLastStep()).toBe(bool_attr.id)
     })
 })

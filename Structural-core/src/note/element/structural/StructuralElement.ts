@@ -51,7 +51,7 @@ export class StructuralElement extends NoteElement {
         return this.values.get(index)
     }
 
-    stepInEachChildren(edit_path: EditPath): EditPath[] {
+    stepInEachChildren(edit_path: EditPath, filter_mode?: number): EditPath[] {
         return this.ordered_values.map((attr_value) => {
             return edit_path.clone().append(attr_value.id)
         })

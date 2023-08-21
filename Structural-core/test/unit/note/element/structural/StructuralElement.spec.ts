@@ -5,6 +5,7 @@ import { StringAttribute } from "@/note/element/structural/attribute/type/String
 import { StructuralElement } from "@/note/element/structural/StructuralElement"
 import { StructureDefinition } from "@/note/element/structural/StructureDefinition"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
+import { EditPath } from "@/note/util/EditPath"
 
 describe('StructuralElement', () => {
     let element: StructuralElement
@@ -49,6 +50,15 @@ describe('StructuralElement', () => {
     })
 
     it("stepInEachChildren", () => {
-        // TODO
+        let value2 = new AttributeValue(num_attr, 1)
+        element.addValue(num_attr, value2)
+        let value = new AttributeValue(str_attr, "test")
+        element.addValue(str_attr, value)
+
+        let edit_path = (new EditPath()).append(element.id)
+        let edit_paths = element.stepInEachChildren(edit_path)
+        expect(edit_paths.length).toBe(2)
+        expect(edit_paths[0].getLastStep()).toBe(value.id)
+        expect(edit_paths[1].getLastStep()).toBe(value2.id)
     })
 })
