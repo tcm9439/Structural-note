@@ -1,7 +1,7 @@
 import { UUID, ID } from "@/common/CommonTypes"
 import { ComponentBase } from "@/note/util/ComponentBase"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
-import { EditPathNode, EndOfEditPathError } from "@/note/util/EditPath"
+import { EditPath, EditPathNode, EndOfEditPathError } from "@/note/util/EditPath"
 
 /**
  * data type + data (value)
@@ -42,6 +42,10 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
     }
 
     getNextEditPathNode(index: string): EditPathNode | undefined {
+        throw new EndOfEditPathError("AttributeValue")
+    }
+
+    stepInEachChildren(edit_path: EditPath): EditPath[] {
         throw new EndOfEditPathError("AttributeValue")
     }
 }

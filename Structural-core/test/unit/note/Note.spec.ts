@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest"
 import { Note } from '@/note/Note'
 import { NoteSection } from '@/note/section/NoteSection'
+import { EditPath } from "@/note/util/EditPath"
 
 describe('Note', () => {
     let note: Note 
@@ -32,5 +33,20 @@ describe('Note', () => {
         let section1 = new NoteSection("Section 1")
         note.sections.add(section1)
         expect(note.getNextEditPathNode(section1.id)).toBe(section1)
+    })
+
+    it("stepInEachChildren", () => {
+        let section1 = new NoteSection("Section 1")
+        note.sections.add(section1)
+        let section2 = new NoteSection("Section 2")
+        note.sections.add(section2)
+        let section3 = new NoteSection("Section 3")
+        note.sections.add(section3)
+
+        let edit_path = note.stepInEachChildren(new EditPath())
+        expect(edit_path.length).toBe(3)
+        expect(edit_path[0].getLastStep()).toBe(section1.id)
+        expect(edit_path[1].getLastStep()).toBe(section2.id)
+        expect(edit_path[2].getLastStep()).toBe(section3.id)
     })
 })

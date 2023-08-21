@@ -59,6 +59,10 @@ export class OrderedComponents<T extends ComponentBase> {
         return this._components.get(id)
     }
 
+    has(id: UUID): boolean {
+        return this._components.has(id)
+    }
+
     moveUp(component: T): void {
         this._order.moveUp(component.id)
     }

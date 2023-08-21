@@ -47,4 +47,8 @@ describe('StructuralElement', () => {
         element.addValue(num_attr, new_value)
         expect(element.getNextEditPathNode(num_attr.id)).toBe(new_value)
     })
+
+    it("stepInEachChildren", () => {
+        // TODO
+    })
 })

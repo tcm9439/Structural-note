@@ -1,6 +1,6 @@
 import { UUID } from "@/common/CommonTypes"
 import { OrderedComponents } from "@/note/util/OrderedComponents"
-import { EditPathNode } from "@/note/util/EditPath"
+import { EditPath, EditPathNode } from "@/note/util/EditPath"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
 import { StructureDefinition } from "@/note/element/structural/StructureDefinition"
@@ -49,5 +49,11 @@ export class StructuralElement extends NoteElement {
 
     getNextEditPathNode(index: UUID): EditPathNode | undefined {
         return this.values.get(index)
+    }
+
+    stepInEachChildren(edit_path: EditPath): EditPath[] {
+        return this.ordered_values.map((attr_value) => {
+            return edit_path.clone().append(attr_value.id)
+        })
     }
 }

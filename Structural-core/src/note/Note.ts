@@ -1,6 +1,6 @@
 import { ComponentBase } from "@/note/util/ComponentBase"
 import { OrderedComponents } from "@/note/util/OrderedComponents"
-import { EditPathNode } from "@/note/util/EditPath"
+import { EditPathNode, EditPath } from "@/note/util/EditPath"
 import { NoteSection } from "@/note/section/NoteSection"
 
 /**
@@ -36,5 +36,11 @@ export class Note extends ComponentBase implements EditPathNode {
 
     getNextEditPathNode(index: string): EditPathNode | undefined {
         return this._sections.get(index)
+    }
+
+    stepInEachChildren(edit_path: EditPath): EditPath[] {
+        return this.sections.order.order.map((section_id) => {
+            return edit_path.clone().append(section_id)
+        })
     }
 }

@@ -17,6 +17,7 @@ export class EndOfEditPathError extends Error {
  */
 export interface EditPathNode {
     getNextEditPathNode(index: UUID): EditPathNode | undefined
+    stepInEachChildren(edit_path: EditPath): EditPath[]
 }
 
 /**
@@ -40,23 +41,15 @@ export class EditPathStep {
  *  how to find the target node from the base node by the edit path.
  */
 export class EditPath {
-    private _root: EditPathNode
     private _path: EditPathStep[] = []
 
-    constructor(base: EditPathNode) {
-        this._root = base
-    }
-
-    addStep(index: UUID) {
+    append(index: UUID) {
         this._path.push(new EditPathStep(index))
+        return this
     }
 
-    get root(): EditPathNode {
-        return this._root
-    }
-
-    getNodeByPath(): EditPathNode {
-        let current: EditPathNode | undefined = this._root
+    getNodeByPath(root: EditPathNode): EditPathNode {
+        let current: EditPathNode | undefined = root
         for (let step of this._path) {
             current = current.getNextEditPathNode(step.index)
             if (current === undefined) {
@@ -64,5 +57,15 @@ export class EditPath {
             }
         }
         return current
+    }
+
+    clone(): EditPath {
+        let clone = new EditPath()
+        clone._path = this._path.slice()
+        return clone
+    }
+
+    getLastStep(): UUID {
+        return this._path[this._path.length - 1].index
     }
 }

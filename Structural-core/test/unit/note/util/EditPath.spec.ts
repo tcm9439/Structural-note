@@ -10,6 +10,10 @@ class TestNode implements EditPathNode {
         this.id = id
     }
 
+    stepInEachChildren(edit_path: EditPath): EditPath[] {
+        return []
+    }
+
     getNextEditPathNode(index: UUID): EditPathNode | undefined {
         return this.children.get(index)
     }
@@ -61,43 +65,56 @@ describe("EditPath", () => {
         children[1].children.set("3", children[3])
         children[1].children.set("4", children[4])
 
-        path = new EditPath(root)
+        path = new EditPath()
     })
 
 	it("constructor", () => {
         expect(path).toBeInstanceOf(EditPath)
 	})
 
-	it("get root", () => {
-        expect(path.root).toBe(root)
-	})
-
     it("addStep", () => {
-        path.addStep("1")
+        path.append("1")
         expect(path["_path"]).toEqual([new EditPathStep("1")])
-        path.addStep("3")
+        path.append("3")
         expect(path["_path"]).toEqual([new EditPathStep("1"), new EditPathStep("3")])
     })
 
     it("getNodeByPath case 1 (normal)", () => {
-        path.addStep("1")
-        expect(path.getNodeByPath()).toBe(children[1])
-        path.addStep("3")
-        expect(path.getNodeByPath()).toBe(children[3])
+        path.append("1")
+        expect(path.getNodeByPath(root)).toBe(children[1])
+        path.append("3")
+        expect(path.getNodeByPath(root)).toBe(children[3])
     })
 
     it("getNodeByPath case 2 (normal)", () => {
-        path.addStep("1")
-        expect(path.getNodeByPath()).toBe(children[1])
-        path.addStep("4")
-        expect(path.getNodeByPath()).toBe(children[4])
+        path.append("1")
+        expect(path.getNodeByPath(root)).toBe(children[1])
+        path.append("4")
+        expect(path.getNodeByPath(root)).toBe(children[4])
     })
 
     it("getNodeByPath case 3 (end of path / wrong index)", () => {
-        path.addStep("2")
-        expect(path.getNodeByPath()).toBe(children[2])
-        path.addStep("4")
-        expect(() => path.getNodeByPath()).toThrow(EndOfEditPathError)
+        path.append("2")
+        expect(path.getNodeByPath(root)).toBe(children[2])
+        path.append("4")
+        expect(() => path.getNodeByPath(root)).toThrow(EndOfEditPathError)
     })
     
+    it("clone", () => {
+        path.append("1")
+        path.append("3")
+        const clone = path.clone()
+        expect(clone["_path"]).toEqual([new EditPathStep("1"), new EditPathStep("3")])
+
+        clone.append("4")
+        expect(clone["_path"]).toEqual([new EditPathStep("1"), new EditPathStep("3"), new EditPathStep("4")])
+        expect(path["_path"]).toEqual([new EditPathStep("1"), new EditPathStep("3")])
+    })
+
+    it("getLastStep", () => {
+        path.append("1")
+        expect(path.getLastStep()).toBe("1")
+        path.append("3")
+        expect(path.getLastStep()).toBe("3")
+    })
 })

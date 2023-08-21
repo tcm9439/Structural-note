@@ -70,6 +70,14 @@ describe('OrderedComponents', () => {
         expect(components.get(note.id)).toBe(note)
     })
 
+    it("has", () => {
+        const note = new Note("Title 4")
+        expect(components.has(note.id)).toBe(false)
+
+        components.add(note)
+        expect(components.has(note.id)).toBe(true)
+    })
+
     it("get ordered components", () => {
         expect(components.ordered_components).toStrictEqual(notes)
     })

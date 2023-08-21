@@ -3,7 +3,7 @@ import { AttributeDefinition } from "@/note/element/structural/attribute/Attribu
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
 import { NumberAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
-import { EndOfEditPathError } from "@/note/util/EditPath"
+import { EditPath, EndOfEditPathError } from "@/note/util/EditPath"
 
 describe('AttributeValue', () => {
 	let attr_value: AttributeValue<any>
@@ -40,5 +40,9 @@ describe('AttributeValue', () => {
 
     it("getNextEditPathNode", () => {
         expect(() => { attr_value.getNextEditPathNode("") }).toThrow(EndOfEditPathError)
+    })
+
+    it("stepInEachChildren", () => {
+        expect(() => { attr_value.stepInEachChildren(new EditPath()) }).toThrow(EndOfEditPathError)
     })
 })
