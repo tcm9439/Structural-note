@@ -18,7 +18,7 @@ describe('Note', () => {
         expect(note.title).toBe("Title 2")
     })
 
-    it('sections', () => {
+    it('get sections', () => {
         expect(note.sections).not.toBeUndefined()
         expect(note.sections.length()).toBe(0)
 
@@ -27,4 +27,10 @@ describe('Note', () => {
         expect(note.sections.length()).toBe(1)
         expect(note.sections.get(section1.id)).toBe(section1)
     })  
+
+    it("getNextEditPathNode", () => {
+        let section1 = new NoteSection("Section 1")
+        note.sections.add(section1)
+        expect(note.getNextEditPathNode(section1.id)).toBe(section1)
+    })
 })

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest"
 import { OrderedList } from "@/common/OrderedList"
-import { OrderedComponents } from '@/note/common/OrderedComponents'
+import { OrderedComponents } from '@/note/util/OrderedComponents'
 import { Note } from "@/note/Note"
 import { UUID } from "@/common/CommonTypes"
 
@@ -104,8 +104,11 @@ describe('OrderedComponents', () => {
         compareComponentsOrder(components, notes, [2, 0, 1])
     })
 
-    it('getter', () => {
+    it("get components", () => {
         expect(components.components).toBeInstanceOf(Map)
+    })
+
+    it("get order", () => {
         expect(components.order).toBeInstanceOf(OrderedList)
     })
 })

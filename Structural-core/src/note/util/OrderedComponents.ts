@@ -1,6 +1,6 @@
 import { UUID } from "@/common/CommonTypes"
 import { OrderedList } from "@/common/OrderedList"
-import { ComponentBase } from "@/note/common/ComponentBase"
+import { ComponentBase } from "@/note/util/ComponentBase"
 
 export class OrderedComponents<T extends ComponentBase> {
     private _components: Map<UUID, T> = new Map()

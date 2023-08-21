@@ -26,4 +26,10 @@ describe("TextAreaSection", () => {
         let element = note_section.elements.ordered_components[0] as TextElement
         expect(element.content).toBe("Content 1")
     })
+
+    it("getNextEditPathNode", () => {
+        let new_ele = new TextElement("Content 3")
+        note_section.elements.add(new_ele)
+        expect(note_section.getNextEditPathNode(new_ele.id)).toBe(new_ele)
+    })
 })

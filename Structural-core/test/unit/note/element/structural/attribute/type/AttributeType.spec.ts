@@ -34,11 +34,11 @@ describe('AttributeType', () => {
         expect(TestAttribute.instance).not.toBeNull()
     })
 
-	it('type getter', () => {
+	it("get type", () => {
         expect(TestAttribute.instance.type).toBe("TEST")
     })
 
-	it('convertibleTo getter', () => {
+	it('get convertibleTo', () => {
         expect(Array.from(TestAttribute.instance.convertibleTo)).toEqual([StringAttribute.TYPE])
     })
 

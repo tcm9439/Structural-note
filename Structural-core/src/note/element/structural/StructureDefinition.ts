@@ -1,4 +1,4 @@
-import { OrderedComponents } from "@/note/common/OrderedComponents"
+import { OrderedComponents } from "@/note/util/OrderedComponents"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
 
 /**

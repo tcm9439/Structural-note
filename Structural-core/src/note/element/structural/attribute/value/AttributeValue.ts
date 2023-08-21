@@ -1,11 +1,12 @@
 import { UUID, ID } from "@/common/CommonTypes"
-import { ComponentBase } from "@/note/common/ComponentBase"
+import { ComponentBase } from "@/note/util/ComponentBase"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
+import { EditPathNode, EndOfEditPathError } from "@/note/util/EditPath"
 
 /**
  * data type + data (value)
  */
-export class AttributeValue<T> extends ComponentBase {
+export class AttributeValue<T> extends ComponentBase implements EditPathNode {
     private _definition : AttributeDefinition<T>
     private _value : T
 
@@ -38,5 +39,9 @@ export class AttributeValue<T> extends ComponentBase {
     convertTo<N>(new_attr_def: AttributeDefinition<N>, mode: ID = 0): AttributeValue<N> {
         const new_value: N = this.definition.attribute_type.convertTo(new_attr_def.attribute_type, this.value, mode)
         return new AttributeValue(new_attr_def, new_value)
+    }
+
+    getNextEditPathNode(index: string): EditPathNode | undefined {
+        throw new EndOfEditPathError("AttributeValue")
     }
 }

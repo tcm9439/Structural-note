@@ -1,5 +1,6 @@
-import { OrderedComponents } from "@/note/common/OrderedComponents"
 import { UUID } from "@/common/CommonTypes"
+import { OrderedComponents } from "@/note/util/OrderedComponents"
+import { EditPathNode } from "@/note/util/EditPath"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
 import { StructureDefinition } from "@/note/element/structural/StructureDefinition"
@@ -44,5 +45,9 @@ export class StructuralElement extends NoteElement {
     validate(): boolean {
         // TODO
         return true
+    }
+
+    getNextEditPathNode(index: UUID): EditPathNode | undefined {
+        return this.values.get(index)
     }
 }

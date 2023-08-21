@@ -1,11 +1,13 @@
-import { ComponentBase } from "@/note/common/ComponentBase"
+import { ComponentBase } from "@/note/util/ComponentBase"
+import { OrderedComponents } from '@/note/util/OrderedComponents'
+import { UUID } from "@/common/CommonTypes"
+import { EditPathNode } from "@/note/util/EditPath"
 import { NoteElement } from "@/note/element/NoteElement"
-import { OrderedComponents } from '@/note/common/OrderedComponents';
 
 /**
  * A section of a note.
  */
-export class NoteSection extends ComponentBase {
+export class NoteSection extends ComponentBase implements EditPathNode {
     private _title: string
     private _elements: OrderedComponents<NoteElement> = new OrderedComponents()
 
@@ -20,5 +22,9 @@ export class NoteSection extends ComponentBase {
 
     get elements(): OrderedComponents<NoteElement> {
         return this._elements
+    }
+
+    getNextEditPathNode(index: UUID): EditPathNode | undefined {
+        return this._elements.get(index)
     }
 }

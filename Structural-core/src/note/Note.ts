@@ -1,5 +1,6 @@
-import { ComponentBase } from "@/note/common/ComponentBase"
-import { OrderedComponents } from "@/note/common/OrderedComponents"
+import { ComponentBase } from "@/note/util/ComponentBase"
+import { OrderedComponents } from "@/note/util/OrderedComponents"
+import { EditPathNode } from "@/note/util/EditPath"
 import { NoteSection } from "@/note/section/NoteSection"
 
 /**
@@ -8,7 +9,7 @@ import { NoteSection } from "@/note/section/NoteSection"
  * 
  * Can be saved to a file.
  */
-export class Note extends ComponentBase {
+export class Note extends ComponentBase implements EditPathNode {
     private _title: string
     private _sections: OrderedComponents<NoteSection> = new OrderedComponents()
 
@@ -31,5 +32,9 @@ export class Note extends ComponentBase {
 
     save(){
         // TODO
+    }
+
+    getNextEditPathNode(index: string): EditPathNode | undefined {
+        return this._sections.get(index)
     }
 }

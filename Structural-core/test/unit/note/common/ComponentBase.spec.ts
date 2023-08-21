@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { ComponentBase } from '@/note/common/ComponentBase'
+import { ComponentBase } from '@/note/util/ComponentBase'
 import { Note } from "@/note/Note"
 
 describe('ComponentBase', () => {

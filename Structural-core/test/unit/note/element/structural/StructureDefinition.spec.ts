@@ -17,7 +17,7 @@ describe('StructureDefinition', () => {
         expect(definition).not.toBeNull()
     })
 
-    it('getter', () => {
+    it("get attributes", () => {
         expect(definition.attributes).not.toBeNull()
         expect(definition.attributes.length()).toBe(2)
     })

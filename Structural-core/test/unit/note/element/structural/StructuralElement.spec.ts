@@ -26,7 +26,7 @@ describe('StructuralElement', () => {
         expect(element).not.toBeNull()
     })
 
-    it('value getter setter', () => {
+    it('get set values', () => {
         expect(element.values).toBeInstanceOf(Map)
         const str_value = new AttributeValue(str_attr, "test")
         element.addValue(str_attr, str_value)
@@ -40,5 +40,11 @@ describe('StructuralElement', () => {
         element.addValue(str_attr, str_value)
 
         expect(element.ordered_values).toEqual([str_value, num_value])
+    })
+
+    it("getNextEditPathNode", () => {
+        const new_value = new AttributeValue(num_attr, 1)
+        element.addValue(num_attr, new_value)
+        expect(element.getNextEditPathNode(num_attr.id)).toBe(new_value)
     })
 })
