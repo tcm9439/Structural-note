@@ -34,7 +34,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     }
 
     getNextEditPathNode(index: string): EditPathNode | undefined {
-        throw new EndOfEditPathError("AttributeDefinition")
+        return undefined
     }
 
     stepInEachChildren(edit_path: EditPath, filter_mode?: number): EditPath[] {

@@ -22,7 +22,7 @@ describe('AttributeDefinition', () => {
     })
 
     it("getNextEditPathNode", () => {
-        expect(() => definition.getNextEditPathNode("")).toThrow(EndOfEditPathError)
+        expect(definition.getNextEditPathNode("")).toBeUndefined()
     })
 
     it("stepInEachChildren", () => {

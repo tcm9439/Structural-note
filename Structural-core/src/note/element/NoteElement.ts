@@ -7,7 +7,7 @@ import { EditPathNode, EndOfEditPathError, EditPath } from "@/note/util/EditPath
  */
 export abstract class NoteElement extends ComponentBase implements EditPathNode {
     getNextEditPathNode(index: UUID): EditPathNode | undefined {
-        throw new EndOfEditPathError("NoteElement")
+        return undefined
     }
 
     stepInEachChildren(edit_path: EditPath, filter_mode?: number): EditPath[] {

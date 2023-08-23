@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, Ref, reactive } from 'vue'
 import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, StringAttribute, StructuralElement } from "structural-core"
 
 let test_note: Ref<Note> = ref(new Note("My first note")) as Ref<Note>

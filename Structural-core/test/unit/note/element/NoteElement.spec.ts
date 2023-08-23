@@ -11,7 +11,7 @@ describe("NoteElement", () => {
 
     it("getNextEditPathNode", () => {
         let element = new TextElement()
-        expect(() => { element.getNextEditPathNode("") }).toThrow(EndOfEditPathError)
+        expect(element.getNextEditPathNode("")).toBeUndefined()
     })
 
     it("stepInEachChildren", () => {

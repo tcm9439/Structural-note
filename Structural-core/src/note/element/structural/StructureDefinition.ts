@@ -1,7 +1,7 @@
 import { OrderedComponents } from "@/note/util/OrderedComponents"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
 import { ComponentBase } from "@/note/util/ComponentBase"
-import { EditPath, EditPathNode, EndOfEditPathError } from "@/note/util/EditPath"
+import { EditPath, EditPathNode } from "@/note/util/EditPath"
 
 /**
  * A structure definition is a collection of attribute definitions.

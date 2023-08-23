@@ -42,7 +42,7 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
     }
 
     getNextEditPathNode(index: string): EditPathNode | undefined {
-        throw new EndOfEditPathError("AttributeValue")
+        return undefined
     }
 
     stepInEachChildren(edit_path: EditPath, filter_mode?: number): EditPath[] {

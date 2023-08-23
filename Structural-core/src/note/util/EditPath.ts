@@ -43,15 +43,18 @@ export class EditPathStep {
 export class EditPath {
     private _path: EditPathStep[] = []
 
-    append(index: UUID) {
+    append(index: UUID): EditPath {
         this._path.push(new EditPathStep(index))
         return this
     }
 
     getNodeByPath(root: EditPathNode): EditPathNode {
         let current: EditPathNode | undefined = root
+        // console.log("_path", this._path)
         for (let step of this._path) {
+            // console.log("step", step)
             current = current.getNextEditPathNode(step.index)
+            // console.log("current", current)
             if (current === undefined) {
                 throw new EndOfEditPathError()
             }

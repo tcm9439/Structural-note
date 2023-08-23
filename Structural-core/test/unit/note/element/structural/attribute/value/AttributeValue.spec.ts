@@ -39,7 +39,7 @@ describe('AttributeValue', () => {
     })
 
     it("getNextEditPathNode", () => {
-        expect(() => { attr_value.getNextEditPathNode("") }).toThrow(EndOfEditPathError)
+        expect(attr_value.getNextEditPathNode("")).toBeUndefined()
     })
 
     it("stepInEachChildren", () => {
