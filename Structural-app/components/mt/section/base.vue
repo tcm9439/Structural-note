@@ -29,11 +29,6 @@ const getElement = computed(() => {
     })
 })
 
-function changeNote(event){
-    let ele2 = new TextElement("======> Yeah <======")
-    section.value.elements.add(ele2)
-}
-
 </script>
 
 <template>
@@ -42,16 +37,18 @@ function changeNote(event){
             {{ section.title }}
         </template>
 
-        <slot name="operations"></slot>
-
-        <button @click="changeNote">[Debug] Add example element</button>
+        <template #extra>
+            <slot name="operation"></slot>
+        </template>
+        
+        <slot name="content"></slot>
     
         <template v-for="element of getElement" :key="element.id">
             <template v-if="element.type === 'TextElement'">
-                <vue-element-text :edit_path="element.path" />
+                <mt-element-text :edit_path="element.path" />
             </template>
             <template v-else-if="element.type === 'StructuralElement'">
-                <vue-element-structural :edit_path="element.path" />
+                <mt-element-structural :edit_path="element.path" />
             </template>
         </template>
     </Card>

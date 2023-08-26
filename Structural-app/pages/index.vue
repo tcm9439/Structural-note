@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, StringAttribute, StructuralElement } from "structural-core"
+import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, StringAttribute, StructuralElement, ViewState } from "structural-core"
 
 let test_note: Ref<Note> = ref(new Note("My first note")) as Ref<Note>
 
@@ -22,8 +22,10 @@ ele_struct.values.set(attr_definition.id, value)
 section2.elements.add(ele_struct)
 test_note.value.sections.add(section2)
 
+provide("view-state", new ViewState())
+
 </script>
 
 <template>
-    <vue-note :note="test_note" />
+    <mt-note :note="test_note" />
 </template>

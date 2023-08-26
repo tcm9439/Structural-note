@@ -11,8 +11,6 @@ const struct_element = editing_note === undefined? null : ref(props.edit_path.ge
 
 const getValues = computed(() => {
     return struct_element?.value.stepInEachChildren(edit_path).map((child_path) => {
-        console.log(edit_path)
-        console.log(child_path)
         const child_id = child_path.getLastStep()
         const child = child_path.getNodeByPath(editing_note.value)
 
@@ -29,7 +27,7 @@ const getValues = computed(() => {
 <template>
     <template v-for="value in getValues">
         <template v-if="value.type === 'STRING'">
-            <vue-attribute-value-string :edit_path="value.path"></vue-attribute-value-string>
+            <mt-attribute-value-string :edit_path="value.path"></mt-attribute-value-string>
         </template> 
     </template>
 </template>
