@@ -43,4 +43,26 @@ describe('StructureDefinition', () => {
         expect(edit_paths[0].getLastStep()).toBe(str_attr.id)
         expect(edit_paths[1].getLastStep()).toBe(bool_attr.id)
     })
+
+    it("clone", () => {
+        let clone = definition.clone()
+        expect(clone).not.toBeNull()
+        // same id
+        expect(clone.id).toEqual(definition.id)
+
+        // attributes are deep copied
+        expect(clone.attributes.length()).toBe(definition.attributes.length())
+        expect(clone.attributes.get(str_attr.id)).not.toBe(str_attr)
+        expect(clone.attributes.get(bool_attr.id)).not.toBe(bool_attr)
+
+        // if delete an attribute from clone, the original definition should not be affected
+        clone.attributes.remove(str_attr.id)
+        expect(clone.attributes.length()).toBe(1)
+        expect(definition.attributes.length()).toBe(2)
+    })
+
+    it("cloneDeepWithCustomizer", () => {
+        let clone = definition.cloneDeepWithCustomizer()
+        expect(clone).toBeUndefined()
+    })
 })

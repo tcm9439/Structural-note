@@ -33,7 +33,7 @@ export class StructuralSection extends NoteSection {
         }
 
         if (filter_mode === StructuralSection.DEFINITION_FILTER_MODE) {
-            return [edit_path.clone().append(this._definition.id)]
+            return [edit_path.clone().append(this._definition.id, "definition", false)]
         }
 
         throw new EndOfEditPathError(`StructuralSection (mode {filter_mode})`)

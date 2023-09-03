@@ -55,10 +55,10 @@ describe('OrderedComponents', () => {
         notes.push(note)
         compareComponentsOrder(components, notes, [0, 1, 2, 3])
 
-        components.remove(note)
+        components.remove(note.id)
         compareComponentsOrder(components, notes, [0, 1, 2])
 
-        expect(() => components.remove(note)).toThrowError(/not exist/)
+        expect(() => components.remove(note.id)).toThrowError(/not exist/)
         expect(components.length()).toBe(3)
     })
 

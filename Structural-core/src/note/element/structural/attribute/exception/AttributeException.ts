@@ -16,3 +16,10 @@ export class InvalidTypeConversionException extends Error {
         this.name = 'InvalidTypeConversionException'
     }
 }
+
+export class NullAttrTypeException extends Error {
+    constructor() {
+        super(`Invalid argument: Attribute Type cannot be null`)
+        this.name = 'NullAttrTypeException'
+    }
+}

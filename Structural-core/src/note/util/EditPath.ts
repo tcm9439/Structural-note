@@ -1,4 +1,5 @@
 import { UUID } from "@/common/CommonTypes"
+import { Cloneable } from "@/note/util/Cloneable"
 
 export class EndOfEditPathError extends Error {
     constructor(last_element_name?: string) {
@@ -26,35 +27,45 @@ export interface EditPathNode {
  */
 export class EditPathStep {
     private _index: UUID
+    private _name: string
+    private _show_in_breadcrumb: boolean
 
-    constructor(index: UUID) {
+    constructor(index: UUID, name?: string, show_in_breadcrumb?: boolean) {
         this._index = index
+        this._name = name || ""
+        this._show_in_breadcrumb = show_in_breadcrumb || true
     }
 
     get index(): UUID {
         return this._index
+    }
+
+    get name(): string {
+        return this._name
+    }
+
+    get show_in_breadcrumb(): boolean {
+        return this._show_in_breadcrumb
     }
 }
 
 /**
  * The class represent that
  *  how to find the target node from the base node by the edit path.
+ * Also for showing the breadcrumb.
  */
-export class EditPath {
+export class EditPath implements Cloneable<EditPath> {
     private _path: EditPathStep[] = []
 
-    append(index: UUID): EditPath {
-        this._path.push(new EditPathStep(index))
+    append(index: UUID, name?: string, show_in_breadcrumb?: boolean): EditPath {
+        this._path.push(new EditPathStep(index, name, show_in_breadcrumb))
         return this
     }
 
     getNodeByPath(root: EditPathNode): EditPathNode {
         let current: EditPathNode | undefined = root
-        // console.log("_path", this._path)
         for (let step of this._path) {
-            // console.log("step", step)
             current = current.getNextEditPathNode(step.index)
-            // console.log("current", current)
             if (current === undefined) {
                 throw new EndOfEditPathError()
             }
@@ -70,5 +81,9 @@ export class EditPath {
 
     getLastStep(): UUID {
         return this._path[this._path.length - 1].index
+    }
+
+    getBreadcrumb(): string[] {
+        return this._path.filter((step) => step.show_in_breadcrumb).map((step) => step.name)
     }
 }

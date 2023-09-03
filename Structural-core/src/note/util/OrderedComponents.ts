@@ -46,8 +46,7 @@ export class OrderedComponents<T extends ComponentBase> {
      * Remove a component from the list.
      * If the component is not in the list, raise error.
      */
-    remove(component: T): void {
-        const id = component.id
+    remove(id: UUID): void {
         if (!this._components.has(id)) {
             throw new Error(`Component ${id} does not exist`)
         }

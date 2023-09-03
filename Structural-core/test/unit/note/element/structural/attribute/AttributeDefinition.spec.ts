@@ -12,7 +12,7 @@ describe('AttributeDefinition', () => {
         expect(definition.description).toBe("")
         expect(definition.optional).toBe(false)
         expect(definition.attribute_type).toBe(StringAttribute.instance)
-        expect(definition.attribute_type.type).toBe("STRING")
+        expect(definition.attribute_type?.type).toBe("STRING")
 
         definition = new AttributeDefinition("test", StringAttribute.instance, true, "description")
         expect(definition.name).toBe("test")
@@ -27,5 +27,27 @@ describe('AttributeDefinition', () => {
 
     it("stepInEachChildren", () => {
         expect(() => definition.stepInEachChildren(new EditPath)).toThrow(EndOfEditPathError)
+    })
+
+    it("clone", () => {
+        let clone = definition.clone()
+        expect(clone).not.toBe(definition)
+        expect(clone.id).toEqual(definition.id)
+        expect(clone.name).toEqual(definition.name)
+        expect(clone.description).toEqual(definition.description)
+        expect(clone.optional).toEqual(definition.optional)
+        expect(clone.attribute_type).toBe(definition.attribute_type)
+
+        clone.name = "clone"
+        clone.description = "clone"
+        clone.optional = !clone.optional
+        expect(clone.name).not.toEqual(definition.name)
+        expect(clone.description).not.toEqual(definition.description)
+        expect(clone.optional).not.toEqual(definition.optional)
+    })
+
+    it("cloneDeepWithCustomizer", () => {
+        let clone = definition.cloneDeepWithCustomizer()
+        expect(clone).toBeUndefined()
     })
 })

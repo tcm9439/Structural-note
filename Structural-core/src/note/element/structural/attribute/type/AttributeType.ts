@@ -1,4 +1,5 @@
 import { ID } from "@/common/CommonTypes"
+import { Cloneable } from "@/note/util/Cloneable"
 import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/note/element/structural/attribute/exception/AttributeException"
 
 export interface AttributeValueConverter<OriType,NewType> {
@@ -12,15 +13,21 @@ export interface AttributeValueConverter<OriType,NewType> {
  * - the types it can be converted to
  * - the conversion functions
  */
-export abstract class AttributeType<T> {
+export abstract class AttributeType<T> implements Cloneable<AttributeType<T>> {
+    private static attrTypes: AttributeType<any>[] = []
     private _type: string
     /**
      * Map of AttrType => { Map of ModeID => Converter }
      */
     private _converters: Map<string, Map<ID, AttributeValueConverter<T, any>>> = new Map()
-    
+
     constructor(type: string) {
         this._type = type
+        AttributeType.attrTypes.push(this)
+    }
+
+    static getAttrTypes(): AttributeType<any>[] {
+        return AttributeType.attrTypes
     }
 
     get convertibleTo(): IterableIterator<string> {
@@ -71,5 +78,14 @@ export abstract class AttributeType<T> {
             }
         }
         throw new InvalidTypeConversionException(this.type, new_type_str)
+    }
+
+    clone(): AttributeType<T> {
+        // as the type is singleton, just return itself
+        return this
+    }
+
+    cloneDeepWithCustomizer(): AttributeType<T> {
+        return this
     }
 }

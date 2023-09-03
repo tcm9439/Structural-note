@@ -52,8 +52,8 @@ export class StructuralElement extends NoteElement {
     }
 
     stepInEachChildren(edit_path: EditPath, filter_mode?: number): EditPath[] {
-        return this._definition.attributes.order.order.map((attr_def) => {
-            return edit_path.clone().append(attr_def)
+        return this._definition.attributes.ordered_components.map((attr_def) => {
+            return edit_path.clone().append(attr_def.id, attr_def.name, false)
         })
     }
 }

@@ -3,6 +3,10 @@ import { StringAttribute } from "@/note/element/structural/attribute/type/String
 
 export class NumberAttribute extends AttributeType<number> {
     public static readonly TYPE: string = "NUMBER"
+    /**
+     * Singleton instance
+     * Cannot be init here as it has circular dependency with StringAttribute/...
+     */
     private static _instance: NumberAttribute
 
     constructor() {
