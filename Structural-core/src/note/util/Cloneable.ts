@@ -13,6 +13,11 @@ export interface Cloneable<T> {
     cloneDeepWithCustomizer(): T | undefined
 }
 
+export type ICloneable = {
+    clone: Function,
+    cloneDeepWithCustomizer: Function
+}
+
 export class CloneUtil {
     static cloneDeepWithCloneable<T>(value_to_clone: T): T {
         return _.cloneDeepWith(value_to_clone, (value) => {

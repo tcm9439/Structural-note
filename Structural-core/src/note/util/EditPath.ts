@@ -86,4 +86,8 @@ export class EditPath implements Cloneable<EditPath> {
     getBreadcrumb(): string[] {
         return this._path.filter((step) => step.show_in_breadcrumb).map((step) => step.name)
     }
+
+    cloneDeepWithCustomizer(): EditPath | undefined {
+        return this.clone()
+    }
 }

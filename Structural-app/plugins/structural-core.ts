@@ -1,6 +1,7 @@
-import { ViewState } from "structural-core"
+import { GlobalViewState, ModuleInit } from "structural-core"
 
 export default defineNuxtPlugin((nuxtApp) => {
-    const view_state = new ViewState()
+    ModuleInit.init()
+    const view_state = new GlobalViewState()
     nuxtApp.provide('viewState', view_state)
 })

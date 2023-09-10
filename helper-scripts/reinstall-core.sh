@@ -2,12 +2,15 @@
 # so that the following relative path will work even this script is called from other dir
 cd $(dirname $0)
 
-echo ======================
-echo "Building..."
-echo ======================
-cd ../Structural-core
-rm -rf lib lib-types
-npm run build-all
+# if second parameter exista ans is n, skip the build step
+if [ "$1" != "n" ]; then
+    echo ======================
+    echo "Building..."
+    echo ======================
+    cd ../Structural-core
+    rm -rf lib lib-types
+    npm run build-all
+fi
 
 cd ../Structural-app
 echo
