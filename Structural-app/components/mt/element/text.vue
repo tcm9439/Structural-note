@@ -12,5 +12,15 @@ const element = editing_note === undefined? null : ref(props.edit_path.getNodeBy
 </script>
 
 <template>
-    <Input v-model="element.content" type="textarea" :autosize="{ minRows: 2 }"/> 
+    <Input 
+        type="textarea" :autosize="{ minRows: 2 }"
+        v-model="element.content"
+    /> 
 </template>
+
+<style>
+    /* Don't allow user to drag & alter size of the input box */
+    textarea {
+        resize: none;
+    }
+</style>

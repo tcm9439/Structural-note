@@ -1,23 +1,18 @@
 <script setup lang="ts">
-import { EditPath, StructuralSection } from 'structural-core';
+import { EditPath, Note, StructuralSection } from 'structural-core';
 
 const props = defineProps<{
     edit_path: EditPath,
 }>()
 
-const editing_note: Ref<Note> | undefined = ref(inject("editing-note"))
-const edit_path = props.edit_path
-// const section = editing_note === undefined? null : ref(props.edit_path.getNodeByPath(editing_note.value) as StructuralSection)
+const editing_note: Ref<Note> = ref(inject("editing-note")) as Ref<Note>
+const section: Ref<StructuralSection> = ref(props.edit_path.getNodeByPath(editing_note.value)) as Ref<StructuralSection>
 
-const mode = ref(1)
+const edit_def_mode = ref(false)
+const def_path = section.value.stepInEachChildren(props.edit_path, StructuralSection.DEFINITION_FILTER_MODE)[0]
 
-function createDef(){
-    console.log("createDef")
-    mode.value = 2
-}
-
-function editDef(){
-    console.log("editDef")
+function startEditDef(){
+    edit_def_mode.value = true
 }
 
 </script>
@@ -25,14 +20,13 @@ function editDef(){
 <template>
     <mt-section-base :edit_path="edit_path" class="no-pad">
         <template #operation>
-            <template v-if="mode === 1">
-                <Button type="primary" @click="createDef">Create Def</Button>
-            </template>
-            <template v-else>
-                <Button type="primary" @click="editDef">Edit Def</Button>
-            </template>
+            <Button type="primary" @click="startEditDef">Edit Def</Button>
         </template>
     </mt-section-base>
+
+    <mt-attribute-definition-edit-struct-def 
+        :edit_path="def_path" 
+        v-model:edit_def_mode="edit_def_mode"/>
 </template>
 
 <style>

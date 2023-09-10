@@ -33,7 +33,7 @@ export class EditPathStep {
     constructor(index: UUID, name?: string, show_in_breadcrumb?: boolean) {
         this._index = index
         this._name = name || ""
-        this._show_in_breadcrumb = show_in_breadcrumb || true
+        this._show_in_breadcrumb = show_in_breadcrumb || false
     }
 
     get index(): UUID {

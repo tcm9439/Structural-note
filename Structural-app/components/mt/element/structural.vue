@@ -1,22 +1,28 @@
 <script setup lang="ts">
-import { StructuralElement } from "structural-core"
+import { EditPath, Note, StructuralElement } from "structural-core"
 
 const props = defineProps<{
-    edit_path: EditPath,
+    edit_path: EditPath, // edit_path to the StructureElement
 }>()
 
 const editing_note: Ref<Note> | undefined = ref(inject("editing-note"))
-const edit_path = props.edit_path
 const struct_element = editing_note === undefined? null : ref(props.edit_path.getNodeByPath(editing_note.value) as StructuralElement)
 
 const getValues = computed(() => {
-    return struct_element?.value.stepInEachChildren(edit_path).map((child_path) => {
+    console.log("struct element edit_path", props.edit_path)
+    return struct_element?.value.stepInEachChildren(props.edit_path).map((child_path) => {
         const child_id = child_path.getLastStep()
-        const child = child_path.getNodeByPath(editing_note.value)
+        let child = null
+        try {
+            // TODO the attr may not have value yet if just added
+            child = child_path.getNodeByPath(editing_note.value)
+        } catch (error) {
+            
+        }
 
         return {
             id: child_id,
-            type: child.definition_type_str,
+            type: child?.definition_type_str,
             path: child_path,
         }
     })
