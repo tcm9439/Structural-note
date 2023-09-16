@@ -281,6 +281,12 @@ describe("StructDefEditEvent", () => {
     })
 
     it("attrTypeUpdate", () => {
-        
+        expect(context.edit_queue.hasPendingItem()).toBeFalsy()
+        StructDefEditEvent.startEditAttr(context, attr_def.id, confirm_attr_callback_spy)
+        expect(context.edit_queue["_pending_items"].length).toBe(1)
+        StructDefEditEvent.attrTypeUpdate(context)
+        expect(context.edit_queue["_pending_items"].length).toBe(2)
+        expect(context.edit_queue["_pending_items"][0].operation).toBe(StructEditOperation.CHANGE_ATTR)
+        expect(context.edit_queue["_pending_items"][1].operation).toBe(StructEditOperation.CHANGE_ATTR_TYPE)
     })
 })

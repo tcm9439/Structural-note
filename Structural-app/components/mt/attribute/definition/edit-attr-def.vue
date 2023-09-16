@@ -14,6 +14,9 @@ const attr_def = editing_note === undefined || props.edit_path === null? ref(nul
 const ori_attr_type_name = attr_def.value?.attribute_type?.type ?? null
 
 const attr_type_can_be_changed = ref(true)
+/**
+ * Get all the attribute types that this attribute definition can be changed to.
+ */
 function getAllTypes(){
     if (ori_attr_type_name !== null){
         // existing attr, type can only be changed to convertible types
@@ -32,8 +35,10 @@ function getAllTypes(){
 
 const attr_type: Ref<string> = ref("")
 function selectedType(attr_type: AttrTypeNameAndInstance){
+    // when user select a type, update the attr_def & push a update type operation in the queue
     if (attr_def.value != null){
         attr_def.value.attribute_type = attr_type.instance
+        emit('attrTypeUpdate')
     }
 }
 

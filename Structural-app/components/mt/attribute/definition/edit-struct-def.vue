@@ -16,6 +16,7 @@ const struct_def = editing_note === undefined? ref(null) : ref(props.edit_path.g
 
 const edit_context = ref(new StructDefEditContext(struct_def.value, onExitEditStruct))
 const edit_state = computed(() => edit_context.value.state)
+const struct_has_change = computed(() => edit_context.value.edit_queue.hasConfirmedItem())
 
 let attr_def_edit_path: Ref<EditPath | null> = ref(null)
 // let attr_def_edit_path: EditPath | null = null
@@ -98,16 +99,23 @@ function attrTypeUpdate(){
         </div>
 
         <template #footer>
+            <!-- The button set for the whole struct def -->
             <div v-show="edit_state === StructDefEditState.EDITING_STRUCT">
+                <!-- Cancel button is always show & is the only way to close this Modal -->
                 <Button @click="cancelEditStruct">
                     Cancel
                 </Button>
-    
-                <Button type="primary" @click="confirmStructDef">
+
+                <!-- If no change is done, don't allow user to click the confirm button. -->
+                <Button type="primary" @click="confirmStructDef" v-show="struct_has_change">
+                    Confirm
+                </Button>
+                <Button type="primary" disabled v-show="!struct_has_change">
                     Confirm
                 </Button>
             </div>
 
+            <!-- The button set for the selected editing attr def -->
             <div v-show="edit_state === StructDefEditState.EDITING_ATTR">
                 <Button @click="cancelEditAttr">
                     Cancel

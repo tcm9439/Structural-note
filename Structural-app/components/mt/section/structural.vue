@@ -12,8 +12,19 @@ const edit_def_mode = ref(false)
 const def_path = section.value.stepInEachChildren(props.edit_path, StructuralSection.DEFINITION_FILTER_MODE)[0]
 
 function startEditDef(){
+    // show the edit-struct-def component
     edit_def_mode.value = true
 }
+
+// watch edit_def_mode
+// when change to false, reload the edit-struct-def component
+const reload_edit_struct_def_counter = ref(0)
+watch(edit_def_mode, (new_val, old_val) => {
+    if (!new_val){
+        // reload the edit-struct-def component
+        reload_edit_struct_def_counter.value++
+    }
+})
 
 </script>
 
@@ -26,7 +37,8 @@ function startEditDef(){
 
     <mt-attribute-definition-edit-struct-def 
         :edit_path="def_path" 
-        v-model:edit_def_mode="edit_def_mode"/>
+        v-model:edit_def_mode="edit_def_mode"
+        :key="reload_edit_struct_def_counter"/>
 </template>
 
 <style>

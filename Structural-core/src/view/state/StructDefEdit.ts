@@ -61,6 +61,8 @@ export class StructEditQueue {
         if (item.operation == StructEditOperation.DELETE_ATTR || item.operation == StructEditOperation.CHANGE_ATTR) {
             this._confirmed_items = this.removeAllOperationForAttr(this._confirmed_items, item.attr_id)
         }
+        // if operation == add => there should be no previous operations for the same attr
+        // if operation == type change => keep the previous operations for the same attr
 
         this._confirmed_items.push(item)
     }
@@ -197,7 +199,7 @@ export class StructDefEditContext {
 }
 
 export class StructDefEditEvent {
-    static startAddAttr(state_context: StructDefEditContext, confirm_callback: AttrDefCallback): UUID {
+    static startAddAttr(state_context: StructDefEditContext, confirm_callback?: AttrDefCallback): UUID {
         // init the attr & add the attr to the struct_def
         let attr = new AttributeDefinition()
         state_context.editing_struct_def.editing.attributes.add(attr)
@@ -207,7 +209,7 @@ export class StructDefEditEvent {
         return attr.id
     }
     
-    static startEditAttr(state_context: StructDefEditContext, id: string, confirm_callback: AttrDefCallback) {
+    static startEditAttr(state_context: StructDefEditContext, id: string, confirm_callback?: AttrDefCallback) {
         state_context.startEditAttr(id, confirm_callback)
         state_context.edit_queue.push(new StructEditQueueItem(id, StructEditOperation.CHANGE_ATTR))
     }
