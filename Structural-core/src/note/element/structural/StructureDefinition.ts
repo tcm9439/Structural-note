@@ -32,6 +32,11 @@ export class StructureDefinition extends ComponentBase implements EditPathNode, 
         return CloneUtil.cloneDeepWithCloneable(this)
     }
 
+    cloneFrom(other: StructureDefinition): void {
+        // id is not cloned
+        this._attributes = CloneUtil.cloneDeepWithCloneable(other._attributes)
+    }
+
     cloneDeepWithCustomizer(): StructureDefinition | undefined {
         return undefined
     }

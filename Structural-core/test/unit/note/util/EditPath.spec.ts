@@ -111,6 +111,18 @@ describe("EditPath", () => {
         expect(path["_path"]).toEqual([new EditPathStep("1"), new EditPathStep("3")])
     })
 
+    it("cloneFrom", () => {
+        path.append("1")
+        path.append("3")
+        const clone = new EditPath()
+        clone.cloneFrom(path)
+        expect(clone["_path"]).toEqual([new EditPathStep("1"), new EditPathStep("3")])
+
+        clone.append("4")
+        expect(clone["_path"]).toEqual([new EditPathStep("1"), new EditPathStep("3"), new EditPathStep("4")])
+        expect(path["_path"]).toEqual([new EditPathStep("1"), new EditPathStep("3")])
+    })
+
     it("getLastStep", () => {
         path.append("1")
         expect(path.getLastStep()).toBe("1")

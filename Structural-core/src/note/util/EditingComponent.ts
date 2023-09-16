@@ -48,6 +48,6 @@ export class EditingComponent<T extends ICloneable> {
      */
     rollback() {
         this._rollback_callback && this._rollback_callback(this._untainted_component)
-        this._editing_component = this._untainted_component.clone()
+        this._editing_component.cloneFrom(this._untainted_component)
     }
 }

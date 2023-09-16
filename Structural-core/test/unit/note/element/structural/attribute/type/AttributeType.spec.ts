@@ -107,6 +107,12 @@ describe('AttributeType', () => {
         expect(clone).toBe(TestAttribute.instance)
     })
 
+    it("cloneFrom", () => {
+        expect(() => {
+            TestAttribute.instance.cloneFrom(TestAttribute.instance)
+        }).toThrow("Method not supported. AttributeType is singleton.")
+    })
+
     it("cloneDeepWithCustomizer", () => {
         let clone = TestAttribute.instance.cloneDeepWithCustomizer()
         expect(clone).toBe(TestAttribute.instance)

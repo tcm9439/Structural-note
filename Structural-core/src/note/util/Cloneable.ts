@@ -7,6 +7,11 @@ export interface Cloneable<T> {
     clone(): T
 
     /**
+     * The function used for deep copying the value from other.
+     */
+    cloneFrom(other: T): void
+
+    /**
      * The function used by lodash cloneDeepWith.
      * If return undefined, the lodash ori function is used.
      */
@@ -15,6 +20,7 @@ export interface Cloneable<T> {
 
 export type ICloneable = {
     clone: Function,
+    cloneFrom: Function,
     cloneDeepWithCustomizer: Function
 }
 

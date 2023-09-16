@@ -124,16 +124,18 @@ export class StructDefEditContext {
 
     exitEdit(){
         if (this.state == StructDefEditState.EDITING_ATTR) {
-            this.state = StructDefEditState.EDITING_STRUCT
+            // rollback the attr def if it is not committed
+            this.rollbackAttr()
             this._attr_def = null
-            return
-        } 
-        
-        // finish editing the struct def
-        if (this.hasAttrChange()) {
-            this._exitCallback(true)
+            this.state = StructDefEditState.EDITING_STRUCT
         } else {
-            this._exitCallback(false)
+            // this.state == StructDefEditState.EDITING_STRUCT
+            // finish editing the struct def => execute the exit callback
+            if (this.hasAttrChange()) {
+                this._exitCallback(true)
+            } else {
+                this._exitCallback(false)
+            }
         }
     }
 
@@ -146,34 +148,30 @@ export class StructDefEditContext {
         this.state = StructDefEditState.EDITING_ATTR
     }
 
-    attrHasConfirmedEdit(): boolean {
-        return this._attr_def?.hasCommit || false
-    }
-
     hasAttrChange(): boolean {
         return this.edit_queue.hasConfirmedItem()
     }
 
     commitAttr() {
         assert(this.state == StructDefEditState.EDITING_ATTR)
-        assert(this.attr_def != null)
+        assert(this.editing_attr_def != null)
         if (this.edit_queue.hasPendingItem()) {
-            this.attr_def.commit()
+            this.editing_attr_def.commit()
             this.edit_queue.commit()
         }
     }
 
     rollbackAttr() {
         assert(this.state == StructDefEditState.EDITING_ATTR)
-        assert(this.attr_def != null)
-        let attr_id = this.attr_def.editing.id
+        assert(this.editing_attr_def != null)
+        let attr_id = this.editing_attr_def.editing.id
 
         // if the attr is newly added, remove it from the struct_def
         if (this.edit_queue.uncommittedItemsInclude(attr_id, StructEditOperation.ADD_ATTR)) {
-            this.struct_def.editing.attributes.remove(attr_id)
+            this.editing_struct_def.editing.attributes.remove(attr_id)
         }
 
-        this.attr_def.rollback()
+        this.editing_attr_def.rollback()
         this.edit_queue.rollback()
     }
 
@@ -189,11 +187,11 @@ export class StructDefEditContext {
         return this._edit_queue
     }
 
-    get struct_def(): EditingComponent<StructureDefinition> {
+    get editing_struct_def(): EditingComponent<StructureDefinition> {
         return this._struct_def
     }
 
-    get attr_def(): EditingComponent<AttributeDefinition<any>> | null {
+    get editing_attr_def(): EditingComponent<AttributeDefinition<any>> | null {
         return this._attr_def
     }
 }
@@ -202,7 +200,7 @@ export class StructDefEditEvent {
     static startAddAttr(state_context: StructDefEditContext, confirm_callback: AttrDefCallback): UUID {
         // init the attr & add the attr to the struct_def
         let attr = new AttributeDefinition()
-        state_context.struct_def.editing.attributes.add(attr)
+        state_context.editing_struct_def.editing.attributes.add(attr)
 
         state_context.startEditAttr(attr.id, confirm_callback)
         state_context.edit_queue.push(new StructEditQueueItem(attr.id, StructEditOperation.ADD_ATTR))
@@ -216,34 +214,37 @@ export class StructDefEditEvent {
     
     static deleteAttr(state_context: StructDefEditContext, id: string) {
         state_context.startEditAttr(id)
-        state_context.struct_def.editing.attributes.remove(id)
+        state_context.editing_struct_def.editing.attributes.remove(id)
         state_context.edit_queue.push(new StructEditQueueItem(id, StructEditOperation.DELETE_ATTR))
         state_context.commitAttr()
+        state_context.edit_queue.commit()
         state_context.exitEdit()
     }
     
     static confirmEditAttr(state_context: StructDefEditContext) {
         state_context.commitAttr()
+        state_context.edit_queue.commit()
         state_context.exitEdit()
     }
     
     static cancelEditAttr(state_context: StructDefEditContext) {
         state_context.rollbackAttr()
+        state_context.edit_queue.rollback()
         state_context.exitEdit()
     }
     
     static confirmEditStruct(state_context: StructDefEditContext){
-        state_context.struct_def.commit()
+        state_context.editing_struct_def.commit()
         state_context.exitEdit()
     }
     
     static cancelEditStruct(state_context: StructDefEditContext) {
-        state_context.struct_def.rollback()
+        state_context.editing_struct_def.rollback()
         state_context.exitEdit()
     }
 
     static attrTypeUpdate(state_context: StructDefEditContext) {
-        let attr_id = state_context.attr_def?.editing.id as UUID
+        let attr_id = state_context.editing_attr_def?.editing.id as UUID
         state_context.edit_queue.push(new StructEditQueueItem(attr_id, StructEditOperation.CHANGE_ATTR_TYPE))
     }
 }

@@ -79,6 +79,10 @@ export class EditPath implements Cloneable<EditPath> {
         return clone
     }
 
+    cloneFrom(other: EditPath): void {
+        this._path = other._path.slice()
+    }
+
     getLastStep(): UUID {
         return this._path[this._path.length - 1].index
     }

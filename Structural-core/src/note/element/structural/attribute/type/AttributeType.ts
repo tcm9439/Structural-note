@@ -85,6 +85,10 @@ export abstract class AttributeType<T> implements Cloneable<AttributeType<T>> {
         return this
     }
 
+    cloneFrom(other: AttributeType<T>): void {
+        throw new Error("Method not supported. AttributeType is singleton.")
+    }
+
     cloneDeepWithCustomizer(): AttributeType<T> {
         return this
     }

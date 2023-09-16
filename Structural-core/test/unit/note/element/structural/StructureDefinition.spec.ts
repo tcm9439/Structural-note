@@ -59,10 +59,35 @@ describe('StructureDefinition', () => {
         clone.attributes.remove(str_attr.id)
         expect(clone.attributes.length()).toBe(1)
         expect(definition.attributes.length()).toBe(2)
+
+        // if alter the attribute in clone, the original definition should not be affected
+        let cloned_bool_atr = clone.attributes.get(bool_attr.id) as AttributeDefinition<boolean>
+        cloned_bool_atr.name = "new name"
+        expect(cloned_bool_atr.name).toBe("new name")
+        expect(bool_attr.name).toBe("Bool Attr")
+        expect(definition.attributes.get(bool_attr.id)?.name).toBe("Bool Attr")
     })
 
     it("cloneDeepWithCustomizer", () => {
         let clone = definition.cloneDeepWithCustomizer()
         expect(clone).toBeUndefined()
+    })
+
+    it("cloneFrom", () => {
+        let clone = new StructureDefinition()
+        clone.cloneFrom(definition)
+        expect(clone).not.toBeNull()
+        // diff id
+        expect(clone.id).not.toEqual(definition.id)
+
+        // attributes are deep copied
+        expect(clone.attributes.length()).toBe(definition.attributes.length())
+        expect(clone.attributes.get(str_attr.id)).not.toBe(str_attr)
+        expect(clone.attributes.get(bool_attr.id)).not.toBe(bool_attr)
+
+        // if delete an attribute from clone, the original definition should not be affected
+        clone.attributes.remove(str_attr.id)
+        expect(clone.attributes.length()).toBe(1)
+        expect(definition.attributes.length()).toBe(2)
     })
 })

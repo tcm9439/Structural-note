@@ -50,4 +50,19 @@ describe('AttributeDefinition', () => {
         let clone = definition.cloneDeepWithCustomizer()
         expect(clone).toBeUndefined()
     })
+
+    it("cloneFrom", () => {
+        // create a new definition
+        let clone = new AttributeDefinition("clone", StringAttribute.instance, false, "clone")
+
+        clone.cloneFrom(definition)
+        expect(clone.id).not.toEqual(definition.id)
+        expect(clone.name).toEqual(definition.name)
+        expect(clone.description).toEqual(definition.description)
+        expect(clone.optional).toEqual(definition.optional)
+        expect(clone.attribute_type).toEqual(definition.attribute_type)
+
+        clone.name = "clone"
+        expect(clone.name).not.toEqual(definition.name)
+    })
 })

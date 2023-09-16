@@ -50,4 +50,13 @@ describe("AttrTypeHelper", () => {
             }
         }
     })
+
+    it("getGroupedConvertibleTypes", () => {
+        let type = NumberAttribute.instance
+        let type_groups = AttrTypeHelper.getGroupedConvertibleTypes(type, 2)
+        expect(type_groups.length).toBe(1)
+        expect(type_groups[0].length).toBe(1)
+        expect(type_groups[0][0].name).toBe("STRING")
+        expect(type_groups[0][0].instance).toBe(StringAttribute.instance)
+    })
 })

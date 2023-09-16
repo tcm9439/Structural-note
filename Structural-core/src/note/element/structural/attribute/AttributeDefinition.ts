@@ -1,10 +1,10 @@
 import { ComponentBase } from "@/note/util/ComponentBase"
-import { CloneUtil } from "@/note/util/Cloneable"
+import { CloneUtil, Cloneable } from "@/note/util/Cloneable"
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
 import { EditPath, EditPathNode, EndOfEditPathError } from "@/note/util/EditPath"
 import _ from "lodash"
 
-export class AttributeDefinition<T> extends ComponentBase implements EditPathNode {
+export class AttributeDefinition<T> extends ComponentBase implements EditPathNode, Cloneable<AttributeDefinition<T>> {
     private _name: string
     private _description: string
     private _optional: boolean
@@ -61,6 +61,14 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
 
     clone(): AttributeDefinition<T> {
         return CloneUtil.cloneDeepWithCloneable(this)
+    }
+
+    cloneFrom(other: AttributeDefinition<T>): void {
+        // id is not cloned
+        this._name = CloneUtil.cloneDeepWithCloneable(other._name)
+        this._description = CloneUtil.cloneDeepWithCloneable(other._description)
+        this._optional = CloneUtil.cloneDeepWithCloneable(other._optional)
+        this._attribute_type = CloneUtil.cloneDeepWithCloneable(other._attribute_type)
     }
 
     cloneDeepWithCustomizer(): AttributeDefinition<T> | undefined {
