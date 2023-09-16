@@ -38,16 +38,12 @@ function onExitEditStruct(has_change: boolean){
 }
 
 function startAddAttr() {
-    let new_id = StructDefEditEvent.startAddAttr(edit_context.value, (new_attr_def) => {
-        
-    })
+    let new_id = StructDefEditEvent.startAddAttr(edit_context.value)
     setAttrToEdit(new_id)
 }
 
 function startEditAttr(id: string) {
-    StructDefEditEvent.startEditAttr(edit_context.value, id, (new_attr_def) => {
-    
-    })
+    StructDefEditEvent.startEditAttr(edit_context.value, id)
     setAttrToEdit(id)
 }
 

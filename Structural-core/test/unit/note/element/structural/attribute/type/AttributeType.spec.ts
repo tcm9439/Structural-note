@@ -58,6 +58,10 @@ describe('AttributeType', () => {
         expect(found_string).toBeTruthy()
     })
 
+    it("getAttrType", () => {
+        expect(AttributeType.getAttrType("TEST")).toBe(TestAttribute.instance)
+    })
+
 	it("get type", () => {
         expect(TestAttribute.instance.type).toBe("TEST")
     })

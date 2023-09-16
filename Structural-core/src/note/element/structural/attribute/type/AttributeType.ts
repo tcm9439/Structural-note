@@ -14,7 +14,7 @@ export interface AttributeValueConverter<OriType,NewType> {
  * - the conversion functions
  */
 export abstract class AttributeType<T> implements Cloneable<AttributeType<T>> {
-    private static attrTypes: AttributeType<any>[] = []
+    private static attrTypes: Map<string, AttributeType<any>> = new Map()
     private _type: string
     /**
      * Map of AttrType => { Map of ModeID => Converter }
@@ -23,11 +23,15 @@ export abstract class AttributeType<T> implements Cloneable<AttributeType<T>> {
 
     constructor(type: string) {
         this._type = type
-        AttributeType.attrTypes.push(this)
+        AttributeType.attrTypes.set(type, this)
     }
 
     static getAttrTypes(): AttributeType<any>[] {
-        return AttributeType.attrTypes
+        return Array.from(AttributeType.attrTypes.values())
+    }
+
+    static getAttrType(type: string): AttributeType<any> | undefined {
+        return AttributeType.attrTypes.get(type)
     }
 
     get convertibleTo(): IterableIterator<string> {

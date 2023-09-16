@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, Note, AttributeDefinition, AttrTypeHelper, AttrTypeNameAndInstance } from "structural-core"
+import { EditPath, Note, AttributeDefinition, AttrTypeHelper, AttrTypeNameAndInstance, AttributeType } from "structural-core"
 
 const props = defineProps<{
     edit_path: EditPath | null, // edit_path to the AttributeDefinition
@@ -11,21 +11,23 @@ const emit = defineEmits<{
 
 const editing_note: Ref<Note> | undefined = ref(inject("editing-note"))
 const attr_def = editing_note === undefined || props.edit_path === null? ref(null) : ref(props.edit_path.getNodeByPath(editing_note.value) as AttributeDefinition<any>)
-const ori_attr_type = attr_def.value?.attribute_type?.type ?? null
+const ori_attr_type_name = attr_def.value?.attribute_type?.type ?? null
 
 const attr_type_can_be_changed = ref(true)
 function getAllTypes(){
-    if (ori_attr_type === null){
-        // new attr
-        return AttrTypeHelper.getGroupedTypes(2, null)
-    } else {
+    if (ori_attr_type_name !== null){
         // existing attr, type can only be changed to convertible types
-        let types = AttrTypeHelper.getGroupedConvertibleTypes(ori_attr_type, 2, null)
-        if (types.length === 0){
-            attr_type_can_be_changed.value = false
+        let ori_attr_type = AttributeType.getAttrType(ori_attr_type_name)
+        if (ori_attr_type !== undefined){ 
+            let types = AttrTypeHelper.getGroupedConvertibleTypes(ori_attr_type, 2, null)
+            if (types.length === 0){
+                attr_type_can_be_changed.value = false
+            }
+            return types
         }
-        return types
     }
+    // new attr
+    return AttrTypeHelper.getGroupedTypes(2, null)
 }
 
 const attr_type: Ref<string> = ref("")
