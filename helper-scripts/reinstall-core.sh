@@ -1,35 +1,18 @@
-# cd to the dir of this file 
-# so that the following relative path will work even this script is called from other dir
 cd $(dirname $0)
 
-# if second parameter exista ans is n, skip the build step
-if [ "$1" != "n" ]; then
-    echo ======================
-    echo "Building..."
-    echo ======================
-    cd ../Structural-core
-    rm -rf lib lib-types
-    npm run build-all
+if [ $# -eq 1 ]; then
+    REBUILD=$1
+else
+    REBUILD="y"
 fi
 
-cd ../Structural-app
-echo
-echo ======================
-echo "Unistalling..."
-echo ======================
-npm uninstall ../Structural-core 
-npx nuxi clean
-rm -fr ./node_modules/structural-core
+PACKAGE_PATH=../Structural-core
+PACKAGE_NAME=structural-core
+PROJECT_PATH=../Structural-app
 
-echo
-echo ======================
-echo "Installing..."
-echo ======================
-npm install ../Structural-core 
-npm install --install-links
+# fix the local transitive dependency
+ABS_FS_LIB_PATH=$(realpath ../../ts-util/tauri-fs-util)
+ls -la "$PACKAGE_PATH/package.json"
+sed -i '' "s|file:../../ts-util/tauri-fs-util|file:$ABS_FS_LIB_PATH|g" "$PACKAGE_PATH/package.json"
 
-echo
-echo ======================
-echo "Checking..."
-echo ======================
-ls -lah ./node_modules/ | grep structural-core
+./reinstall-package.sh $PACKAGE_PATH $PACKAGE_NAME $REBUILD $PROJECT_PATH NUXT
