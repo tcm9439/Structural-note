@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, Note, StructuralSection, ViewState } from "structural-core"
+import { EditPath, Note, StructuralSection, InjectConstant } from "structural-core"
 import MtSectionBase from "@/components/mt/section/base.vue"
 import MtSectionStructural from "@/components/mt/section/structural.vue"
 
@@ -9,7 +9,7 @@ const props = defineProps<{
 
 // Provide the note in edit to the children
 const editing_note = ref(props.note)
-provide("editing-note", props.note)
+provide(InjectConstant.EDITING_NOTE, props.note)
 
 const { $viewState } = useNuxtApp()
 const view_state = ref($viewState)
@@ -40,18 +40,7 @@ const getSections = computed(() => {
 </script>
 
 <template>
-    <Card>
-        <template #title>
-            <p>{{ editing_note.title }}</p>
-        </template>
-        
-        <!-- <div style="background-color: lightgray;">
-            {{ editing_note }}
-        </div> -->
-
-        <template v-for="section of getSections">
-            <component :is="section.type" :edit_path="section.path" />
-        </template>
-        
-    </Card>    
+    <template v-for="section of getSections">
+        <component :is="section.type" :edit_path="section.path" />
+    </template>
 </template>

@@ -20,6 +20,10 @@ export class NoteSection extends ComponentBase implements EditPathNode {
         return this._title
     }
 
+    set title(title: string) {
+        this._title = title
+    }
+
     get elements(): OrderedComponents<NoteElement> {
         return this._elements
     }

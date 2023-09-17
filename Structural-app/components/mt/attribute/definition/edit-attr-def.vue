@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, Note, AttributeDefinition, AttrTypeHelper, AttrTypeNameAndInstance, AttributeType } from "structural-core"
+import { EditPath, Note, AttributeDefinition, AttrTypeHelper, AttrTypeNameAndInstance, AttributeType, InjectConstant } from "structural-core"
 
 const props = defineProps<{
     edit_path: EditPath | null, // edit_path to the AttributeDefinition
@@ -9,7 +9,7 @@ const emit = defineEmits<{
     (event: 'attrTypeUpdate'): void
 }>()
 
-const editing_note: Ref<Note> | undefined = ref(inject("editing-note"))
+const editing_note: Ref<Note> | undefined = ref(inject(InjectConstant.EDITING_NOTE))
 const attr_def = editing_note === undefined || props.edit_path === null? ref(null) : ref(props.edit_path.getNodeByPath(editing_note.value) as AttributeDefinition<any>)
 const ori_attr_type_name = attr_def.value?.attribute_type?.type ?? null
 

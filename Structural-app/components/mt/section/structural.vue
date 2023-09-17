@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { EditPath, Note, StructuralSection } from 'structural-core';
+import { EditPath, Note, StructuralSection, InjectConstant } from 'structural-core';
 
 const props = defineProps<{
     edit_path: EditPath,
 }>()
 
-const editing_note: Ref<Note> = ref(inject("editing-note")) as Ref<Note>
+const editing_note: Ref<Note> = ref(inject(InjectConstant.EDITING_NOTE)) as Ref<Note>
 const section: Ref<StructuralSection> = ref(props.edit_path.getNodeByPath(editing_note.value)) as Ref<StructuralSection>
 
 const edit_def_mode = ref(false)

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { Note, TextElement, EditPath } from 'structural-core'
+import { Note, TextElement, EditPath, InjectConstant } from 'structural-core'
 
 const props = defineProps<{
     edit_path: EditPath,
 }>()
 
-const editing_note: Ref<Note> | undefined = ref(inject("editing-note"))
+const editing_note: Ref<Note> | undefined = ref(inject(InjectConstant.EDITING_NOTE))
 const edit_path = props.edit_path
 const element = editing_note === undefined? null : ref(props.edit_path.getNodeByPath(editing_note.value) as TextElement)
 

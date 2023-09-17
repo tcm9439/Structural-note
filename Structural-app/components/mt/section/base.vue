@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { Note, NoteSection, TextElement, StructuralElement, EditPath } from 'structural-core'
+import { Note, NoteSection, TextElement, StructuralElement, EditPath, InjectConstant } from 'structural-core'
 
 const props = defineProps<{
     edit_path: EditPath,
 }>()
 
-const editing_note: Ref<Note> | undefined = ref(inject("editing-note"))
+const editing_note: Ref<Note> | undefined = ref(inject(InjectConstant.EDITING_NOTE))
 const edit_path = props.edit_path
-const section = editing_note === undefined? null : ref(props.edit_path.getNodeByPath(editing_note.value) as NoteSection)
+const section = editing_note === undefined? null : reactive(props.edit_path.getNodeByPath(editing_note.value) as NoteSection)
 
 const getElement = computed(() => {
-    return section?.value.stepInEachChildren(edit_path).map((child_path) => {
+    return section?.stepInEachChildren(edit_path).map((child_path) => {
         const child_id = child_path.getLastStep()
         const child = child_path.getNodeByPath(editing_note.value)
         let child_type: string
@@ -34,7 +34,7 @@ const getElement = computed(() => {
 <template>
     <Card v-if="section != null">
         <template #title>
-            {{ section.title }}
+            <Input v-model="section.title" :border="false" />
         </template>
 
         <template #extra>

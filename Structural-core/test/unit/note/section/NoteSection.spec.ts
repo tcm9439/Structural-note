@@ -15,9 +15,11 @@ describe("TextAreaSection", () => {
         expect(note_section).not.toBeUndefined()
     })
 
-    it("get title", () => {
+    it("get set title", () => {
         let note_section: NoteSection = new NoteSection("Title 1")
         expect(note_section.title).toBe("Title 1")
+        note_section.title = "Title 2"
+        expect(note_section.title).toBe("Title 2")
     })
 
     it("get elements", () => {

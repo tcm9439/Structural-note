@@ -28,3 +28,5 @@ export * from "@/view/state/GlobalViewState"
 export * from "@/view/vue-helper/AttrTypeHelper"
 export * from "@/view/vue-helper/StructuralDefinitionHelper"
 export * from "@/view/state/StructDefEdit"
+
+export * from "@/view/GlobalConstant"

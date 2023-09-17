@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { EditPath, Note, AttributeValue } from "structural-core"
+import { EditPath, Note, AttributeValue, InjectConstant } from "structural-core"
 
 const props = defineProps<{
     edit_path: EditPath,
 }>()
 
-const editing_note: Ref<Note> | undefined = ref(inject("editing-note"))
+const editing_note: Ref<Note> | undefined = ref(inject(InjectConstant.EDITING_NOTE))
 const value = editing_note === undefined? null : ref(props.edit_path.getNodeByPath(editing_note.value) as AttributeValue<string>)
 
 </script>
 
 <template>
-    <span>{{ value.definition.name }}: </span>
+    <span>{{ value?.definition.name }}: </span>
     <Input 
         v-model="value.value" 
         style="width: 300px"

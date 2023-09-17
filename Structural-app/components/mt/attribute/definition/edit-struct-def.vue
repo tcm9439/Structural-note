@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, Note, StructureDefinition, AttributeDefinition, StringAttribute, StructDefEditContext, StructDefEditState, StructDefEditEvent } from "structural-core"
+import { EditPath, Note, StructureDefinition, EventConstant, StructDefEditContext, StructDefEditState, StructDefEditEvent, InjectConstant } from "structural-core"
 const { $Message } = useNuxtApp()
 
 const props = defineProps<{
@@ -10,8 +10,9 @@ const props = defineProps<{
 const emit = defineEmits<{
     (event: 'update:edit_def_mode', visible: boolean): void
 }>()
+const { $emitter } = useNuxtApp()
 
-const editing_note: Ref<Note> | undefined = ref(inject("editing-note"))
+const editing_note: Ref<Note> | undefined = ref(inject(InjectConstant.EDITING_NOTE))
 const struct_def = editing_note === undefined? ref(null) : ref(props.edit_path.getNodeByPath(editing_note.value) as StructureDefinition)
 
 const edit_context = ref(new StructDefEditContext(struct_def.value, onExitEditStruct))
@@ -28,14 +29,15 @@ function setAttrToEdit(id: string){
 }
 
 function onExitEditStruct(has_change: boolean){
-    // close this modal
-    emit('update:edit_def_mode', false)
     if (has_change){
         // there is changes to the def
+        $emitter.emit(EventConstant.ATTR_DEF_UPDATE, edit_context.value.edit_queue)
         $Message.info("Update Definition")
     } else {
         $Message.info("Cancel")
     }
+    // close this modal
+    emit('update:edit_def_mode', false)
 }
 
 function startAddAttr() {

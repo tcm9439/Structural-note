@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "structural-core": "file:../Structural-core",
+    "tiny-emitter": "^2.1.0",
     "view-ui-plus": "^1.3.14"
   }
 }

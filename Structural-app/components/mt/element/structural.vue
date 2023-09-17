@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { EditPath, Note, StructuralElement } from "structural-core"
+import { EditPath, Note, StructuralElement, StructEditQueue, InjectConstant, EventConstant } from "structural-core"
 
 const props = defineProps<{
     edit_path: EditPath, // edit_path to the StructureElement
 }>()
+const { $emitter } = useNuxtApp()
 
-const editing_note: Ref<Note> | undefined = ref(inject("editing-note"))
+const editing_note: Ref<Note> | undefined = ref(inject(InjectConstant.EDITING_NOTE))
 const struct_element = editing_note === undefined? null : ref(props.edit_path.getNodeByPath(editing_note.value) as StructuralElement)
 
 type ElementValue = {
@@ -43,6 +44,17 @@ const elements_values: Ref<null | ElementValue[]> = ref(null)
 watch(() => struct_element?.value?.values.size, () => {
     elements_values.value = getElementsValues()
 }, { immediate: true })
+
+// alter the DOM according to the changes
+function attributeDefinitionUpdateHandler(edit_queue: StructEditQueue){
+    console.log("attributeDefinitionUpdateHandler", edit_queue)
+}
+$emitter.on(EventConstant.ATTR_DEF_UPDATE, attributeDefinitionUpdateHandler);
+
+onBeforeUnmount(() => {
+    // Unsubscribe or remove event listeners here. Otherwise, the DOM could not be destroyed
+    $emitter.off(EventConstant.ATTR_DEF_UPDATE, attributeDefinitionUpdateHandler);
+})
 
 </script>
 
