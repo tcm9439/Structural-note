@@ -272,11 +272,7 @@ describe("StructDefEditEvent", () => {
         StructDefEditEvent.startEditAttr(context, attr_def.id, confirm_attr_callback_spy)
         attr_def.name = "New Name"
         StructDefEditEvent.confirmEditAttr(context)
-        console.log(context.editing_struct_def.editing.attributes)
-        console.log(context.editing_struct_def.untainted.attributes)
         StructDefEditEvent.cancelEditStruct(context)
-        console.log(context.editing_struct_def.editing.attributes)
-        console.log(context.editing_struct_def.untainted.attributes)
         expect(struct_def.attributes.get(attr_def.id)?.name).toBe("Test String Attr")
     })
 

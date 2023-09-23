@@ -61,4 +61,45 @@ describe('StructuralElement', () => {
         expect(edit_paths[0].getLastStep()).toBe(str_attr.id)
         expect(edit_paths[1].getLastStep()).toBe(num_attr.id)
     })
+
+    it("saveAsJson", () => {
+        let value2 = new AttributeValue(num_attr, 1)
+        element.addValue(num_attr, value2)
+        let value = new AttributeValue(str_attr, "test")
+        element.addValue(str_attr, value)
+
+        let json = element.saveAsJson()
+        expect(json).toEqual({
+            type: "StructuralElement",
+            id: element.id,
+            definition_id: definition.id,
+            values: [
+                {
+                    id: value.id,
+                    definition_id: str_attr.id,
+                    value: "test"
+                },
+                {
+                    id: value2.id,
+                    definition_id: num_attr.id,
+                    value: 1
+                }
+            ]
+        })
+    })
+
+    it("loadFromJson", () => {
+        let value2 = new AttributeValue(num_attr, 1)
+        element.addValue(num_attr, value2)
+        let value = new AttributeValue(str_attr, "test")
+        element.addValue(str_attr, value)
+        let json = element.saveAsJson()
+        let new_element = StructuralElement.loadFromJson(json, definition)
+        expect(new_element).not.toBeNull()
+        expect(new_element?.id).toBe(element.id)
+        expect(new_element?.definition).toBe(definition)
+        expect(new_element?.values.size).toBe(2)
+        expect(new_element?.values.get(str_attr.id)).toEqual(value)
+        expect(new_element?.values.get(num_attr.id)).toEqual(value2)
+    })
 })

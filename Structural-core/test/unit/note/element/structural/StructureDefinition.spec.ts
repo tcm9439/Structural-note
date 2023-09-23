@@ -90,4 +90,33 @@ describe('StructureDefinition', () => {
         expect(clone.attributes.length()).toBe(1)
         expect(definition.attributes.length()).toBe(2)
     })
+
+    it("saveAsJson", () => {
+        let json = definition.saveAsJson()
+        expect(json).toEqual({
+            id: definition.id,
+            attributes: [
+                {
+                    id: str_attr.id,
+                    name: str_attr.name,
+                    description: str_attr.description,
+                    optional: str_attr.optional,
+                    attribute_type: str_attr.attribute_type?.type
+                },
+                {
+                    id: bool_attr.id,
+                    name: bool_attr.name,
+                    description: bool_attr.description,
+                    optional: bool_attr.optional,
+                    attribute_type: bool_attr.attribute_type?.type
+                }
+            ]
+        })
+    })
+
+    it("loadFromJson", () => {
+        let json = definition.saveAsJson()
+        let new_definition = StructureDefinition.loadFromJson(json)
+        expect(new_definition).toEqual(definition)
+    })
 })

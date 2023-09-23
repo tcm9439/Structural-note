@@ -1,5 +1,5 @@
 import { ID } from "@/common/CommonTypes"
-import { Cloneable } from "@/note/util/Cloneable"
+import { Cloneable } from "@/common/Cloneable"
 import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/note/element/structural/attribute/exception/AttributeException"
 
 export interface AttributeValueConverter<OriType,NewType> {

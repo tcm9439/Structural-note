@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { CloneUtil } from "@/note/util/Cloneable"
+import { CloneUtil } from "@/common/Cloneable"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
 
 describe("Cloneable", () => {

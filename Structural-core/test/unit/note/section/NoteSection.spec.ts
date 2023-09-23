@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest"
 import { NoteSection } from "@/note/section/NoteSection"
 import { TextElement } from "@/note/element/TextElement"
+import _ from "lodash"
 
 describe("TextAreaSection", () => {
     let note_section: NoteSection
@@ -33,5 +34,20 @@ describe("TextAreaSection", () => {
         let new_ele = new TextElement("Content 3")
         note_section.elements.add(new_ele)
         expect(note_section.getNextEditPathNode(new_ele.id)).toBe(new_ele)
+    })
+
+    it("saveAsJson", () => {
+        let json = note_section.saveAsJson()
+        expect(json.id).toBe(note_section.id)
+        expect(json.type).toBe("NoteSection")
+        expect(json.title).toBe("Title 1")
+        expect(json.elements).not.toBeUndefined()
+        expect(json.elements.length).toBe(2)
+    })
+
+    it("loadFromJson", () => {
+        let json = note_section.saveAsJson()
+        let note_section_2 = NoteSection.loadFromJson(json)
+        expect(note_section_2).toEqual(note_section)
     })
 })

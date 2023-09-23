@@ -3,10 +3,13 @@ import { ComponentBase } from '@/note/util/ComponentBase'
 import { Note } from "@/note/Note"
 
 describe('ComponentBase', () => {
-    it('constructor & get id', () => {
+    it('get set id', () => {
         let component = new Note("ABC")
         expect(component).not.toBeUndefined()
         expect(component.id).not.toBeUndefined()
+
+        component["id"] = "ABC2"
+        expect(component.id).toBe("ABC2")
     })
 
 	it('generateNewId', () => {

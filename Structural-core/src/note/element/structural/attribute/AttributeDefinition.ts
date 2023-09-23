@@ -1,8 +1,17 @@
 import { ComponentBase } from "@/note/util/ComponentBase"
-import { CloneUtil, Cloneable } from "@/note/util/Cloneable"
+import { CloneUtil, Cloneable } from "@/common/Cloneable"
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
 import { EditPath, EditPathNode, EndOfEditPathError } from "@/note/util/EditPath"
-import _ from "lodash"
+import { z } from "zod"
+
+export const AttributeDefinitionJson = z.object({
+    id: z.string(),
+    name: z.string(),
+    description: z.string(),
+    optional: z.boolean(),
+    attribute_type: z.string()
+}).required()
+
 
 export class AttributeDefinition<T> extends ComponentBase implements EditPathNode, Cloneable<AttributeDefinition<T>> {
     private _name: string
@@ -73,5 +82,31 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
 
     cloneDeepWithCustomizer(): AttributeDefinition<T> | undefined {
         return undefined
+    }
+
+    saveAsJson(): z.infer<typeof AttributeDefinitionJson> {
+        if (this.attribute_type === null) {
+            throw new Error("Attribute type is null")
+        }
+        return {
+            id: this.id,
+            name: this.name,
+            description: this.description,
+            optional: this.optional,
+            attribute_type: this.attribute_type.type
+        }
+    }
+
+    static loadFromJson(json: object): AttributeDefinition<any> | null {
+        const result = AttributeDefinitionJson.safeParse(json)
+        if (!result.success) {
+            console.error("Failed to load AttributeDefinition from JSON", result.error)
+            return null
+        }
+        const valid_json = result.data
+        const attribute_type = AttributeType.getAttrType(valid_json.attribute_type)
+        const def = new AttributeDefinition(valid_json.name, attribute_type, valid_json.optional, valid_json.description)
+        def.id = valid_json.id
+        return def
     }
 }

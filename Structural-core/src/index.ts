@@ -21,7 +21,7 @@ export * from "./note/util/ComponentBase"
 export * from "./note/util/OrderedComponents"
 export * from "./note/util/EditPath"
 export * from "./note/util/EditingComponent"
-export * from "./note/util/Cloneable"
+export * from "./common/Cloneable"
 
 export * from "./view/ViewTypes"
 export * from "./view/state/GlobalViewState"

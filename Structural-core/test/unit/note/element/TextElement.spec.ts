@@ -22,4 +22,19 @@ describe("TextAreaSection", () => {
         text_area_section.content = "Content DEF"
         expect(text_area_section.content).toBe("Content DEF")
     })
+
+    it("saveAsJson", () => {
+        text_area_section.content = "Content ABC"
+        expect(text_area_section.saveAsJson()).toEqual({
+            type: "TextElement",
+            id: text_area_section.id,
+            content: "Content ABC"
+        })
+    })
+
+    it("loadFromJson", () => {
+        let json = text_area_section.saveAsJson()
+        let text_area_section_2 = TextElement.loadFromJson(json)
+        expect(text_area_section_2).toEqual(text_area_section)
+    })
 })

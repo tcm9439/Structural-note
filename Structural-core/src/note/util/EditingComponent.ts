@@ -1,4 +1,4 @@
-import { ICloneable } from "@/note/util/Cloneable"
+import { ICloneable } from "@/common/Cloneable"
 
 export class EditingComponent<T extends ICloneable> {
     private _untainted_component: T

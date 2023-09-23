@@ -45,4 +45,44 @@ describe('AttributeValue', () => {
     it("stepInEachChildren", () => {
         expect(() => { attr_value.stepInEachChildren(new EditPath()) }).toThrow(EndOfEditPathError)
     })
+
+    it("saveAsJson", () => {
+        expect(attr_value.saveAsJson()).toEqual({
+            id: attr_value.id,
+            definition_id: definition.id,
+            value: "Hello World"
+        })
+    })
+
+    it("loadFromJson", () => {
+        let json = { 
+            id: "ABC1199", 
+            definition_id: definition.id,
+            value: "Hello World" 
+        }
+        let value = AttributeValue.loadFromJson(json, definition)
+        expect(value).not.toBeNull()
+        expect(value?.id).toBe("ABC1199")
+        expect(value?.definition).toBe(definition)
+        expect(value?.value).toBe("Hello World")
+    })
+
+    it("loadFromJson with invalid json schema", () => {
+        let json = { 
+            id: "ABC1199", 
+            definition_id: definition.id,
+        }
+        let value = AttributeValue.loadFromJson(json, definition)
+        expect(value).toBeNull()
+    })
+
+    it("loadFromJson with invalid definition id", () => {
+        let json = { 
+            id: "ABC1199", 
+            definition_id: definition.id + "2",
+            value: "Hello World" 
+        }
+        let value = AttributeValue.loadFromJson(json, definition)
+        expect(value).toBeNull()
+    })
 })

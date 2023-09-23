@@ -3,6 +3,13 @@ import { ComponentBase } from "@/note/util/ComponentBase"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
 import { EditPath, EditPathNode, EndOfEditPathError } from "@/note/util/EditPath"
 import { NullAttrTypeException } from "@/note/element/structural/attribute/exception/AttributeException"
+import { z } from "zod"
+
+export const AttributeValueJson = z.object({
+    id: z.string(),
+    definition_id: z.string(),
+    value: z.any()  // this accept null, which actually should not be allowed
+}).required()
 
 /**
  * data type + data (value)
@@ -51,5 +58,36 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
 
     stepInEachChildren(edit_path: EditPath, filter_mode?: number): EditPath[] {
         throw new EndOfEditPathError("AttributeValue")
+    }
+
+    saveAsJson(): z.infer<typeof AttributeValueJson> {
+        return {
+            id: this.id,
+            definition_id: this.definition_id,
+            value: this.value
+        }
+    }
+
+    static loadFromJson(json: object, attribute_def: AttributeDefinition<any>): AttributeValue<any> | null {
+        // check if the json_data match the schema
+        const result = AttributeValueJson.safeParse(json)
+        if (!result.success) {
+            console.error(result.error)
+            return null
+        }
+        const valid_json = result.data
+
+        // check if the attribute definition match
+        if (valid_json.definition_id !== attribute_def.id) {
+            // throw new Error("Definition id not match")
+            return null
+        }
+        if (result.data.value == null){
+            return null
+        }
+
+        const value = new AttributeValue(attribute_def, valid_json.value)
+        value.id = valid_json.id
+        return value
     }
 }

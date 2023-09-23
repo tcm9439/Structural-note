@@ -52,4 +52,19 @@ describe('StructuralSection', () => {
         expect(edit_path.length).toBe(1)
         expect(edit_path[0].getLastStep()).toBe(txt_element.id)
     })
+
+    it("saveAsJson", () => {
+        let json = section.saveAsJson()
+        expect(json.id).toBe(section.id)
+        expect(json.type).toBe("StructuralSection")
+        expect(json.definition).not.toBeUndefined()
+        expect(json.title).toBe("title")
+        expect(json.elements.length).toBe(1)
+    })
+
+    it("loadFromJson", () => {
+        let json = section.saveAsJson()
+        let section_2 = StructuralSection.loadFromJson(json)
+        expect(section_2).toEqual(section)
+    })
 })
