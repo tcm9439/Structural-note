@@ -1,5 +1,6 @@
 import { ComponentBase } from "@/note/util/ComponentBase"
-import { OrderedComponents } from "@/note/util/OrderedComponents"
+import { UUID } from "@/common/CommonTypes"
+import { OrderedComponents, ComponentsOrderJson } from "@/note/util/OrderedComponents"
 import { EditPathNode, EditPath } from "@/note/util/EditPath"
 import { NoteSection, NoteSectionJson } from "@/note/section/NoteSection"
 import { StructuralSection } from "@/note/section/StructuralSection"
@@ -8,6 +9,7 @@ import { z } from "zod"
 export const NoteJson = z.object({
     id: z.string(),
     title: z.string(),
+    section_order: ComponentsOrderJson,
     sections: z.array(NoteSectionJson.passthrough())
 }).required()
 
@@ -56,6 +58,7 @@ export class Note extends ComponentBase implements EditPathNode {
         return {
             id: this.id,
             title: this.title,
+            section_order: this.sections.saveAsJson(),
             sections: sections
         }
     }
@@ -70,6 +73,9 @@ export class Note extends ComponentBase implements EditPathNode {
         
         const note = new Note(valid_json.title)
         note.id = valid_json.id
+        
+        // load sections
+        let loaded_sections: Map<UUID, NoteSection> = new Map()
         valid_json.sections.forEach((section_json) => {
             let section: NoteSection | null
             if (section_json.type === "NoteSection") {
@@ -83,9 +89,22 @@ export class Note extends ComponentBase implements EditPathNode {
 
             if (section !== null) {
                 console.log(`Fail to load section: ${section.title}`)
-                note.sections.add(section)
+                // note.sections.add(section)
+                loaded_sections.set(section.id, section)
             }
         })
+
+        // add the loaded section in order
+        let order = valid_json.section_order
+        // forEach may not preserve order
+        for (let i = 0; i < order.length; i++) {
+            const section = loaded_sections.get(order[i])
+            if (section === undefined) {
+                return null
+            }
+            note.sections.add(section)
+        }
+
         return note
     }
 }

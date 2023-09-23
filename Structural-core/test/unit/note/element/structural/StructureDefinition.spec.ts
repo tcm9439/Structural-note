@@ -95,6 +95,7 @@ describe('StructureDefinition', () => {
         let json = definition.saveAsJson()
         expect(json).toEqual({
             id: definition.id,
+            attribute_order: [str_attr.id, bool_attr.id],
             attributes: [
                 {
                     id: str_attr.id,

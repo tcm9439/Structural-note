@@ -1,6 +1,9 @@
 import { UUID } from "@/common/CommonTypes"
 import { OrderedList } from "@/common/OrderedList"
 import { ComponentBase } from "@/note/util/ComponentBase"
+import { z } from "zod"
+
+export const ComponentsOrderJson = z.array(z.string())
 
 export class OrderedComponents<T extends ComponentBase> {
     private _components: Map<UUID, T> = new Map()
@@ -23,6 +26,10 @@ export class OrderedComponents<T extends ComponentBase> {
 
     public static orderByList<T extends ComponentBase>(components: Map<UUID, T>, order: OrderedList<UUID>): T[] {
         return order.order.map(id => components.get(id) as T)
+    }
+
+    saveAsJson(): z.infer<typeof ComponentsOrderJson> {
+        return this._order.order
     }
 
     length(): number {

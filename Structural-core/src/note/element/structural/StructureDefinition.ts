@@ -1,4 +1,4 @@
-import { OrderedComponents } from "@/note/util/OrderedComponents"
+import { OrderedComponents, ComponentsOrderJson } from "@/note/util/OrderedComponents"
 import { AttributeDefinition, AttributeDefinitionJson } from "@/note/element/structural/attribute/AttributeDefinition"
 import { ComponentBase } from "@/note/util/ComponentBase"
 import { EditPath, EditPathNode } from "@/note/util/EditPath"
@@ -7,6 +7,7 @@ import { z } from "zod"
 
 export const StructureDefinitionJson = z.object({
     id: z.string(),
+    attribute_order: ComponentsOrderJson,
     attributes: z.array(AttributeDefinitionJson)
 }).required()
 
@@ -54,6 +55,7 @@ export class StructureDefinition extends ComponentBase implements EditPathNode, 
 
         return {
             id: this.id,
+            attribute_order: this.attributes.saveAsJson(),
             attributes: attributes
         }
     }
@@ -67,12 +69,26 @@ export class StructureDefinition extends ComponentBase implements EditPathNode, 
         const valid_json = result.data
         let definition = new StructureDefinition()
         definition.id = valid_json.id
+
+        let loaded_attr = new Map<string, AttributeDefinition<any>>()
         valid_json.attributes.forEach((attr_json: object) => {
             let attr_def = AttributeDefinition.loadFromJson(attr_json)
             if (attr_def !== null) {
-                definition.attributes.add(attr_def)
+                // definition.attributes.add(attr_def)
+                loaded_attr.set(attr_def.id, attr_def)
             }
         })
+
+        // add the definitions in the order
+        let order = valid_json.attribute_order
+        for (let i = 0; i < order.length; i++) {
+            let attr_def = loaded_attr.get(order[i])
+            if (attr_def === undefined) {
+                return null
+            }
+            definition.attributes.add(attr_def)
+        }
+
         return definition
     }
 }

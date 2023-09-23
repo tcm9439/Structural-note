@@ -1,5 +1,5 @@
 import { ComponentBase } from "@/note/util/ComponentBase"
-import { OrderedComponents } from '@/note/util/OrderedComponents'
+import { OrderedComponents, ComponentsOrderJson } from '@/note/util/OrderedComponents'
 import { UUID } from "@/common/CommonTypes"
 import { EditPathNode, EditPath } from "@/note/util/EditPath"
 import { NoteElement, NoteElementJson } from "@/note/element/NoteElement"
@@ -10,6 +10,7 @@ export const NoteSectionJson = z.object({
     type: z.string(),
     id: z.string(),
     title: z.string(),
+    elements_order: ComponentsOrderJson,
     // passthrough : won't filter out child's class properties which don't exist in the parent class
     elements: z.array(NoteElementJson.passthrough())
 }).required()
@@ -57,6 +58,7 @@ export class NoteSection extends ComponentBase implements EditPathNode {
             type: "NoteSection",
             id: this.id,
             title: this.title,
+            elements_order: this.elements.saveAsJson(),
             elements: elements
         }
     }
@@ -70,6 +72,8 @@ export class NoteSection extends ComponentBase implements EditPathNode {
         const valid_json = result.data
         const section = new NoteSection(valid_json.title)
         section.id = valid_json.id
+
+        let loaded_elements: Map<UUID, NoteElement> = new Map()
         valid_json.elements.forEach((element_json) => {
             let element: NoteElement | null
             if (element_json.type === "TextElement") {
@@ -80,9 +84,22 @@ export class NoteSection extends ComponentBase implements EditPathNode {
             }
 
             if (element !== null) {
-                section.elements.add(element)
+                // section.elements.add(element)
+                loaded_elements.set(element.id, element)
             }
         })
+
+        // add elements in order
+        for (let i = 0; i < valid_json.elements_order.length; i++) {
+            let element_id = valid_json.elements_order[i]
+            let element = loaded_elements.get(element_id)
+            if (element === undefined) {
+                console.error(`Fail to load element: ${element_id}`)
+                return null
+            }
+            section.elements.add(element)
+        }
+
         return section
     }
 }
