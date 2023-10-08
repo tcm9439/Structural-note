@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, Note, StructureDefinition, EventConstant, StructDefEditContext, StructDefEditState, StructDefEditEvent, InjectConstant } from "structural-core"
+import { EditPath, Note, StructureDefinition, EventConstant, StructDefEditContext, StructDefEditState, StructDefEditEvent, InjectConstant, AttributeDefinition } from "structural-core"
 const { $Message } = useNuxtApp()
 
 const props = defineProps<{
@@ -20,15 +20,12 @@ const edit_state = computed(() => edit_context.value.state)
 const struct_has_change = computed(() => edit_context.value.edit_queue.hasConfirmedItem())
 
 let attr_def_edit_path: Ref<EditPath | null> = ref(null)
-// let attr_def_edit_path: EditPath | null = null
-// const attr_def: Ref<AttributeDefinition<any> | null> = ref(null)
 function setAttrToEdit(id: string){
     attr_def_edit_path.value = props.edit_path.clone().append(id)
-    // attr_def_edit_path = props.edit_path.clone().append(id)
-    // attr_def.value = struct_def.value?.attributes.get(id) ?? null
 }
 
 function onExitEditStruct(has_change: boolean){
+    console.log(struct_def.value)
     if (has_change){
         // there is changes to the def
         $emitter.emit(EventConstant.ATTR_DEF_UPDATE, edit_context.value.edit_queue)
@@ -70,8 +67,8 @@ function cancelEditStruct() {
     StructDefEditEvent.cancelEditStruct(edit_context.value)
 }
 
-function attrTypeUpdate(){
-    StructDefEditEvent.attrTypeUpdate(edit_context.value)
+function attrTypeUpdate(attr_def: AttributeDefinition<any>){
+    StructDefEditEvent.attrTypeUpdate(edit_context.value, attr_def)
 }
 
 </script>

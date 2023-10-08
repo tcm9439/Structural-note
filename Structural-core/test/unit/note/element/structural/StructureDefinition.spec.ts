@@ -101,14 +101,12 @@ describe('StructureDefinition', () => {
                     id: str_attr.id,
                     name: str_attr.name,
                     description: str_attr.description,
-                    optional: str_attr.optional,
                     attribute_type: str_attr.attribute_type?.type
                 },
                 {
                     id: bool_attr.id,
                     name: bool_attr.name,
                     description: bool_attr.description,
-                    optional: bool_attr.optional,
                     attribute_type: bool_attr.attribute_type?.type
                 }
             ]

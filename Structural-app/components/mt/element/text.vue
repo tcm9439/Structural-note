@@ -6,7 +6,6 @@ const props = defineProps<{
 }>()
 
 const editing_note: Ref<Note> | undefined = ref(inject(InjectConstant.EDITING_NOTE))
-const edit_path = props.edit_path
 const element = editing_note === undefined? null : ref(props.edit_path.getNodeByPath(editing_note.value) as TextElement)
 
 </script>

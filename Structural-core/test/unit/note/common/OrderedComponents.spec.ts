@@ -3,6 +3,7 @@ import { OrderedList } from "@/common/OrderedList"
 import { OrderedComponents } from '@/note/util/OrderedComponents'
 import { Note } from "@/note/Note"
 import { UUID } from "@/common/CommonTypes"
+import _ from "lodash"
 
 function compareComponentsOrder(components: OrderedComponents<Note>, note_ids: Note[], expected_order_index: number[]): void {
     expect(components.length()).toBe(expected_order_index.length)
@@ -68,6 +69,19 @@ describe('OrderedComponents', () => {
 
         components.add(note)
         expect(components.get(note.id)).toBe(note)
+    })
+
+    it("override", () => {
+        const note = new Note("Title 4")
+        expect(() => components.override(note)).toThrowError(/not exist/)
+        
+        components.add(note)
+        expect(components.get(note.id)).toBe(note)
+        const note2 = new Note("Title 4")
+        _.set(note2, "id", note.id)
+        expect(() => components.override(note2)).not.toThrowError(/not exist/)
+        expect(components.get(note.id)).toBe(note2)
+
     })
 
     it("has", () => {

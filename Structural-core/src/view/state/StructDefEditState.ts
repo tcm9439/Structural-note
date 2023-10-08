@@ -2,6 +2,9 @@ import { UUID } from "@/common/CommonTypes"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
 import { StructureDefinition } from "@/note/element/structural/StructureDefinition"
 import { EditingComponent } from "@/note/util/EditingComponent"
+import { StructuralElement } from "@/note/element/structural/StructuralElement"
+import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
+import { InvalidTypeConversionForDataException } from "@/note/element/structural/attribute/exception/AttributeException"
 import assert from "assert"
 
 export type AttrDefCallback = (new_attr: AttributeDefinition<any>) => void
@@ -87,6 +90,11 @@ export class StructEditQueue {
         this._pending_items = []
     }
 
+    purge(){
+        this._confirmed_items = []
+        this._pending_items = []
+    }
+
     /**
      * Remove all operations for the attr
      * i.e. only keep the item with different attr_id
@@ -102,7 +110,7 @@ export class StructEditQueue {
     /**
      * Return the first item and remove it from the list
      */
-    consume(): StructEditQueueItem | null {
+    consume(): StructEditQueueItem | undefined {
         return this._confirmed_items.shift()!
     }
 }
@@ -242,11 +250,96 @@ export class StructDefEditEvent {
     
     static cancelEditStruct(state_context: StructDefEditContext) {
         state_context.editing_struct_def.rollback()
+        state_context.edit_queue.purge()
         state_context.exitEdit()
     }
 
-    static attrTypeUpdate(state_context: StructDefEditContext) {
+    static attrTypeUpdate(state_context: StructDefEditContext, new_attr_def: AttributeDefinition<any>) {
         let attr_id = state_context.editing_attr_def?.editing.id as UUID
         state_context.edit_queue.push(new StructEditQueueItem(attr_id, StructEditOperation.CHANGE_ATTR_TYPE))
+
+        // set the new attr def in the struct_def
+        state_context.editing_struct_def.editing.attributes.override(new_attr_def)
+    }
+}
+
+export class StructDefEditEventElementHandler {
+    static editQueueConsumer(element: StructuralElement, edit_queue: StructEditQueue){
+        while (edit_queue.hasConfirmedItem()){
+            let edit_queue_item = edit_queue.consume()
+            assert(edit_queue_item != null)
+            switch(edit_queue_item.operation){
+                case StructEditOperation.ADD_ATTR:
+                    StructDefEditEventElementHandler.handleNewAttr(element, edit_queue_item.attr_id)
+                    break
+                case StructEditOperation.DELETE_ATTR:
+                    StructDefEditEventElementHandler.handleDeleteAttr(element, edit_queue_item.attr_id)
+                    break
+                case StructEditOperation.CHANGE_ATTR_TYPE:
+                    StructDefEditEventElementHandler.handleAttrTypeChange(element, edit_queue_item.attr_id)
+                    break
+                case StructEditOperation.CHANGE_ATTR:
+                    StructDefEditEventElementHandler.handleAttrChange(element, edit_queue_item.attr_id)
+                    break
+            }
+        }
+    }
+
+    static handleNewAttr(element: StructuralElement, attr_id: UUID){
+        // get the definition
+        const attr_def = element.definition.attributes.get(attr_id)
+        if (attr_def == null){
+            throw new Error(`Attribute with id ${attr_id} not found`)
+        }
+        // create a new value and add it to the element
+        let attr_value = new AttributeValue(attr_def)
+        element.values.set(attr_id, attr_value)
+    }
+
+    static handleDeleteAttr(element: StructuralElement, attr_id: UUID){
+        // delete the value from the element
+        element.values.delete(attr_id)
+    }
+
+    static handleAttrTypeChange(element: StructuralElement, attr_id: UUID){
+        // get the new definition
+        const attr_def = element.definition.attributes.get(attr_id)
+        if (attr_def == null){
+            throw new Error(`Attribute with id ${attr_id} not found`)
+        }
+        const attr_value = element.values.get(attr_id)
+
+        if (attr_value == null){
+            throw new Error(`Attribute value with id ${attr_id} not found`)
+        }
+        
+        // convert the value to the new type
+        let new_attr_value: AttributeValue<any>
+        try {
+            new_attr_value = attr_value.convertTo(attr_def)
+        } catch (error) {
+            if (error instanceof InvalidTypeConversionForDataException) {
+                console.log(`Failed to convert attribute value with id ${attr_id} to new type: ${error.message}`)
+            } else {
+                console.log(error)
+            }
+            // if failed to convert, create a new value
+            new_attr_value = new AttributeValue(attr_def)
+        }
+        element.values.set(attr_id, new_attr_value)
+        console.log(new_attr_value.definition)
+    }
+
+    static handleAttrChange(element: StructuralElement, attr_id: UUID){
+        // validate the value
+        const attr_def = element.definition.attributes.get(attr_id)
+        if (attr_def == null){
+            throw new Error(`Attribute with id ${attr_id} not found`)
+        }
+        const attr_value = element.values.get(attr_id)
+        if (attr_value == null){
+            throw new Error(`Attribute value with id ${attr_id} not found`)
+        }
+        attr_value.validate()
     }
 }

@@ -1,6 +1,7 @@
 import { ID } from "@/common/CommonTypes"
 import { Cloneable } from "@/common/Cloneable"
 import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/note/element/structural/attribute/exception/AttributeException"
+import { ConstrainType, Constrain } from "@/note/element/structural/attribute/constrain/Constrain"
 
 export interface AttributeValueConverter<OriType,NewType> {
     (value: OriType, mode?: any): NewType
@@ -20,6 +21,9 @@ export abstract class AttributeType<T> implements Cloneable<AttributeType<T>> {
      * Map of AttrType => { Map of ModeID => Converter }
      */
     private _converters: Map<string, Map<ID, AttributeValueConverter<T, any>>> = new Map()
+    private _available_constraints: ConstrainType[] = [
+        ConstrainType.REQUIRE
+    ]
 
     constructor(type: string) {
         this._type = type
@@ -40,6 +44,21 @@ export abstract class AttributeType<T> implements Cloneable<AttributeType<T>> {
 
     get type(): string {
         return this._type
+    }
+
+    addAvailableConstraint(constrain_type: ConstrainType): void {
+        this._available_constraints.push(constrain_type)
+    }
+
+    get available_constraints(): ConstrainType[] {
+        return this._available_constraints
+    }
+
+    allowConstrain(constrain: Constrain | ConstrainType): boolean {
+        if (constrain instanceof Constrain) {
+            return this.available_constraints.includes(constrain.getType())
+        }
+        return this.available_constraints.includes(constrain)
     }
 
     private get converters(): Map<string, Map<ID, AttributeValueConverter<T, any>>> {

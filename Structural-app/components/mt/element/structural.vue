@@ -1,53 +1,71 @@
 <script setup lang="ts">
-import { EditPath, Note, StructuralElement, StructEditQueue, InjectConstant, EventConstant } from "structural-core"
+import { EditPath, Note, StructuralElement, StructEditQueue, InjectConstant, EventConstant, EndOfEditPathError, AttributeValue, StructDefEditEventElementHandler } from "structural-core"
+import MtAttributeValueString from "@/components/mt/attribute/value/string.vue"
+import MtAttributeValueNumber from "@/components/mt/attribute/value/number.vue"
 
 const props = defineProps<{
     edit_path: EditPath, // edit_path to the StructureElement
 }>()
 const { $emitter } = useNuxtApp()
 
-const editing_note: Ref<Note> | undefined = ref(inject(InjectConstant.EDITING_NOTE))
-const struct_element = editing_note === undefined? null : ref(props.edit_path.getNodeByPath(editing_note.value) as StructuralElement)
+const editing_note: Note | undefined = inject(InjectConstant.EDITING_NOTE)
+const struct_element = editing_note === undefined? null : props.edit_path.getNodeByPath(editing_note) as StructuralElement
 
 type ElementValue = {
     id: string,
-    type: string,
+    type: any, // DefineComponent
     path: EditPath,
 }
 
 function getElementsValues(): ElementValue[]{
-    return struct_element?.value.stepInEachChildren(props.edit_path).map((child_path) => {
+    return struct_element?.stepInEachChildren(props.edit_path).reduce((result, child_path) => {
         const child_id = child_path.getLastStep()
         let child = null
         try {
-            // TODO the attr may not have value yet if just added
-            child = child_path.getNodeByPath(editing_note.value)
+            child = child_path.getNodeByPath(editing_note) as unknown as AttributeValue<any>
         } catch (error) {
-            
+            if (error instanceof EndOfEditPathError){
+                // TODO the attr may not have value yet if just added
+                child = null
+            }
         }
 
-        return {
-            id: child_id,
-            type: child?.definition_type_str,
-            path: child_path,
+        if (child === null){
+            return result
         }
-    }) ?? []
+
+        // map the AttributeValue type 
+        let child_type: any // DefineComponent
+        switch(child.definition_type_str){
+            case "STRING":
+                child_type = MtAttributeValueString
+                break
+            case "NUMBER":
+                child_type = MtAttributeValueNumber
+                break
+        }
+
+        result.push({
+            id: child_id,
+            type: child_type,
+            path: child_path,
+        })
+        return result
+    }, [] as ElementValue[]) ?? []
 }
 
-// const getValues = computed(() => {
-//     console.log("struct element edit_path", props.edit_path)
-//     return getElementsValues()
-// })
-
-const elements_values: Ref<null | ElementValue[]> = ref(null)
-// watch the length of the struct_element.value.values => update elements_values
-watch(() => struct_element?.value?.values.size, () => {
+// reload the values in this element
+const elements_values: Ref<null | ElementValue[]> = shallowRef(null)
+const reload_elements = ref(0)
+watch(reload_elements, () => {
     elements_values.value = getElementsValues()
 }, { immediate: true })
 
 // alter the DOM according to the changes
 function attributeDefinitionUpdateHandler(edit_queue: StructEditQueue){
-    console.log("attributeDefinitionUpdateHandler", edit_queue)
+    console.log("attributeDefinitionUpdateHandler")
+    StructDefEditEventElementHandler.editQueueConsumer(struct_element, edit_queue)
+    reload_elements.value += 1
 }
 $emitter.on(EventConstant.ATTR_DEF_UPDATE, attributeDefinitionUpdateHandler);
 
@@ -59,10 +77,10 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <template v-for="value in elements_values">
-    <!-- <template v-for="value in getValues"> -->
-        <template v-if="value.type === 'STRING'">
-            <mt-attribute-value-string :edit_path="value.path"></mt-attribute-value-string>
-        </template> 
-    </template>
+    <!-- One form per element so that form-item can use attr id as prop (key) -->
+    <Form inline label-position="top">
+        <template v-for="value in elements_values" :key="value.id">
+            <component :is='value.type' :edit_path="value.path" />
+        </template>
+    </Form>
 </template>

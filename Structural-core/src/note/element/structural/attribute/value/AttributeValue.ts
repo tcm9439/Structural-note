@@ -3,6 +3,7 @@ import { ComponentBase } from "@/note/util/ComponentBase"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
 import { EditPath, EditPathNode, EndOfEditPathError } from "@/note/util/EditPath"
 import { NullAttrTypeException } from "@/note/element/structural/attribute/exception/AttributeException"
+import { ValidateResult, ValidValidateResult } from "@/note/element/structural/attribute/constrain/Constrain"
 import { z } from "zod"
 
 export const AttributeValueJson = z.object({
@@ -16,12 +17,14 @@ export const AttributeValueJson = z.object({
  */
 export class AttributeValue<T> extends ComponentBase implements EditPathNode {
     private _definition : AttributeDefinition<T>
-    private _value : T
+    private _value : T | null
+    private _validate_result : ValidateResult 
 
-    constructor(definition: AttributeDefinition<T>, value: T) {
+    constructor(definition: AttributeDefinition<T>, value: T | null = null) {
         super()
         this._definition = definition
         this._value = value
+        this._validate_result = ValidValidateResult
     }
 
     get definition(): AttributeDefinition<T> {
@@ -36,17 +39,30 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
         return this.definition.attribute_type?.type || ""
     }
 
-    get value(): T {
+    get value(): T | null {
         return this._value
     }
 
     set value(value: T) {
         this._value = value
+        this.validate()
+    }
+
+    validate(): ValidateResult {
+        this._validate_result = this.definition.validate(this.value)
+        return this._validate_result
+    }
+
+    get validate_result(): ValidateResult {
+        return this._validate_result
     }
 
     convertTo<N>(new_attr_def: AttributeDefinition<N>, mode: ID = 0): AttributeValue<N> {
         if (this.definition.attribute_type === null || new_attr_def.attribute_type === null){
             throw new NullAttrTypeException()
+        }
+        if (this.value === null){
+            return new AttributeValue(new_attr_def)
         }
         const new_value: N = this.definition.attribute_type.convertTo(new_attr_def.attribute_type, this.value, mode)
         return new AttributeValue(new_attr_def, new_value)

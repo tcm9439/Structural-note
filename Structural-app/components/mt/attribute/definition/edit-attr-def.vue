@@ -6,7 +6,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-    (event: 'attrTypeUpdate'): void
+    (event: 'attrTypeUpdate', new_attr_def: AttributeDefinition<any>): void
 }>()
 
 const editing_note: Ref<Note> | undefined = ref(inject(InjectConstant.EDITING_NOTE))
@@ -34,11 +34,12 @@ function getAllTypes(){
 }
 
 const attr_type: Ref<string> = ref("")
+// when user select a type, update the attr_def & push a update type operation in the queue
 function selectedType(attr_type: AttrTypeNameAndInstance){
-    // when user select a type, update the attr_def & push a update type operation in the queue
-    if (attr_def.value != null){
-        attr_def.value.attribute_type = attr_type.instance
-        emit('attrTypeUpdate')
+    if (attr_def.value !== null){
+        // attr_def.value.attribute_type = attr_type.instance
+        let new_attr_def = AttributeDefinition.convertToType(attr_def.value, attr_type.instance)
+        emit('attrTypeUpdate', new_attr_def)
     }
 }
 
@@ -55,7 +56,6 @@ function changeToTab(tab: string){
             <div v-if="attr_def !== null">
                 Name: <Input v-model="attr_def.name" />
                 Description: <Input v-model="attr_def.description" />
-                Optional: <Switch v-model="attr_def.optional" />
             </div>
 
             <!-- <Button type="primary" @click="changeToTab('constrain')" style="float: right;">Next</Button> -->

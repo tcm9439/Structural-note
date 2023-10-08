@@ -4,6 +4,8 @@ import { NumberAttribute } from "@/note/element/structural/attribute/type/Number
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
 import { AttributeTypeInitializer } from "@/note/element/structural/attribute/type/AttributeTypeInitializer"
 import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/note/element/structural/attribute/exception/AttributeException"
+import { ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
+import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain"
 
 class TestAttribute extends AttributeType<number> {
     public static readonly TYPE: string = "TEST"
@@ -120,5 +122,15 @@ describe('AttributeType', () => {
     it("cloneDeepWithCustomizer", () => {
         let clone = TestAttribute.instance.cloneDeepWithCustomizer()
         expect(clone).toBe(TestAttribute.instance)
+    })
+
+    it("Constrain", () => {
+        let available_constraints = TestAttribute.instance.available_constraints
+        expect(available_constraints).toHaveLength(1)
+        expect(available_constraints[0]).toBe(ConstrainType.REQUIRE)
+    })
+
+    it("AllowConstrain", () => {
+        expect(TestAttribute.instance.allowConstrain(new RequireConstrain())).toBeTruthy()
     })
 })

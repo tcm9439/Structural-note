@@ -7,7 +7,7 @@ const props = defineProps<{
 }>()
 
 const editing_note: Ref<Note> | undefined = ref(inject(InjectConstant.EDITING_NOTE))
-const value = editing_note === undefined? null : ref(props.edit_path.getNodeByPath(editing_note.value) as AttributeValue<string>)
+const value = editing_note === undefined? null : ref(props.edit_path.getNodeByPath(editing_note.value) as AttributeValue<number>)
 const attr_name = value?.value.definition.name
 const attr_id = value?.value.definition.id
 
@@ -15,15 +15,6 @@ const attr_id = value?.value.definition.id
 
 <template>
     <FormItem :label="attr_name" :prop="attr_id" :error="value.validate_result.invalid_message">
-        <Input 
-            v-model="value.value" 
-            style="width: 300px"
-        />
+        <InputNumber v-model="value.value" controls-outside />
     </FormItem>
 </template>
-
-<style>
-    textarea {
-        resize: none;
-    }
-</style>

@@ -2,19 +2,19 @@ import { describe, it, expect, beforeEach } from "vitest"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
 import { EditPath, EndOfEditPathError } from "@/note/util/EditPath"
+import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain"
 import _ from "lodash"
 
 describe('AttributeDefinition', () => {
 	let definition: AttributeDefinition<string>
 
     beforeEach(() => {
-        definition = new AttributeDefinition("test", StringAttribute.instance, true, "description ABC!")  
+        definition = new AttributeDefinition("test", StringAttribute.instance, "description ABC!")  
     })
 
     it('constructor & getter', () => {
         expect(definition.name).toBe("test")
         expect(definition.description).toBe("description ABC!")
-        expect(definition.optional).toBe(true)
         expect(definition.attribute_type).toBe(StringAttribute.instance)
     })
 
@@ -32,15 +32,12 @@ describe('AttributeDefinition', () => {
         expect(clone.id).toEqual(definition.id)
         expect(clone.name).toEqual(definition.name)
         expect(clone.description).toEqual(definition.description)
-        expect(clone.optional).toEqual(definition.optional)
         expect(clone.attribute_type).toBe(definition.attribute_type)
 
         clone.name = "clone"
         clone.description = "clone"
-        clone.optional = !clone.optional
         expect(clone.name).not.toEqual(definition.name)
         expect(clone.description).not.toEqual(definition.description)
-        expect(clone.optional).not.toEqual(definition.optional)
     })
 
     it("cloneDeepWithCustomizer", () => {
@@ -56,7 +53,6 @@ describe('AttributeDefinition', () => {
         expect(clone.id).not.toEqual(definition.id)
         expect(clone.name).toEqual(definition.name)
         expect(clone.description).toEqual(definition.description)
-        expect(clone.optional).toEqual(definition.optional)
         expect(clone.attribute_type).toEqual(definition.attribute_type)
 
         clone.name = "clone"
@@ -69,7 +65,6 @@ describe('AttributeDefinition', () => {
             id: definition.id,
             name: "test",
             description: "description ABC!",
-            optional: true,
             attribute_type: "STRING"
         })
     })
@@ -84,5 +79,13 @@ describe('AttributeDefinition', () => {
         let json = definition.saveAsJson()
         _.set(json, "attribute_type", null)
         expect(AttributeDefinition.loadFromJson(json)).toBeNull()
+    })
+
+    it("Constrain & validate", () => {
+        expect(definition.validate("Hello World").valid).toBeTruthy()
+        definition.addConstrain(new RequireConstrain())
+        expect(definition.constrains.length).toBe(1)
+        expect(definition.validate("Hello World").valid).toBeTruthy()
+        expect(definition.validate(null).valid).toBeFalsy()
     })
 })

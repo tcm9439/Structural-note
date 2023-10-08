@@ -1,8 +1,11 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest"
-import { StructDefEditState, StructDefEditContext, StructEditQueueItem, StructEditQueue, StructEditOperation, StructDefEditEvent, AttrDefCallback, StructDefCallback, ExitCallback } from "@/view/state/StructDefEdit"
+import { StructDefEditState, StructDefEditContext, StructEditQueueItem, StructEditQueue, StructEditOperation, StructDefEditEvent, AttrDefCallback, StructDefCallback, ExitCallback, StructDefEditEventElementHandler } from "@/view/state/StructDefEditState"
 import { StructureDefinition } from "@/note/element/structural/StructureDefinition"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
+import { NumberAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
+import { StructuralElement } from "@/index"
+import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
 
 describe("StructEditQueueItem", () => {
     it("constructor & getter", () => {
@@ -54,6 +57,19 @@ describe("StructEditQueue", () => {
         let queue = new StructEditQueue()
         queue.push(new StructEditQueueItem("1234", StructEditOperation.ADD_ATTR))
         queue.rollback()
+        expect(queue["_pending_items"].length).toBe(0)
+        expect(queue["_confirmed_items"].length).toBe(0)
+    })
+
+    it("purge", () => {
+        let queue = new StructEditQueue()
+        queue.push(new StructEditQueueItem("1234", StructEditOperation.ADD_ATTR))
+        queue.commit()
+        queue.push(new StructEditQueueItem("3344", StructEditOperation.ADD_ATTR))
+        expect(queue["_pending_items"].length).toBe(1)
+        expect(queue["_confirmed_items"].length).toBe(1)
+        
+        queue.purge()
         expect(queue["_pending_items"].length).toBe(0)
         expect(queue["_confirmed_items"].length).toBe(0)
     })
@@ -277,12 +293,100 @@ describe("StructDefEditEvent", () => {
     })
 
     it("attrTypeUpdate", () => {
+        let element = new StructuralElement(struct_def)
+        // add a value for the attr
+        let value = new AttributeValue(attr_def, "1234")
+        element.addValue(attr_def, value)
+
         expect(context.edit_queue.hasPendingItem()).toBeFalsy()
         StructDefEditEvent.startEditAttr(context, attr_def.id, confirm_attr_callback_spy)
         expect(context.edit_queue["_pending_items"].length).toBe(1)
-        StructDefEditEvent.attrTypeUpdate(context)
+
+        // update the attr type
+        let new_attr_def = AttributeDefinition.convertToType(attr_def, NumberAttribute.instance)
+        StructDefEditEvent.attrTypeUpdate(context, new_attr_def)
+
+        // queue
         expect(context.edit_queue["_pending_items"].length).toBe(2)
         expect(context.edit_queue["_pending_items"][0].operation).toBe(StructEditOperation.CHANGE_ATTR)
         expect(context.edit_queue["_pending_items"][1].operation).toBe(StructEditOperation.CHANGE_ATTR_TYPE)
+        // attr def
+        expect(struct_def.attributes.get(attr_def.id)?.attribute_type).toBe(NumberAttribute.instance)
+        // but the value is still pointing to the old attr def
+        expect(value.definition.attribute_type).toBe(StringAttribute.instance)
+    })
+})
+
+describe("StructDefEditEventElementHandler", () => {
+    let element: StructuralElement
+    let edit_queue: StructEditQueue
+    let attr_def: AttributeDefinition<any>
+    let attr_def2: AttributeDefinition<string>
+    let spy_handleNewAttr: any
+
+    beforeEach(() => {
+        vi.clearAllMocks()
+
+        element = new StructuralElement(new StructureDefinition())
+        edit_queue = new StructEditQueue()
+        attr_def = new AttributeDefinition("Test String Attr", StringAttribute.instance)
+        attr_def2 = new AttributeDefinition("Test String Attr 2", StringAttribute.instance)
+        element.definition.attributes.add(attr_def)
+        element.definition.attributes.add(attr_def2)
+
+        edit_queue.push(new StructEditQueueItem(attr_def.id, StructEditOperation.ADD_ATTR))
+        edit_queue.push(new StructEditQueueItem(attr_def2.id, StructEditOperation.ADD_ATTR))
+        edit_queue.commit()
+        expect(edit_queue.hasConfirmedItem()).toBeTruthy()
+
+        spy_handleNewAttr = vi.spyOn(StructDefEditEventElementHandler, 'handleNewAttr')
+        StructDefEditEventElementHandler.editQueueConsumer(element, edit_queue)
+    })
+
+    it("editQueueConsumer", () => {
+        // check if the handleNewAttr is called twice
+        expect(spy_handleNewAttr).toBeCalledTimes(2)
+        // all confirmed items should be consumed
+        expect(edit_queue.hasConfirmedItem()).toBeFalsy() 
+    })
+
+    it("handleNewAttr", () => {
+        // check if the new attr is added to the element
+        let value = element.values.get(attr_def.id)
+        expect(value).toBeDefined()
+        expect(value?.value).toBeNull()
+        expect(value?.definition_id).toBe(attr_def.id)
+        value = element.values.get(attr_def2.id)
+        expect(value).toBeDefined()
+        expect(value?.value).toBeNull()
+        expect(value?.definition_id).toBe(attr_def2.id)
+    })
+
+    it("handleDeleteAttr", () => {
+        // delete the attr
+        element.definition.attributes.remove(attr_def.id)
+        StructDefEditEventElementHandler.handleDeleteAttr(element, attr_def.id)
+
+        // check if the attr is deleted from the element
+        expect(element.values.get(attr_def.id)).toBeUndefined()
+        expect(element.values.get(attr_def2.id)).toBeDefined()
+    })
+
+    it("handleAttrTypeChange", () => {
+        // set the attr value
+        let value = element.values.get(attr_def.id)
+        if (value != null){
+            value.value = "1234"
+        }
+
+        // set the attr type to number
+        let new_attr_def = AttributeDefinition.convertToType(attr_def, NumberAttribute.instance)
+        element.definition.attributes.override(new_attr_def)
+        StructDefEditEventElementHandler.handleAttrTypeChange(element, attr_def.id)
+
+        // check if the attr is updated
+        let converted_value = element.values.get(attr_def.id)
+        expect(converted_value).toBeDefined()
+        expect(converted_value?.value).toBe(1234)
     })
 })

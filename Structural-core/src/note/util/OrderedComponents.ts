@@ -38,15 +38,27 @@ export class OrderedComponents<T extends ComponentBase> {
 
     /**
      * Add a component to the end of the list.
-     * If the component is already in the list, raise error..
+     * If the component is already in the list, raise error.
      */
-    add(component: T): void {
+    add(component: T): void { 
         const id = component.id
         if (this._components.has(id)) {
             throw new Error(`Component ${id} already exists`)
         }
         this._components.set(id, component)
         this._order.add(id)
+    }
+
+    /**
+     * Replace a component in the list.
+     * If the component is not in the list, raise error.
+     */
+    override(component: T): void {
+        const id = component.id
+        if (!this._components.has(id)) {
+            throw new Error(`Component ${id} does not exist`)
+        }
+        this._components.set(id, component)
     }
 
     /**

@@ -19,7 +19,7 @@ view_state.value.editing_note_name = props.note.title
 // The children will use this path to get the node from the editing note
 const edit_path = new EditPath()
 
-const getSections = computed(() => {
+const sections = computed(() => {
     return editing_note.value.stepInEachChildren(edit_path).map((child_path) => {
         const child_id = child_path.getLastStep()
         const child = child_path.getNodeByPath(editing_note.value)
@@ -40,7 +40,7 @@ const getSections = computed(() => {
 </script>
 
 <template>
-    <template v-for="section of getSections">
+    <template v-for="section of sections">
         <component :is="section.type" :edit_path="section.path" />
     </template>
 </template>

@@ -4,6 +4,8 @@ import { AttributeValue } from "@/note/element/structural/attribute/value/Attrib
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
 import { NumberAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
 import { EditPath, EndOfEditPathError } from "@/note/util/EditPath"
+import { ValidValidateResult } from "@/note/element/structural/attribute/constrain/Constrain"
+import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain"
 
 describe('AttributeValue', () => {
 	let attr_value: AttributeValue<any>
@@ -28,6 +30,11 @@ describe('AttributeValue', () => {
         expect(attr_value.value).toBe("Hello World")
         attr_value.value = "Foo Bar"
         expect(attr_value.value).toBe("Foo Bar")
+
+        expect(attr_value.validate_result.valid).toBeTruthy()
+        definition.addConstrain(new RequireConstrain())
+        attr_value.value = null
+        expect(attr_value.validate_result.valid).toBeFalsy()
     })
 
     it('convertTo', () => {
@@ -84,5 +91,20 @@ describe('AttributeValue', () => {
         }
         let value = AttributeValue.loadFromJson(json, definition)
         expect(value).toBeNull()
+    })
+
+    it("validate", () => {
+        // add a require constrain
+        definition.addConstrain(new RequireConstrain())
+        expect(attr_value.validate()).toEqual(ValidValidateResult)
+        expect(attr_value.validate_result).toEqual(ValidValidateResult)
+
+        attr_value.value = null
+        let expected_result = {
+            valid: false,
+            invalid_message: "This attribute is required"
+        }
+        expect(attr_value.validate()).toEqual(expected_result)
+        expect(attr_value.validate_result).toEqual(expected_result)
     })
 })
