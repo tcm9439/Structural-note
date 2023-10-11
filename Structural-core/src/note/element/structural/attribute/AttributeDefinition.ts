@@ -1,3 +1,4 @@
+import { UUID } from "@/common/CommonTypes"
 import { ComponentBase } from "@/note/util/ComponentBase"
 import { CloneUtil, Cloneable } from "@/common/Cloneable"
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
@@ -17,7 +18,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     private _name: string
     private _description: string
     private _attribute_type: AttributeType<T> | null
-    private _constrains: Constrain[] = []
+    private _constrains: Map<UUID, Constrain> = new Map()
     
     constructor(name?: string, attribute_type?: AttributeType<T>, description?: string) {
         super()
@@ -30,7 +31,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         return this._attribute_type
     }
 
-    get constrains(): Constrain[] {
+    get constrains(): Map<UUID, Constrain> {
         return this._constrains
     }
 
@@ -55,11 +56,16 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     }
 
     getNextEditPathNode(index: string): EditPathNode | undefined {
-        return undefined
+        return this.constrains.get(index)
     }
 
+    // step in each constrain
     stepInEachChildren(edit_path: EditPath, filter_mode?: number): EditPath[] {
-        throw new EndOfEditPathError("AttributeDefinition")
+        let result: EditPath[] = []
+        this.constrains.forEach((constrain) => {
+            return edit_path.clone().append(constrain.id)
+        })
+        return result
     }
 
     clone(): AttributeDefinition<T> {
@@ -72,7 +78,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
             if (!this._attribute_type.allowConstrain(constrain)) {
                 throw new Error("Constrain not allowed")
             }
-            this._constrains.push(constrain)
+            this._constrains.set(constrain.id, constrain)
         }
     }
 
@@ -80,7 +86,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
      * Check if the value pass all the constrains
      */
     validate(value: any): ValidateResult {
-        for (const constrain of this.constrains) {
+        for (const [id, constrain] of this.constrains) {
             const result = constrain.validate(value)
             if (!result.valid) {
                 return result

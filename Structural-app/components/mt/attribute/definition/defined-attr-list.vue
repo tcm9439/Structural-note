@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { StructureDefinition, EditPath, Note, StructuralDefinitionHelper, InjectConstant } from "structural-core"
+import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 
 const props = defineProps<{
     edit_path: EditPath, // edit_path to the StructureDefinition
 }>()
 
-const editing_note: Ref<Note> | undefined = ref(inject(InjectConstant.EDITING_NOTE))
-const struct_def = editing_note === undefined? null : ref(props.edit_path.getNodeByPath(editing_note.value) as StructureDefinition)
+const editing_note = inject(InjectConstant.EDITING_NOTE) as Note
+const struct_def = activeDataGetter(editing_note, props.edit_path) as StructureDefinition
 
 const data = computed(() => {
-    return StructuralDefinitionHelper.getAttributesInTableFormat(struct_def?.value)
+    return StructuralDefinitionHelper.getAttributesInTableFormat(struct_def)
 })
 
 const emit = defineEmits<{

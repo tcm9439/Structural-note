@@ -18,7 +18,7 @@ export class EndOfEditPathError extends Error {
  */
 export interface EditPathNode {
     getNextEditPathNode(index: UUID): EditPathNode | undefined
-    stepInEachChildren(edit_path: EditPath, filter_mode?: number): EditPath[]
+    stepInEachChildren(parent_edit_path: EditPath, filter_mode?: number): EditPath[]
 }
 
 /**

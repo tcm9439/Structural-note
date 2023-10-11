@@ -1,30 +1,25 @@
 <script setup lang="ts">
-import { EditPath, Note, StructuralSection, InjectConstant } from 'structural-core';
+import { EditPath, StructuralSection, Note, InjectConstant } from "structural-core"
+import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 
 const props = defineProps<{
     edit_path: EditPath,
 }>()
 
-const editing_note: Ref<Note> = ref(inject(InjectConstant.EDITING_NOTE)) as Ref<Note>
-const section: Ref<StructuralSection> = ref(props.edit_path.getNodeByPath(editing_note.value)) as Ref<StructuralSection>
+const editing_note: Note | undefined = inject(InjectConstant.EDITING_NOTE)
+const section = activeDataGetter(editing_note, props.edit_path) as StructuralSection
+let def_path: EditPath
+try {
+    def_path = section.stepInEachChildren(props.edit_path, StructuralSection.DEFINITION_FILTER_MODE)[0]
+} catch (error) {
+    console.error("Cannot get the definition path.", error)
+}
 
 const edit_def_mode = ref(false)
-const def_path = section.value.stepInEachChildren(props.edit_path, StructuralSection.DEFINITION_FILTER_MODE)[0]
-
 function startEditDef(){
     // show the edit-struct-def component
     edit_def_mode.value = true
 }
-
-// watch edit_def_mode
-// when change to false, reload the edit-struct-def component
-const reload_edit_struct_def_counter = ref(0)
-watch(edit_def_mode, (new_val, old_val) => {
-    if (!new_val){
-        // reload the edit-struct-def component
-        reload_edit_struct_def_counter.value++
-    }
-})
 
 </script>
 
@@ -35,10 +30,12 @@ watch(edit_def_mode, (new_val, old_val) => {
         </template>
     </mt-section-base>
 
+    <!-- Show the edit def window once user click the Edit button -->
     <mt-attribute-definition-edit-struct-def 
+        v-if="edit_def_mode"
         :edit_path="def_path" 
         v-model:edit_def_mode="edit_def_mode"
-        :key="reload_edit_struct_def_counter"/>
+    />
 </template>
 
 <style>

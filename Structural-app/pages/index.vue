@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, StringAttribute, StructuralElement } from "structural-core"
+// import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, StringAttribute, StructuralElement, RequireConstrain } from "structural-core"
 import { TauriFileSystem } from "tauri-fs-util"
-import { exists, BaseDirectory, writeTextFile, readTextFile, writeBinaryFile, createDir, readBinaryFile, removeFile } from '@tauri-apps/api/fs'
 
 let test_note: Ref<Note> = ref(new Note("My first note")) as Ref<Note>
 
@@ -15,6 +15,7 @@ test_note.value.sections.add(section1)
 let section2 = new StructuralSection("Section struct")
 
 let attr_definition = new AttributeDefinition("test", StringAttribute.instance)
+// attr_definition.addConstrain(new RequireConstrain())
 section2.definition.attributes.add(attr_definition)
 
 let ele_struct = new StructuralElement(section2.definition)
@@ -78,11 +79,10 @@ async function testFs3(){
     
     console.log("Test")
 }
-
 </script>
 
 <template>
-    <mt-note :note="test_note" />
+    <mt-note :note="test_note" v-if="test_note !== null"/>
     <Button @click="testFs">Test</Button>
     <Button @click="testFs2">Test2</Button>
     <Button @click="testFs3">Test3</Button>

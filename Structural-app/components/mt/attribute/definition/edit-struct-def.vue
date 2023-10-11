@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { EditPath, Note, StructureDefinition, EventConstant, StructDefEditContext, StructDefEditState, StructDefEditEvent, InjectConstant, AttributeDefinition } from "structural-core"
+import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 const { $Message } = useNuxtApp()
 
 const props = defineProps<{
@@ -12,10 +13,10 @@ const emit = defineEmits<{
 }>()
 const { $emitter } = useNuxtApp()
 
-const editing_note: Ref<Note> | undefined = ref(inject(InjectConstant.EDITING_NOTE))
-const struct_def = editing_note === undefined? ref(null) : ref(props.edit_path.getNodeByPath(editing_note.value) as StructureDefinition)
+const editing_note = inject(InjectConstant.EDITING_NOTE) as Note
+const struct_def = activeDataGetter(editing_note, props.edit_path) as StructureDefinition
 
-const edit_context = ref(new StructDefEditContext(struct_def.value, onExitEditStruct))
+const edit_context = ref(new StructDefEditContext(struct_def, onExitEditStruct)) as Ref<StructDefEditContext>
 const edit_state = computed(() => edit_context.value.state)
 const struct_has_change = computed(() => edit_context.value.edit_queue.hasConfirmedItem())
 
@@ -25,7 +26,6 @@ function setAttrToEdit(id: string){
 }
 
 function onExitEditStruct(has_change: boolean){
-    console.log(struct_def.value)
     if (has_change){
         // there is changes to the def
         $emitter.emit(EventConstant.ATTR_DEF_UPDATE, edit_context.value.edit_queue)
@@ -91,7 +91,7 @@ function attrTypeUpdate(attr_def: AttributeDefinition<any>){
                 @edit="startEditAttr"
                 :edit_path="edit_path" />
         </div>
-        <div v-if="edit_state === StructDefEditState.EDITING_ATTR">
+        <div v-if="edit_state === StructDefEditState.EDITING_ATTR && attr_def_edit_path != null">
             <mt-attribute-definition-edit-attr-def 
                 @attrTypeUpdate="attrTypeUpdate"
                 :edit_path="attr_def_edit_path" />

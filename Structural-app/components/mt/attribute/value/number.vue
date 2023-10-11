@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { EditPath, Note, AttributeValue, InjectConstant } from "structural-core"
-import { FormItem } from "view-ui-plus";
+// import { FormItem } from "view-ui-plus"
 
 const props = defineProps<{
     edit_path: EditPath,

@@ -1,34 +1,28 @@
 <script setup lang="ts">
-import { Note, NoteSection, TextElement, StructuralElement, EditPath, InjectConstant } from 'structural-core'
+import { NoteSection, EditPath, Note, InjectConstant, ComponentVForElement, TextElement } from "structural-core"
+import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
+import { elementListGetter } from "@/composables/active-data/ElementListGetter"
+import { elementComponentMapper } from "@/composables/active-data/ElementComponentMapper"
 
 const props = defineProps<{
     edit_path: EditPath,
 }>()
 
-const editing_note: Ref<Note> | undefined = ref(inject(InjectConstant.EDITING_NOTE))
-const edit_path = props.edit_path
-const section = editing_note === undefined? null : reactive(props.edit_path.getNodeByPath(editing_note.value) as NoteSection)
+const editing_note: Note | undefined = inject(InjectConstant.EDITING_NOTE)
+const section = shallowReactive(activeDataGetter(editing_note, props.edit_path) as NoteSection)
+const section_elements = ref(null) as Ref<ComponentVForElement[] | null>
+console.log("Loaded section", section.id, section.title)
 
-const getElement = computed(() => {
-    return section?.stepInEachChildren(edit_path).map((child_path) => {
-        const child_id = child_path.getLastStep()
-        const child = child_path.getNodeByPath(editing_note.value)
-        let child_type: string
-        if (child instanceof StructuralElement){
-            child_type = "StructuralElement"
-        } else if (child instanceof TextElement){
-            child_type = "TextElement"
-        } else {
-            child_type = ""
-        }
-        return {
-            id: child_id,
-            type: child_type,
-            path: child_path,
-        }
-    })
-})
+watch(() => section.elements.length(), () => {
+    section_elements.value = elementListGetter(editing_note, section, props.edit_path, elementComponentMapper)
+}, { immediate: true })
 
+function addElement(temp: string){
+    if (temp === "text"){
+        const new_section = new TextElement()
+        section.elements.add(new_section)
+    }
+}
 </script>
 
 <template>
@@ -38,18 +32,25 @@ const getElement = computed(() => {
         </template>
 
         <template #extra>
+            <Dropdown @on-click="addElement">
+                <a href="javascript:void(0)">
+                    <Icon type="md-add" />
+                </a>
+                <template #list>
+                    <DropdownMenu>
+                        <!-- TODO make this dynamically depends on the section type -->
+                        <DropdownItem name="text">Add text section</DropdownItem>
+                        <DropdownItem name="dummy">dummy</DropdownItem>
+                    </DropdownMenu>
+                </template>
+            </Dropdown>
             <slot name="operation"></slot>
         </template>
         
         <slot name="content"></slot>
     
-        <template v-for="element of getElement" :key="element.id">
-            <template v-if="element.type === 'TextElement'">
-                <mt-element-text :edit_path="element.path" />
-            </template>
-            <template v-else-if="element.type === 'StructuralElement'">
-                <mt-element-structural :edit_path="element.path" />
-            </template>
+        <template v-for="element of section_elements" :key="element.id">
+            <component :is="element.type" :edit_path="element.path" />
         </template>
     </Card>
 </template>

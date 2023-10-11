@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest"
-import { StructDefEditState, StructDefEditContext, StructEditQueueItem, StructEditQueue, StructEditOperation, StructDefEditEvent, AttrDefCallback, StructDefCallback, ExitCallback, StructDefEditEventElementHandler } from "@/view/state/StructDefEditState"
+import { StructDefEditState, StructDefEditContext, StructEditQueueItem, StructEditQueue, StructEditOperation, StructDefEditEvent, AttrDefCallback, StructDefCallback, ExitCallback, StructDefEditEventElementHandler } from "@/view/state/edit/StructDefEditState"
 import { StructureDefinition } from "@/note/element/structural/StructureDefinition"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"

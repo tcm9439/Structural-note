@@ -1,41 +1,27 @@
 <script setup lang="ts">
-import { EditPath, Note, StructuralSection, InjectConstant } from "structural-core"
-import MtSectionBase from "@/components/mt/section/base.vue"
-import MtSectionStructural from "@/components/mt/section/structural.vue"
+import { EditPath, Note, InjectConstant, ComponentVForElement } from "structural-core"
+import { elementListGetter } from "@/composables/active-data/ElementListGetter"
+import { sectionComponentMapper } from "@/composables/active-data/SectionComponentMapper"
+
 
 const props = defineProps<{
     note: Note,
 }>()
 
 // Provide the note in edit to the children
-const editing_note = ref(props.note)
+// const editing_note = ref(props.note) as Ref<Note>
 provide(InjectConstant.EDITING_NOTE, props.note)
-
-const { $viewState } = useNuxtApp()
-const view_state = ref($viewState)
-
-view_state.value.editing_note_name = props.note.title
-
 // The children will use this path to get the node from the editing note
 const edit_path = new EditPath()
 
-const sections = computed(() => {
-    return editing_note.value.stepInEachChildren(edit_path).map((child_path) => {
-        const child_id = child_path.getLastStep()
-        const child = child_path.getNodeByPath(editing_note.value)
-        let child_type
-        if (child instanceof StructuralSection){
-            child_type = MtSectionStructural
-        } else {
-            child_type = MtSectionBase
-        }
-        return {
-            id: child_id,
-            type: child_type,
-            path: child_path,
-        }
-    })
-})
+// TODO move the edit note name setting to the place that open & load / create  the note
+const { $viewState } = useNuxtApp()
+$viewState.editing_note_name = props.note.title
+
+const sections = ref(null) as Ref<ComponentVForElement[] | null>
+watch(() => props.note.sections.length(), () => {
+    sections.value = elementListGetter(props.note, props.note, edit_path, sectionComponentMapper)
+}, { immediate: true })
 
 </script>
 

@@ -1,4 +1,4 @@
-export class GlobalViewState {
+export class MainViewState {
     private _editing_note_name: string = ""
     // private breadcrumb: string[]
 
