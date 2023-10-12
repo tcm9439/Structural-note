@@ -11,9 +11,9 @@ const props = defineProps<{
 const editing_note: Note | undefined = inject(InjectConstant.EDITING_NOTE)
 const section = shallowReactive(activeDataGetter(editing_note, props.edit_path) as NoteSection)
 const section_elements = ref(null) as Ref<ComponentVForElement[] | null>
-console.log("Loaded section", section.id, section.title)
+const rerender_elements = ref(0)
 
-watch(() => section.elements.length(), () => {
+watch([() => section.elements.length(), rerender_elements], () => {
     section_elements.value = elementListGetter(editing_note, section, props.edit_path, elementComponentMapper)
 }, { immediate: true })
 
@@ -23,6 +23,20 @@ function addElement(temp: string){
         section.elements.add(new_section)
     }
 }
+
+function removeElement(element_id: string){
+    section.elements.remove(element_id)
+}
+
+function moveUpElement(element_id: string){
+    rerender_elements.value += 1
+    section.elements.moveUp(element_id)
+}
+
+function moveDownElement(element_id: string){
+    section.elements.moveDown(element_id)
+}
+
 </script>
 
 <template>
@@ -49,7 +63,11 @@ function addElement(temp: string){
         
         <slot name="content"></slot>
         <template v-for="element of section_elements" :key="element.id">
-            <component :is="element.type" :edit_path="element.path" />
+            <mt-element-base :id="element.id" @delete="removeElement" @move-up="moveUpElement" @move-down="moveDownElement">
+            <template #content>
+                <component :is="element.type" :edit_path="element.path" />
+                </template>
+            </mt-element-base>
         </template>
     </Card>
 </template>

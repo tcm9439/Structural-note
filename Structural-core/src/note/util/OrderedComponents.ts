@@ -81,11 +81,17 @@ export class OrderedComponents<T extends ComponentBase> {
         return this._components.has(id)
     }
 
-    moveUp(component: T): void {
-        this._order.moveUp(component.id)
+    moveUp(component: T | UUID): void {
+        if (component instanceof ComponentBase) {
+            component = component.id
+        }
+        this._order.moveUp(component)
     }
 
-    moveDown(component: T): void {
-        this._order.moveDown(component.id)
+    moveDown(component: T | UUID): void {
+        if (component instanceof ComponentBase) {
+            component = component.id
+        }
+        this._order.moveDown(component)
     }
 }
