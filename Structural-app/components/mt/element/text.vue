@@ -26,6 +26,7 @@ function onButton1Change(){
 
 <template>
     <div 
+        class="container"
         @mouseover="mouseoverHandler"
         @mouseleave="mouseleaveHandler"
     >
@@ -59,8 +60,15 @@ function onButton1Change(){
         resize: none;
     }
 
-    floating-element-tool-bar {
-        /* TODO */
-        padding: auto;
+    .container {
+        position: relative;
+        padding: 8px;
+    }
+
+    .floating-element-tool-bar {
+        position: absolute;
+        right: 20px;
+        top: -6px;
+        z-index: 10;
     }
 </style>

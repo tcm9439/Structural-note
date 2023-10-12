@@ -26,7 +26,7 @@ function addElement(temp: string){
 </script>
 
 <template>
-    <Card v-if="section != null">
+    <Card v-if="section != null" class="card">
         <template #title>
             <Input v-model="section.title" :border="false" />
         </template>
@@ -48,9 +48,14 @@ function addElement(temp: string){
         </template>
         
         <slot name="content"></slot>
-    
         <template v-for="element of section_elements" :key="element.id">
             <component :is="element.type" :edit_path="element.path" />
         </template>
     </Card>
 </template>
+
+<style scoped>
+    .card {
+        margin-bottom: 20px;
+    }
+</style>

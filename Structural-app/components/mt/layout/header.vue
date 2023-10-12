@@ -4,7 +4,7 @@ const view_state = ref($viewState);
 </script>
 
 <template>
-    <Header :style="{position: 'fixed', width: '100%'}">
+    <Header class="header">
         <Space>
             <div class="white-text">NOTE</div>
             <div class="white-text">{{ view_state.editing_note_name }}</div>
@@ -31,7 +31,14 @@ const view_state = ref($viewState);
 </template>
 
 <style>
+    .header {
+        position: fixed;
+        width: 100%;
+        z-index: 999;
+    }
+    
     .white-text {
+        padding-right: 10px;
         color: #fff;
     }
 </style>

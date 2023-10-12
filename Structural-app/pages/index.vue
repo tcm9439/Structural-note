@@ -21,8 +21,16 @@ section2.definition.attributes.add(attr_definition)
 let ele_struct = new StructuralElement(section2.definition)
 let value = new AttributeValue(attr_definition, "Random value")
 ele_struct.values.set(attr_definition.id, value)
-
 section2.elements.add(ele_struct)
+
+let ele3 = new TextElement("ABCDEFG")
+section2.elements.add(ele3)
+
+ele_struct = new StructuralElement(section2.definition)
+value = new AttributeValue(attr_definition, "Second!")
+ele_struct.values.set(attr_definition.id, value)
+section2.elements.add(ele_struct)
+
 test_note.value.sections.add(section2)
 
 const output = ref("")

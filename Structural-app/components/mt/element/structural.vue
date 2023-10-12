@@ -11,6 +11,7 @@ const props = defineProps<{
 
 const editing_note = inject(InjectConstant.EDITING_NOTE) as Note
 const struct_element = activeDataGetter(editing_note, props.edit_path) as StructuralElement
+const collapse_open_panel = ref(struct_element.id)
 
 // reload the values in this element
 function getElementsValues(){
@@ -20,7 +21,8 @@ const elements_values = shallowRef(getElementsValues())
 
 // on structural section definition change
 function attributeDefinitionUpdateHandler(edit_queue: StructEditQueue){
-    StructDefEditEventElementHandler.editQueueConsumer(struct_element, edit_queue)
+    // All elements' attributeDefinitionUpdateHandler share the same edit_queue so it must be clone() before consume
+    StructDefEditEventElementHandler.editQueueConsumer(struct_element, edit_queue.clone())
     // reload the elements & DOM
     elements_values.value = getElementsValues()
 }
@@ -34,12 +36,16 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <!-- One form per element so that form-item can use attr id as prop (key) -->
-    <div style="border: 1px solid #a8a8a8; padding: 10px;">
-        <Form inline label-position="top">
-            <template v-for="value in elements_values" :key="value.id">
-                <component :is='value.type' :edit_path="value.path" />
+    <Collapse v-model="collapse_open_panel">
+        <Panel :name="struct_element.id">
+            <template #content>
+                <!-- One form per element so that form-item can use attr id as prop (key) -->
+                <Form inline label-position="top">
+                        <template v-for="value in elements_values" :key="value.id">
+                            <component :is='value.type' :edit_path="value.path" />
+                    </template>
+                </Form>
             </template>
-        </Form>
-    </div>
+        </Panel>
+    </Collapse>
 </template>

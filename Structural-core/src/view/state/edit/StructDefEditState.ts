@@ -113,6 +113,13 @@ export class StructEditQueue {
     consume(): StructEditQueueItem | undefined {
         return this._confirmed_items.shift()!
     }
+
+    clone(): StructEditQueue {
+        let new_queue = new StructEditQueue()
+        new_queue._confirmed_items = [...this._confirmed_items]
+        new_queue._pending_items = [...this._pending_items]
+        return new_queue
+    }
 }
 
 export class StructDefEditContext {
