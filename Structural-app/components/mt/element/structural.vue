@@ -41,8 +41,8 @@ onBeforeUnmount(() => {
             <template #content>
                 <!-- One form per element so that form-item can use attr id as prop (key) -->
                 <Form inline label-position="top">
-                        <template v-for="value in elements_values" :key="value.id">
-                            <component :is='value.type' :edit_path="value.path" />
+                    <template v-for="value in elements_values" :key="value.id">
+                        <mt-attribute-value-base :edit_path="value.path" :type="value.type" />
                     </template>
                 </Form>
             </template>

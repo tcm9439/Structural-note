@@ -15,6 +15,14 @@ export class RequireConstrain extends Constrain {
         this._required = required
     }
 
+    get required(): boolean {
+        return this._required
+    }
+
+    set required(required: boolean) {
+        this._required = required
+    }
+
     getType(): ConstrainType {
         return RequireConstrain.type
     }

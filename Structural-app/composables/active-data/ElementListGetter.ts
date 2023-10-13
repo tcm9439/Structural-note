@@ -18,11 +18,15 @@ export function elementListGetter(editing_note: Note | undefined, parent_node: E
         }
         if (child !== null) {
             let child_component = child_element_component_mapper(child)
+            // if child_component is not a sting, wrap it with markRaw
+            if (typeof child_component !== "string") {
+                child_component = markRaw(child_component)
+            }
             if (child_component !== null) {
                 result.push({
                     id: child_id,
                     path: child_path,
-                    type: markRaw(child_component)
+                    type: child_component
                 })
             }
         }
