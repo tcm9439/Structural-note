@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest"
 import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain"
-import { ValidValidateResult } from "@/note/element/structural/attribute/constrain/Constrain"
+import { ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
 
 describe("RequireConstrain", () => {
 	it("validate", () => {

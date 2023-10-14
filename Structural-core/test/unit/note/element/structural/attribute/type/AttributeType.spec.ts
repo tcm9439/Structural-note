@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, beforeAll } from "vitest"
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
-import { NumberAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
+import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
 import { AttributeTypeInitializer } from "@/note/element/structural/attribute/type/AttributeTypeInitializer"
 import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/note/element/structural/attribute/exception/AttributeException"
@@ -49,7 +49,7 @@ describe('AttributeType', () => {
         for (let type of types) {
             expect(type).toBeInstanceOf(AttributeType)
             
-            if (type instanceof NumberAttribute) {
+            if (type instanceof IntegerAttribute) {
                 found_number = true
             } else if (type instanceof StringAttribute) {
                 found_string = true
@@ -74,7 +74,7 @@ describe('AttributeType', () => {
 
     it('isConvertibleTo', () => {
         expect(TestAttribute.instance.isConvertibleTo("TEST")).toBe(false)
-        expect(TestAttribute.instance.isConvertibleTo(NumberAttribute.TYPE)).toBe(false)
+        expect(TestAttribute.instance.isConvertibleTo(IntegerAttribute.TYPE)).toBe(false)
         expect(TestAttribute.instance.isConvertibleTo(StringAttribute.TYPE)).toBe(true)
     })
 
@@ -99,7 +99,7 @@ describe('AttributeType', () => {
     })
 
     it('convertTo - invalid type', () => {
-        expect(() => TestAttribute.instance.convertTo(NumberAttribute.instance, 234)).toThrow(InvalidTypeConversionException)
+        expect(() => TestAttribute.instance.convertTo(IntegerAttribute.instance, 234)).toThrow(InvalidTypeConversionException)
     })
 
     it('convertTo - invalid value', () => {

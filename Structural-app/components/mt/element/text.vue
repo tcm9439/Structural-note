@@ -8,7 +8,6 @@ const props = defineProps<{
 
 const editing_note = inject(InjectConstant.EDITING_NOTE) as Note
 const element = shallowReactive(activeDataGetter(editing_note, props.edit_path) as TextElement)
-console.log("render text element", element)
 </script>
 
 <template>
@@ -18,7 +17,7 @@ console.log("render text element", element)
     /> 
 </template>
 
-<style>
+<style scoped>
     /* Don't allow user to drag & alter size of the input box */
     textarea {
         resize: none;

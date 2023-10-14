@@ -334,7 +334,6 @@ export class StructDefEditEventElementHandler {
             new_attr_value = new AttributeValue(attr_def)
         }
         element.values.set(attr_id, new_attr_value)
-        console.log(new_attr_value.definition)
     }
 
     static handleAttrChange(element: StructuralElement, attr_id: UUID){

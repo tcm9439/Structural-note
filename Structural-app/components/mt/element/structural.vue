@@ -20,11 +20,13 @@ function getElementsValues(){
 const elements_values = shallowRef(getElementsValues())
 
 // on structural section definition change
+const render_value_components = ref(0)
 function attributeDefinitionUpdateHandler(edit_queue: StructEditQueue){
     // All elements' attributeDefinitionUpdateHandler share the same edit_queue so it must be clone() before consume
     StructDefEditEventElementHandler.editQueueConsumer(struct_element, edit_queue.clone())
     // reload the elements & DOM
     elements_values.value = getElementsValues()
+    render_value_components.value++
 }
 $emitter.on(EventConstant.ATTR_DEF_UPDATE, attributeDefinitionUpdateHandler);
 
@@ -42,7 +44,7 @@ onBeforeUnmount(() => {
                 <!-- One form per element so that form-item can use attr id as prop (key) -->
                 <Form inline label-position="top">
                     <template v-for="value in elements_values" :key="value.id">
-                        <mt-attribute-value-base :edit_path="value.path" :type="value.type" />
+                        <mt-attribute-value-base :edit_path="value.path" :type="value.type" :render="render_value_components"/>
                     </template>
                 </Form>
             </template>

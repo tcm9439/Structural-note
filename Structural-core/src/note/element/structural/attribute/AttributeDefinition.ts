@@ -2,8 +2,9 @@ import { UUID } from "@/common/CommonTypes"
 import { ComponentBase } from "@/note/util/ComponentBase"
 import { CloneUtil, Cloneable } from "@/common/Cloneable"
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
-import { Constrain, ValidateResult, ValidValidateResult } from "@/note/element/structural/attribute/constrain/Constrain"
-import { EditPath, EditPathNode, EndOfEditPathError } from "@/note/util/EditPath"
+import { Constrain, ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
+import { ValidateResult, ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
+import { EditPath, EditPathNode } from "@/note/util/EditPath"
 import { z } from "zod"
 
 export const AttributeDefinitionJson = z.object({
@@ -19,12 +20,17 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     private _description: string
     private _attribute_type: AttributeType<T> | null
     private _constrains: Map<UUID, Constrain> = new Map()
+    private _default_value: T | null = null
     
     constructor(name?: string, attribute_type?: AttributeType<T>, description?: string) {
         super()
         this._name = name || ""
         this._attribute_type = attribute_type || null
         this._description = description || ""
+    }
+
+    get default_value(): T | null {
+        return this._default_value
     }
 
     get attribute_type(): AttributeType<T> | null {
@@ -63,7 +69,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     stepInEachChildren(edit_path: EditPath, filter_mode?: number): EditPath[] {
         let result: EditPath[] = []
         this.constrains.forEach((constrain) => {
-            return edit_path.clone().append(constrain.id)
+            result.push(edit_path.clone().append(constrain.id))
         })
         return result
     }
@@ -73,13 +79,37 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     }
 
     addConstrain(constrain: Constrain): void {
-        // check if the constrain is allowed by the attribute type
         if (this._attribute_type !== null) {
+            // check if the constrain is allowed by the attribute type
             if (!this._attribute_type.allowConstrain(constrain)) {
                 throw new Error("Constrain not allowed")
             }
+
+            // check if the constrain is compatible with the existing constrains
+            for (const [id, existing_constrain] of this.constrains) {
+                if (!existing_constrain.isCompatibleTo(constrain)) {
+                    throw new Error(`Constrain ${constrain.getType()} not compatible to ${existing_constrain.getType()}`)
+                }
+            }
+
+            // pass all the checks, add the constrain
             this._constrains.set(constrain.id, constrain)
         }
+    }
+
+    getAvailableConstrains(): ConstrainType[] {
+        if (this._attribute_type === null) {
+            return []
+        }
+        let available_constraints = this._attribute_type.available_constraints
+
+        // filter out the incompatible constrains w.r.t. the existing constrains
+        for (const [id, constrain] of this.constrains) {
+            available_constraints = available_constraints.filter((constrain_type) => {
+                return constrain.isCompatibleToType(constrain_type)
+            })
+        }
+        return available_constraints
     }
 
     /**

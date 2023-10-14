@@ -3,7 +3,7 @@ import { StructDefEditState, StructDefEditContext, StructEditQueueItem, StructEd
 import { StructureDefinition } from "@/note/element/structural/StructureDefinition"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
-import { NumberAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
+import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
 import { StructuralElement } from "@/index"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
 
@@ -303,7 +303,7 @@ describe("StructDefEditEvent", () => {
         expect(context.edit_queue["_pending_items"].length).toBe(1)
 
         // update the attr type
-        let new_attr_def = AttributeDefinition.convertToType(attr_def, NumberAttribute.instance)
+        let new_attr_def = AttributeDefinition.convertToType(attr_def, IntegerAttribute.instance)
         StructDefEditEvent.attrTypeUpdate(context, new_attr_def)
 
         // queue
@@ -311,7 +311,7 @@ describe("StructDefEditEvent", () => {
         expect(context.edit_queue["_pending_items"][0].operation).toBe(StructEditOperation.CHANGE_ATTR)
         expect(context.edit_queue["_pending_items"][1].operation).toBe(StructEditOperation.CHANGE_ATTR_TYPE)
         // attr def
-        expect(struct_def.attributes.get(attr_def.id)?.attribute_type).toBe(NumberAttribute.instance)
+        expect(struct_def.attributes.get(attr_def.id)?.attribute_type).toBe(IntegerAttribute.instance)
         // but the value is still pointing to the old attr def
         expect(value.definition.attribute_type).toBe(StringAttribute.instance)
     })
@@ -380,7 +380,7 @@ describe("StructDefEditEventElementHandler", () => {
         }
 
         // set the attr type to number
-        let new_attr_def = AttributeDefinition.convertToType(attr_def, NumberAttribute.instance)
+        let new_attr_def = AttributeDefinition.convertToType(attr_def, IntegerAttribute.instance)
         element.definition.attributes.override(new_attr_def)
         StructDefEditEventElementHandler.handleAttrTypeChange(element, attr_def.id)
 

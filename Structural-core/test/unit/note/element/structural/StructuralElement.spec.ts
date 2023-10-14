@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
-import { NumberAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
+import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
 import { StructuralElement } from "@/note/element/structural/StructuralElement"
 import { StructureDefinition } from "@/note/element/structural/StructureDefinition"
@@ -17,7 +17,7 @@ describe('StructuralElement', () => {
         definition = new StructureDefinition()
         str_attr = new AttributeDefinition("str", StringAttribute.instance)
         definition.attributes.add(str_attr)
-        num_attr = new AttributeDefinition("num", NumberAttribute.instance)
+        num_attr = new AttributeDefinition("num", IntegerAttribute.instance)
         definition.attributes.add(num_attr)
 
         element = new StructuralElement(definition)

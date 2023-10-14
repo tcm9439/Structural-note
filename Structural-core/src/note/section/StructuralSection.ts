@@ -50,7 +50,7 @@ export class StructuralSection extends NoteSection {
             return [edit_path.clone().append(this._definition.id, "definition", false)]
         }
 
-        throw new EndOfEditPathError(`StructuralSection (mode {filter_mode})`)
+        throw new EndOfEditPathError(`StructuralSection (mode ${filter_mode})`)
     }
 
     saveAsJson(): z.infer<typeof StructuralSectionJson> {

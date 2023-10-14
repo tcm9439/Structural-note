@@ -5,7 +5,7 @@ import { AttributeDefinition } from "@/note/element/structural/attribute/Attribu
 import { AttributeValue, AttributeValueJson } from "@/note/element/structural/attribute/value/AttributeValue"
 import { StructureDefinition } from "@/note/element/structural/StructureDefinition"
 import { NoteElement, NoteElementJson } from "@/note/element/NoteElement"
-import { ValidValidateResult, ValidateResult } from "@/note/element/structural/attribute/constrain/Constrain"
+import { ValidValidateResult, ValidateResult } from "./attribute/ValidateResult"
 import { z } from "zod"
 
 export const StructuralElementJson = NoteElementJson.extend({

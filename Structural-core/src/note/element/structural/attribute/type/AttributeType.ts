@@ -115,4 +115,13 @@ export abstract class AttributeType<T> implements Cloneable<AttributeType<T>> {
     cloneDeepWithCustomizer(): AttributeType<T> {
         return this
     }
+
+    /**
+     * Check if the given value is valid regarding to this type
+     * @param value the value to validate
+     * @returns true if the value is valid, false otherwise
+     */
+    validate(value: T): boolean {
+        return true
+    }
 }

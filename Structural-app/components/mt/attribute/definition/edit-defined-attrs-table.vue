@@ -1,3 +1,8 @@
+<!-- 
+    The table of all attributes defined in a structural element. 
+    For edit purpose.
+-->
+
 <script setup lang="ts">
 import { StructureDefinition, EditPath, Note, StructuralDefinitionHelper, InjectConstant } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"

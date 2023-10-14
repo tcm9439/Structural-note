@@ -2,9 +2,9 @@ import { describe, it, expect, beforeEach } from "vitest"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
-import { NumberAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
+import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
 import { EditPath, EndOfEditPathError } from "@/note/util/EditPath"
-import { ValidValidateResult } from "@/note/element/structural/attribute/constrain/Constrain"
+import { ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
 import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain"
 
 describe('AttributeValue', () => {
@@ -38,7 +38,7 @@ describe('AttributeValue', () => {
     })
 
     it('convertTo', () => {
-        const new_definition = new AttributeDefinition("test2", NumberAttribute.instance)
+        const new_definition = new AttributeDefinition("test2", IntegerAttribute.instance)
         attr_value.value = "123"
         const new_value = attr_value.convertTo(new_definition)
         expect(new_value.definition).toBe(new_definition)

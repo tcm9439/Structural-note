@@ -34,15 +34,18 @@ function moveUpElement(element_id: string){
 }
 
 function moveDownElement(element_id: string){
+    rerender_elements.value += 1
     section.elements.moveDown(element_id)
 }
 
 </script>
 
 <template>
-    <Card v-if="section != null" class="card">
+    <Card v-if="section != null" class="section-card">
         <template #title>
-            <Input v-model="section.title" :border="false" />
+            <div class="section-title">
+                <Input v-model="section.title" :border="false"/>
+            </div>
         </template>
 
         <template #extra>
@@ -73,7 +76,11 @@ function moveDownElement(element_id: string){
 </template>
 
 <style scoped>
-    .card {
+    .section-card {
         margin-bottom: 20px;
+    }
+
+    .section-title :deep(.ivu-input-no-border) {
+        font-weight: bold;
     }
 </style>

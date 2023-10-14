@@ -3,7 +3,7 @@ import { ComponentBase } from "@/note/util/ComponentBase"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
 import { EditPath, EditPathNode, EndOfEditPathError } from "@/note/util/EditPath"
 import { NullAttrTypeException } from "@/note/element/structural/attribute/exception/AttributeException"
-import { ValidateResult, ValidValidateResult } from "@/note/element/structural/attribute/constrain/Constrain"
+import { ValidateResult, ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
 import { z } from "zod"
 
 export const AttributeValueJson = z.object({
@@ -18,13 +18,16 @@ export const AttributeValueJson = z.object({
 export class AttributeValue<T> extends ComponentBase implements EditPathNode {
     private _definition : AttributeDefinition<T>
     private _value : T | null
-    private _validate_result : ValidateResult 
+    private _validate_result : ValidateResult = ValidValidateResult
 
     constructor(definition: AttributeDefinition<T>, value: T | null = null) {
         super()
         this._definition = definition
+        if (value === null){
+            value = definition.default_value
+        }
         this._value = value
-        this._validate_result = ValidValidateResult
+        this.validate()
     }
 
     get definition(): AttributeDefinition<T> {

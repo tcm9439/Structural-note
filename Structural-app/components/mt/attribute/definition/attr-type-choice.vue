@@ -20,6 +20,7 @@ function typeChosen(){
 
 <template>
     <Radio style="width: 100%;" v-if="attr_type !== null" :label="attr_type.name" @change="typeChosen">
+        <!-- TODO different icon -->
         <Icon type="md-reorder" />
         {{ attr_type.name }}
     </Radio>

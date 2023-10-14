@@ -67,8 +67,14 @@ function cancelEditStruct() {
     StructDefEditEvent.cancelEditStruct(edit_context.value)
 }
 
-function attrTypeUpdate(attr_def: AttributeDefinition<any>){
-    StructDefEditEvent.attrTypeUpdate(edit_context.value, attr_def)
+const render_attr_def = ref(0)
+function attrTypeUpdate(attr_def: AttributeDefinition<any> | null){
+    if (attr_def !== null){
+        // change the ori attr type
+        StructDefEditEvent.attrTypeUpdate(edit_context.value, attr_def)
+    }
+    // else a init attr type is set
+    render_attr_def.value += 1
 }
 
 </script>
@@ -78,25 +84,29 @@ function attrTypeUpdate(attr_def: AttributeDefinition<any>){
         :modelValue="props.edit_def_mode"
         title="Section Definition"
         :closable="false"
-        width="85">
+        :mask-closable="false"
+        width="85"
+    >
 
-        <!-- <template #header>
-            Section Definition
-        </template> -->
-
+        <!-- Attributes list -->
         <div v-if="edit_state === StructDefEditState.EDITING_STRUCT">
-            <mt-attribute-definition-defined-attr-list 
+            <mt-attribute-definition-edit-defined-attrs-table
                 @create="startAddAttr" 
                 @delete="deleteAttr"
                 @edit="startEditAttr"
                 :edit_path="edit_path" />
         </div>
+
+        <!-- Edit one of the attribute -->
         <div v-if="edit_state === StructDefEditState.EDITING_ATTR && attr_def_edit_path != null">
             <mt-attribute-definition-edit-attr-def 
                 @attrTypeUpdate="attrTypeUpdate"
-                :edit_path="attr_def_edit_path" />
+                :edit_path="attr_def_edit_path" 
+                :render="render_attr_def"
+            />
         </div>
 
+        <!-- Confirm / Cancel Button -->
         <template #footer>
             <!-- The button set for the whole struct def -->
             <div v-show="edit_state === StructDefEditState.EDITING_STRUCT">

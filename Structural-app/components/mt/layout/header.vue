@@ -34,7 +34,7 @@ const view_state = ref($viewState);
     .header {
         position: fixed;
         width: 100%;
-        z-index: 999;
+        z-index: 20;
     }
     
     .white-text {

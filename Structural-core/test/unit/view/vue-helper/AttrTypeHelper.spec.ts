@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, beforeAll } from "vitest"
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
 import { AttrTypeHelper, AttrTypeNameAndInstance } from "@/view/vue-helper/AttrTypeHelper"
 import { AttributeTypeInitializer } from "@/note/element/structural/attribute/type/AttributeTypeInitializer"
-import { NumberAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
+import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
 
 describe("AttrTypeHelper", () => {
@@ -21,7 +21,7 @@ describe("AttrTypeHelper", () => {
             
             if (type.name === "NUMBER") {
                 found_number = true
-                expect(type.instance).toBe(NumberAttribute.instance)
+                expect(type.instance).toBe(IntegerAttribute.instance)
             } else if (type.name === "STRING") {
                 found_string = true
                 expect(type.instance).toBe(StringAttribute.instance)
@@ -52,7 +52,7 @@ describe("AttrTypeHelper", () => {
     })
 
     it("getGroupedConvertibleTypes", () => {
-        let type = NumberAttribute.instance
+        let type = IntegerAttribute.instance
         let type_groups = AttrTypeHelper.getGroupedConvertibleTypes(type, 2)
         expect(type_groups.length).toBe(1)
         expect(type_groups[0].length).toBe(1)

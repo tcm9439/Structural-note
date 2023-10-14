@@ -26,6 +26,7 @@ watch(() => props.note.sections.length(), () => {
 </script>
 
 <template>
+    <!-- {{ editing_note }} -->
     <template v-for="section of sections">
         <component :is="section.type" :edit_path="section.path" />
     </template>

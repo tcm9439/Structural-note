@@ -1,4 +1,5 @@
-import { Constrain, ValidateResult, ValidValidateResult, ConstrainJson, ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
+import { Constrain, ConstrainJson, ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
+import { ValidateResult, ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
 import { z } from "zod"
 
 export const RequireConstrainJson = ConstrainJson.extend({
@@ -27,13 +28,36 @@ export class RequireConstrain extends Constrain {
         return RequireConstrain.type
     }
 
+    getRepeatable(): boolean {
+        return false
+    }
+
+    constrainIsValid(): ValidateResult {
+        // This constrain is always valid
+        return ValidValidateResult
+    }
+
     validate(value: any): ValidateResult {
-        if (this._required && value == null) {
+        if (!this._required) {
+            return ValidValidateResult;
+        }
+
+        let isEmpty = false
+        if (value === null || value === undefined) {
+            isEmpty = true
+        }
+
+        if (typeof value === "string" && value.trim() === "") {
+            isEmpty = true
+        }
+
+        if (isEmpty) {
             return {
                 valid: false,
                 invalid_message: "This attribute is required"
             }
         }
+
         return ValidValidateResult;
     }
 
