@@ -238,7 +238,14 @@ describe("StructDefEditEvent", () => {
         expect(context.state).toBe(StructDefEditState.EDITING_ATTR)
         expect(context.edit_queue.hasPendingItem()).toBeTruthy()
 
-        StructDefEditEvent.confirmEditAttr(context)
+        let validate_def_result = StructDefEditEvent.confirmEditAttr(context)
+        expect(validate_def_result.valid).toBeFalsy()
+        let editing_attr_def = context.editing_attr_def?.editing as AttributeDefinition<any>
+        editing_attr_def.name = "New Name"
+        editing_attr_def.description = "New Description"
+        editing_attr_def.attribute_type = IntegerAttribute.instance
+        validate_def_result = StructDefEditEvent.confirmEditAttr(context)
+        expect(validate_def_result.valid).toBeTruthy()
         expect(context.state).toBe(StructDefEditState.EDITING_STRUCT)
         expect(context.editing_attr_def).toBeNull()
         expect(context.edit_queue.hasPendingItem()).toBeFalsy()

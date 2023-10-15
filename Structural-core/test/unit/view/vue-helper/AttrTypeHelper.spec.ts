@@ -19,7 +19,7 @@ describe("AttrTypeHelper", () => {
             expect(type.name).toBeTypeOf("string")
             expect(type.instance).toBeInstanceOf(AttributeType)
             
-            if (type.name === "NUMBER") {
+            if (type.name === "INT") {
                 found_number = true
                 expect(type.instance).toBe(IntegerAttribute.instance)
             } else if (type.name === "STRING") {

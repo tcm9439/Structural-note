@@ -1,10 +1,13 @@
+import { ConstrainType } from "@/index"
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
 
-class NumberAttribute extends AttributeType<number> {
+export class NumberAttribute extends AttributeType<number> {
     constructor(type: string) {
         super(type)
-        this.addConvertibleType(StringAttribute.TYPE, this.convertToString)
+        this.addConvertibleType(StringAttribute.TYPE, this.convertToString.bind(this))
+        this.addAvailableConstraint(ConstrainType.MIN)
+        this.addAvailableConstraint(ConstrainType.MAX)
     }
 
     convertToString(value: number, mode?: any): string {

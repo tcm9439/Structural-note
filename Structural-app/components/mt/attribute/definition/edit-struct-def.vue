@@ -11,7 +11,7 @@ const props = defineProps<{
 const emit = defineEmits<{
     (event: 'update:edit_def_mode', visible: boolean): void
 }>()
-const { $emitter } = useNuxtApp()
+const { $emitter, $Modal } = useNuxtApp()
 
 const editing_note = inject(InjectConstant.EDITING_NOTE) as Note
 const struct_def = activeDataGetter(editing_note, props.edit_path) as StructureDefinition
@@ -23,6 +23,13 @@ const struct_has_change = computed(() => edit_context.value.edit_queue.hasConfir
 let attr_def_edit_path: Ref<EditPath | null> = ref(null)
 function setAttrToEdit(id: string){
     attr_def_edit_path.value = props.edit_path.clone().append(id)
+}
+
+function showInvalidDefinitionMessage(def_type: string, error_msg: string){
+    $Modal.error({
+        title: `Invalid ${def_type} Definition`,
+        content: error_msg,
+    });
 }
 
 function onExitEditStruct(has_change: boolean){
@@ -52,7 +59,10 @@ function deleteAttr(id: string) {
 }
 
 function confirmEditAttr() {
-    StructDefEditEvent.confirmEditAttr(edit_context.value)
+    let result = StructDefEditEvent.confirmEditAttr(edit_context.value)
+    if (result?.valid === false){
+        showInvalidDefinitionMessage("Attribute", result.invalid_message)
+    }
 }
 
 function cancelEditAttr() {
@@ -60,7 +70,10 @@ function cancelEditAttr() {
 }
 
 function confirmStructDef(){
-    StructDefEditEvent.confirmEditStruct(edit_context.value)
+    let result = StructDefEditEvent.confirmEditStruct(edit_context.value)
+    if (result?.valid === false){
+        showInvalidDefinitionMessage("Section", result.invalid_message)
+    }
 }
 
 function cancelEditStruct() {

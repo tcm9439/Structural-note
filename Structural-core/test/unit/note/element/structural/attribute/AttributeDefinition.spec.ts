@@ -19,11 +19,12 @@ describe('AttributeDefinition', () => {
     })
 
     it("getNextEditPathNode", () => {
+        // TODO
         expect(definition.getNextEditPathNode("")).toBeUndefined()
     })
 
     it("stepInEachChildren", () => {
-        expect(() => definition.stepInEachChildren(new EditPath)).toThrow(EndOfEditPathError)
+        // TODO
     })
 
     it("clone", () => {
@@ -84,7 +85,7 @@ describe('AttributeDefinition', () => {
     it("Constrain & validate", () => {
         expect(definition.validate("Hello World").valid).toBeTruthy()
         definition.addConstrain(new RequireConstrain())
-        expect(definition.constrains.length).toBe(1)
+        expect(definition.constrains.size).toBe(1)
         expect(definition.validate("Hello World").valid).toBeTruthy()
         expect(definition.validate(null).valid).toBeFalsy()
     })

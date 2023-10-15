@@ -5,6 +5,7 @@ import { EditingComponent } from "@/note/util/EditingComponent"
 import { StructuralElement } from "@/note/element/structural/StructuralElement"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
 import { InvalidTypeConversionForDataException } from "@/note/element/structural/attribute/exception/AttributeException"
+import { ValidValidateResult, ValidateResult } from "@/note/element/structural/attribute/ValidateResult"
 import assert from "assert"
 
 export type AttrDefCallback = (new_attr: AttributeDefinition<any>) => void
@@ -179,8 +180,8 @@ export class StructDefEditContext {
     }
 
     rollbackAttr() {
-        assert(this.state == StructDefEditState.EDITING_ATTR)
-        assert(this.editing_attr_def != null)
+        assert(this.state == StructDefEditState.EDITING_ATTR, "Invalid state")
+        assert(this.editing_attr_def != null, "Empty attr def")
         let attr_id = this.editing_attr_def.editing.id
 
         // if the attr is newly added, remove it from the struct_def
@@ -238,10 +239,16 @@ export class StructDefEditEvent {
         state_context.exitEdit()
     }
     
-    static confirmEditAttr(state_context: StructDefEditContext) {
+    static confirmEditAttr(state_context: StructDefEditContext): ValidateResult {
+        // abort confirm if the attr def is not valid
+        let validate_result = state_context.editing_attr_def?.editing.validateDefinition()
+        if (validate_result !== undefined && !validate_result?.valid) {
+            return validate_result
+        }
         state_context.commitAttr()
         state_context.edit_queue.commit()
         state_context.exitEdit()
+        return ValidValidateResult
     }
     
     static cancelEditAttr(state_context: StructDefEditContext) {
@@ -250,9 +257,15 @@ export class StructDefEditEvent {
         state_context.exitEdit()
     }
     
-    static confirmEditStruct(state_context: StructDefEditContext){
+    static confirmEditStruct(state_context: StructDefEditContext): ValidateResult {
+        // abort confirm if the struct def is not valid
+        let validate_result = state_context.editing_struct_def?.editing.validateDefinition()
+        if (validate_result !== undefined && !validate_result?.valid) {
+            return validate_result
+        }
         state_context.editing_struct_def.commit()
         state_context.exitEdit()
+        return ValidValidateResult
     }
     
     static cancelEditStruct(state_context: StructDefEditContext) {

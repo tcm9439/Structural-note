@@ -3,6 +3,7 @@ import { ValidateResult, ValidValidateResult } from "@/note/element/structural/a
 import { z } from "zod"
 
 export const RequireConstrainJson = ConstrainJson.extend({
+    id: z.string(),
     type: z.literal("RequireConstrain"),
     required: z.boolean()
 }).required()
@@ -37,6 +38,11 @@ export class RequireConstrain extends Constrain {
         return ValidValidateResult
     }
 
+    /**
+     * Rule:
+     * 1. If the value is null or undefined, it is invalid
+     * 2. If the value is a string, and it is empty, it is invalid
+     */
     validate(value: any): ValidateResult {
         if (!this._required) {
             return ValidValidateResult;
@@ -63,6 +69,7 @@ export class RequireConstrain extends Constrain {
 
     saveAsJson(): z.infer<typeof RequireConstrainJson> {
         return {
+            id: this.id,
             type: "RequireConstrain",
             required: this._required
         }
@@ -77,6 +84,8 @@ export class RequireConstrain extends Constrain {
         }
         const valid_json = result.data
 
-        return new RequireConstrain(valid_json.required)
+        let loaded_constrain = new RequireConstrain(valid_json.required)
+        loaded_constrain.id = json.id
+        return loaded_constrain
     }
 }

@@ -182,4 +182,45 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         def.id = valid_json.id
         return def
     }
+
+    /**
+     * Check if the definition is valid.
+     */
+    validateDefinition(): ValidateResult {
+        // name not null
+        if (this.name.trim() === "") {
+            return {
+                valid: false,
+                invalid_message: `Attribute name cannot be empty ${this.name}`
+            }
+        }
+
+        // attribute type not null
+        if (this.attribute_type === null) {
+            return {
+                valid: false,
+                invalid_message: `Attribute type cannot be empty for attribute ${this.name}`
+            }
+        }
+
+        // constrains valid
+        for (const [id, constrain] of this.constrains) {
+            const result = constrain.validate_constrain_result
+            if (!result.valid) {
+                result.invalid_message = `Constrain ${constrain.getType()} for attribute ${this.name} is invalid: ${result.invalid_message}`
+                return result
+            }
+        }
+
+        // default value valid
+        if (this.default_value !== null) {
+            const result = this.validate(this.default_value)
+            if (!result.valid) {
+                result.invalid_message = `Default value for attribute ${this.name} is invalid: ${result.invalid_message}`
+                return result
+            }
+        }
+
+        return ValidValidateResult
+    }
 }

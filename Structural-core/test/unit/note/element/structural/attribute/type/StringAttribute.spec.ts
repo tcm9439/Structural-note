@@ -9,12 +9,22 @@ describe("StringAttribute", () => {
         expect(StringAttribute.instance).not.toBeNull()
     })
 
-    it("convertToNumber", () => {
-        expect(StringAttribute.instance.convertToNumber("109")).toBe(109)
-        expect(StringAttribute.instance.convertToNumber("109.8")).toBe(109.8)
-        expect(StringAttribute.instance.convertToNumber("-109.8")).toBe(-109.8)
-        expect(() => StringAttribute.instance.convertToNumber("20%")).toThrow(InvalidTypeConversionException)
-        expect(() => StringAttribute.instance.convertToNumber("SomeChar")).toThrow(InvalidTypeConversionException)
+    it("convertToInteger", () => {
+        expect(StringAttribute.instance.convertToInteger("109")).toBe(109)
+        expect(StringAttribute.instance.convertToInteger("109.8")).toBe(110)
+        expect(StringAttribute.instance.convertToInteger("109.4")).toBe(109)
+        expect(StringAttribute.instance.convertToInteger("-109.8")).toBe(-110)
+        expect(() => StringAttribute.instance.convertToInteger("20%")).toThrow(InvalidTypeConversionException)
+        expect(() => StringAttribute.instance.convertToInteger("SomeChar")).toThrow(InvalidTypeConversionException)
+    })
+
+    it("convertToDecimal", () => {
+        expect(StringAttribute.instance.convertToDecimal("109")).toBe(109)
+        expect(StringAttribute.instance.convertToDecimal("109.8")).toBe(109.8)
+        expect(StringAttribute.instance.convertToDecimal("109.4")).toBe(109.4)
+        expect(StringAttribute.instance.convertToDecimal("-109.8")).toBe(-109.8)
+        expect(() => StringAttribute.instance.convertToDecimal("20%")).toThrow(InvalidTypeConversionException)
+        expect(() => StringAttribute.instance.convertToDecimal("SomeChar")).toThrow(InvalidTypeConversionException)
     })
 
     it("create", () => {

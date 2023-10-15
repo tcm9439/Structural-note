@@ -17,12 +17,12 @@ export const ConstrainJson = z.object({
 
 export abstract class Constrain extends ComponentBase implements EditPathNode {
     // if this constrain is valid
-    protected _validate_result : ValidateResult = ValidValidateResult
+    protected _validate_constrain_result : ValidateResult = ValidValidateResult
 
     abstract getType(): ConstrainType
 
-    get validate_result(): ValidateResult {
-        return this._validate_result
+    get validate_constrain_result(): ValidateResult {
+        return this._validate_constrain_result
     }
 
     /**

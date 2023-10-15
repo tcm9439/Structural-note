@@ -9,13 +9,12 @@ export const MinConstrainJson = ConstrainJson.extend({
 
 export class MinConstrain<T> extends Constrain {
     static readonly type: ConstrainType = ConstrainType.MIN
-    private _min: T | null
+    private _min: T | null = null
     private _value_type: string | null = null
 
     constructor(min: T | null = null) {
         super()
-        this._min = min
-        this.constrainIsValid()
+        this.min = min
     }
 
     set valueType(value_type: string | null) {
@@ -28,6 +27,7 @@ export class MinConstrain<T> extends Constrain {
 
     set min(min: T | null) {
         this._min = min
+        this.constrainIsValid()
     }
 
     get min(): T | null {
@@ -36,15 +36,15 @@ export class MinConstrain<T> extends Constrain {
 
     constrainIsValid(): ValidateResult {
         if (this.min == null) {
-            this._validate_result = {
+            this._validate_constrain_result = {
                 valid: false,
                 invalid_message: "The minimum value is not set"
             }
         } else {
-            this._validate_result = ValidValidateResult
+            this._validate_constrain_result = ValidValidateResult
         }
 
-        return this.validate_result
+        return this.validate_constrain_result
     }
 
     getType(): ConstrainType {

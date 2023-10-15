@@ -13,8 +13,8 @@ export class StringAttribute extends AttributeType<string> {
 
     constructor() {
         super(StringAttribute.TYPE)
-        this.addConvertibleType(IntegerAttribute.TYPE, this.convertToInteger)
-        this.addConvertibleType(DecimalAttribute.TYPE, this.convertToDecimal)
+        this.addConvertibleType(IntegerAttribute.TYPE, this.convertToInteger.bind(this))
+        this.addConvertibleType(DecimalAttribute.TYPE, this.convertToDecimal.bind(this))
     }
 
     convertToDecimal(value: string, mode?: any): number {

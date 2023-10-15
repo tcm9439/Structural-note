@@ -7,7 +7,7 @@ export class BooleanAttribute extends AttributeType<boolean> {
 
     constructor() {
         super(BooleanAttribute.TYPE)
-        this.addConvertibleType(StringAttribute.TYPE, this.convertToString)
+        this.addConvertibleType(StringAttribute.TYPE, this.convertToString.bind(this))
     }
 
     convertToString(value: boolean, mode?: any): string {

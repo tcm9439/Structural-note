@@ -4,6 +4,7 @@ import { ComponentBase } from "@/note/util/ComponentBase"
 import { EditPath, EditPathNode } from "@/note/util/EditPath"
 import { Cloneable, CloneUtil } from "@/common/Cloneable"
 import { z } from "zod"
+import { ValidateResult, ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
 
 export const StructureDefinitionJson = z.object({
     id: z.string(),
@@ -16,10 +17,6 @@ export const StructureDefinitionJson = z.object({
  */
 export class StructureDefinition extends ComponentBase implements EditPathNode, Cloneable<StructureDefinition> {
     private _attributes: OrderedComponents<AttributeDefinition<any>> = new OrderedComponents()
-
-    constructor() {
-        super()
-    }
     
     get attributes(): OrderedComponents<AttributeDefinition<any>> {
         return this._attributes
@@ -90,5 +87,28 @@ export class StructureDefinition extends ComponentBase implements EditPathNode, 
         }
 
         return definition
+    }
+
+    /**
+     * Check if the definition is valid.
+     */
+    validateDefinition(): ValidateResult {
+        // at least one attribute
+        if (this.attributes.ordered_components.length === 0) {
+            return {
+                valid: false,
+                invalid_message: "There must be at least one attribute definition."
+            }
+        }
+
+        // check if the attribute definition is valid
+        for (let attr_def of this.attributes.ordered_components) {
+            let result = attr_def.validateDefinition()
+            if (!result.valid) {
+                return result
+            }
+        }
+
+        return ValidValidateResult
     }
 }

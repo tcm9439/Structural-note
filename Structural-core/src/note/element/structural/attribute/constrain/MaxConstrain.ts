@@ -9,13 +9,12 @@ export const MaxConstrainJson = ConstrainJson.extend({
 
 export class MaxConstrain<T> extends Constrain {
     static readonly type: ConstrainType = ConstrainType.MAX
-    private _max: T | null
+    private _max: T | null = null
     private _value_type: string | null = null
 
     constructor(max: T | null = null) {
         super()
-        this._max = max
-        this.constrainIsValid()
+        this.max = max
     }
 
     set valueType(value_type: string | null) {
@@ -28,6 +27,7 @@ export class MaxConstrain<T> extends Constrain {
 
     set max(max: T | null) {
         this._max = max
+        this.constrainIsValid()
     }
 
     get max(): T | null {
@@ -36,15 +36,15 @@ export class MaxConstrain<T> extends Constrain {
 
     constrainIsValid(): ValidateResult {
         if (this.max == null) {
-            this._validate_result = {
+            this._validate_constrain_result = {
                 valid: false,
                 invalid_message: "The maximum value is not set"
             }
         } else {
-            this._validate_result = ValidValidateResult
+            this._validate_constrain_result = ValidValidateResult
         }
 
-        return this.validate_result
+        return this.validate_constrain_result
     }
 
     getType(): ConstrainType {
