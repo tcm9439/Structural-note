@@ -23,3 +23,18 @@ export class NullAttrTypeException extends Error {
         this.name = 'NullAttrTypeException'
     }
 }
+
+
+export class IncompatibleConstrain extends Error {
+    constructor(new_constrain_type: string, existing_constrain_type: string) {
+        super(`Constrain ${new_constrain_type} not compatible to ${existing_constrain_type}`)
+        this.name = 'IncompatibleConstrain'
+    }
+}
+
+export class ForbiddenConstrain extends Error {
+    constructor(constrain_type: string) {
+        super(`Constrain ${constrain_type} is not allowed for this attribute.`)
+        this.name = 'ForbiddenConstrain'
+    }
+}

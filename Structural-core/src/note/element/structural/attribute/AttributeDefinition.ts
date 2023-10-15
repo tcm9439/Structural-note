@@ -4,6 +4,7 @@ import { CloneUtil, Cloneable } from "@/common/Cloneable"
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
 import { Constrain, ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
 import { ValidateResult, ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
+import { ForbiddenConstrain, IncompatibleConstrain } from "@/note/element/structural/attribute/exception/AttributeException"
 import { EditPath, EditPathNode } from "@/note/util/EditPath"
 import { z } from "zod"
 
@@ -82,13 +83,13 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         if (this._attribute_type !== null) {
             // check if the constrain is allowed by the attribute type
             if (!this._attribute_type.allowConstrain(constrain)) {
-                throw new Error("Constrain not allowed")
+                throw new ForbiddenConstrain(constrain.getType())
             }
 
             // check if the constrain is compatible with the existing constrains
             for (const [id, existing_constrain] of this.constrains) {
                 if (!existing_constrain.isCompatibleTo(constrain)) {
-                    throw new Error(`Constrain ${constrain.getType()} not compatible to ${existing_constrain.getType()}`)
+                    throw new IncompatibleConstrain(constrain.getType(), existing_constrain.getType())
                 }
             }
 
@@ -191,7 +192,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         if (this.name.trim() === "") {
             return {
                 valid: false,
-                invalid_message: `Attribute name cannot be empty ${this.name}`
+                invalid_message: "Attribute name cannot be empty"
             }
         }
 
@@ -199,7 +200,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         if (this.attribute_type === null) {
             return {
                 valid: false,
-                invalid_message: `Attribute type cannot be empty for attribute ${this.name}`
+                invalid_message: `Attribute type cannot be empty for attribute "${this.name}"`
             }
         }
 
@@ -207,7 +208,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         for (const [id, constrain] of this.constrains) {
             const result = constrain.validate_constrain_result
             if (!result.valid) {
-                result.invalid_message = `Constrain ${constrain.getType()} for attribute ${this.name} is invalid: ${result.invalid_message}`
+                result.invalid_message = `Constrain ${constrain.getType()} for attribute "${this.name}" is invalid: ${result.invalid_message}`
                 return result
             }
         }
@@ -216,7 +217,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         if (this.default_value !== null) {
             const result = this.validate(this.default_value)
             if (!result.valid) {
-                result.invalid_message = `Default value for attribute ${this.name} is invalid: ${result.invalid_message}`
+                result.invalid_message = `Default value for attribute "${this.name}" is invalid: ${result.invalid_message}`
                 return result
             }
         }

@@ -4,11 +4,11 @@ import { z } from "zod"
 import { ValidateResult, ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
 
 export enum ConstrainType {
-    REQUIRE,
-    MIN,
-    MAX,
-    UNIQUE,
-    REGEX,
+    REQUIRE = "REQUIRE",
+    MIN = "MIN",
+    MAX = "MAX",
+    UNIQUE = "UNIQUE",
+    REGEX = "REGEX",
 }
 
 export const ConstrainJson = z.object({
