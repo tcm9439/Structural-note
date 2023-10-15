@@ -5,18 +5,14 @@ import MtAttributeConstrainRequire from "@/components/mt/attribute/constrain/req
 
 export type ConstrainChoice = {
     label: string,
-    id: number
+    id: string
 }
 
 export function constrainChoiceMapper(constrain_type: ConstrainType): ConstrainChoice | null {
-    switch(constrain_type){
-        case ConstrainType.REQUIRE:
-            return {
-                label: "Require",
-                id: constrain_type
-            }
+    return {
+        label: constrain_type,
+        id: constrain_type
     }
-    return null
 }
 
 export function definedConstrainMapper(child: EditPathNode){

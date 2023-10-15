@@ -9,28 +9,17 @@ const props = defineProps<{
 }>()
 
 const editing_note = inject(InjectConstant.EDITING_NOTE) as Note
-let attr_value = ref(activeDataGetter(editing_note, props.edit_path) as AttributeValue<any>)
-const attr_id = attr_value.value.definition.id
+let attr_value = activeDataGetter(editing_note, props.edit_path) as AttributeValue<any>
+const attr_id = attr_value.definition.id
 
 watch(() => props.render, () => {
-    attr_value.value = activeDataGetter(editing_note, props.edit_path) as AttributeValue<any>
+    attr_value = activeDataGetter(editing_note, props.edit_path) as AttributeValue<any>
 })
 </script>
 
 <template>
     <FormItem :label="attr_value.definition.name" :prop="attr_id" :error="attr_value.validate_result.invalid_message">
-        <template v-if="props.type === 'INT'">
-            <InputNumber v-model="attr_value.value" :step="1" controls-outside />
-        </template>
-        <template v-else-if="props.type === 'DECIMAL'">
-            <InputNumber v-model="attr_value.value" :step="0.1" controls-outside />
-        </template>
-        <template v-else-if="props.type === 'STRING'">
-            <Input v-model="attr_value.value"/>
-        </template>
-        <template v-else-if="props.type === 'BOOLEAN'">
-            <Switch v-model="attr_value.value" />
-        </template>
+        <mt-attribute-value-editor :type="props.type" v-model:value="attr_value.value" />
     </FormItem>
 </template>
 

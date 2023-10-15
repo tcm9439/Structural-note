@@ -8,6 +8,7 @@ export class NumberAttribute extends AttributeType<number> {
         this.addConvertibleType(StringAttribute.TYPE, this.convertToString.bind(this))
         this.addAvailableConstraint(ConstrainType.MIN)
         this.addAvailableConstraint(ConstrainType.MAX)
+        this.addAvailableConstraint(ConstrainType.UNIQUE)
     }
 
     convertToString(value: number, mode?: any): string {

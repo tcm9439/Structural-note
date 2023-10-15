@@ -21,27 +21,34 @@ watch(active_tab, () => {
 
 // # base
 const editing_note = inject(InjectConstant.EDITING_NOTE) as Note
-const attr_def = activeDataGetter(editing_note, props.edit_path) as AttributeDefinition<any>
+let attr_def = activeDataGetter(editing_note, props.edit_path) as AttributeDefinition<any>
+
+// # reload (after attr type changed)
+const reload_done = ref(0)
+watch(() => props.render, () => {
+    attr_def = activeDataGetter(editing_note, props.edit_path) as AttributeDefinition<any>
+    attr_types_that_can_be_set.value = getAllTypes()
+    current_attr_type_name.value = attr_def.attribute_type?.type as string
+    reload_done.value += 1
+})
 
 // # attr type
 const init_attr_type_mode = ref(attr_def.attribute_type === null? true : false)
 const new_constrain_added = ref(0)
-const attr_type_name: Ref<string> = ref("")
+const current_attr_type_name: Ref<string> = ref("")
 const attr_type_can_be_changed = ref(true)
 const attr_types_that_can_be_set = shallowRef(getAllTypes())
 
 // for determining if the attr has type => show advance option tabs
 const attr_has_type = computed(() => {
-    return attr_type_name.value !== ""
+    return current_attr_type_name.value !== ""
 })
 
 // Get all the attribute types that this attribute definition can be changed to.
 function getAllTypes(){
     if (!init_attr_type_mode.value){
-        let ori_attr_type_name = attr_def.attribute_type?.type as string
         // existing attr, type can only be changed to convertible types
-        let ori_attr_type = AttributeType.getAttrType(ori_attr_type_name)
-        attr_type_name.value = ori_attr_type_name
+        let ori_attr_type = AttributeType.getAttrType(current_attr_type_name.value)
         if (ori_attr_type !== undefined){ 
             let types = AttrTypeHelper.getGroupedConvertibleTypes(ori_attr_type, 2, null)
             if (types.length === 0){
@@ -49,9 +56,10 @@ function getAllTypes(){
             }
             return types
         }
+    } else {
+        // new attr
+        return AttrTypeHelper.getGroupedTypes(2, null)
     }
-    // new attr
-    return AttrTypeHelper.getGroupedTypes(2, null)
 }
 
 // when user select a type, update the attr_def & push a update type operation in the queue
@@ -64,7 +72,6 @@ function selectedType(attr_type: AttrTypeNameAndInstance){
         // init attr type
         attr_def.attribute_type = attr_type.instance
         init_attr_type_mode.value = false
-        attr_types_that_can_be_set.value = getAllTypes()
         emit('attrTypeUpdate', null)
     }
 }
@@ -72,10 +79,10 @@ function selectedType(attr_type: AttrTypeNameAndInstance){
 // # constrains
 // render the available constrains
 const available_constrains: Ref<ConstrainChoice[]> = ref([])
-watch([() => props.render, attr_type_name, new_constrain_added], () => {
+watch([reload_done, new_constrain_added], () => {
     if (init_attr_type_mode.value){
         // load the available constrains for the new attr
-        let attr_type = AttributeType.getAttrType(attr_type_name.value)
+        let attr_type = AttributeType.getAttrType(current_attr_type_name.value)
         available_constrains.value = attr_type?.available_constraints.map(constrainChoiceMapper) as ConstrainChoice[] ?? []
     } else {
         // get the available constrains from the attr_def
@@ -85,11 +92,11 @@ watch([() => props.render, attr_type_name, new_constrain_added], () => {
 
 // render the defined constrains
 const defined_constrains: Ref<ComponentVForElement[]> = ref([])
-watch(() => attr_def.constrains.size, () => {
+watch([() => attr_def.constrains.size, reload_done], () => {
     defined_constrains.value = elementListGetter(editing_note, attr_def, props.edit_path, definedConstrainMapper)
 }, { immediate: true })
 
-const selected_new_constrain: Ref<number | null> = ref(null)
+const selected_new_constrain: Ref<any | null> = ref(null)
 function addNewConstrain(){
     if (selected_new_constrain.value !== null){
         let constrain = ConstrainTypeToClassMap.get(selected_new_constrain.value)
@@ -125,11 +132,11 @@ function addNewConstrain(){
             </template>
             <template v-else>
                 <p>
-                    Current Attribute Type: {{ attr_def.attribute_type?.type }}
+                    Current Attribute Type: {{ current_attr_type_name }}
                 </p>
                 Change attribute type to:
             </template>
-            <RadioGroup type="button" v-model="attr_type_name" style="width: 100%" v-if="attr_type_can_be_changed">
+            <RadioGroup type="button" v-model="current_attr_type_name" style="width: 100%" v-if="attr_type_can_be_changed">
                 <Row v-for="type_group in attr_types_that_can_be_set">
                     <Col flex="1" v-for="attr_type in type_group">
                         <mt-attribute-definition-attr-type-choice 
@@ -157,9 +164,10 @@ function addNewConstrain(){
                     Add
                 </Button>
                 <Divider />
+                <!-- TODO delete constrain button -->
                 <Form>
                     <template v-for="value in defined_constrains" :key="value.id">
-                        <component :is="value.type" :edit_path="value.path" />
+                        <component :is="value.type" :edit_path="value.path" :attr_def="attr_def"/>
                     </template>
                 </Form>
             </TabPane>

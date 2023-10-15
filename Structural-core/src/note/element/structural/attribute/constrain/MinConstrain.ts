@@ -6,26 +6,15 @@ import { z } from "zod"
 export const MinConstrainJson = ConstrainJson.extend({
     type: z.literal("MinConstrain"),
     min: z.any(),
-    value_type: z.string().nullable()
 }).required()
 
 export class MinConstrain<T> extends Constrain {
     static readonly type: ConstrainType = ConstrainType.MIN
     private _min: T | null = null
-    private _value_type: string | null = null
 
-    constructor(min: T | null = null, value_type: string | null = null) {
+    constructor(min: T | null = null) {
         super()
         this.min = min
-        this.valueType = value_type
-    }
-
-    set valueType(value_type: string | null) {
-        this._value_type = value_type
-    }
-
-    get valueType(): string | null {
-        return this._value_type
     }
 
     set min(min: T | null) {
@@ -91,7 +80,6 @@ export class MinConstrain<T> extends Constrain {
             id: this.id,
             type: "MinConstrain",
             min: this.min,
-            value_type: this.valueType
         }
     }
 
@@ -104,7 +92,7 @@ export class MinConstrain<T> extends Constrain {
         }
         const valid_json = result.data
 
-        const constrain = new MinConstrain<any>(valid_json.min, valid_json.value_type)
+        const constrain = new MinConstrain<any>(valid_json.min)
         constrain.id = valid_json.id
         return constrain
     }

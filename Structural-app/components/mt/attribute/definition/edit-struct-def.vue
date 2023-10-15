@@ -20,16 +20,24 @@ const edit_context = ref(new StructDefEditContext(struct_def, onExitEditStruct))
 const edit_state = computed(() => edit_context.value.state)
 const struct_has_change = computed(() => edit_context.value.edit_queue.hasConfirmedItem())
 
+// # error modal
+const show_error_modal = ref(false)
+const error_title = ref("")
+const error_content = ref("")
+
 let attr_def_edit_path: Ref<EditPath | null> = ref(null)
 function setAttrToEdit(id: string){
     attr_def_edit_path.value = props.edit_path.clone().append(id)
 }
 
 function showInvalidDefinitionMessage(def_type: string, error_msg: string){
-    $Modal.error({
-        title: `Invalid ${def_type} Definition`,
-        content: error_msg,
-    });
+    show_error_modal.value = true
+    error_title.value = `Invalid ${def_type} Definition`
+    error_content.value = error_msg
+}
+
+function onErrorModalConfirm(){
+    show_error_modal.value = false
 }
 
 function onExitEditStruct(has_change: boolean){
@@ -87,6 +95,8 @@ function attrTypeUpdate(attr_def: AttributeDefinition<any> | null){
         StructDefEditEvent.attrTypeUpdate(edit_context.value, attr_def)
     }
     // else a init attr type is set
+
+    // re-render the attr def
     render_attr_def.value += 1
 }
 
@@ -148,5 +158,37 @@ function attrTypeUpdate(attr_def: AttributeDefinition<any> | null){
                 </Button>
             </div>
         </template>
+
+        <Modal 
+            :modelValue="show_error_modal"
+            :closable="false"
+            :mask-closable="false"
+            class-name="vertical-center-modal"
+        >
+            <template #header>
+                <Icon type="md-alert" style="color: #f00; font-size: 20px; margin-right: 10px" />
+                {{ error_title }}
+            </template>
+            {{ error_content }}
+
+            <template #footer>
+                <Button type="primary" @click="onErrorModalConfirm">
+                    Confirm
+                </Button>
+            </template>
+        </Modal>
     </Modal>
 </template>
+
+<style>
+    /* center the error modal */
+    .vertical-center-modal {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .vertical-center-modal .ivu-modal {
+        top: 0;
+    }
+</style>

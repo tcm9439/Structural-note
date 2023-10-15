@@ -1,6 +1,7 @@
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
 import { IntegerAttribute, DecimalAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
 import { InvalidTypeConversionException } from '@/note/element/structural/attribute/exception/AttributeException'
+import { ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
 
 export class StringAttribute extends AttributeType<string> {    
     public static readonly TYPE: string = "STRING"
@@ -15,6 +16,8 @@ export class StringAttribute extends AttributeType<string> {
         super(StringAttribute.TYPE)
         this.addConvertibleType(IntegerAttribute.TYPE, this.convertToInteger.bind(this))
         this.addConvertibleType(DecimalAttribute.TYPE, this.convertToDecimal.bind(this))
+        this.addAvailableConstraint(ConstrainType.REGEX)
+        this.addAvailableConstraint(ConstrainType.UNIQUE)
     }
 
     convertToDecimal(value: string, mode?: any): number {

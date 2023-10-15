@@ -6,26 +6,15 @@ import { z } from "zod"
 export const MaxConstrainJson = ConstrainJson.extend({
     type: z.literal("MaxConstrain"),
     max: z.any(),
-    value_type: z.string().nullable()
 }).required()
 
 export class MaxConstrain<T> extends Constrain {
     static readonly type: ConstrainType = ConstrainType.MAX
     private _max: T | null = null
-    private _value_type: string | null = null
 
-    constructor(max: T | null = null, value_type: string | null = null) {
+    constructor(max: T | null = null) {
         super()
         this.max = max
-        this.valueType = value_type
-    }
-
-    set valueType(value_type: string | null) {
-        this._value_type = value_type
-    }
-
-    get valueType(): string | null {
-        return this._value_type
     }
 
     set max(max: T | null) {
@@ -92,7 +81,6 @@ export class MaxConstrain<T> extends Constrain {
             id: this.id,
             type: "MaxConstrain",
             max: this.max,
-            value_type: this.valueType,
         }
     }
 
@@ -105,7 +93,7 @@ export class MaxConstrain<T> extends Constrain {
         }
         const valid_json = result.data
 
-        let max_constrain = new MaxConstrain<any>(valid_json.max, valid_json.value_type)
+        let max_constrain = new MaxConstrain<any>(valid_json.max)
         max_constrain.id = valid_json.id
         return max_constrain
     }

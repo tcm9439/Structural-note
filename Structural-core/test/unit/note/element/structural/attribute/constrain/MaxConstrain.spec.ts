@@ -7,19 +7,17 @@ describe("MaxConstrain", () => {
     let max_constrain: MaxConstrain<number>
 
     beforeEach(() => {
-        max_constrain = new MaxConstrain<number>(100, "number")
+        max_constrain = new MaxConstrain<number>(100)
     })
 
 	it("constructor", () => {
         expect(max_constrain.max).toBe(100)
-        expect(max_constrain.valueType).toBe("number")
         expect(max_constrain.validate_constrain_result.valid).toBe(true)
 	})
 
 	it("empty constructor", () => {
         max_constrain = new MaxConstrain<number>()
         expect(max_constrain.max).toBeNull()
-        expect(max_constrain.valueType).toBeNull()
         expect(max_constrain.validate_constrain_result.valid).toBe(false)
 	})
 
@@ -33,11 +31,6 @@ describe("MaxConstrain", () => {
         expect(max_constrain.validate_constrain_result.valid).toBe(false)
     })
 
-    it("get set valueType", () => {
-        max_constrain.valueType = "string"
-        expect(max_constrain.valueType).toBe("string")
-    })
-
     it("constrainIsValid", () => {
         expect(max_constrain.validate_constrain_result.valid).toBe(true)
 
@@ -47,12 +40,12 @@ describe("MaxConstrain", () => {
 
     it("isCompatibleTo", () => {
         // compatible to MaxConstrain?
-        let new_max_constrain = new MaxConstrain<number>(1, "number")
+        let new_max_constrain = new MaxConstrain<number>(1)
         expect(max_constrain.isCompatibleTo(new_max_constrain)).toBe(false)
         
         // compatible to MinConstrain?
         // - max value smaller than min value
-        let min_constrain = new MinConstrain<number>(999, "number")
+        let min_constrain = new MinConstrain<number>(999)
         expect(max_constrain.isCompatibleTo(min_constrain)).toBe(false)
 
         // - max value greater than min value
@@ -74,7 +67,7 @@ describe("MaxConstrain", () => {
 
     it("different type", () => {
         // date
-        let date_max_constrain = new MaxConstrain<Date>(new Date(2020, 1, 1), "date")
+        let date_max_constrain = new MaxConstrain<Date>(new Date(2020, 1, 1))
         expect(date_max_constrain.validate(new Date(2020, 1, 1))).toBe(ValidValidateResult)
         expect(date_max_constrain.validate(new Date(2019, 12, 30))).toBe(ValidValidateResult)
         expect(date_max_constrain.validate(new Date(2020, 1, 2)).valid).toBe(false)
