@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Icon } from "view-ui-plus"
+
 const { $viewState } = useNuxtApp();
 const view_state = ref($viewState);
 </script>

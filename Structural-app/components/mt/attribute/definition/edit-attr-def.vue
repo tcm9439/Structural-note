@@ -3,6 +3,7 @@ import { EditPath, Note, AttributeDefinition, AttrTypeHelper, AttrTypeNameAndIns
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 import { elementListGetter } from "@/composables/active-data/ElementListGetter"
 import { constrainChoiceMapper, ConstrainChoice, definedConstrainMapper } from "@/composables/active-data/ConstrainMapper"
+import { Icon } from "view-ui-plus"
 
 const props = defineProps<{
     edit_path: EditPath, // edit_path to the AttributeDefinition
@@ -28,14 +29,14 @@ const reload_done = ref(0)
 watch(() => props.render, () => {
     attr_def = activeDataGetter(editing_note, props.edit_path) as AttributeDefinition<any>
     attr_types_that_can_be_set.value = getAllTypes()
-    current_attr_type_name.value = attr_def.attribute_type?.type as string
+    current_attr_type_name.value = attr_def.attribute_type?.type || ""
     reload_done.value += 1
 })
 
 // # attr type
 const init_attr_type_mode = ref(attr_def.attribute_type === null? true : false)
-const new_constrain_added = ref(0)
-const current_attr_type_name: Ref<string> = ref("")
+const constrain_changed_count = ref(0)
+const current_attr_type_name: Ref<string> = ref(attr_def.attribute_type?.type || "")
 const attr_type_can_be_changed = ref(true)
 const attr_types_that_can_be_set = shallowRef(getAllTypes())
 
@@ -64,6 +65,7 @@ function getAllTypes(){
 
 // when user select a type, update the attr_def & push a update type operation in the queue
 function selectedType(attr_type: AttrTypeNameAndInstance){
+    current_attr_type_name.value = attr_type.name
     if (attr_def.attribute_type !== null){
         // has old type
         let new_attr_def = AttributeDefinition.convertToType(attr_def, attr_type.instance)
@@ -79,7 +81,7 @@ function selectedType(attr_type: AttrTypeNameAndInstance){
 // # constrains
 // render the available constrains
 const available_constrains: Ref<ConstrainChoice[]> = ref([])
-watch([reload_done, new_constrain_added], () => {
+watch([reload_done, constrain_changed_count], () => {
     if (init_attr_type_mode.value){
         // load the available constrains for the new attr
         let attr_type = AttributeType.getAttrType(current_attr_type_name.value)
@@ -103,10 +105,15 @@ function addNewConstrain(){
         if (constrain !== undefined){
             let new_constrain = new constrain()
             attr_def.constrains.set(new_constrain.id, new_constrain)
-            new_constrain_added.value += 1
+            constrain_changed_count.value += 1
             selected_new_constrain.value = null
         }
     }
+}
+
+function deleteConstrain(id: string){
+    attr_def.constrains.delete(id)
+    constrain_changed_count.value += 1
 }
 
 </script>
@@ -131,12 +138,21 @@ function addNewConstrain(){
                 Choose Attribute Type:
             </template>
             <template v-else>
-                <p>
-                    Current Attribute Type: {{ current_attr_type_name }}
-                </p>
+                <Row>
+                    <Col flex="1">
+                        Current Attribute Type: 
+                    </Col>
+                    <Col flex="2">
+                        <mt-attribute-definition-attr-type-choice 
+                        :attr_name="current_attr_type_name"
+                        :readonly_mode="true"
+                        />
+                    </Col>
+                </Row>
+                <Divider />
                 Change attribute type to:
             </template>
-            <RadioGroup type="button" v-model="current_attr_type_name" style="width: 100%" v-if="attr_type_can_be_changed">
+            <div style="width: 100%" v-if="attr_type_can_be_changed">
                 <Row v-for="type_group in attr_types_that_can_be_set">
                     <Col flex="1" v-for="attr_type in type_group">
                         <mt-attribute-definition-attr-type-choice 
@@ -145,7 +161,7 @@ function addNewConstrain(){
                         />
                     </Col>
                 </Row>
-            </RadioGroup>
+            </div>
             <div v-else>Type cannot be change.</div>
         </TabPane>
 
@@ -164,11 +180,18 @@ function addNewConstrain(){
                     Add
                 </Button>
                 <Divider />
-                <!-- TODO delete constrain button -->
                 <Form>
-                    <template v-for="value in defined_constrains" :key="value.id">
-                        <component :is="value.type" :edit_path="value.path" :attr_def="attr_def"/>
-                    </template>
+                    <Row v-for="value in defined_constrains" :key="value.id">
+                        <Col flex="1">
+                            <component :is="value.type" :edit_path="value.path" :attr_def="attr_def"/>
+                        </Col>
+                        <Col flex="1">
+                            <Button @click="deleteConstrain(value.id)" class="delete-constrain-button">
+                                <Icon type="md-trash" />
+                                Delete
+                            </Button>
+                        </Col>
+                    </Row>
                 </Form>
             </TabPane>
         </template>
@@ -178,3 +201,10 @@ function addNewConstrain(){
         </template>
     </Tabs>
 </template>
+
+<style scoped>
+.delete-constrain-button{
+    /* align to right */
+    float: right;
+}
+</style>

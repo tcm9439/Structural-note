@@ -6,6 +6,7 @@
 <script setup lang="ts">
 import { StructureDefinition, EditPath, Note, StructuralDefinitionHelper, InjectConstant } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
+import { Icon } from "view-ui-plus"
 
 const props = defineProps<{
     edit_path: EditPath, // edit_path to the StructureDefinition

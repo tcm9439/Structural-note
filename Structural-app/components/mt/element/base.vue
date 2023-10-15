@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Icon } from "view-ui-plus"
+
 const props = defineProps<{
     id: string,
 }>()

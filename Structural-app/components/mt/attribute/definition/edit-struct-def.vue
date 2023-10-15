@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { EditPath, Note, StructureDefinition, EventConstant, StructDefEditContext, StructDefEditState, StructDefEditEvent, InjectConstant, AttributeDefinition } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
+import { Icon } from "view-ui-plus"
 const { $Message } = useNuxtApp()
 
 const props = defineProps<{
@@ -166,7 +167,7 @@ function attrTypeUpdate(attr_def: AttributeDefinition<any> | null){
             class-name="vertical-center-modal"
         >
             <template #header>
-                <Icon type="md-alert" style="color: #f00; font-size: 20px; margin-right: 10px" />
+                <Icon type="md-alert" color="red" />
                 {{ error_title }}
             </template>
             {{ error_content }}

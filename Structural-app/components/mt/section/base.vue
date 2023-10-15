@@ -3,6 +3,7 @@ import { NoteSection, EditPath, Note, InjectConstant, ComponentVForElement, Text
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 import { elementListGetter } from "@/composables/active-data/ElementListGetter"
 import { elementComponentMapper } from "@/composables/active-data/ElementComponentMapper"
+import { Icon } from "view-ui-plus"
 
 const props = defineProps<{
     edit_path: EditPath,
