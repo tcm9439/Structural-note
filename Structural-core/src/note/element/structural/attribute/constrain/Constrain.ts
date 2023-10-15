@@ -12,6 +12,7 @@ export enum ConstrainType {
 }
 
 export const ConstrainJson = z.object({
+    id: z.string(),
     type: z.string()
 }).required()
 
@@ -53,10 +54,10 @@ export abstract class Constrain extends ComponentBase implements EditPathNode {
     }
 
     isCompatibleToType(type: ConstrainType): boolean {
-        if (this.getType() == type) {
+        if (this.getType() === type) {
             return this.getRepeatable()
         }
-        return false
+        return true
     }
 
     /**

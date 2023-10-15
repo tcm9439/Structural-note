@@ -3,7 +3,6 @@ import { ValidateResult, ValidValidateResult } from "@/note/element/structural/a
 import { z } from "zod"
 
 export const RequireConstrainJson = ConstrainJson.extend({
-    id: z.string(),
     type: z.literal("RequireConstrain"),
     required: z.boolean()
 }).required()

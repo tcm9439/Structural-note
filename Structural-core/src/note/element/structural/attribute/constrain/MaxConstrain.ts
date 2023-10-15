@@ -1,10 +1,12 @@
 import { Constrain, ConstrainType, ConstrainJson } from "@/note/element/structural/attribute/constrain/Constrain"
+import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinConstrain"
 import { ValidateResult, ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
 import { z } from "zod"
 
 export const MaxConstrainJson = ConstrainJson.extend({
     type: z.literal("MaxConstrain"),
-    max: z.any()
+    max: z.any(),
+    value_type: z.string().nullable()
 }).required()
 
 export class MaxConstrain<T> extends Constrain {
@@ -12,9 +14,10 @@ export class MaxConstrain<T> extends Constrain {
     private _max: T | null = null
     private _value_type: string | null = null
 
-    constructor(max: T | null = null) {
+    constructor(max: T | null = null, value_type: string | null = null) {
         super()
         this.max = max
+        this.valueType = value_type
     }
 
     set valueType(value_type: string | null) {
@@ -47,6 +50,25 @@ export class MaxConstrain<T> extends Constrain {
         return this.validate_constrain_result
     }
 
+    /**
+     * MaxConstrain is not compatible to
+     * - MinConstrain with min value greater than max value 
+     */
+    isCompatibleTo(constrain: Constrain): boolean {
+        let result = super.isCompatibleTo(constrain)
+        if (!result) {
+            return false
+        }
+
+        if (constrain instanceof MinConstrain) {
+            if (this.max != null && constrain.min != null) {
+                return this.max >= constrain.min
+            }
+        }
+
+        return true
+    }
+
     getType(): ConstrainType {
         return MaxConstrain.type
     }
@@ -67,8 +89,10 @@ export class MaxConstrain<T> extends Constrain {
     
     saveAsJson(): z.infer<typeof MaxConstrainJson> {
         return {
+            id: this.id,
             type: "MaxConstrain",
             max: this.max,
+            value_type: this.valueType,
         }
     }
 
@@ -81,6 +105,8 @@ export class MaxConstrain<T> extends Constrain {
         }
         const valid_json = result.data
 
-        return new MaxConstrain(valid_json.max)
+        let max_constrain = new MaxConstrain<any>(valid_json.max, valid_json.value_type)
+        max_constrain.id = valid_json.id
+        return max_constrain
     }
 }

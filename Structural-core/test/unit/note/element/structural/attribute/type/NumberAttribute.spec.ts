@@ -8,7 +8,7 @@ describe('NumberAttribute', () => {
         expect(IntegerAttribute.instance).not.toBeNull()
     })
 
-    it("convertToNumber", () => {
+    it("convertToString", () => {
         expect(IntegerAttribute.instance.convertToString(109)).toBe("109")
         expect(IntegerAttribute.instance.convertToString(109.8)).toBe("109.8")
         expect(IntegerAttribute.instance.convertToString(-9)).toBe("-9")

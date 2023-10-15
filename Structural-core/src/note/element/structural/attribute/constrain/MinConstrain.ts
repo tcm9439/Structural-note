@@ -1,10 +1,12 @@
+import { MaxConstrain } from "@/index"
 import { Constrain, ConstrainType, ConstrainJson } from "@/note/element/structural/attribute/constrain/Constrain"
 import { ValidateResult, ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
 import { z } from "zod"
 
 export const MinConstrainJson = ConstrainJson.extend({
     type: z.literal("MinConstrain"),
-    min: z.any()
+    min: z.any(),
+    value_type: z.string().nullable()
 }).required()
 
 export class MinConstrain<T> extends Constrain {
@@ -12,9 +14,10 @@ export class MinConstrain<T> extends Constrain {
     private _min: T | null = null
     private _value_type: string | null = null
 
-    constructor(min: T | null = null) {
+    constructor(min: T | null = null, value_type: string | null = null) {
         super()
         this.min = min
+        this.valueType = value_type
     }
 
     set valueType(value_type: string | null) {
@@ -47,6 +50,24 @@ export class MinConstrain<T> extends Constrain {
         return this.validate_constrain_result
     }
 
+    /**
+     * MinConstrain is not compatible to
+     * - MaxConstrain with max value smaller than min value 
+     */
+    isCompatibleTo(constrain: Constrain): boolean {
+        let result = super.isCompatibleTo(constrain)
+        if (!result) {
+            return false
+        }
+
+        if (constrain instanceof MaxConstrain) {
+            if (this.min != null && constrain.max != null) {
+                return this.min <= constrain.max
+            }
+        }
+        return true
+    }
+
     getType(): ConstrainType {
         return MinConstrain.type
     }
@@ -67,8 +88,10 @@ export class MinConstrain<T> extends Constrain {
     
     saveAsJson(): z.infer<typeof MinConstrainJson> {
         return {
+            id: this.id,
             type: "MinConstrain",
             min: this.min,
+            value_type: this.valueType
         }
     }
 
@@ -81,6 +104,8 @@ export class MinConstrain<T> extends Constrain {
         }
         const valid_json = result.data
 
-        return new MinConstrain(valid_json.min)
+        const constrain = new MinConstrain<any>(valid_json.min, valid_json.value_type)
+        constrain.id = valid_json.id
+        return constrain
     }
 }
