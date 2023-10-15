@@ -118,4 +118,52 @@ describe('StructureDefinition', () => {
         let new_definition = StructureDefinition.loadFromJson(json)
         expect(new_definition).toEqual(definition)
     })
+
+    it("loadFromJson: invalid json, order and attr def unmatch", () => {
+        let json = {
+            id: definition.id,
+            attribute_order: [str_attr.id, bool_attr.id],
+            attributes: [
+                {
+                    id: bool_attr.id,
+                    name: bool_attr.name,
+                    description: bool_attr.description,
+                    attribute_type: bool_attr.attribute_type?.type
+                }
+            ]
+        }
+        let new_definition = StructureDefinition.loadFromJson(json)
+        expect(new_definition).toEqual(null)
+    })
+
+    it("loadFromJson: invalid json data type", () => {
+        let json = {
+            id: -1,
+            attribute_order: [],
+            attributes: []
+        }
+        let new_definition = StructureDefinition.loadFromJson(json)
+        expect(new_definition).toEqual(null)
+    })
+
+    it("validateDefinition: valid", () => {
+        expect(definition.validateDefinition().valid).toBe(true)
+    })
+
+    it("validateDefinition: no attribute", () => {
+        definition.attributes.remove(str_attr.id)
+        definition.attributes.remove(bool_attr.id)
+        let validate_result = definition.validateDefinition()
+        expect(validate_result.valid).toBe(false)
+        expect(validate_result.invalid_message).toBe("There must be at least one attribute definition.")
+    })
+
+    it("validateDefinition: invalid attribute", () => {
+        let invalid_attr = new AttributeDefinition("invalid", StringAttribute.instance)
+        invalid_attr.name = ""
+        definition.attributes.add(invalid_attr)
+        let validate_result = definition.validateDefinition()
+        expect(validate_result.valid).toBe(false)
+        expect(validate_result.invalid_message).toBe("Attribute name cannot be empty.")
+    })
 })

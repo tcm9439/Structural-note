@@ -10,7 +10,7 @@ import { z } from "zod"
 
 export const StructuralElementJson = NoteElementJson.extend({
     type: z.literal("StructuralElement"),
-    values: z.array(AttributeValueJson),
+    values: z.array(AttributeValueJson.nullable()),
     definition_id: z.string()
 }).required()
 
@@ -58,13 +58,13 @@ export class StructuralElement extends NoteElement {
      * @returns true if the element is valid
      */
     validate(): ValidateResult {
-        this.values.forEach((value) => {
+        for (let [id, value] of this.values) {
             let value_result = value.validate_result
             if (!value_result.valid) {
-                value_result.invalid_message = `Invalid value for attribute ${value.definition.name}: ${value_result.invalid_message}`
+                value_result.invalid_message = `Invalid value for attribute "${value.definition.name}": ${value_result.invalid_message}`
                 return value_result
             }
-        })
+        }
         return ValidValidateResult
     }
 
@@ -79,7 +79,11 @@ export class StructuralElement extends NoteElement {
     }
 
     saveAsJson(): z.infer<typeof StructuralElementJson> {
+        console.log("saveAsJson", this.ordered_values)
         let values = this.ordered_values.flatMap((value) => {
+            if (value === undefined) {
+                return null
+            }
             return value.saveAsJson()
         })
 
@@ -100,20 +104,27 @@ export class StructuralElement extends NoteElement {
         const valid_json = result.data
         const element = new StructuralElement(definition)
         element.id = valid_json.id
-        valid_json.values.forEach((value_json) => {
+
+        for (let value_json of valid_json.values) {
+            if (value_json === null) {
+                // the value is not present
+                continue
+            }
+
             // get the corresponding attribute definition for the AttributeValue
             let attr_def = definition.attributes.get(value_json.definition_id)
             if (attr_def === undefined) {
                 console.error(`Attribute definition not found: ${value_json.definition_id}`)
                 return null
             }
+
             let attr_value = AttributeValue.loadFromJson(value_json, attr_def)
             if (attr_value === null) {
                 console.error("Fail to load Attribute value")
                 return null
             }
             element.addValue(attr_def, attr_value)
-        })
+        }
         
         return element
     }

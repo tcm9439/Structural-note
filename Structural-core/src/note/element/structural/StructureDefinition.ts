@@ -67,20 +67,22 @@ export class StructureDefinition extends ComponentBase implements EditPathNode, 
         let definition = new StructureDefinition()
         definition.id = valid_json.id
 
+        // load the attribute definitions (in unknown order, just load them first)
         let loaded_attr = new Map<string, AttributeDefinition<any>>()
         valid_json.attributes.forEach((attr_json: object) => {
             let attr_def = AttributeDefinition.loadFromJson(attr_json)
             if (attr_def !== null) {
-                // definition.attributes.add(attr_def)
                 loaded_attr.set(attr_def.id, attr_def)
             }
         })
 
-        // add the definitions in the order
+        // add the attribute definitions in the order
         let order = valid_json.attribute_order
         for (let i = 0; i < order.length; i++) {
             let attr_def = loaded_attr.get(order[i])
             if (attr_def === undefined) {
+                // the attribute definition is not loaded in the previous step
+                // INVALID JSON
                 return null
             }
             definition.attributes.add(attr_def)

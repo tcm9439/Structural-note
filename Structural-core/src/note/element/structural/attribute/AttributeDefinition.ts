@@ -192,7 +192,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         if (this.name.trim() === "") {
             return {
                 valid: false,
-                invalid_message: "Attribute name cannot be empty"
+                invalid_message: "Attribute name cannot be empty."
             }
         }
 

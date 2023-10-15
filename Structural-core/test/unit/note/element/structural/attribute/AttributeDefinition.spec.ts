@@ -177,7 +177,7 @@ describe('AttributeDefinition', () => {
         definition.name = ""
         let validate_result = definition.validateDefinition()
         expect(validate_result.valid).toBe(false)
-        expect(validate_result.invalid_message).toBe("Attribute name cannot be empty")
+        expect(validate_result.invalid_message).toBe("Attribute name cannot be empty.")
     })
 
     it("validateDefinition: empty attribute type", () => {

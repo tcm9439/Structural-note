@@ -98,10 +98,12 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
 
         // check if the attribute definition match
         if (valid_json.definition_id !== attribute_def.id) {
-            // throw new Error("Definition id not match")
+            console.error("AttrValue loadFromJson: Definition id not match")
             return null
         }
+        
         if (result.data.value == null){
+            console.error("AttrValue loadFromJson: No value")
             return null
         }
 
