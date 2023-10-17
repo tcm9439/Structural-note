@@ -2,7 +2,7 @@ import { UUID, ID } from "@/common/CommonTypes"
 import { ComponentBase } from "@/note/util/ComponentBase"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
 import { EditPath, EditPathNode, EndOfEditPathError } from "@/note/util/EditPath"
-import { NullAttrTypeException } from "@/note/element/structural/attribute/exception/AttributeException"
+import { InvalidTypeConversionForDataException, NullAttrTypeException } from "@/note/element/structural/attribute/exception/AttributeException"
 import { ValidateResult, ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
 import { z } from "zod"
 
@@ -17,17 +17,20 @@ export const AttributeValueJson = z.object({
  */
 export class AttributeValue<T> extends ComponentBase implements EditPathNode {
     private _definition : AttributeDefinition<T>
-    private _value : T | null
+    private _value : T | null = null
     private _validate_result : ValidateResult = ValidValidateResult
 
     constructor(definition: AttributeDefinition<T>, value: T | null = null) {
         super()
         this._definition = definition
+        // set the value to default value if it is null
         if (value === null){
-            value = definition.default_value
+            if (definition.default_value !== null){
+                this.value = definition.default_value
+            }
+        } else {
+            this.value = value
         }
-        this._value = value
-        this.validate()
     }
 
     get definition(): AttributeDefinition<T> {
@@ -60,15 +63,31 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
         return this._validate_result
     }
 
-    convertTo<N>(new_attr_def: AttributeDefinition<N>, mode: ID = 0): AttributeValue<N> {
-        if (this.definition.attribute_type === null || new_attr_def.attribute_type === null){
+    private set validate_result(value: ValidateResult) {
+        this._validate_result = value
+    }
+
+    static convertValueForNewAttrDef<O,N>(value: O, old_attr_def: AttributeDefinition<O>, new_attr_def: AttributeDefinition<N>, mode: ID = 0): N | null {
+        if (old_attr_def.attribute_type === null || new_attr_def.attribute_type === null){
             throw new NullAttrTypeException()
         }
+
+        try {
+            return old_attr_def.attribute_type.convertTo(new_attr_def.attribute_type, value, mode)
+        } catch (error) {
+            if (error instanceof InvalidTypeConversionForDataException) {
+                console.log(`Failed to convert attribute value with id ${old_attr_def.id} to new type: ${error.message}`)
+            }
+            return null
+        }
+    }
+
+    convertTo<N>(new_attr_def: AttributeDefinition<N>, mode: ID = 0): AttributeValue<N> {
         if (this.value === null){
             return new AttributeValue(new_attr_def)
         }
-        const new_value: N = this.definition.attribute_type.convertTo(new_attr_def.attribute_type, this.value, mode)
-        return new AttributeValue(new_attr_def, new_value)
+        const conversion_result = AttributeValue.convertValueForNewAttrDef<T, N>(this.value, this.definition, new_attr_def, mode)
+        return new AttributeValue(new_attr_def, conversion_result)
     }
 
     getNextEditPathNode(index: string): EditPathNode | undefined {

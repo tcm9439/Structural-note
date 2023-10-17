@@ -7,6 +7,7 @@ import { ValidateResult, ValidValidateResult } from "@/note/element/structural/a
 import { ForbiddenConstrain, IncompatibleConstrain } from "@/note/element/structural/attribute/exception/AttributeException"
 import { EditPath, EditPathNode } from "@/note/util/EditPath"
 import { z } from "zod"
+import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
 
 export const AttributeDefinitionJson = z.object({
     id: z.string(),
@@ -32,6 +33,14 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
 
     get default_value(): T | null {
         return this._default_value
+    }
+
+    setDefaultValue(value: T | null): ValidateResult {
+        this._default_value = value
+        if (value === null){
+            return ValidValidateResult
+        }
+        return this.validate(value)
     }
 
     get attribute_type(): AttributeType<T> | null {
@@ -140,9 +149,18 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
             // add the constrain to the new definition if it is allowed
             old_attr_def.constrains.forEach((constrain) => {
                 if (new_attr_type.allowConstrain(constrain)) {
+                    // TODO
+                    // drop the constrain with type incompatible to the new type
+                    // e.g. the min/max that has a value of the old type
                     new_attr_def.addConstrain(constrain)
                 }
             })
+
+            // convert the default value
+            if (old_attr_def.default_value !== null) {
+                let conversion_result = AttributeValue.convertValueForNewAttrDef(old_attr_def.default_value, old_attr_def, new_attr_def)
+                new_attr_def.setDefaultValue(conversion_result)
+            }
         }
 
         return new_attr_def

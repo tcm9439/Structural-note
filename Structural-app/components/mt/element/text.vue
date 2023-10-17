@@ -19,7 +19,7 @@ const element = shallowReactive(activeDataGetter(editing_note, props.edit_path) 
 
 <style scoped>
     /* Don't allow user to drag & alter size of the input box */
-    textarea {
+    :deep(textarea) {
         resize: none;
     }
 </style>

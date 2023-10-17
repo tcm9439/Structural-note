@@ -335,22 +335,11 @@ export class StructDefEditEventElementHandler {
         
         // convert the value to the new type
         let new_attr_value: AttributeValue<any>
-        try {
-            new_attr_value = attr_value.convertTo(attr_def)
-        } catch (error) {
-            if (error instanceof InvalidTypeConversionForDataException) {
-                console.log(`Failed to convert attribute value with id ${attr_id} to new type: ${error.message}`)
-            } else {
-                console.log(error)
-            }
-            // if failed to convert, create a new value
-            new_attr_value = new AttributeValue(attr_def)
-        }
+        new_attr_value = attr_value.convertTo(attr_def)
         element.values.set(attr_id, new_attr_value)
     }
 
     static handleAttrChange(element: StructuralElement, attr_id: UUID){
-        // validate the value
         const attr_def = element.definition.attributes.get(attr_id)
         if (attr_def == null){
             throw new Error(`Attribute with id ${attr_id} not found`)
@@ -359,6 +348,13 @@ export class StructDefEditEventElementHandler {
         if (attr_value == null){
             throw new Error(`Attribute value with id ${attr_id} not found`)
         }
+
+        // if the current value is null, set the default value
+        if (attr_value.value == null){
+            attr_value.value = attr_def.default_value
+        }
+
+        // validate the value
         attr_value.validate()
     }
 }

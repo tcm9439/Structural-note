@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, Note, AttributeDefinition, AttrTypeHelper, AttrTypeNameAndInstance, AttributeType, InjectConstant, ConstrainTypeToClassMap, ComponentVForElement } from "structural-core"
+import { EditPath, Note, AttributeDefinition, AttrTypeHelper, AttrTypeNameAndInstance, AttributeType, InjectConstant, ConstrainTypeToClassMap, ComponentVForElement, ValidValidateResult } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 import { elementListGetter } from "@/composables/active-data/ElementListGetter"
 import { constrainChoiceMapper, ConstrainChoice, definedConstrainMapper } from "@/composables/active-data/ConstrainMapper"
@@ -116,13 +116,28 @@ function deleteConstrain(id: string){
     constrain_changed_count.value += 1
 }
 
+// # default value
+const has_default_value = ref(attr_def.default_value !== null)
+function onToggleDefaultValue(){
+    if (!has_default_value.value){
+        default_value.value = null
+    }
+}
+const default_value_validate_result = ref(ValidValidateResult)
+const default_value = computed({
+    get: () => attr_def.default_value,
+    set: (v) => { 
+        default_value_validate_result.value = attr_def.setDefaultValue(v)
+    }
+})
+
 </script>
 
 <template>
     <Tabs v-model="active_tab">
         <!-- Tab to choose the attr basic info. -->
         <TabPane label="Basic" name="basic">
-            <Form inline label-position="top" v-if="attr_def !== null">
+            <Form label-position="top" v-if="attr_def !== null">
                 <FormItem label="Name" prop="name">
                     <Input v-model="attr_def.name" />
                 </FormItem>
@@ -134,10 +149,14 @@ function deleteConstrain(id: string){
 
         <!-- Tab to choose the attr type. -->
         <TabPane label="Type" name="type">
+            <!-- prompt -->
+            <!-- No existing attr type -->
             <template v-if="init_attr_type_mode">
                 Choose Attribute Type:
             </template>
+            <!-- Has existing attr type -->
             <template v-else>
+                <!-- Current attr type -->
                 <Row>
                     <Col flex="1">
                         Current Attribute Type: 
@@ -152,7 +171,12 @@ function deleteConstrain(id: string){
                 <Divider />
                 Change attribute type to:
             </template>
-            <div style="width: 100%" v-if="attr_type_can_be_changed">
+
+            <!-- New attr types that can be set / changed to -->
+            <div 
+                v-if="attr_type_can_be_changed"
+                style="width: 100%" 
+            >
                 <Row v-for="type_group in attr_types_that_can_be_set">
                     <Col flex="1" v-for="attr_type in type_group">
                         <mt-attribute-definition-attr-type-choice 
@@ -162,14 +186,27 @@ function deleteConstrain(id: string){
                     </Col>
                 </Row>
             </div>
+            <!-- The attr type is fixed. -->
             <div v-else>Type cannot be change.</div>
         </TabPane>
 
+        <!-- Tab that only show after the type is set  -->
         <template v-if="attr_has_type">
+            <!-- Default value editor -->
             <TabPane label="Default" name="default">
-                TODO default value editor
+                <Form>
+                    <Checkbox v-model="has_default_value" @on-change="onToggleDefaultValue" >
+                        Default value
+                    </Checkbox>
+                <FormItem prop="default_value" :error="default_value_validate_result.invalid_message" >
+                    <mt-attribute-value-editor :type="current_attr_type_name" v-model:value="default_value" />
+                </FormItem>
+                </Form>
             </TabPane>
+
+            <!-- Constrain editor -->
             <TabPane label="Constrain" name="constrain">
+                <!-- Adding new constrain -->
                 <Select v-model="selected_new_constrain" clearable style="width:200px">
                     <Option v-for="item in available_constrains" :value="item.id" :key="item.id">
                         {{ item.label }}
@@ -180,6 +217,8 @@ function deleteConstrain(id: string){
                     Add
                 </Button>
                 <Divider />
+
+                <!-- Defined Constrain -->
                 <Form>
                     <Row v-for="value in defined_constrains" :key="value.id">
                         <Col flex="1">
@@ -196,6 +235,7 @@ function deleteConstrain(id: string){
             </TabPane>
         </template>
         <template v-else>
+            <!-- Type is not set yet -->
             <TabPane label="Default" name="default" disabled />
             <TabPane label="Constrain" name="constrain" disabled />
         </template>
