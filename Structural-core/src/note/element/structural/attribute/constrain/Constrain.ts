@@ -38,13 +38,6 @@ export abstract class Constrain extends ComponentBase implements EditPathNode {
     abstract constrainIsValid(): ValidateResult
 
     /**
-     * Check if this constrain is repeatable 
-     * (i.e. if an attribute can have multiple instance of this constrain)
-     * @returns true if this constrain is repeatable, false otherwise
-     */
-    abstract getRepeatable(): boolean
-
-    /**
      * Check if this constrain is compatible to the given constrain
      * (i.e. if an attribute can have both this constrain and the given constrain)
      * @param constrain the constrain to check
@@ -55,7 +48,7 @@ export abstract class Constrain extends ComponentBase implements EditPathNode {
 
     isCompatibleToType(type: ConstrainType): boolean {
         if (this.getType() === type) {
-            return this.getRepeatable()
+            return false
         }
         return true
     }

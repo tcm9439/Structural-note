@@ -4,7 +4,6 @@ import { StructureDefinition } from "@/note/element/structural/StructureDefiniti
 import { EditingComponent } from "@/note/util/EditingComponent"
 import { StructuralElement } from "@/note/element/structural/StructuralElement"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
-import { InvalidTypeConversionForDataException } from "@/note/element/structural/attribute/exception/AttributeException"
 import { ValidValidateResult, ValidateResult } from "@/note/element/structural/attribute/ValidateResult"
 import assert from "assert"
 

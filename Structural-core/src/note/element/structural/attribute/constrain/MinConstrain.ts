@@ -61,10 +61,6 @@ export class MinConstrain<T> extends Constrain {
         return MinConstrain.type
     }
 
-    getRepeatable(): boolean {
-        return false
-    }
-
     public validate(value: T): ValidateResult {
         if (this.min != null && value < this.min) {
             return {

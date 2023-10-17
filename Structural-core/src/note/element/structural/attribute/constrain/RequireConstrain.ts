@@ -27,11 +27,7 @@ export class RequireConstrain extends Constrain {
     getType(): ConstrainType {
         return RequireConstrain.type
     }
-
-    getRepeatable(): boolean {
-        return false
-    }
-
+    
     constrainIsValid(): ValidateResult {
         // This constrain is always valid
         return ValidValidateResult

@@ -88,23 +88,24 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         return CloneUtil.cloneDeepWithCloneable(this)
     }
 
-    addConstrain(constrain: Constrain): void {
+    addConstrain(constrain: Constrain): Error | null {
         if (this._attribute_type !== null) {
             // check if the constrain is allowed by the attribute type
             if (!this._attribute_type.allowConstrain(constrain)) {
-                throw new ForbiddenConstrain(constrain.getType())
+                return new ForbiddenConstrain(constrain.getType())
             }
 
             // check if the constrain is compatible with the existing constrains
             for (const [id, existing_constrain] of this.constrains) {
                 if (!existing_constrain.isCompatibleTo(constrain)) {
-                    throw new IncompatibleConstrain(constrain.getType(), existing_constrain.getType())
+                    return new IncompatibleConstrain(constrain.getType(), existing_constrain.getType())
                 }
             }
 
             // pass all the checks, add the constrain
             this._constrains.set(constrain.id, constrain)
         }
+        return null
     }
 
     getAvailableConstrains(): ConstrainType[] {
@@ -149,10 +150,10 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
             // add the constrain to the new definition if it is allowed
             old_attr_def.constrains.forEach((constrain) => {
                 if (new_attr_type.allowConstrain(constrain)) {
-                    // TODO
-                    // drop the constrain with type incompatible to the new type
-                    // e.g. the min/max that has a value of the old type
-                    new_attr_def.addConstrain(constrain)
+                    let error = new_attr_def.addConstrain(constrain)
+                    if (error !== null) {
+                        console.error("Fail to add the constrain to the new attribute definition.", error)
+                    }
                 }
             })
 
@@ -228,6 +229,17 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
             if (!result.valid) {
                 result.invalid_message = `Constrain ${constrain.getType()} for attribute "${this.name}" is invalid: ${result.invalid_message}`
                 return result
+            }
+        }
+        // constrain is compatible to each other
+        for (const [id, constrain] of this.constrains) {
+            for (const [id2, constrain2] of this.constrains) {
+                if (id !== id2 && !constrain.isCompatibleTo(constrain2)) {
+                    return {
+                        valid: false,
+                        invalid_message: `Constrain ${constrain.getType()} is not compatible to constrain ${constrain2.getType()} for attribute "${this.name}"`
+                    }
+                }
             }
         }
 

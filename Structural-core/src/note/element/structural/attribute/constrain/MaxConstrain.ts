@@ -61,11 +61,7 @@ export class MaxConstrain<T> extends Constrain {
     getType(): ConstrainType {
         return MaxConstrain.type
     }
-
-    getRepeatable(): boolean {
-        return false
-    }
-
+    
     public validate(value: T): ValidateResult {
         if (this.max != null && value > this.max) {
             return {

@@ -30,6 +30,7 @@ watch(() => props.render, () => {
     attr_def = activeDataGetter(editing_note, props.edit_path) as AttributeDefinition<any>
     attr_types_that_can_be_set.value = getAllTypes()
     current_attr_type_name.value = attr_def.attribute_type?.type || ""
+    default_value.value = attr_def.default_value
     reload_done.value += 1
 })
 
@@ -82,14 +83,8 @@ function selectedType(attr_type: AttrTypeNameAndInstance){
 // render the available constrains
 const available_constrains: Ref<ConstrainChoice[]> = ref([])
 watch([reload_done, constrain_changed_count], () => {
-    if (init_attr_type_mode.value){
-        // load the available constrains for the new attr
-        let attr_type = AttributeType.getAttrType(current_attr_type_name.value)
-        available_constrains.value = attr_type?.available_constraints.map(constrainChoiceMapper) as ConstrainChoice[] ?? []
-    } else {
-        // get the available constrains from the attr_def
-        available_constrains.value = attr_def.getAvailableConstrains().map(constrainChoiceMapper) as ConstrainChoice[]
-    }
+    // get the available constrains from the attr_def
+    available_constrains.value = attr_def.getAvailableConstrains().map(constrainChoiceMapper) as ConstrainChoice[]
 }, { immediate: true })
 
 // render the defined constrains
@@ -98,7 +93,7 @@ watch([() => attr_def.constrains.size, reload_done], () => {
     defined_constrains.value = elementListGetter(editing_note, attr_def, props.edit_path, definedConstrainMapper)
 }, { immediate: true })
 
-const selected_new_constrain: Ref<any | null> = ref(null)
+const selected_new_constrain: Ref<any> = ref(null)
 function addNewConstrain(){
     if (selected_new_constrain.value !== null){
         let constrain = ConstrainTypeToClassMap.get(selected_new_constrain.value)
