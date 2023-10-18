@@ -1,4 +1,4 @@
-import { ArrayUtil } from "@/common/ArrayUtil"
+import { ArrayUtil } from "@/view/vue-helper/ArrayUtil"
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
 
 export class AttrTypeNameAndInstance {

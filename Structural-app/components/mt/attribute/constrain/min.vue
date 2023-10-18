@@ -13,7 +13,7 @@ const constrain_type = props.attr_def.attribute_type?.type || ""
 </script>
 
 <template>
-    <FormItem label="Min Value" prop="min">
+    <FormItem prop="min">
         <mt-attribute-value-editor :type="constrain_type" v-model:value="constrain.min" />
     </FormItem>
 </template>

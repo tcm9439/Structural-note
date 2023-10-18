@@ -12,7 +12,7 @@ const constrain = activeDataGetter(editing_note, props.edit_path) as RequireCons
 </script>
 
 <template>
-    <FormItem label="Required" prop="required">
+    <FormItem prop="required">
         <Switch v-model="constrain.required" />
     </FormItem>
 </template>

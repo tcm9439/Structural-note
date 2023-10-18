@@ -13,7 +13,7 @@ const constrain_type = props.attr_def.attribute_type?.type || ""
 </script>
 
 <template>
-    <FormItem label="Max Value" prop="max">
+    <FormItem prop="max">
         <mt-attribute-value-editor :type="constrain_type" v-model:value="constrain.max" />
     </FormItem>
 </template>

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { ArrayUtil } from "@/common/ArrayUtil"
+import { ArrayUtil } from "@/view/vue-helper/ArrayUtil"
 
 describe("ArrayUtil", () => {
     it("group element_in_group=n padded=undefined", () => {

@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { EditPath, Note, AttributeDefinition, AttrTypeHelper, AttrTypeNameAndInstance, AttributeType, InjectConstant, ConstrainTypeToClassMap, ComponentVForElement, ValidValidateResult } from "structural-core"
+import { EditPath, Note, AttributeDefinition, AttrTypeHelper, AttrTypeNameAndInstance, AttributeType, InjectConstant, ConstrainTypeToClassMap, ValidValidateResult, ConstrainType } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
-import { elementListGetter } from "@/composables/active-data/ElementListGetter"
-import { constrainChoiceMapper, ConstrainChoice, definedConstrainMapper } from "@/composables/active-data/ConstrainMapper"
-import { Icon } from "view-ui-plus"
+import { getAttrConstrainEditComponents, AttrConstrainEditComponent, getGroupedAttrConstrain } from "@/composables/active-data/ConstrainMapper"
 
 const props = defineProps<{
     edit_path: EditPath, // edit_path to the AttributeDefinition
@@ -17,7 +15,6 @@ const emit = defineEmits<{
 // # view
 const active_tab = ref("basic")
 watch(active_tab, () => {
-    selected_new_constrain.value = null
 })
 
 // # base
@@ -70,45 +67,39 @@ function selectedType(attr_type: AttrTypeNameAndInstance){
     if (attr_def.attribute_type !== null){
         // has old type
         let new_attr_def = AttributeDefinition.convertToType(attr_def, attr_type.instance)
-        emit('attrTypeUpdate', new_attr_def)
+        emit('attrTypeUpdate', new_attr_def)   
     } else {
         // init attr type
         attr_def.attribute_type = attr_type.instance
         init_attr_type_mode.value = false
         emit('attrTypeUpdate', null)
     }
+    constrain_changed_count.value += 1
 }
 
 // # constrains
-// render the available constrains
-const available_constrains: Ref<ConstrainChoice[]> = ref([])
+// render the constrains
+const available_constrains: Ref<AttrConstrainEditComponent[][]> = ref([])
 watch([reload_done, constrain_changed_count], () => {
     // get the available constrains from the attr_def
-    available_constrains.value = attr_def.getAvailableConstrains().map(constrainChoiceMapper) as ConstrainChoice[]
+    let constrains = getAttrConstrainEditComponents(props.edit_path, attr_def)
+    available_constrains.value = getGroupedAttrConstrain(constrains)
 }, { immediate: true })
 
-// render the defined constrains
-const defined_constrains: Ref<ComponentVForElement[]> = ref([])
-watch([() => attr_def.constrains.size, reload_done], () => {
-    defined_constrains.value = elementListGetter(editing_note, attr_def, props.edit_path, definedConstrainMapper)
-}, { immediate: true })
-
-const selected_new_constrain: Ref<any> = ref(null)
-function addNewConstrain(){
-    if (selected_new_constrain.value !== null){
-        let constrain = ConstrainTypeToClassMap.get(selected_new_constrain.value)
+function onConstrainStatusChange(is_set: boolean, type: ConstrainType, id: string | null){
+    if (is_set){
+        // add constrain
+        let constrain = ConstrainTypeToClassMap.get(type)
         if (constrain !== undefined){
             let new_constrain = new constrain()
             attr_def.constrains.set(new_constrain.id, new_constrain)
             constrain_changed_count.value += 1
-            selected_new_constrain.value = null
         }
+    } else {
+        // remove constrain
+        attr_def.constrains.delete(id as string)
+        constrain_changed_count.value += 1
     }
-}
-
-function deleteConstrain(id: string){
-    attr_def.constrains.delete(id)
-    constrain_changed_count.value += 1
 }
 
 // # default value
@@ -187,43 +178,28 @@ const default_value = computed({
 
         <!-- Tab that only show after the type is set  -->
         <template v-if="attr_has_type">
-            <!-- Default value editor -->
-            <TabPane label="Default" name="default">
-                <Form>
-                    <Checkbox v-model="has_default_value" @on-change="onToggleDefaultValue" >
-                        Default value
-                    </Checkbox>
-                <FormItem prop="default_value" :error="default_value_validate_result.invalid_message" >
-                    <mt-attribute-value-editor :type="current_attr_type_name" v-model:value="default_value" />
-                </FormItem>
-                </Form>
-            </TabPane>
-
-            <!-- Constrain editor -->
             <TabPane label="Constrain" name="constrain">
-                <!-- Adding new constrain -->
-                <Select v-model="selected_new_constrain" clearable style="width:200px">
-                    <Option v-for="item in available_constrains" :value="item.id" :key="item.id">
-                        {{ item.label }}
-                    </Option>
-                </Select>
-                <Button @click="addNewConstrain">
-                    <Icon type="md-add" />
-                    Add
-                </Button>
-                <Divider />
+                <Form inline>
+                    <!-- Default value editor -->
+                    <FormItem prop="default_value_checkbox">
+                        <Checkbox v-model="has_default_value" @on-change="onToggleDefaultValue" >
+                            Default value
+                        </Checkbox>
+                    </FormItem>
+                    <FormItem prop="default_value" :error="default_value_validate_result.invalid_message" >
+                        <mt-attribute-value-editor :type="current_attr_type_name" v-model:value="default_value" />
+                    </FormItem>
 
-                <!-- Defined Constrain -->
-                <Form>
-                    <Row v-for="value in defined_constrains" :key="value.id">
-                        <Col flex="1">
-                            <component :is="value.type" :edit_path="value.path" :attr_def="attr_def"/>
-                        </Col>
-                        <Col flex="1">
-                            <Button @click="deleteConstrain(value.id)" class="delete-constrain-button">
-                                <Icon type="md-trash" />
-                                Delete
-                            </Button>
+                    <!-- Constrains editor -->
+                    <Row v-for="group in available_constrains">
+                        <Col span="12" v-for="value in group" :key="undefined">
+                            <mt-attribute-constrain-base 
+                                v-if="value !== null"
+                                :params="value"
+                                :attr_def="attr_def"
+                                :render="constrain_changed_count"
+                                @update="onConstrainStatusChange">
+                            </mt-attribute-constrain-base>
                         </Col>
                     </Row>
                 </Form>
@@ -231,7 +207,6 @@ const default_value = computed({
         </template>
         <template v-else>
             <!-- Type is not set yet -->
-            <TabPane label="Default" name="default" disabled />
             <TabPane label="Constrain" name="constrain" disabled />
         </template>
     </Tabs>

@@ -31,8 +31,10 @@ export * from "./common/Cloneable"
 
 export * from "./view/ViewTypes"
 export * from "./view/state/MainViewState"
+export * from "./view/state/edit/StructDefEditState"
+
+export * from "./view/vue-helper/ArrayUtil"
 export * from "./view/vue-helper/AttrTypeHelper"
 export * from "./view/vue-helper/StructuralDefinitionHelper"
-export * from "./view/state/edit/StructDefEditState"
 
 export * from "./view/GlobalConstant"
