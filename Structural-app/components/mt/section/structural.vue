@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, StructuralSection, Note, InjectConstant } from "structural-core"
+import { EditPath, StructuralSection, Note, InjectConstant, ElementType, StructuralElement } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 
 const props = defineProps<{
@@ -21,10 +21,25 @@ function startEditDef(){
     edit_def_mode.value = true
 }
 
+function addElement(element_type: ElementType, last_element_id: string){   
+    let new_element
+    switch(element_type){
+        case ElementType.STRUCT:
+            new_element = new StructuralElement(section.definition)
+            break
+        default:
+            return
+    }
+    section.elements.addAfter(new_element, last_element_id)
+}
+
 </script>
 
 <template>
-    <mt-section-base :edit_path="edit_path" class="no-pad">
+    <mt-section-base 
+        :edit_path="edit_path" 
+        @add-element="addElement"
+        class="no-pad">
         <template #operation>
             <Button type="primary" @click="startEditDef">Edit Def</Button>
         </template>

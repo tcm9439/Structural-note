@@ -33,15 +33,15 @@ describe('StructuralElement', () => {
     it('get set values', () => {
         expect(element.values).toBeInstanceOf(Map)
         const str_value = new AttributeValue(str_attr, "test")
-        element.addValue(str_attr, str_value)
+        element.setValue(str_attr, str_value)
         expect(element.values.get(str_attr.id)).toBe(str_value)
     })
 
     it('ordered_values', () => {
         const num_value = new AttributeValue(num_attr, 1)
-        element.addValue(num_attr, num_value)
+        element.setValue(num_attr, num_value)
         const str_value = new AttributeValue(str_attr, "test")
-        element.addValue(str_attr, str_value)
+        element.setValue(str_attr, str_value)
 
         expect(element.ordered_values).toEqual([str_value, num_value])
     })
@@ -49,7 +49,7 @@ describe('StructuralElement', () => {
     it("validate: valid", () => {
         num_attr.addConstrain(new MinConstrain(10))
         const num_value = new AttributeValue(num_attr, 20)
-        element.addValue(num_attr, num_value)
+        element.setValue(num_attr, num_value)
 
         let result = element.validate()
         expect(result).toBe(ValidValidateResult)
@@ -58,7 +58,7 @@ describe('StructuralElement', () => {
     it("validate: not passing the constrain", () => {
         num_attr.addConstrain(new MinConstrain(100))
         const num_value = new AttributeValue(num_attr, 1)
-        element.addValue(num_attr, num_value)
+        element.setValue(num_attr, num_value)
 
         let result = element.validate()
         expect(result.valid).toBe(false)
@@ -69,7 +69,7 @@ describe('StructuralElement', () => {
         num_attr.addConstrain(new MinConstrain(100))
         num_attr.addConstrain(new MaxConstrain(110))
         const num_value = new AttributeValue(num_attr, 200)
-        element.addValue(num_attr, num_value)
+        element.setValue(num_attr, num_value)
         
         let result = element.validate()
         expect(result.valid).toBe(false)
@@ -78,15 +78,15 @@ describe('StructuralElement', () => {
 
     it("getNextEditPathNode", () => {
         const new_value = new AttributeValue(num_attr, 1)
-        element.addValue(num_attr, new_value)
+        element.setValue(num_attr, new_value)
         expect(element.getNextEditPathNode(num_attr.id)).toBe(new_value)
     })
 
     it("stepInEachChildren", () => {
         let value2 = new AttributeValue(num_attr, 1)
-        element.addValue(num_attr, value2)
+        element.setValue(num_attr, value2)
         let value = new AttributeValue(str_attr, "test")
-        element.addValue(str_attr, value)
+        element.setValue(str_attr, value)
 
         let edit_path = (new EditPath()).append(element.id)
         let edit_paths = element.stepInEachChildren(edit_path)
@@ -97,9 +97,9 @@ describe('StructuralElement', () => {
 
     it("saveAsJson", () => {
         let value2 = new AttributeValue(num_attr, 1)
-        element.addValue(num_attr, value2)
+        element.setValue(num_attr, value2)
         let value = new AttributeValue(str_attr, "test")
-        element.addValue(str_attr, value)
+        element.setValue(str_attr, value)
 
         let json = element.saveAsJson()
         expect(json).toEqual({
@@ -123,9 +123,9 @@ describe('StructuralElement', () => {
 
     it("loadFromJson", () => {
         let value2 = new AttributeValue(num_attr, 1)
-        element.addValue(num_attr, value2)
+        element.setValue(num_attr, value2)
         let value = new AttributeValue(str_attr, "test")
-        element.addValue(str_attr, value)
+        element.setValue(str_attr, value)
         let json = element.saveAsJson()
         let new_element = StructuralElement.loadFromJson(json, definition)
         expect(new_element).not.toBeNull()
@@ -144,23 +144,13 @@ describe('StructuralElement', () => {
 
     it("loadFromJson: invalid attr definition id", () => {
         let value2 = new AttributeValue(num_attr, 1)
-        element.addValue(num_attr, value2)
+        element.setValue(num_attr, value2)
         let value = new AttributeValue(str_attr, "test")
-        element.addValue(str_attr, value)
+        element.setValue(str_attr, value)
         let json = element.saveAsJson()
 
         definition.attributes.remove(str_attr.id)
         let new_element = StructuralElement.loadFromJson(json, definition)
         expect(new_element).toBeNull()
-    })
-
-    it("loadFromJson: one of the attr value is undefined", () => {
-        let value2 = new AttributeValue(num_attr, 1)
-        element.addValue(num_attr, value2)
-        let json = element.saveAsJson()
-        expect(json.values[0]).toBeNull()
-
-        let new_element = StructuralElement.loadFromJson(json, definition)
-        expect(new_element).toEqual(element)
     })
 })

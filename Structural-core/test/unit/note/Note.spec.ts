@@ -98,13 +98,13 @@ describe("Save & load Note", () => {
 
         let element2 = new StructuralElement(section2.definition)
         section2.elements.add(element2)
-        element2.addValue(str_attr, new AttributeValue(str_attr, "test value 1"))
-        element2.addValue(bool_attr, new AttributeValue(bool_attr, true))
+        element2.setValue(str_attr, new AttributeValue(str_attr, "test value 1"))
+        element2.setValue(bool_attr, new AttributeValue(bool_attr, true))
 
         let element3 = new StructuralElement(section2.definition)
         section2.elements.add(element3)
-        element3.addValue(str_attr, new AttributeValue(str_attr, "test value 2"))
-        element3.addValue(bool_attr, new AttributeValue(bool_attr, false))
+        element3.setValue(str_attr, new AttributeValue(str_attr, "test value 2"))
+        element3.setValue(bool_attr, new AttributeValue(bool_attr, false))
     })
 
     it("save and load", () => {

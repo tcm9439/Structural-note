@@ -8,6 +8,7 @@ import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinC
 import { MaxConstrain } from "@/note/element/structural/attribute/constrain/MaxConstrain"
 import { ForbiddenConstrain, IncompatibleConstrain } from "@/note/element/structural/attribute/exception/AttributeException"
 import { ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
+import { ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
 import _ from "lodash"
 
 describe('AttributeDefinition', () => {
@@ -62,7 +63,7 @@ describe('AttributeDefinition', () => {
 
     it("cloneFrom", () => {
         // create a new definition
-        let clone = new AttributeDefinition("clone", StringAttribute.instance, false, "clone")
+        let clone = new AttributeDefinition("clone", StringAttribute.instance, "clone")
 
         clone.cloneFrom(definition)
         expect(clone.id).not.toEqual(definition.id)
@@ -102,21 +103,24 @@ describe('AttributeDefinition', () => {
         expect(definition.constrains.size).toBe(1)
 
         // incompatible constrain
-        expect(() => definition.addConstrain(new RequireConstrain())).toThrowError(IncompatibleConstrain)
+        expect(definition.addConstrain(new RequireConstrain())).toBeInstanceOf(IncompatibleConstrain)
 
         // forbidden constrain
-        expect(() => definition.addConstrain(new MinConstrain(10))).toThrowError(ForbiddenConstrain)
+        expect(definition.addConstrain(new MinConstrain(10))).toBeInstanceOf(ForbiddenConstrain)
     })
 
     it("getAvailableConstrains", () => {
-        // has attribute type, no existing constrain to be incompatible with others
+        // def has attribute type, no existing constrain to be incompatible with others
         expect(definition.getAvailableConstrains()).toEqual(StringAttribute.instance.available_constraints)
 
-        // has attribute type, existing constrain to be incompatible with others
+        // def has attribute type, existing RequireConstrain to be incompatible with RequireConstrain
         definition.addConstrain(new RequireConstrain())
-        expect(definition.getAvailableConstrains()).toEqual([])
+        expect(definition.getAvailableConstrains()).toEqual([
+            ConstrainType.REGEX,
+            ConstrainType.UNIQUE,
+        ])
 
-        // has no attribute type
+        // def has no attribute type => no available constrain
         let new_attr_def = new AttributeDefinition("test")
         expect(new_attr_def.getAvailableConstrains()).toEqual([])
     })

@@ -28,13 +28,18 @@ export class StructuralElement extends NoteElement {
     constructor(definition: StructureDefinition){
         super()
         this._definition = definition
+
+        // initialize the values
+        for (let [attr_id, attr_def] of definition.attributes.components) {
+            this._values.set(attr_id, new AttributeValue(attr_def))
+        }
     }
 
     get values(): Map<UUID, AttributeValue<any>> {
         return this._values
     }
 
-    addValue<T>(attr: AttributeDefinition<T>, value: AttributeValue<T>): void {
+    setValue<T>(attr: AttributeDefinition<T>, value: AttributeValue<T>): void {
         this._values.set(attr.id, value)
     }
 
@@ -123,7 +128,7 @@ export class StructuralElement extends NoteElement {
                 console.error("Fail to load Attribute value")
                 return null
             }
-            element.addValue(attr_def, attr_value)
+            element.setValue(attr_def, attr_value)
         }
         
         return element

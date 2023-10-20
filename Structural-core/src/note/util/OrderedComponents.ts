@@ -49,6 +49,24 @@ export class OrderedComponents<T extends ComponentBase> {
         this._order.add(id)
     }
 
+    addBefore(component: T, before: UUID): void {
+        const id = component.id
+        if (this._components.has(id)) {
+            throw new Error(`Component ${id} already exists`)
+        }
+        this._components.set(id, component)
+        this._order.addBefore(id, before)
+    }
+
+    addAfter(component: T, after: UUID): void {
+        const id = component.id
+        if (this._components.has(id)) {
+            throw new Error(`Component ${id} already exists`)
+        }
+        this._components.set(id, component)
+        this._order.addAfter(id, after)
+    }
+
     /**
      * Replace a component in the list.
      * If the component is not in the list, raise error.

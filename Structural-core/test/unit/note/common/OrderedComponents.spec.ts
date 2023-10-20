@@ -50,6 +50,26 @@ describe('OrderedComponents', () => {
         expect(components.length()).toBe(4)
     })
 
+    it('addBefore', () => {
+        const note = new Note("Title 4")
+        components.addBefore(note, notes[0].id)
+        notes.push(note)
+        compareComponentsOrder(components, notes, [3, 0, 1, 2])
+
+        expect(() => components.addBefore(note, notes[0].id)).toThrowError(/already exists/)
+        expect(components.length()).toBe(4)
+    })
+
+    it('addAfter', () => {
+        const note = new Note("Title 4")
+        components.addAfter(note, notes[0].id)
+        notes.push(note)
+        compareComponentsOrder(components, notes, [0, 3, 1, 2])
+
+        expect(() => components.addAfter(note, notes[0].id)).toThrowError(/already exists/)
+        expect(components.length()).toBe(4)
+    })
+
     it('remove', () => {
         const note = new Note("Title 4")
         components.add(note)

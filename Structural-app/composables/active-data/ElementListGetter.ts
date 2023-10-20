@@ -1,4 +1,4 @@
-import { ComponentVForElement, EditPath, EditPathNode, EndOfEditPathError, Note, InjectConstant } from "structural-core"
+import { ComponentVForElement, EditPath, EditPathNode, EndOfEditPathError, Note, ElementType, NoteSection } from "structural-core"
 
 type ChildElementComponentMapper = (child: EditPathNode) => any // DefineComponent
 
@@ -32,4 +32,31 @@ export function elementListGetter(editing_note: Note | undefined, parent_node: E
         }
         return result
     }, [] as ComponentVForElement[]) ?? []
+}
+
+export type AvailableElementComponent = {
+    id: string,
+    display_choice: string,
+}
+
+export function availableElementComponentGetter(section: NoteSection): AvailableElementComponent[]{
+    return section.available_element_types.map((element_type) => {
+        let display_choice = ""
+
+        switch (element_type) {
+            case ElementType.TEXT:
+                display_choice = "Add Text Section"
+                break;
+            case ElementType.STRUCT:
+                display_choice = "Add Struct Section"
+                break;
+            default:
+                break;
+        }
+
+        return {
+            id: element_type,
+            display_choice: display_choice
+        }
+    })
 }

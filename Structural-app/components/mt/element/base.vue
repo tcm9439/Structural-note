@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ElementType } from "structural-core"
 import { Icon } from "view-ui-plus"
 
 const props = defineProps<{
@@ -6,21 +7,28 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
+    (event: 'add', element_type: ElementType, id: string): void
     (event: 'delete', id: string): void
     (event: 'moveUp', id: string): void
     (event: 'moveDown', id: string): void
 }>()
 
 const hover_here = ref(false)
+const click_add = ref(false)
+let click_add_time: Date | null = null
+const show_operation_button = computed(() => hover_here.value || click_add.value)
 function mouseoverHandler(){
     hover_here.value = true
 }
 function mouseleaveHandler(){
     hover_here.value = false
 }
-const button1 = ref("")
-function onButton1Change(){
-    switch (button1.value){
+const operation_button = ref("")
+function onOperationButtonChange(){
+    switch (operation_button.value){
+        case "add":
+            onAddButtonClick()
+            break
         case "delete":
             emit('delete', props.id)
             break
@@ -31,8 +39,29 @@ function onButton1Change(){
             emit('moveDown', props.id)
             break
     }
-    button1.value = ""
+    operation_button.value = ""
     hover_here.value = false
+}
+
+// # Add Element
+function onAddButtonClick(){
+    click_add_time = new Date()
+    click_add.value = true
+}
+function addElement(element_type: ElementType){
+    click_add.value = false
+    click_add_time = null
+    emit('add', element_type, props.id)
+    operation_button.value = ""
+}
+function cancelAdd(){
+    hover_here.value = false
+    // if click_add_time is not null and the time difference is more than 0.01 second, cancel add
+    if (click_add.value && click_add_time != null && (new Date().getTime() - click_add_time.getTime()) > 30){
+        click_add.value = false
+        click_add_time = null
+    }
+    operation_button.value = ""
 }
 </script>
 
@@ -43,11 +72,24 @@ function onButton1Change(){
         @mouseleave="mouseleaveHandler"
     >
         <RadioGroup 
-            v-model="button1" 
-            type="button" 
-            v-if="hover_here" 
-            @on-change="onButton1Change"
+            v-model="operation_button" 
+            type="button"
+            v-if="show_operation_button"
+            @on-change="onOperationButtonChange"
             class="floating-element-tool-bar">
+                <Radio label="add">
+                    <Dropdown 
+                        @on-click="addElement" 
+                        @on-clickoutside="cancelAdd"
+                        trigger="custom" :visible="click_add">
+                        <Icon type="md-add" @click="onAddButtonClick"/>
+                        <template #list>
+                            <DropdownMenu>
+                                <slot name="available_element"></slot>
+                            </DropdownMenu>
+                        </template>
+                    </Dropdown>
+                </Radio>
                 <Radio label="delete">
                     <Icon type="md-trash" />
                 </Radio>
@@ -63,7 +105,7 @@ function onButton1Change(){
         
 </template>
 
-<style>
+<style scoped>
 .container {
     position: relative;
     padding: 8px;

@@ -49,4 +49,26 @@ describe("OrderedList", () => {
         ordered_list.moveDown(1)
         expect(ordered_list.order).toStrictEqual([2, 1, 3])
     })
+
+    it("addBefore", () => {
+        ordered_list.addBefore(4, 2)
+        expect(ordered_list.order).toStrictEqual([1, 4, 2, 3])
+        ordered_list.addBefore(5, 6)
+        expect(ordered_list.order).toStrictEqual([1, 4, 2, 3, 5])
+        ordered_list.addBefore(6, 1)
+        expect(ordered_list.order).toStrictEqual([6, 1, 4, 2, 3, 5])
+        ordered_list.addBefore(7, 5)
+        expect(ordered_list.order).toStrictEqual([6, 1, 4, 2, 3, 7, 5])
+    })
+
+    it("addAfter", () => {
+        ordered_list.addAfter(4, 2)
+        expect(ordered_list.order).toStrictEqual([1, 2, 4, 3])
+        ordered_list.addAfter(5, 6)
+        expect(ordered_list.order).toStrictEqual([1, 2, 4, 3, 5])
+        ordered_list.addAfter(6, 1)
+        expect(ordered_list.order).toStrictEqual([1, 6, 2, 4, 3, 5])
+        ordered_list.addAfter(7, 5)
+        expect(ordered_list.order).toStrictEqual([1, 6, 2, 4, 3, 5, 7])
+    })
 })

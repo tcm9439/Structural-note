@@ -3,6 +3,12 @@ import { ComponentBase } from "@/note/util/ComponentBase"
 import { EditPathNode, EndOfEditPathError, EditPath } from "@/note/util/EditPath"
 import { z } from "zod"
 
+export enum ElementType {
+    TEXT = "TEXT",
+    STRUCT = "STRUCT",
+    MARKDOWN = "MARKDOWN",
+}
+
 export const NoteElementJson = z.object({
     type: z.string(),
     id: z.string()

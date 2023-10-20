@@ -30,4 +30,4 @@ watch(() => props.note.sections.length(), () => {
         <component :is="section.type" :edit_path="section.path" />
     </template>
     <!-- {{ editing_note }} -->
-</template>
+</template>composables/active-data/SectionComponent

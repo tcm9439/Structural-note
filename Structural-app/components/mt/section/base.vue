@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { NoteSection, EditPath, Note, InjectConstant, ComponentVForElement, TextElement } from "structural-core"
+import { NoteSection, EditPath, Note, InjectConstant, ComponentVForElement, TextElement, ElementType } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
-import { elementListGetter } from "@/composables/active-data/ElementListGetter"
+import { elementListGetter, availableElementComponentGetter } from "@/composables/active-data/ElementListGetter"
 import { elementComponentMapper } from "@/composables/active-data/ElementComponentMapper"
-import { Icon } from "view-ui-plus"
 
 const props = defineProps<{
     edit_path: EditPath,
+}>()
+
+const emit = defineEmits<{
+    (event: 'addElement', element_type: ElementType, last_element_id: string): void
 }>()
 
 const editing_note: Note | undefined = inject(InjectConstant.EDITING_NOTE)
@@ -18,11 +21,22 @@ watch([() => section.elements.length(), rerender_elements], () => {
     section_elements.value = elementListGetter(editing_note, section, props.edit_path, elementComponentMapper)
 }, { immediate: true })
 
-function addElement(temp: string){
-    if (temp === "text"){
-        const new_section = new TextElement()
-        section.elements.add(new_section)
+
+// # Elements
+const available_element_types = availableElementComponentGetter(section)
+function addElement(element_type: string, last_element_id: string){
+    // if element_type is available in NoteSection, add it directly
+    // else, emit event to the extended section component
+    let new_element
+    switch(element_type as ElementType){
+        case ElementType.TEXT:
+            new_element = new TextElement()
+            break
+        default:
+            emit("addElement", element_type as ElementType, last_element_id)
+            return
     }
+    section.elements.addAfter(new_element, last_element_id)
 }
 
 function removeElement(element_id: string){
@@ -50,26 +64,24 @@ function moveDownElement(element_id: string){
         </template>
 
         <template #extra>
-            <Dropdown @on-click="addElement">
-                <a href="javascript:void(0)">
-                    <Icon type="md-add" />
-                </a>
-                <template #list>
-                    <DropdownMenu>
-                        <!-- TODO make this dynamically depends on the section type -->
-                        <DropdownItem name="text">Add text section</DropdownItem>
-                        <DropdownItem name="dummy">dummy</DropdownItem>
-                    </DropdownMenu>
-                </template>
-            </Dropdown>
             <slot name="operation"></slot>
         </template>
         
         <slot name="content"></slot>
         <template v-for="element of section_elements" :key="element.id">
-            <mt-element-base :id="element.id" @delete="removeElement" @move-up="moveUpElement" @move-down="moveDownElement">
-            <template #content>
-                <component :is="element.type" :edit_path="element.path" />
+            <mt-element-base 
+                :id="element.id"
+                @add="addElement"
+                @delete="removeElement" 
+                @move-up="moveUpElement" 
+                @move-down="moveDownElement">
+                <template #available_element>
+                    <DropdownItem v-for="element_type in available_element_types" :name="element_type.id">
+                        {{ element_type.display_choice }}
+                    </DropdownItem>
+                </template>
+                <template #content>
+                    <component :is="element.type" :edit_path="element.path" />
                 </template>
             </mt-element-base>
         </template>

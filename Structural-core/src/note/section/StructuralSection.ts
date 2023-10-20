@@ -1,5 +1,5 @@
 import { UUID } from "@/common/CommonTypes"
-import { NoteElement } from "@/note/element/NoteElement"
+import { NoteElement, ElementType } from "@/note/element/NoteElement"
 import { TextElement } from "@/note/element/TextElement"
 import { StructuralElement } from "@/note/element/structural/StructuralElement"
 import { NoteSection, NoteSectionJson } from "@/note/section/NoteSection"
@@ -26,6 +26,7 @@ export class StructuralSection extends NoteSection {
 
     constructor(title: string){
         super(title)
+        this.addAvailableElementType(ElementType.STRUCT)
     }
 
     private set definition(value: StructureDefinition) {

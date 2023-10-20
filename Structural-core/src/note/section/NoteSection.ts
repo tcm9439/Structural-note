@@ -2,7 +2,7 @@ import { ComponentBase } from "@/note/util/ComponentBase"
 import { OrderedComponents, ComponentsOrderJson } from '@/note/util/OrderedComponents'
 import { UUID } from "@/common/CommonTypes"
 import { EditPathNode, EditPath } from "@/note/util/EditPath"
-import { NoteElement, NoteElementJson } from "@/note/element/NoteElement"
+import { NoteElement, NoteElementJson, ElementType } from "@/note/element/NoteElement"
 import { TextElement } from "@/note/element/TextElement"
 import { z } from "zod"
 
@@ -21,6 +21,9 @@ export const NoteSectionJson = z.object({
 export class NoteSection extends ComponentBase implements EditPathNode {
     private _title: string
     private _elements: OrderedComponents<NoteElement> = new OrderedComponents()
+    private _available_element_types: ElementType[] = [
+        ElementType.TEXT,
+    ]
 
     constructor(title: string) {
         super()
@@ -37,6 +40,14 @@ export class NoteSection extends ComponentBase implements EditPathNode {
 
     get elements(): OrderedComponents<NoteElement> {
         return this._elements
+    }
+
+    get available_element_types(): ElementType[] {
+        return this._available_element_types
+    }
+
+    protected addAvailableElementType(type: ElementType) {
+        this._available_element_types.push(type)
     }
 
     getNextEditPathNode(index: UUID): EditPathNode | undefined {

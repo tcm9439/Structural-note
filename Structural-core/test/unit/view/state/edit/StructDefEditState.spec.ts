@@ -303,7 +303,7 @@ describe("StructDefEditEvent", () => {
         let element = new StructuralElement(struct_def)
         // add a value for the attr
         let value = new AttributeValue(attr_def, "1234")
-        element.addValue(attr_def, value)
+        element.setValue(attr_def, value)
 
         expect(context.edit_queue.hasPendingItem()).toBeFalsy()
         StructDefEditEvent.startEditAttr(context, attr_def.id, confirm_attr_callback_spy)
