@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, StringAttribute, StructuralElement } from "structural-core"
-// import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, StringAttribute, StructuralElement, RequireConstrain } from "structural-core"
 import { TauriFileSystem } from "tauri-fs-util"
 
 let test_note: Ref<Note> = ref(new Note("My first note")) as Ref<Note>
@@ -10,7 +9,7 @@ let ele1 = new TextElement("Hello world.")
 let ele2 = new TextElement("======> Yeah <======")
 section1.elements.add(ele1)
 section1.elements.add(ele2)
-// test_note.value.sections.add(section1)
+test_note.value.sections.add(section1)
 
 let section2 = new StructuralSection("Section struct")
 
@@ -31,7 +30,7 @@ value = new AttributeValue(attr_definition, "Second!")
 ele_struct.values.set(attr_definition.id, value)
 section2.elements.add(ele_struct)
 
-// test_note.value.sections.add(section2)
+test_note.value.sections.add(section2)
 
 const output = ref("")
 async function testFs(){

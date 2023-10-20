@@ -1,6 +1,6 @@
 import { SectionType } from "structural-core"
 
-type AvailableSection = {
+export type AvailableSection = {
     id: string,
     display_choice: string,
 }

@@ -10,7 +10,6 @@ const view_state = ref($viewState);
         <Space>
             <div class="white-text">NOTE</div>
             <div class="white-text">{{ view_state.editing_note_name }}</div>
-            <div class="white-text">Last modified: </div>
             <Dropdown>
                 <div class="white-text">
                     <Icon type="md-document" />

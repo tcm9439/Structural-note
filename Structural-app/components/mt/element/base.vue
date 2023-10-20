@@ -77,9 +77,18 @@ function cancelAdd(){
             v-if="show_operation_button"
             @on-change="onOperationButtonChange"
             class="floating-element-tool-bar">
-
-                <!-- Available Element to add -->
-                <Radio label="add">
+                <!-- Other operation -->
+                <Radio label="moveUp">
+                    <Icon type="md-arrow-up" />
+                </Radio>
+                <Radio label="moveDown">
+                    <Icon type="md-arrow-down" />
+                </Radio>
+                <Radio label="delete">
+                    <Icon type="md-trash" />
+                </Radio>
+                 <!-- Available Element to add -->
+                 <Radio label="add">
                     <Dropdown 
                         @on-click="addElement" 
                         @on-clickoutside="cancelAdd"
@@ -92,18 +101,7 @@ function cancelAdd(){
                         </template>
                     </Dropdown>
                 </Radio>
-
-                <!-- Other operation -->
-                <Radio label="delete">
-                    <Icon type="md-trash" />
-                </Radio>
-                <Radio label="moveUp">
-                    <Icon type="md-arrow-up" />
-                </Radio>
-                <Radio label="moveDown">
-                    <Icon type="md-arrow-down" />
-                </Radio>
-        </RadioGroup>
+            </RadioGroup>
         <slot name="content"></slot>
     </div>
         

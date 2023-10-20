@@ -11,8 +11,8 @@
 
 <style scoped>
     :deep(.ivu-layout-header) {
-        height: 8vh;
-        line-height: 8vh;
+        max-height: max(8vh, 40px);
+        line-height: max(8vh, 40px);
     }
     
     .layout {
@@ -28,6 +28,5 @@
     .content {
         margin: 10vh 20px 0;
         min-height: 100%;
-        /* text-align: center; */
     }
 </style>

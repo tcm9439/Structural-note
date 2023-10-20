@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { EditPath, StructuralSection, Note, InjectConstant, ElementType, StructuralElement } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
+import { AvailableSection } from "@/composables/active-data/Note"
 
 const props = defineProps<{
     edit_path: EditPath,
+    available_section_types: AvailableSection[],
 }>()
 
 const editing_note: Note | undefined = inject(InjectConstant.EDITING_NOTE)
@@ -38,6 +40,7 @@ function addElement(element_type: ElementType, last_element_id?: string){
 <template>
     <mt-section-base 
         :edit_path="edit_path" 
+        :available_section_types="available_section_types"
         @add-element="addElement"
         class="no-pad">
         <template #operation>

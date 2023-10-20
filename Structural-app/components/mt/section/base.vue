@@ -3,10 +3,12 @@ import { NoteSection, EditPath, Note, InjectConstant, ComponentVForElement, Text
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 import { elementListGetter, availableElementComponentGetter, elementComponentMapper } from "@/composables/active-data/Element"
 import { Icon } from "view-ui-plus"
+import { AvailableSection } from "@/composables/active-data/Note"
 const { $emitter } = useNuxtApp()
 
 const props = defineProps<{
     edit_path: EditPath,
+    available_section_types: AvailableSection[]
 }>()
 
 const emit = defineEmits<{
@@ -17,6 +19,7 @@ const editing_note: Note | undefined = inject(InjectConstant.EDITING_NOTE)
 const section = shallowReactive(activeDataGetter(editing_note, props.edit_path) as NoteSection)
 const section_elements = ref(null) as Ref<ComponentVForElement[] | null>
 const rerender_elements = ref(0)
+const no_element = computed(() => section.elements.length() === 0)
 
 watch([() => section.elements.length(), rerender_elements], () => {
     section_elements.value = elementListGetter(editing_note, section, props.edit_path, elementComponentMapper)
@@ -59,16 +62,16 @@ function addSection(section_type: string){
     $emitter.emit(EventConstant.ADD_SECTION, section_type, section.id)
 }
 
-function removeSection(section_id: string){
-    $emitter.emit('deleteSection', section.id)
+function removeSection(){
+    $emitter.emit(EventConstant.REMOVE_SECTION, section.id)
 }
 
-function moveUpSection(section_id: string){
-    $emitter.emit('moveUpSection', section.id)
+function moveUpSection(){
+    $emitter.emit(EventConstant.MV_UP_SECTION, section.id)
 }
 
-function moveDownSection(section_id: string){
-    $emitter.emit('moveDownSection', section.id)
+function moveDownSection(){
+    $emitter.emit(EventConstant.MV_DOWN_SECTION, section.id)
 }
 
 </script>
@@ -82,31 +85,14 @@ function moveDownSection(section_id: string){
             </div>
         </template>
 
-        <!-- Operation Buttons -->
-        <template #extra>
-            <!-- Add section button -->
+        <!-- Add element button when there is NO element in this section -->
+        <div v-if="no_element" class="add-element-container">
             <Dropdown 
-                @on-click="addSection" 
-                trigger="click">
-                <Button class="section-operation-button">
-                    <Icon type="md-add"/>
-                    Section
-                </Button>
-                
-                <template #list>
-                    <DropdownMenu>
-                        <slot name="available_section"></slot>
-                    </DropdownMenu>
-                </template>
-            </Dropdown>
-
-            <!-- Add element (at bottom of this section) button -->
-            <Dropdown 
+                class="add-element-button"
                 @on-click="addElement" 
                 trigger="click">
-                <Button class="section-operation-button">
-                    <Icon type="md-add"/>
-                    Element
+                <Button shape="circle" icon="md-add" long>
+                    Add Element
                 </Button>
                 
                 <template #list>
@@ -117,19 +103,36 @@ function moveDownSection(section_id: string){
                     </DropdownMenu>
                 </template>
             </Dropdown>
+        </div>
 
-            <Button class="section-operation-button" @click="removeSection">
-                <Icon type="md-trash" />
-            </Button>
-            <Button class="section-operation-button" @click="moveUpSection">
-                <Icon type="md-arrow-up" />
-            </Button>
-            <Button class="section-operation-button" @click="moveDownSection">
-                <Icon type="md-arrow-down" />
-            </Button>
-            
+        <!-- Operation Buttons -->
+        <template #extra>
             <!-- Child class operation -->
             <slot name="operation"></slot>
+
+            <ButtonGroup class="section-operation-button">
+                <Button @click="moveUpSection">
+                    <Icon type="md-arrow-up" />
+                </Button>
+                <Button @click="moveDownSection">
+                    <Icon type="md-arrow-down" />
+                </Button>
+                <Button @click="removeSection">
+                    <Icon type="md-trash" />
+                </Button>
+
+                <!-- Add section button -->
+                <Dropdown @on-click="addSection" trigger="click" class="add-section-dropdown">
+                    <Button>
+                        <Icon type="md-add"/>
+                    </Button>
+                    <template #list>
+                        <DropdownItem v-for="section_type in props.available_section_types" :name="section_type.id">
+                            {{ section_type.display_choice }}
+                        </DropdownItem>
+                    </template>
+                </Dropdown>
+            </ButtonGroup>
         </template>
         
 
@@ -155,16 +158,30 @@ function moveDownSection(section_id: string){
 </template>
 
 <style scoped>
-    .section-card {
-        margin-bottom: 20px;
-    }
+.section-card {
+    margin-bottom: 20px;
+}
 
-    .section-title :deep(.ivu-input-no-border) {
-        font-weight: bold;
-    }
+.section-title :deep(.ivu-input-no-border) {
+    font-weight: bold;
+}
 
-    :deep(.section-operation-button) {
-        /* margin at left and right */
-        margin: 0 4px;
-    }
+.add-element-button.ivu-dropdown {
+    width: 80%;
+}
+
+.add-element-container {
+    width: 100%;
+    text-align: center;
+}
+
+:deep(.section-operation-button) {
+    margin-right: 8px;
+}
+
+:deep(.ivu-btn-group > .ivu-dropdown.add-section-dropdown > .ivu-dropdown-rel > .ivu-btn){
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    margin-left: -1px
+}
 </style>

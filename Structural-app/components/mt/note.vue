@@ -51,15 +51,15 @@ function moveDownSection(section_id: string){
 }
 
 $emitter.on(EventConstant.ADD_SECTION, addSection);
-$emitter.on('deleteSection', removeSection);
-$emitter.on('moveUpSection', moveUpSection);
+$emitter.on(EventConstant.REMOVE_SECTION, removeSection);
+$emitter.on(EventConstant.MV_UP_SECTION, moveUpSection);
 $emitter.on('moveDownSection', moveDownSection);
 
 onBeforeUnmount(() => {
-    $emitter.off(EventConstant.ADD_SECTION, addSectionHandler);
-    $emitter.off('deleteSection', removeSection);
-    $emitter.off('moveUpSection', moveUpSection);
-    $emitter.off('moveDownSection', moveDownSection);
+    $emitter.off(EventConstant.ADD_SECTION, addSection);
+    $emitter.off(EventConstant.REMOVE_SECTION, removeSection);
+    $emitter.off(EventConstant.MV_UP_SECTION, moveUpSection);
+    $emitter.off(EventConstant.MV_DOWN_SECTION, moveDownSection);
 })
 
 </script>
@@ -87,14 +87,10 @@ onBeforeUnmount(() => {
 
     <template v-for="section of sections" :key="section.id">
         <!-- Section List -->
-        <component :is="section.type" :edit_path="section.path">
-            <!-- For add section button -->
-            <template #available_section>
-                <DropdownItem v-for="section_type in available_section_types" :name="section_type.id">
-                    {{ section_type.display_choice }}
-                </DropdownItem>
-            </template>
-        </component>
+        <component :is="section.type" 
+            :edit_path="section.path" 
+            :available_section_types="available_section_types" 
+        />
     </template>
     <!-- {{ editing_note }} -->
 </template>
