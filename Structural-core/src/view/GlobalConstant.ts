@@ -1,8 +1,9 @@
 export class EventConstant {
-    public static ATTR_DEF_UPDATE: string = "ATTR_DEF_UPDATE_EVENT"
-    public static SECTION_UPDATE: string = "SECTION_UPDATE_EVENT"
+    public static readonly ATTR_DEF_UPDATE: string = "ATTR_DEF_UPDATE_EVENT"
+    public static readonly SECTION_UPDATE: string = "SECTION_UPDATE_EVENT"
+    public static readonly ADD_SECTION: string = "ADD_SECTION_EVENT"
 }
 
 export class InjectConstant {
-    public static EDITING_NOTE: string = "EDITING_NOTE"
+    public static readonly EDITING_NOTE: string = "EDITING_NOTE"
 }

@@ -32,7 +32,7 @@ const view_state = ref($viewState);
     </Header>
 </template>
 
-<style>
+<style scoped>
     .header {
         position: fixed;
         width: 100%;

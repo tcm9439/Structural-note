@@ -6,6 +6,11 @@ import { NoteElement, NoteElementJson, ElementType } from "@/note/element/NoteEl
 import { TextElement } from "@/note/element/TextElement"
 import { z } from "zod"
 
+export enum SectionType {
+    BASE = "BASE",
+    STRUCT = "STRUCT",
+}
+
 export const NoteSectionJson = z.object({
     type: z.string(),
     id: z.string(),
@@ -25,9 +30,9 @@ export class NoteSection extends ComponentBase implements EditPathNode {
         ElementType.TEXT,
     ]
 
-    constructor(title: string) {
+    constructor(title?: string){
         super()
-        this._title = title
+        this._title = title ?? ""
     }
 
     get title(): string {

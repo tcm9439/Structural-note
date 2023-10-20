@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { EditPath, Note, AttributeDefinition, AttrTypeHelper, AttrTypeNameAndInstance, AttributeType, InjectConstant, ConstrainTypeToClassMap, ValidValidateResult, ConstrainType } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
-import { getAttrConstrainEditComponents, AttrConstrainEditComponent, getGroupedAttrConstrain } from "@/composables/active-data/ConstrainMapper"
+import { getAttrConstrainEditComponents, AttrConstrainEditComponent, getGroupedAttrConstrain } from "@/composables/active-data/Constrain"
 
 const props = defineProps<{
     edit_path: EditPath, // edit_path to the AttributeDefinition

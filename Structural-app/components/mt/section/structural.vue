@@ -21,7 +21,7 @@ function startEditDef(){
     edit_def_mode.value = true
 }
 
-function addElement(element_type: ElementType, last_element_id: string){   
+function addElement(element_type: ElementType, last_element_id?: string){   
     let new_element
     switch(element_type){
         case ElementType.STRUCT:
@@ -41,7 +41,11 @@ function addElement(element_type: ElementType, last_element_id: string){
         @add-element="addElement"
         class="no-pad">
         <template #operation>
-            <Button type="primary" @click="startEditDef">Edit Def</Button>
+            <Button 
+                type="primary" class="section-operation-button"
+                @click="startEditDef">
+                Edit Def
+            </Button>
         </template>
     </mt-section-base>
 

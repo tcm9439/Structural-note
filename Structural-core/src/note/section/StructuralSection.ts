@@ -24,7 +24,7 @@ export class StructuralSection extends NoteSection {
 
     private _definition : StructureDefinition = new StructureDefinition()
 
-    constructor(title: string){
+    constructor(title?: string){
         super(title)
         this.addAvailableElementType(ElementType.STRUCT)
     }

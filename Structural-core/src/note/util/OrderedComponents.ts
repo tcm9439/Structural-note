@@ -49,7 +49,11 @@ export class OrderedComponents<T extends ComponentBase> {
         this._order.add(id)
     }
 
-    addBefore(component: T, before: UUID): void {
+    addBefore(component: T, before?: UUID): void {
+        if (before === undefined) {
+            this.add(component)
+            return
+        }
         const id = component.id
         if (this._components.has(id)) {
             throw new Error(`Component ${id} already exists`)
@@ -58,7 +62,11 @@ export class OrderedComponents<T extends ComponentBase> {
         this._order.addBefore(id, before)
     }
 
-    addAfter(component: T, after: UUID): void {
+    addAfter(component: T, after?: UUID): void {
+        if (after === undefined) {
+            this.add(component)
+            return
+        }
         const id = component.id
         if (this._components.has(id)) {
             throw new Error(`Component ${id} already exists`)

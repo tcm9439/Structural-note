@@ -5,6 +5,7 @@ export * from "./common/CommonTypes"
 export * from "./common/Cloneable"
 
 export * from "./note/Note"
+export * from "./note/section/SectionMap"
 export * from "./note/section/NoteSection"
 export * from "./note/section/StructuralSection"
 

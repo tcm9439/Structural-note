@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { EditPath, Note, InjectConstant, ComponentVForElement } from "structural-core"
-import { elementListGetter } from "@/composables/active-data/ElementListGetter"
-import { sectionComponentMapper } from "@/composables/active-data/SectionComponentMapper"
-
+import { EditPath, Note, InjectConstant, ComponentVForElement, EventConstant, SectionTypeMapper, SectionType } from "structural-core"
+import { elementListGetter } from "@/composables/active-data/Element"
+import { sectionComponentMapper } from "@/composables/active-data/Section"
+import { getAvailableSection } from "@/composables/active-data/Note"
+const { $emitter } = useNuxtApp()
 
 const props = defineProps<{
     note: Note,
@@ -18,16 +19,93 @@ const edit_path = new EditPath()
 const { $viewState } = useNuxtApp()
 $viewState.editing_note_name = props.note.title
 
+const rerender_section = ref(0)
 const sections = ref(null) as Ref<ComponentVForElement[] | null>
-watch(() => props.note.sections.length(), () => {
+const no_section = computed(() => props.note.sections.length() === 0)
+watch([() => props.note.sections.length(), rerender_section], () => {
     sections.value = elementListGetter(props.note, props.note, edit_path, sectionComponentMapper)
 }, { immediate: true })
+
+// # Section
+const available_section_types = ref(getAvailableSection())
+function addSection(section_type: string, last_section_id?: string){
+    let section_class = SectionTypeMapper.get(section_type as SectionType)
+    if (section_class != null){
+        let new_section = new section_class()
+        props.note.sections.addAfter(new_section, last_section_id)
+    }
+}
+function removeSection(section_id: string){
+    props.note.sections.remove(section_id)
+    rerender_section.value += 1
+}
+
+function moveUpSection(section_id: string){
+    props.note.sections.moveUp(section_id)
+    rerender_section.value += 1
+}
+
+function moveDownSection(section_id: string){
+    props.note.sections.moveDown(section_id)
+    rerender_section.value += 1
+}
+
+$emitter.on(EventConstant.ADD_SECTION, addSection);
+$emitter.on('deleteSection', removeSection);
+$emitter.on('moveUpSection', moveUpSection);
+$emitter.on('moveDownSection', moveDownSection);
+
+onBeforeUnmount(() => {
+    $emitter.off(EventConstant.ADD_SECTION, addSectionHandler);
+    $emitter.off('deleteSection', removeSection);
+    $emitter.off('moveUpSection', moveUpSection);
+    $emitter.off('moveDownSection', moveDownSection);
+})
 
 </script>
 
 <template>
-    <template v-for="section of sections">
-        <component :is="section.type" :edit_path="section.path" />
+    <div class="add-section-container">
+        <Dropdown 
+            class="add-section-button"
+            v-if="no_section"
+            @on-click="addSection" 
+            trigger="click">
+            <Button type="primary" shape="circle" icon="md-add" long>
+                Add section
+            </Button>
+            
+            <template #list>
+                <DropdownMenu>
+                    <DropdownItem v-for="section_type in available_section_types" :name="section_type.id">
+                        {{ section_type.display_choice }}
+                    </DropdownItem>
+                </DropdownMenu>
+            </template>
+        </Dropdown>
+    </div>
+
+    <template v-for="section of sections" :key="section.id">
+        <!-- Section List -->
+        <component :is="section.type" :edit_path="section.path">
+            <!-- For add section button -->
+            <template #available_section>
+                <DropdownItem v-for="section_type in available_section_types" :name="section_type.id">
+                    {{ section_type.display_choice }}
+                </DropdownItem>
+            </template>
+        </component>
     </template>
     <!-- {{ editing_note }} -->
-</template>composables/active-data/SectionComponent
+</template>
+
+<style>
+.add-section-button.ivu-dropdown {
+    width: 80%;
+}
+
+.add-section-container {
+    width: 100%;
+    text-align: center;
+}
+</style>

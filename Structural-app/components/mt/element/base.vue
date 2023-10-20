@@ -77,6 +77,8 @@ function cancelAdd(){
             v-if="show_operation_button"
             @on-change="onOperationButtonChange"
             class="floating-element-tool-bar">
+
+                <!-- Available Element to add -->
                 <Radio label="add">
                     <Dropdown 
                         @on-click="addElement" 
@@ -90,6 +92,8 @@ function cancelAdd(){
                         </template>
                     </Dropdown>
                 </Radio>
+
+                <!-- Other operation -->
                 <Radio label="delete">
                     <Icon type="md-trash" />
                 </Radio>

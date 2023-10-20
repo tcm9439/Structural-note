@@ -10,7 +10,7 @@ let ele1 = new TextElement("Hello world.")
 let ele2 = new TextElement("======> Yeah <======")
 section1.elements.add(ele1)
 section1.elements.add(ele2)
-test_note.value.sections.add(section1)
+// test_note.value.sections.add(section1)
 
 let section2 = new StructuralSection("Section struct")
 
@@ -31,7 +31,7 @@ value = new AttributeValue(attr_definition, "Second!")
 ele_struct.values.set(attr_definition.id, value)
 section2.elements.add(ele_struct)
 
-test_note.value.sections.add(section2)
+// test_note.value.sections.add(section2)
 
 const output = ref("")
 async function testFs(){
@@ -91,6 +91,7 @@ async function testFs3(){
 
 <template>
     <mt-note :note="test_note" v-if="test_note !== null"/>
+    <br/>
     <Button @click="testFs">Test</Button>
     <Button @click="testFs2">Test2</Button>
     <Button @click="testFs3">Test3</Button>
