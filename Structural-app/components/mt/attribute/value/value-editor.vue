@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IntegerAttribute, DecimalAttribute, StringAttribute, BooleanAttribute } from "structural-core"
+import { IntegerAttribute, DecimalAttribute, StringAttribute, BooleanAttribute, MarkdownAttribute } from "structural-core"
 
 const props = defineProps<{
     value: any,
@@ -36,5 +36,8 @@ const emit = defineEmits<{
     </template>
     <template v-else-if="props.type === BooleanAttribute.TYPE">
         <Switch v-model="value" />
+    </template>
+    <template v-else-if="props.type === MarkdownAttribute.TYPE">
+        <mt-editor-markdown v-model:content="value" />
     </template>
 </template>

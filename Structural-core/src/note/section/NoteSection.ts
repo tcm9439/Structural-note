@@ -4,6 +4,7 @@ import { UUID } from "@/common/CommonTypes"
 import { EditPathNode, EditPath } from "@/note/util/EditPath"
 import { NoteElement, NoteElementJson, ElementType } from "@/note/element/NoteElement"
 import { TextElement } from "@/note/element/TextElement"
+import { MarkdownElement } from "@/note/element/MarkdownElement"
 import { z } from "zod"
 
 export enum SectionType {
@@ -28,6 +29,7 @@ export class NoteSection extends ComponentBase implements EditPathNode {
     private _elements: OrderedComponents<NoteElement> = new OrderedComponents()
     private _available_element_types: ElementType[] = [
         ElementType.TEXT,
+        ElementType.MARKDOWN
     ]
 
     constructor(title?: string){
@@ -94,6 +96,8 @@ export class NoteSection extends ComponentBase implements EditPathNode {
             let element: NoteElement | null
             if (element_json.type === "TextElement") {
                 element = TextElement.loadFromJson(element_json)
+            } else if (element_json.type === "MdElement") {
+                element = MarkdownElement.loadFromJson(element_json)
             } else {
                 console.error(`Unknown element type: ${element_json.type}`)
                 return null

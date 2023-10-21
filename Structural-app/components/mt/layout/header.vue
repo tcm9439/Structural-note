@@ -49,7 +49,7 @@ onBeforeUnmount(() => {
                 >
                     <Submenu name="file-operation">
                         <template #title>
-                            <Icon type="ios-stats" />
+                            <Icon type="md-folder" />
                             File
                         </template>
                         <MenuItem name="open-file">Open</MenuItem>

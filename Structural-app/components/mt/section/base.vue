@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NoteSection, EditPath, Note, InjectConstant, ComponentVForElement, TextElement, ElementType, EventConstant } from "structural-core"
+import { NoteSection, EditPath, Note, InjectConstant, type ComponentVForElement, TextElement, ElementType, EventConstant, MarkdownElement } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 import { elementListGetter, availableElementComponentGetter, elementComponentMapper } from "@/composables/active-data/Element"
 import { Icon } from "view-ui-plus"
@@ -35,6 +35,9 @@ function addElement(element_type: string, last_element_id?: string){
     switch(element_type as ElementType){
         case ElementType.TEXT:
             new_element = new TextElement()
+            break
+        case ElementType.MARKDOWN:
+            new_element = new MarkdownElement()
             break
         default:
             emit("addElement", element_type as ElementType, last_element_id)
