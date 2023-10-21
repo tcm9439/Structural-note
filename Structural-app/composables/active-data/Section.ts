@@ -1,4 +1,4 @@
-import { EditPathNode, StructuralSection } from "structural-core"
+import { type EditPathNode, StructuralSection } from "structural-core"
 import MtSectionBase from "@/components/mt/section/base.vue"
 import MtSectionStructural from "@/components/mt/section/structural.vue"
 
