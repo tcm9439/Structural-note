@@ -67,7 +67,6 @@ describe('Note', () => {
 
         let json = note.saveAsJson()
         expect(json.id).toBe(note.id)
-        expect(json.title).toBe("Title 1")
         expect(json.sections).not.toBeUndefined()
         expect(json.sections.length).toBe(3)
     })
@@ -109,7 +108,7 @@ describe("Save & load Note", () => {
 
     it("save and load", () => {
         let json = note.saveAsJson()
-        let loaded_note = Note.loadFromJson(json)
+        let loaded_note = Note.loadFromJson(note.title, json)
         expect(loaded_note).toEqual(note)
     })
 })

@@ -28,6 +28,9 @@
         "renameFile": false,
         "exists": true
       },
+      "path": {
+        "all": true
+      },
       "dialog": {
         "all": false, 
         "ask": false,

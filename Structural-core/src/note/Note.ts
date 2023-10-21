@@ -8,7 +8,6 @@ import { z } from "zod"
 
 export const NoteJson = z.object({
     id: z.string(),
-    title: z.string(),
     section_order: ComponentsOrderJson,
     sections: z.array(NoteSectionJson.passthrough())
 }).required()
@@ -57,13 +56,12 @@ export class Note extends ComponentBase implements EditPathNode {
 
         return {
             id: this.id,
-            title: this.title,
             section_order: this.sections.saveAsJson(),
             sections: sections
         }
     }
 
-    static loadFromJson(json: object): Note | null {
+    static loadFromJson(title: string, json: object): Note | null {
         let result = NoteJson.safeParse(json)
         if (!result.success) {
             console.error(result.error)
@@ -71,7 +69,7 @@ export class Note extends ComponentBase implements EditPathNode {
         }
         const valid_json = result.data
         
-        const note = new Note(valid_json.title)
+        const note = new Note(title)
         note.id = valid_json.id
         
         // load sections

@@ -12,7 +12,7 @@ const props = defineProps<{
 const emit = defineEmits<{
     (event: 'update:edit_def_mode', visible: boolean): void
 }>()
-const { $emitter, $Modal } = useNuxtApp()
+const { $emitter } = useNuxtApp()
 
 const editing_note = inject(InjectConstant.EDITING_NOTE) as Note
 const struct_def = activeDataGetter(editing_note, props.edit_path) as StructureDefinition
@@ -180,16 +180,3 @@ function attrTypeUpdate(attr_def: AttributeDefinition<any> | null){
         </Modal>
     </Modal>
 </template>
-
-<style>
-    /* center the error modal */
-    .vertical-center-modal {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .vertical-center-modal .ivu-modal {
-        top: 0;
-    }
-</style>
