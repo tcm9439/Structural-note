@@ -88,8 +88,6 @@ export class Note extends ComponentBase implements EditPathNode {
             }
 
             if (section !== null) {
-                console.log(`Fail to load section: ${section.title}`)
-                // note.sections.add(section)
                 loaded_sections.set(section.id, section)
             }
         })

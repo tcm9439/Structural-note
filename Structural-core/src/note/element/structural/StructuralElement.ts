@@ -84,7 +84,6 @@ export class StructuralElement extends NoteElement {
     }
 
     saveAsJson(): z.infer<typeof StructuralElementJson> {
-        console.log("saveAsJson", this.ordered_values)
         let values = this.ordered_values.flatMap((value) => {
             if (value === undefined) {
                 return null

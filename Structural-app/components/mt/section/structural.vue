@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { EditPath, StructuralSection, Note, InjectConstant, ElementType, StructuralElement } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
-import { AvailableSection } from "@/composables/active-data/Note"
+import { type AvailableSection } from "@/composables/active-data/Note"
 
 const props = defineProps<{
     edit_path: EditPath,

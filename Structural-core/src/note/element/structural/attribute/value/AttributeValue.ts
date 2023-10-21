@@ -76,7 +76,7 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
             return old_attr_def.attribute_type.convertTo(new_attr_def.attribute_type, value, mode)
         } catch (error) {
             if (error instanceof InvalidTypeConversionForDataException) {
-                console.log(`Failed to convert attribute value with id ${old_attr_def.id} to new type: ${error.message}`)
+                console.warn(`Failed to convert attribute value with id ${old_attr_def.id} to new type: ${error.message}`)
             }
             return null
         }

@@ -15,9 +15,8 @@ provide(InjectConstant.EDITING_NOTE, props.note)
 // The children will use this path to get the node from the editing note
 const edit_path = new EditPath()
 
-// TODO move the edit note name setting to the place that open & load / create  the note
 const { $viewState } = useNuxtApp()
-$viewState.editing_note_name = props.note.title
+$viewState.editing_note = props.note
 
 const rerender_section = ref(0)
 const sections = ref(null) as Ref<ComponentVForElement[] | null>
@@ -53,7 +52,7 @@ function moveDownSection(section_id: string){
 $emitter.on(EventConstant.ADD_SECTION, addSection);
 $emitter.on(EventConstant.REMOVE_SECTION, removeSection);
 $emitter.on(EventConstant.MV_UP_SECTION, moveUpSection);
-$emitter.on('moveDownSection', moveDownSection);
+$emitter.on(EventConstant.MV_DOWN_SECTION, moveDownSection);
 
 onBeforeUnmount(() => {
     $emitter.off(EventConstant.ADD_SECTION, addSection);

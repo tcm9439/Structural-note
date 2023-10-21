@@ -33,7 +33,7 @@ if [ "$FRAMEWORK" = "NUXT" ]; then
     echo ======================
     echo "Clean Nuxt..."
     echo ======================
-    npx nuxi clean
+    npx nuxi cleanup
 fi
 
 echo

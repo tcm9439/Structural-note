@@ -21,12 +21,20 @@
         "readFile": true,
         "writeFile": true,
         "readDir": true,
-        "copyFile": true,
+        "copyFile": false,
         "createDir": true,
         "removeDir": true,
-        "removeFile": true,
-        "renameFile": true,
+        "removeFile": false,
+        "renameFile": false,
         "exists": true
+      },
+      "dialog": {
+        "all": false, 
+        "ask": false,
+        "confirm": false,
+        "message": false,
+        "open": true,
+        "save": true
       }
     },
     "bundle": {

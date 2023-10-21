@@ -10,11 +10,6 @@
 </template>
 
 <style scoped>
-    :deep(.ivu-layout-header) {
-        max-height: max(8vh, 40px);
-        line-height: max(8vh, 40px);
-    }
-    
     .layout {
         position: relative;
         border-radius: 4px;

@@ -3,7 +3,7 @@ import { NoteSection, EditPath, Note, InjectConstant, ComponentVForElement, Text
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 import { elementListGetter, availableElementComponentGetter, elementComponentMapper } from "@/composables/active-data/Element"
 import { Icon } from "view-ui-plus"
-import { AvailableSection } from "@/composables/active-data/Note"
+import { type AvailableSection } from "@/composables/active-data/Note"
 const { $emitter } = useNuxtApp()
 
 const props = defineProps<{

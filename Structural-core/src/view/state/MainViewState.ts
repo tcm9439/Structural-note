@@ -1,12 +1,17 @@
+import { Note } from "@/note/Note"
+
 export class MainViewState {
-    private _editing_note_name: string = ""
-    // private breadcrumb: string[]
+    private _editing_note: Note | null = null
 
-	set editing_note_name(value: string ) {
-		this._editing_note_name = value;
-	}
+    get editing_note_name(): string | null {
+        return this._editing_note?.title ?? null
+    }
 
-    get editing_note_name(): string {
-        return this._editing_note_name
+    set editing_note(note: Note | null) {
+        this._editing_note = note
+    }
+
+    get editing_note(): Note | null {
+        return this._editing_note
     }
 }
