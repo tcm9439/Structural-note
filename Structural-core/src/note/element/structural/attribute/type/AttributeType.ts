@@ -30,6 +30,8 @@ export abstract class AttributeType<T> implements Cloneable<AttributeType<T>> {
         AttributeType.attrTypes.set(type, this)
     }
 
+    abstract get default_value(): T
+
     static getAttrTypes(): AttributeType<any>[] {
         return Array.from(AttributeType.attrTypes.values())
     }

@@ -11,6 +11,10 @@ export class NumberAttribute extends AttributeType<number> {
         this.addAvailableConstraint(ConstrainType.UNIQUE)
     }
 
+    get default_value(): number {
+        return 0
+    }
+
     convertToString(value: number, mode?: any): string {
         if (isNaN(value)){
             return ""

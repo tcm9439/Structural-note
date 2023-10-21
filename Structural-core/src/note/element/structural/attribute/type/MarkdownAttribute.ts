@@ -9,6 +9,10 @@ export class MarkdownAttribute extends AttributeType<string> {
         super(MarkdownAttribute.TYPE)
     }
 
+    get default_value(): string {
+        return ""
+    }
+
     static get instance(): MarkdownAttribute {
         if (!this._instance){
             this._instance = new MarkdownAttribute()

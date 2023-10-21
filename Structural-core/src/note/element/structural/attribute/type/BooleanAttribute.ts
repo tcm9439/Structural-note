@@ -10,6 +10,10 @@ export class BooleanAttribute extends AttributeType<boolean> {
         this.addConvertibleType(StringAttribute.TYPE, this.convertToString.bind(this))
     }
 
+    get default_value(): boolean {
+        return false
+    }
+
     convertToString(value: boolean, mode?: any): string {
         return String(value)
     }

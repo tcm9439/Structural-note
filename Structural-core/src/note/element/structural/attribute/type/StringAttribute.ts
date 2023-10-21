@@ -20,6 +20,10 @@ export class StringAttribute extends AttributeType<string> {
         this.addAvailableConstraint(ConstrainType.UNIQUE)
     }
 
+    get default_value(): string {
+        return ""
+    }
+
     convertToDecimal(value: string, mode?: any): number {
         let num = Number(value)
         if (isNaN(num)){

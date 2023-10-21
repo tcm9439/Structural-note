@@ -2,7 +2,7 @@
 /**
  * A component that represent an attribute type and can be selected.
  */
-import { AttrTypeNameAndInstance, IntegerAttribute, DecimalAttribute, StringAttribute, BooleanAttribute } from "structural-core"
+import { AttrTypeNameAndInstance, IntegerAttribute, DecimalAttribute, StringAttribute, BooleanAttribute, MarkdownAttribute } from "structural-core"
 
 const props = defineProps({
     readonly_mode: { type: Boolean, default: false },
@@ -31,6 +31,8 @@ function getIcon(){
             return "mdi:decimal"
         case BooleanAttribute.TYPE:
             return "mdi:toggle-switch"
+        case MarkdownAttribute.TYPE:
+            return "mdi:language-markdown"
     }
     // unknown type
     return "mdi:help-box"

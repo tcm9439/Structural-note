@@ -18,3 +18,4 @@
   - add converter (if any)
 - app
   - value-editor.vue
+  - attr-type-choice.vue 

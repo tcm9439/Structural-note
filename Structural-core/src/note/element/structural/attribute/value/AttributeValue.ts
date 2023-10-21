@@ -25,8 +25,9 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
         this._definition = definition
         // set the value to default value if it is null
         if (value === null){
-            if (definition.default_value !== null){
-                this.value = definition.default_value
+            let default_value = definition.default_value
+            if (default_value !== null){
+                this.value = default_value
             }
         } else {
             this.value = value

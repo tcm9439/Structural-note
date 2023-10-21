@@ -32,7 +32,13 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     }
 
     get default_value(): T | null {
-        return this._default_value
+        if (this._default_value !== null){
+            return this._default_value
+        }
+        if (this.attribute_type !== null){
+            return this.attribute_type.default_value
+        }
+        return null
     }
 
     setDefaultValue(value: T | null): ValidateResult {
