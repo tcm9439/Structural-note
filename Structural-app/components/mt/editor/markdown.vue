@@ -22,12 +22,10 @@ const md_editor_exclude: ToolbarNames[] = [
     "save", "github", "htmlPreview", "catalog",
 ]
 function onFocus(){
-    console.log("focus")
     focus.value = true
 }
 
 onClickOutside(md_div, (event) => {
-    console.log("blur")
     focus.value = false
 })
 

@@ -5,7 +5,6 @@ import { EditingComponent } from "@/note/util/EditingComponent"
 import { StructuralElement } from "@/note/element/structural/StructuralElement"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
 import { ValidValidateResult, ValidateResult } from "@/note/element/structural/attribute/ValidateResult"
-import assert from "assert"
 
 export type AttrDefCallback = (new_attr: AttributeDefinition<any>) => void
 export type StructDefCallback = (new_struct: StructureDefinition) => void
@@ -170,8 +169,14 @@ export class StructDefEditContext {
     }
 
     commitAttr() {
-        assert(this.state == StructDefEditState.EDITING_ATTR)
-        assert(this.editing_attr_def != null)
+        if (this.state != StructDefEditState.EDITING_ATTR){
+            console.warn("Commit attr when not editing attr")
+            return 
+        }
+        if (this.editing_attr_def == null){
+            console.warn("Commit attr when editing attr is null")
+            return
+        }
         if (this.edit_queue.hasPendingItem()) {
             this.editing_attr_def.commit()
             this.edit_queue.commit()
@@ -179,8 +184,14 @@ export class StructDefEditContext {
     }
 
     rollbackAttr() {
-        assert(this.state == StructDefEditState.EDITING_ATTR, "Invalid state")
-        assert(this.editing_attr_def != null, "Empty attr def")
+        if (this.state != StructDefEditState.EDITING_ATTR){
+            console.warn("Rollback attr when not editing attr")
+            return 
+        }
+        if (this.editing_attr_def == null){
+            console.warn("Rollback attr when editing attr is null")
+            return
+        }
         let attr_id = this.editing_attr_def.editing.id
 
         // if the attr is newly added, remove it from the struct_def
@@ -252,7 +263,6 @@ export class StructDefEditEvent {
     
     static cancelEditAttr(state_context: StructDefEditContext) {
         state_context.rollbackAttr()
-        state_context.edit_queue.rollback()
         state_context.exitEdit()
     }
     
@@ -286,7 +296,10 @@ export class StructDefEditEventElementHandler {
     static editQueueConsumer(element: StructuralElement, edit_queue: StructEditQueue){
         while (edit_queue.hasConfirmedItem()){
             let edit_queue_item = edit_queue.consume()
-            assert(edit_queue_item != null)
+            if (edit_queue_item == null){
+                console.warn("Edit queue item is null")
+                return
+            }
             switch(edit_queue_item.operation){
                 case StructEditOperation.ADD_ATTR:
                     StructDefEditEventElementHandler.handleNewAttr(element, edit_queue_item.attr_id)
