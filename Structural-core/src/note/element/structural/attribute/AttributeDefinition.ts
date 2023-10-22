@@ -23,6 +23,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     private _attribute_type: AttributeType<T> | null
     private _constrains: Map<UUID, Constrain> = new Map()
     private _default_value: T | null = null
+    private _required: boolean = false
     
     constructor(name?: string, attribute_type?: AttributeType<T>, description?: string) {
         super()
@@ -39,6 +40,10 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
             return this.attribute_type.default_value
         }
         return null
+    }
+
+    get required(): boolean {
+        return this._required
     }
 
     setDefaultValue(value: T | null): ValidateResult {
@@ -109,9 +114,21 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
             }
 
             // pass all the checks, add the constrain
+            // if constrain is requiredConstrain, set the required to true
+            if (constrain instanceof Constrain) {
+                this._required = true
+            }
             this._constrains.set(constrain.id, constrain)
         }
         return null
+    }
+
+    removeConstrain(constrain_id: UUID): void {
+        // if constrain is requiredConstrain, set the required to false
+        if (this._constrains.get(constrain_id) instanceof Constrain) {
+            this._required = false
+        }
+        this._constrains.delete(constrain_id)
     }
 
     getAvailableConstrains(): ConstrainType[] {

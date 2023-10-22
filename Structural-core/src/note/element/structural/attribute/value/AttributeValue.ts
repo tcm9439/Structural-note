@@ -16,9 +16,10 @@ export const AttributeValueJson = z.object({
  * data type + data (value)
  */
 export class AttributeValue<T> extends ComponentBase implements EditPathNode {
-    private _definition : AttributeDefinition<T>
-    private _value : T | null = null
-    private _validate_result : ValidateResult = ValidValidateResult
+    private _definition: AttributeDefinition<T>
+    private _value: T | null = null
+    private _validate_result: ValidateResult = ValidValidateResult
+    private _is_set_for_required: boolean = false
 
     constructor(definition: AttributeDefinition<T>, value: T | null = null) {
         super()
@@ -30,8 +31,23 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
                 this.value = default_value
             }
         } else {
+            this.setForRequired()
             this.value = value
         }
+
+        // set the set_for_required flag if the definition has required constraint
+        if (definition.required){
+            this.setForRequired()
+        }
+    }
+
+    // TODO update _is_set_for_required after Constraint is change
+    setForRequired(): void {
+        this._is_set_for_required = true
+    }
+
+    get is_set_for_required(): boolean {
+        return this._is_set_for_required
     }
 
     get definition(): AttributeDefinition<T> {
