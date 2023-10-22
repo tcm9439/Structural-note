@@ -45,7 +45,7 @@ function deleteAttr(id: string) {
     <!-- Current defined attributes inside this section. -->
     <Table border :columns="StructuralDefinitionHelper.ATTR_TABLE_COLUMNS" :data="data">
         <template #name="{ row, index }">
-            <strong>{{ row.name }}</strong>
+            <strong>{{row.name}}</strong>
         </template>
         <template #action="{ row }">
             <Button type="primary" size="small" style="margin-right: 5px" 

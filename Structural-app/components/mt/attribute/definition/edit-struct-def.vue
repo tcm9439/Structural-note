@@ -168,9 +168,9 @@ function attrTypeUpdate(attr_def: AttributeDefinition<any> | null){
         >
             <template #header>
                 <Icon type="md-alert" color="red" />
-                {{ error_title }}
+                {{error_title}}
             </template>
-            {{ error_content }}
+            {{error_content}}
 
             <template #footer>
                 <Button type="primary" @click="onErrorModalConfirm">

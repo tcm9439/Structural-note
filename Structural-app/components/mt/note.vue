@@ -49,16 +49,16 @@ function moveDownSection(section_id: string){
     rerender_section.value += 1
 }
 
-$emitter.on(EventConstant.ADD_SECTION, addSection);
-$emitter.on(EventConstant.REMOVE_SECTION, removeSection);
-$emitter.on(EventConstant.MV_UP_SECTION, moveUpSection);
-$emitter.on(EventConstant.MV_DOWN_SECTION, moveDownSection);
+$emitter.on(EventConstant.ADD_SECTION, addSection)
+$emitter.on(EventConstant.REMOVE_SECTION, removeSection)
+$emitter.on(EventConstant.MV_UP_SECTION, moveUpSection)
+$emitter.on(EventConstant.MV_DOWN_SECTION, moveDownSection)
 
 onBeforeUnmount(() => {
-    $emitter.off(EventConstant.ADD_SECTION, addSection);
-    $emitter.off(EventConstant.REMOVE_SECTION, removeSection);
-    $emitter.off(EventConstant.MV_UP_SECTION, moveUpSection);
-    $emitter.off(EventConstant.MV_DOWN_SECTION, moveDownSection);
+    $emitter.off(EventConstant.ADD_SECTION, addSection)
+    $emitter.off(EventConstant.REMOVE_SECTION, removeSection)
+    $emitter.off(EventConstant.MV_UP_SECTION, moveUpSection)
+    $emitter.off(EventConstant.MV_DOWN_SECTION, moveDownSection)
 })
 
 </script>
@@ -77,7 +77,7 @@ onBeforeUnmount(() => {
             <template #list>
                 <DropdownMenu>
                     <DropdownItem v-for="section_type in available_section_types" :name="section_type.id">
-                        {{ section_type.display_choice }}
+                        {{section_type.display_choice}}
                     </DropdownItem>
                 </DropdownMenu>
             </template>

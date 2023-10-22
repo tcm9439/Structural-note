@@ -46,7 +46,7 @@ function getIcon(){
             <!-- Nuxt-Icon -->
             <Icon :name="getIcon()" color="black"/>
         </div>
-        <div class="choice-name">{{ attr_name }}</div>
+        <div class="choice-name">{{attr_name}}</div>
     </div>
 </template>
 

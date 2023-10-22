@@ -1,7 +1,7 @@
 import { TauriFileSystem } from "tauri-fs-util"
 import { open, save } from "@tauri-apps/api/dialog"
 import { basename } from "@tauri-apps/api/path"
-import { Note, EventConstant } from "structural-core"
+import { Note, EventConstant, NoteMarkdownConverter } from "structural-core"
 
 const struct_note_file_extension = "structnote"
 
@@ -43,6 +43,11 @@ export class NoteFileHandler {
         })
     }
 
+    /**
+     * Open a dialog to ask for save path (if no save-path is found).
+     * And save the file to that path.
+     * @param save_as_mode If this is call is for a save-as operation, which 1. won't update the save-path and 2. ask for path to save.
+     */
     static async saveNote(save_as_mode: boolean = false){
         try {
             const { $viewState, $Message } = useNuxtApp();
@@ -75,10 +80,14 @@ export class NoteFileHandler {
             }
             $Message.info("Saved")
         } catch (err) {
-            console.error(err);
+            console.error("Error when trying to save Note.", err);
         }
     }
     
+    /**
+     * Open a dialog to ask for an exiting not to open.
+     * The chosen path is kept as save-path which is used to save current file.
+     */
     static async openNote(){
         try {
             const { $viewState, $emitter } = useNuxtApp();
@@ -111,6 +120,50 @@ export class NoteFileHandler {
     
             // emit the open note event
             $emitter.emit(EventConstant.OPEN_NOTE)
+        } catch (err) {
+            // TODO show the error on screen to acknowledge user
+            console.error("Error when trying to open note.", err);
+        }
+    }
+}
+
+export class NoteExportHandler {
+    private static async askForSavePath(export_file_extension: string, default_note_filename: string): Promise<string | null> {
+        const save_path = await save({
+            title: "Save",
+            filters: [
+                { name: "Export File Type", extensions: [ export_file_extension ] },
+            ],
+            defaultPath: default_note_filename
+        })
+
+        return save_path
+    }
+
+    /**
+     * Convert the Note to a markdown file.
+     * Open a dialog for choosing a path to save the markdown file.
+     */
+    static async exportToMarkdown(){
+        try {
+            const { $viewState, $emitter } = useNuxtApp();
+
+            if ($viewState.editing_note === null){
+                console.warn("No note is opened to save.")
+                return
+            }
+
+            const selected_export_path = await this.askForSavePath("md", $viewState.editing_note.title)
+            
+            if (selected_export_path === null){
+                console.warn("No path is chosen to open.")
+                return
+            } 
+    
+            // selected_open_path === String
+            const converter = new NoteMarkdownConverter()
+            const converted_content = converter.convert($viewState.editing_note)
+            await TauriFileSystem.instance.writeTextFile(selected_export_path, converted_content, false, true)
         } catch (err) {
             console.error(err);
         }

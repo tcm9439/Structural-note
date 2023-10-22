@@ -85,7 +85,7 @@ onBeforeUnmount(() => {
                 <Icon type="md-alert" color="red" />
                 Error
             </template>
-            {{ error_content }}
+            {{error_content}}
 
             <template #footer>
                 <Button type="primary" @click="show_error_modal = false">

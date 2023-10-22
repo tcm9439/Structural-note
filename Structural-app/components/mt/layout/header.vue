@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { EventConstant } from "structural-core"
 import { Icon } from "view-ui-plus"
-import { NoteFileHandler } from "@/composables/file/NoteFileHandler"
-const { $viewState, $emitter } = useNuxtApp();
+import { NoteFileHandler, NoteExportHandler } from "@/composables/file/NoteFileHandler"
+const { $viewState, $emitter } = useNuxtApp()
 
 const editing_note_name = ref<string>($viewState.editing_note_name)
 
@@ -20,6 +20,9 @@ async function menuSelectHandler(menu_item: string){
             break
         case "save-as-file":
             NoteFileHandler.saveNote(true)
+            break
+        case "export-md":
+            NoteExportHandler.exportToMarkdown()
             break
     }
     refresh_menu.value++
@@ -52,9 +55,18 @@ onBeforeUnmount(() => {
                             <Icon type="md-folder" />
                             File
                         </template>
+                        <MenuItem name="close-file">Close (TODO)</MenuItem>
                         <MenuItem name="open-file">Open</MenuItem>
                         <MenuItem name="save-file">Save</MenuItem>
                         <MenuItem name="save-as-file">Save As</MenuItem>
+                        <MenuGroup title="Export">
+                            <MenuItem name="export-md">
+                                Export to Markdown
+                            </MenuItem>
+                            <MenuItem name="export-txt">
+                                Export to Text (TODO)
+                            </MenuItem>
+                        </MenuGroup>
                     </Submenu>
                     <MenuItem name="setting">
                         <Icon type="md-settings" />

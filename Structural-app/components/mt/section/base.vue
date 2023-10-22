@@ -101,7 +101,7 @@ function moveDownSection(){
                 <template #list>
                     <DropdownMenu>
                         <DropdownItem v-for="element_type in available_element_types" :name="element_type.id">
-                            {{ element_type.display_choice }}
+                            {{element_type.display_choice}}
                         </DropdownItem>
                     </DropdownMenu>
                 </template>
@@ -131,7 +131,7 @@ function moveDownSection(){
                     </Button>
                     <template #list>
                         <DropdownItem v-for="section_type in props.available_section_types" :name="section_type.id">
-                            {{ section_type.display_choice }}
+                            {{section_type.display_choice }}
                         </DropdownItem>
                     </template>
                 </Dropdown>
@@ -149,7 +149,7 @@ function moveDownSection(){
                 @move-down="moveDownElement">
                 <template #available_element>
                     <DropdownItem v-for="element_type in available_element_types" :name="element_type.id">
-                        {{ element_type.display_choice }}
+                        {{element_type.display_choice}}
                     </DropdownItem>
                 </template>
                 <template #content>

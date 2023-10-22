@@ -47,3 +47,6 @@ export * from "./view/vue-helper/AttrTypeHelper"
 export * from "./view/vue-helper/StructuralDefinitionHelper"
 
 export * from "./view/GlobalConstant"
+
+export * from "./converter/markdown/Note"
+export * from "./converter/Converter"
