@@ -67,6 +67,14 @@ function deleteAttr(id: string) {
     StructDefEditEvent.deleteAttr(edit_context.value, id)
 }
 
+function moveUpAttr(id: string) {
+    StructDefEditEvent.moveUpAttr(edit_context.value, id)
+}
+
+function moveDownAttr(id: string) {
+    StructDefEditEvent.moveDownAttr(edit_context.value, id)
+}
+
 function confirmEditAttr() {
     let result = StructDefEditEvent.confirmEditAttr(edit_context.value)
     if (result?.valid === false){
@@ -118,6 +126,8 @@ function attrTypeUpdate(attr_def: AttributeDefinition<any> | null){
                 @create="startAddAttr" 
                 @delete="deleteAttr"
                 @edit="startEditAttr"
+                @move-up="moveUpAttr"
+                @move-down="moveDownAttr"
                 :edit_path="edit_path" />
         </div>
 

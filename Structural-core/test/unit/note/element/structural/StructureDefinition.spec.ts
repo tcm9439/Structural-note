@@ -169,4 +169,15 @@ describe('StructureDefinition', () => {
         expect(validate_result.valid).toBe(false)
         expect(validate_result.invalid_message).toBe("Attribute name cannot be empty.")
     })
+
+    it("validateDefinition: duplicated attribute name", () => {
+        let validate_result = definition.validateDefinition()
+        expect(validate_result.valid).toBe(true)
+
+        let invalid_attr = new AttributeDefinition("Str Attr", StringAttribute.instance)
+        definition.attributes.add(invalid_attr)
+        validate_result = definition.validateDefinition()
+        expect(validate_result.valid).toBe(false)
+        expect(validate_result.invalid_message).toBe(`The attribute name "Str Attr" is not unique.`)
+    })
 })

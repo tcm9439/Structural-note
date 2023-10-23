@@ -27,7 +27,8 @@ export enum StructEditOperation {
     ADD_ATTR,
     DELETE_ATTR,
     CHANGE_ATTR,
-    CHANGE_ATTR_TYPE
+    CHANGE_ATTR_TYPE,
+    MOVE_ATTR,
 }
 
 export class StructEditQueueItem {
@@ -238,6 +239,24 @@ export class StructDefEditEvent {
     static startEditAttr(state_context: StructDefEditContext, id: string, confirm_callback?: AttrDefCallback) {
         state_context.startEditAttr(id, confirm_callback)
         state_context.edit_queue.push(new StructEditQueueItem(id, StructEditOperation.CHANGE_ATTR))
+    }
+
+    static moveUpAttr(state_context: StructDefEditContext, id: string) {
+        state_context.startEditAttr(id)
+        state_context.editing_struct_def.editing.attributes.moveUp(id)
+        state_context.edit_queue.push(new StructEditQueueItem(id, StructEditOperation.MOVE_ATTR))
+        state_context.commitAttr()
+        state_context.edit_queue.commit()
+        state_context.exitEdit()
+    }
+
+    static moveDownAttr(state_context: StructDefEditContext, id: string) {
+        state_context.startEditAttr(id)
+        state_context.editing_struct_def.editing.attributes.moveDown(id)
+        state_context.edit_queue.push(new StructEditQueueItem(id, StructEditOperation.MOVE_ATTR))
+        state_context.commitAttr()
+        state_context.edit_queue.commit()
+        state_context.exitEdit()
     }
     
     static deleteAttr(state_context: StructDefEditContext, id: string) {

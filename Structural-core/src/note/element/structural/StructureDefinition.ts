@@ -111,6 +111,18 @@ export class StructureDefinition extends ComponentBase implements EditPathNode, 
             }
         }
 
+        // check if all attributes has unique name
+        let name_set = new Set<string>()
+        for (let attr_def of this.attributes.ordered_components) {
+            if (name_set.has(attr_def.name)) {
+                return {
+                    valid: false,
+                    invalid_message: `The attribute name "${attr_def.name}" is not unique.`
+                }
+            }
+            name_set.add(attr_def.name)
+        }
+
         return ValidValidateResult
     }
 }

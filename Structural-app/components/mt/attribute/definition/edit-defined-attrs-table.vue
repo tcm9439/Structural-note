@@ -23,6 +23,8 @@ const emit = defineEmits<{
     (event: 'create'): void
     (event: 'delete', id: string): void
     (event: 'edit', id: string): void
+    (event: 'move-up', id: string): void
+    (event: 'move-down', id: string): void
 }>()
 
 /**
@@ -39,6 +41,14 @@ function editAttr(id: string) {
 function deleteAttr(id: string) {
     emit('delete', id)
 }
+
+function moveUpAttr(id: string) {
+    emit('move-up', id)
+}
+
+function moveDownAttr(id: string) {
+    emit('move-down', id)
+}
 </script>
 
 <template>
@@ -48,15 +58,22 @@ function deleteAttr(id: string) {
             <strong>{{row.name}}</strong>
         </template>
         <template #action="{ row }">
-            <Button type="primary" size="small" style="margin-right: 5px" 
-                @click="editAttr(row.id)">
-                Edit
-            </Button>
-            
-            <Button type="error" size="small" 
-                @click="deleteAttr(row.id)">
-                Delete
-            </Button>
+            <ButtonGroup>
+                <Button class="operation-button" @click="moveUpAttr(row.id)">
+                    <Icon type="md-arrow-up" />
+                </Button>
+                <Button class="operation-button" @click="moveDownAttr(row.id)">
+                    <Icon type="md-arrow-down" />
+                </Button>
+                <Button type="primary" class="operation-button"
+                    @click="editAttr(row.id)">
+                    <Icon type="md-create" />
+                </Button>
+                <Button type="error" class="operation-button"
+                    @click="deleteAttr(row.id)">
+                    <Icon type="md-trash" />
+                </Button>
+            </ButtonGroup>
         </template>
     </Table>
 
@@ -65,3 +82,9 @@ function deleteAttr(id: string) {
         Add
     </Button>
 </template>
+
+<style scoped>
+.operation-button {
+    margin-left: 5px;
+}
+</style>
