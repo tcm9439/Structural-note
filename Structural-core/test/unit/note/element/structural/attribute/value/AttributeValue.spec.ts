@@ -37,6 +37,57 @@ describe('AttributeValue', () => {
         expect(attr_value.validate_result.valid).toBeFalsy()
     })
 
+    it("get set value", () => {
+        expect(attr_value.value).toBe("Hello World")
+        expect(attr_value.is_set).toBeTruthy()
+        attr_value.value = "Foo Bar"
+        expect(attr_value.is_set).toBeTruthy()
+        expect(attr_value.value).toBe("Foo Bar")
+        
+        expect(attr_value.validate_result.valid).toBeTruthy()
+        definition.addConstrain(new RequireConstrain())
+        attr_value.value = null
+        expect(attr_value.is_set).toBeFalsy()
+        expect(attr_value.validate_result.valid).toBeFalsy()
+    })
+
+    it("is_set: no constrain", () => {
+        // => set to attr default
+        let attr_value_null = new AttributeValue(definition)
+        expect(attr_value_null.is_set).toBeTruthy()
+        expect(attr_value_null.value).toBe("")
+
+        let attr_value_set = new AttributeValue(definition, "Hello World")
+        expect(attr_value_set.is_set).toBeTruthy()
+        expect(attr_value_set.value).toBe("Hello World")
+    })
+
+    it("is_set: has require constrain = true", () => {
+        // => set to attr default
+        definition.addConstrain(new RequireConstrain(true))
+
+        let attr_value_null = new AttributeValue(definition)
+        expect(attr_value_null.is_set).toBeTruthy()
+        expect(attr_value_null.value).toBe("")
+
+        let attr_value_set = new AttributeValue(definition, "Hello World")
+        expect(attr_value_set.is_set).toBeTruthy()
+        expect(attr_value_set.value).toBe("Hello World")
+    })
+
+    it("is_set: has require constrain = false", () => {
+        // => not set
+        definition.addConstrain(new RequireConstrain(false))
+
+        let attr_value_null = new AttributeValue(definition)
+        expect(attr_value_null.is_set).toBeFalsy()
+        expect(attr_value_null.value).not.toBe(null)
+
+        let attr_value_set = new AttributeValue(definition, "Hello World")
+        expect(attr_value_set.is_set).toBeTruthy()
+        expect(attr_value_set.value).toBe("Hello World")
+    })
+
     it('convertTo', () => {
         const new_definition = new AttributeDefinition("test2", IntegerAttribute.instance)
         attr_value.value = "123"

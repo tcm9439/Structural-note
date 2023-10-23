@@ -92,6 +92,7 @@ describe('StructureDefinition', () => {
     })
 
     it("saveAsJson", () => {
+        bool_attr.setDefaultValue(true)
         let json = definition.saveAsJson()
         expect(json).toEqual({
             id: definition.id,
@@ -101,13 +102,15 @@ describe('StructureDefinition', () => {
                     id: str_attr.id,
                     name: str_attr.name,
                     description: str_attr.description,
-                    attribute_type: str_attr.attribute_type?.type
+                    attribute_type: str_attr.attribute_type?.type,
+                    default_value: null
                 },
                 {
                     id: bool_attr.id,
                     name: bool_attr.name,
                     description: bool_attr.description,
-                    attribute_type: bool_attr.attribute_type?.type
+                    attribute_type: bool_attr.attribute_type?.type,
+                    default_value: true
                 }
             ]
         })

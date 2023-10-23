@@ -81,7 +81,8 @@ describe('AttributeDefinition', () => {
             id: definition.id,
             name: "test",
             description: "description ABC!",
-            attribute_type: "STRING"
+            attribute_type: "STRING",
+            default_value: null
         })
     })
 
@@ -123,6 +124,22 @@ describe('AttributeDefinition', () => {
         // def has no attribute type => no available constrain
         let new_attr_def = new AttributeDefinition("test")
         expect(new_attr_def.getAvailableConstrains()).toEqual([])
+    })
+
+    it("isOptionalAttr: false", () => {
+        expect(definition['_require_constrain']).toBeNull()
+        expect(definition.isOptionalAttr()).toBeFalsy()
+        definition.addConstrain(new RequireConstrain())
+        expect(definition['_require_constrain']).not.toBeNull()
+        expect(definition.isOptionalAttr()).toBeFalsy()
+    })
+    
+    it("isOptionalAttr: true", () => {
+        expect(definition['_require_constrain']).toBeNull()
+        expect(definition.isOptionalAttr()).toBeFalsy()
+        definition.addConstrain(new RequireConstrain(false))
+        expect(definition['_require_constrain']).not.toBeNull()
+        expect(definition.isOptionalAttr()).toBeTruthy()
     })
 
     it("validate: one constrain", () => {
@@ -202,6 +219,9 @@ describe('AttributeDefinition', () => {
     })
 
     it("validateDefinition: invalid default value", () => {
-        // TODO default value
+        definition.addConstrain(new RequireConstrain(true))
+        definition.setDefaultValue("")
+        let validate_result = definition.validateDefinition()
+        expect(validate_result.valid).toBeFalsy()
     })
 })

@@ -363,7 +363,7 @@ export class StructDefEditEventElementHandler {
 
         // if the current value is null, set the default value
         if (attr_value.value == null){
-            attr_value.value = attr_def.default_value
+            attr_value.value = attr_def.default_value_for_attr
         }
 
         // validate the value

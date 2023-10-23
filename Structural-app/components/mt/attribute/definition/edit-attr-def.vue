@@ -27,7 +27,7 @@ watch(() => props.render, () => {
     attr_def = activeDataGetter(editing_note, props.edit_path) as AttributeDefinition<any>
     attr_types_that_can_be_set.value = getAllTypes()
     current_attr_type_name.value = attr_def.attribute_type?.type || ""
-    default_value.value = attr_def.default_value
+    default_value.value = attr_def.default_value_for_attr
     reload_done.value += 1
 })
 
@@ -92,26 +92,32 @@ function onConstrainStatusChange(is_set: boolean, type: ConstrainType, id: strin
         let constrain = ConstrainTypeToClassMap.get(type)
         if (constrain !== undefined){
             let new_constrain = new constrain()
-            attr_def.constrains.set(new_constrain.id, new_constrain)
+            attr_def.addConstrain(new_constrain)
             constrain_changed_count.value += 1
         }
     } else {
         // remove constrain
-        attr_def.constrains.delete(id as string)
+        attr_def.removeConstrain(id as string)
         constrain_changed_count.value += 1
     }
 }
 
 // # default value
-const has_default_value = ref(attr_def.default_value !== null)
-function onToggleDefaultValue(){
-    if (!has_default_value.value){
-        default_value.value = null
+const has_default_value = computed({
+    get: () => {
+        return attr_def.explicit_default_value != null
+    },
+    set: (has_default_value) => {
+        if (has_default_value){
+            default_value.value = attr_def.default_value_for_attr
+        } else {
+            default_value.value = null
+        }
     }
-}
+})
 const default_value_validate_result = ref(ValidValidateResult)
 const default_value = computed({
-    get: () => attr_def.default_value,
+    get: () => attr_def.default_value_for_attr,
     set: (v) => { 
         default_value_validate_result.value = attr_def.setDefaultValue(v)
     }
@@ -182,11 +188,13 @@ const default_value = computed({
                 <Form inline>
                     <!-- Default value editor -->
                     <FormItem prop="default_value_checkbox">
-                        <Checkbox v-model="has_default_value" @on-change="onToggleDefaultValue" >
+                        <Checkbox v-model="has_default_value" >
                             Default value
                         </Checkbox>
                     </FormItem>
-                    <FormItem prop="default_value" :error="default_value_validate_result.invalid_message" >
+                    <FormItem prop="default_value" 
+                        v-show="has_default_value"
+                        :error="default_value_validate_result.invalid_message" >
                         <mt-attribute-value-editor :type="current_attr_type_name" v-model:value="default_value" />
                     </FormItem>
 

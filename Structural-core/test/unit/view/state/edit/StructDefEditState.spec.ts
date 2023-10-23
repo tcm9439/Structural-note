@@ -361,11 +361,12 @@ describe("StructDefEditEventElementHandler", () => {
         // check if the new attr is added to the element
         let value = element.values.get(attr_def.id)
         expect(value).toBeDefined()
-        expect(value?.value).toBeNull()
+        expect(value?.value).toBe(attr_def.default_value_for_attr)
         expect(value?.definition_id).toBe(attr_def.id)
+
         value = element.values.get(attr_def2.id)
         expect(value).toBeDefined()
-        expect(value?.value).toBeNull()
+        expect(value?.value).toBe(attr_def.default_value_for_attr)
         expect(value?.definition_id).toBe(attr_def2.id)
     })
 

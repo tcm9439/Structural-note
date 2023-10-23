@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, StringAttribute, StructuralElement, MarkdownElement, MarkdownAttribute } from "structural-core"
+import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, StringAttribute, StructuralElement, MarkdownElement, MarkdownAttribute, RequireConstrain } from "structural-core"
 
 let test_note: Ref<Note> = ref(new Note("My first note")) as Ref<Note>
 
@@ -14,14 +14,19 @@ test_note.value.sections.add(section1)
 
 let section2 = new StructuralSection("Section struct")
 
-let attr_definition = new AttributeDefinition("test", StringAttribute.instance)
-let md_attr_definition = new AttributeDefinition("test", MarkdownAttribute.instance)
+let attr_definition = new AttributeDefinition("test string attr", StringAttribute.instance)
+let attr_definition2 = new AttributeDefinition("test string attr", StringAttribute.instance)
+let md_attr_definition = new AttributeDefinition("test markdown attr", MarkdownAttribute.instance)
+md_attr_definition.addConstrain(new RequireConstrain(false))
 section2.definition.attributes.add(attr_definition)
+section2.definition.attributes.add(attr_definition2)
 section2.definition.attributes.add(md_attr_definition)
 
 let ele_struct = new StructuralElement(section2.definition)
 let value = new AttributeValue(attr_definition, "Random value")
 ele_struct.values.set(attr_definition.id, value)
+value = new AttributeValue(attr_definition2, "Foo")
+ele_struct.values.set(attr_definition2.id, value)
 value = new AttributeValue(md_attr_definition, "### Markdown value\n`some other code`")
 ele_struct.values.set(md_attr_definition.id, value)
 section2.elements.add(ele_struct)

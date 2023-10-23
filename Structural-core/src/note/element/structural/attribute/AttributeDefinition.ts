@@ -3,6 +3,7 @@ import { ComponentBase } from "@/note/util/ComponentBase"
 import { CloneUtil, Cloneable } from "@/common/Cloneable"
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
 import { Constrain, ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
+import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain"
 import { ValidateResult, ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
 import { ForbiddenConstrain, IncompatibleConstrain } from "@/note/element/structural/attribute/exception/AttributeException"
 import { EditPath, EditPathNode } from "@/note/util/EditPath"
@@ -13,7 +14,8 @@ export const AttributeDefinitionJson = z.object({
     id: z.string(),
     name: z.string(),
     description: z.string(),
-    attribute_type: z.string()
+    attribute_type: z.string(),
+    default_value: z.any().optional(),
 }).required()
 
 
@@ -23,7 +25,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     private _attribute_type: AttributeType<T> | null
     private _constrains: Map<UUID, Constrain> = new Map()
     private _default_value: T | null = null
-    private _required: boolean = false
+    private _require_constrain: RequireConstrain | null = null
     
     constructor(name?: string, attribute_type?: AttributeType<T>, description?: string) {
         super()
@@ -32,7 +34,11 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         this._description = description || ""
     }
 
-    get default_value(): T | null {
+    /**
+     * Get the explicit_default_value set by user.
+     * If it doesn't exists, get the implicit default value determined by the attr type.
+     */
+    get default_value_for_attr(): T | null {
         if (this._default_value !== null){
             return this._default_value
         }
@@ -42,8 +48,12 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         return null
     }
 
-    get required(): boolean {
-        return this._required
+    get explicit_default_value(): T | null {
+        return this._default_value
+    }
+
+    isOptionalAttr(): boolean {
+        return this._require_constrain?.required === false
     }
 
     setDefaultValue(value: T | null): ValidateResult {
@@ -114,9 +124,9 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
             }
 
             // pass all the checks, add the constrain
-            // if constrain is requiredConstrain, set the required to true
-            if (constrain instanceof Constrain) {
-                this._required = true
+            // if constrain is requiredConstrain, check if it is required
+            if (constrain instanceof RequireConstrain) {
+                this._require_constrain = constrain
             }
             this._constrains.set(constrain.id, constrain)
         }
@@ -125,8 +135,8 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
 
     removeConstrain(constrain_id: UUID): void {
         // if constrain is requiredConstrain, set the required to false
-        if (this._constrains.get(constrain_id) instanceof Constrain) {
-            this._required = false
+        if (this._constrains.get(constrain_id)?.getType() == ConstrainType.REQUIRE) {
+            this._require_constrain = null
         }
         this._constrains.delete(constrain_id)
     }
@@ -181,8 +191,8 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
             })
 
             // convert the default value
-            if (old_attr_def.default_value !== null) {
-                let conversion_result = AttributeValue.convertValueForNewAttrDef(old_attr_def.default_value, old_attr_def, new_attr_def)
+            if (old_attr_def.default_value_for_attr !== null) {
+                let conversion_result = AttributeValue.convertValueForNewAttrDef(old_attr_def.default_value_for_attr, old_attr_def, new_attr_def)
                 new_attr_def.setDefaultValue(conversion_result)
             }
         }
@@ -209,7 +219,8 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
             id: this.id,
             name: this.name,
             description: this.description,
-            attribute_type: this.attribute_type.type
+            attribute_type: this.attribute_type.type,
+            default_value: this.explicit_default_value,
         }
     }
 
@@ -223,6 +234,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         const attribute_type = AttributeType.getAttrType(valid_json.attribute_type)
         const def = new AttributeDefinition(valid_json.name, attribute_type, valid_json.description)
         def.id = valid_json.id
+        def.setDefaultValue(valid_json.default_value)
         return def
     }
 
@@ -254,6 +266,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
                 return result
             }
         }
+
         // constrain is compatible to each other
         for (const [id, constrain] of this.constrains) {
             for (const [id2, constrain2] of this.constrains) {
@@ -267,8 +280,8 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         }
 
         // default value valid
-        if (this.default_value !== null) {
-            const result = this.validate(this.default_value)
+        if (this.explicit_default_value !== null) {
+            const result = this.validate(this.explicit_default_value)
             if (!result.valid) {
                 result.invalid_message = `Default value for attribute "${this.name}" is invalid: ${result.invalid_message}`
                 return result

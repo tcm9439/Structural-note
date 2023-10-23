@@ -9,7 +9,7 @@ import { ConverterHelper } from "@/converter/ConverterHelper"
 export class AttributeValueMarkdownConverter {
     static convert(attr_def: AttributeDefinition<any>, element: AttributeValue<any>): string {
         // no type => must have no value => invalid
-        if (attr_def.attribute_type === null || !element.is_set_for_required){
+        if (attr_def.attribute_type === null || !element.is_set){
             return ""
         }
 

@@ -19,35 +19,25 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
     private _definition: AttributeDefinition<T>
     private _value: T | null = null
     private _validate_result: ValidateResult = ValidValidateResult
-    private _is_set_for_required: boolean = false
+    private _is_set: boolean = true
 
     constructor(definition: AttributeDefinition<T>, value: T | null = null) {
         super()
         this._definition = definition
-        // set the value to default value if it is null
+        
+        // set the value to default value if it is null & not optional
         if (value === null){
-            let default_value = definition.default_value
-            if (default_value !== null){
-                this.value = default_value
-            }
+            this.setDefaultValue()
+            if (definition.isOptionalAttr()){
+                this._is_set = false
+            } 
         } else {
-            this.setForRequired()
             this.value = value
         }
-
-        // set the set_for_required flag if the definition has required constraint
-        if (definition.required){
-            this.setForRequired()
-        }
     }
 
-    // TODO update _is_set_for_required after Constraint is change
-    setForRequired(): void {
-        this._is_set_for_required = true
-    }
-
-    get is_set_for_required(): boolean {
-        return this._is_set_for_required
+    get is_set(): boolean {
+        return this._is_set
     }
 
     get definition(): AttributeDefinition<T> {
@@ -66,9 +56,26 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
         return this._value
     }
 
-    set value(value: T) {
-        this._value = value
+    set value(value: T | null) {
+        if (value === null){
+            this.unsetValue()
+        } else {
+            this._value = value
+            this._is_set = true
+        }
         this.validate()
+    }
+
+    setDefaultValue(){
+        if (this._value === null){
+            this._value = this.definition.default_value_for_attr
+        }
+    }
+
+    unsetValue(){
+        // still set the default_value as some UI element cannot handle null value
+        this._value = this.definition.default_value_for_attr
+        this._is_set = false
     }
 
     validate(): ValidateResult {
