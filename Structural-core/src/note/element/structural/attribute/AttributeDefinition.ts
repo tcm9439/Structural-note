@@ -205,6 +205,8 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         this._name = CloneUtil.cloneDeepWithCloneable(other._name)
         this._description = CloneUtil.cloneDeepWithCloneable(other._description)
         this._attribute_type = CloneUtil.cloneDeepWithCloneable(other._attribute_type)
+        this._default_value = CloneUtil.cloneDeepWithCloneable(other._default_value)
+        this._constrains = CloneUtil.cloneDeepWithCloneable(other._constrains)
     }
 
     cloneDeepWithCustomizer(): AttributeDefinition<T> | undefined {
