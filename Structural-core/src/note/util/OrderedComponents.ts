@@ -124,4 +124,9 @@ export class OrderedComponents<T extends ComponentBase> {
         }
         this._order.moveDown(component)
     }
+
+    clear(): void {
+        this._components.clear()
+        this._order.clear()
+    }
 }

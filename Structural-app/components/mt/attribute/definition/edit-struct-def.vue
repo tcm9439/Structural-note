@@ -21,7 +21,7 @@ const struct_def = activeDataGetter(editing_note, props.edit_path) as StructureD
 const edit_context = ref(new StructDefEditContext(struct_def, onExitEditStruct)) as Ref<StructDefEditContext>
 const editing_struct_def = edit_context.value.editing_struct_def.editing
 const edit_state = computed(() => edit_context.value.state)
-const struct_has_change = computed(() => edit_context.value.edit_queue.hasConfirmedItem())
+const struct_has_change = computed(() => edit_context.value.hasChange())
 
 // # error modal
 const show_error_modal = ref(false)
@@ -88,6 +88,10 @@ function cancelEditAttr() {
     StructDefEditEvent.cancelEditAttr(edit_context.value)
 }
 
+function updateDisplayKey(){
+    StructDefEditEvent.updateDisplayKey(edit_context.value)
+}
+
 function confirmStructDef(){
     let result = StructDefEditEvent.confirmEditStruct(edit_context.value)
     if (result?.valid === false){
@@ -124,13 +128,23 @@ function attrTypeUpdate(attr_def: AttributeDefinition<any> | null){
 
         <!-- Attributes list -->
         <div v-if="edit_state === StructDefEditState.EDITING_STRUCT">
-            <mt-attribute-definition-edit-defined-attrs-table
-                @create="startAddAttr" 
-                @delete="deleteAttr"
-                @edit="startEditAttr"
-                @move-up="moveUpAttr"
-                @move-down="moveDownAttr"
-                :struct_def="editing_struct_def" />
+            <Tabs>
+                <TabPane label="Attributes" name="attributes">
+                    <mt-attribute-definition-edit-defined-attrs-table
+                        @create="startAddAttr" 
+                        @delete="deleteAttr"
+                        @edit="startEditAttr"
+                        @move-up="moveUpAttr"
+                        @move-down="moveDownAttr"
+                        :struct_def="editing_struct_def" />
+                </TabPane>
+                <TabPane label="Display Name" name="display_name">
+                    <mt-attribute-definition-edit-display-key-table 
+                        v-model:struct_def="editing_struct_def"
+                        @update="updateDisplayKey"
+                    />              
+                </TabPane>
+            </Tabs>
         </div>
 
         <!-- Edit one of the attribute -->
@@ -152,10 +166,7 @@ function attrTypeUpdate(attr_def: AttributeDefinition<any> | null){
                 </Button>
 
                 <!-- If no change is done, don't allow user to click the confirm button. -->
-                <Button type="primary" @click="confirmStructDef" v-show="struct_has_change">
-                    Confirm
-                </Button>
-                <Button type="primary" disabled v-show="!struct_has_change">
+                <Button type="primary" @click="confirmStructDef" :disabled="!struct_has_change">
                     Confirm
                 </Button>
             </div>

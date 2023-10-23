@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { StructureDefinition, EditPath, Note, StructuralDefinitionHelper, InjectConstant } from "structural-core"
+import { StructureDefinition, StructuralDefinitionHelper } from "structural-core"
 import { Icon } from "view-ui-plus"
 
 const props = defineProps<{
@@ -73,14 +73,21 @@ function moveDownAttr(id: string) {
         </template>
     </Table>
 
-    <Button @click="addAttr">
-        <Icon type="md-add" />
-        Add
-    </Button>
+    <div class="add-section-button-wrapper">
+        <Button @click="addAttr" long>
+            <Icon type="md-add" />
+            Add
+        </Button>
+    </div>
 </template>
 
 <style scoped>
 .operation-button {
     margin-left: 5px;
+}
+
+.add-section-button-wrapper {
+    margin-top: 20px;
+    text-align: center;
 }
 </style>

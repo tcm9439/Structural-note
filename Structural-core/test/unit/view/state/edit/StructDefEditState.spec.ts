@@ -171,16 +171,16 @@ describe("StructDefEditContext", () => {
     })
 
     it("hasAttrChange", () => {
-        expect(context.hasAttrChange()).toBeFalsy()
+        expect(context.hasChange()).toBeFalsy()
         context.edit_queue.push(new StructEditQueueItem(attr_def.id, StructEditOperation.CHANGE_ATTR))
         context.edit_queue.commit()
-        expect(context.hasAttrChange()).toBeTruthy()
+        expect(context.hasChange()).toBeTruthy()
     })
 
     it("commitAttr", () => {
         context.startEditAttr(attr_def.id, confirm_attr_callback_spy)
         expect(context.edit_queue.hasPendingItem()).toBeFalsy()
-        expect(context.hasAttrChange()).toBeFalsy()
+        expect(context.hasChange()).toBeFalsy()
         context.editing_attr_def.editing.name = "New Name"
         context.edit_queue.push(new StructEditQueueItem(attr_def.id, StructEditOperation.CHANGE_ATTR))
         expect(context.edit_queue.hasPendingItem()).toBeTruthy()
@@ -189,13 +189,13 @@ describe("StructDefEditContext", () => {
         expect(confirm_attr_callback_spy).toBeCalledTimes(1)
         expect(context.editing_attr_def?.editing.name).toBe("New Name")
         expect(context.edit_queue.hasPendingItem()).toBeFalsy()
-        expect(context.hasAttrChange()).toBeTruthy()
+        expect(context.hasChange()).toBeTruthy()
     })
 
     it("rollbackAttr", () => {
         context.startEditAttr(attr_def.id, confirm_attr_callback_spy)
         expect(context.edit_queue.hasPendingItem()).toBeFalsy()
-        expect(context.hasAttrChange()).toBeFalsy()
+        expect(context.hasChange()).toBeFalsy()
         context.editing_attr_def.editing.name = "New Name"
         context.edit_queue.push(new StructEditQueueItem(attr_def.id, StructEditOperation.CHANGE_ATTR))
         expect(context.edit_queue.hasPendingItem()).toBeTruthy()
@@ -204,7 +204,7 @@ describe("StructDefEditContext", () => {
         expect(confirm_attr_callback_spy).toBeCalledTimes(0)
         expect(context.editing_attr_def?.editing.name).toBe("Test String Attr")
         expect(context.edit_queue.hasPendingItem()).toBeFalsy()
-        expect(context.hasAttrChange()).toBeFalsy()
+        expect(context.hasChange()).toBeFalsy()
     })
 })
 

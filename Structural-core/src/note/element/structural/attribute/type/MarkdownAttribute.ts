@@ -1,8 +1,7 @@
-import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
-import { InvalidTypeConversionException } from '@/note/element/structural/attribute/exception/AttributeException'
+import { AttributeType, AttributeTypeEnum } from "@/note/element/structural/attribute/type/AttributeType"
 
 export class MarkdownAttribute extends AttributeType<string> {    
-    public static readonly TYPE: string = "MARKDOWN"
+    public static readonly TYPE: string = AttributeTypeEnum.MARKDOWN
     private static _instance: MarkdownAttribute
 
     constructor() {

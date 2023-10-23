@@ -17,6 +17,7 @@ export * from "./note/element/structural/StructuralElement"
 export * from "./note/element/structural/StructureDefinition"
 
 export * from "./note/element/structural/attribute/AttributeDefinition"
+export * from "./note/element/structural/attribute/DisplayKey"
 export * from "./note/element/structural/attribute/ValidateResult"
 export * from "./note/element/structural/attribute/exception/AttributeException"
 

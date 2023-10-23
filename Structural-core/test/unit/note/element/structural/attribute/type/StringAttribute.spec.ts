@@ -10,21 +10,21 @@ describe("StringAttribute", () => {
     })
 
     it("convertToInteger", () => {
-        expect(StringAttribute.instance.convertToInteger("109")).toBe(109)
-        expect(StringAttribute.instance.convertToInteger("109.8")).toBe(110)
-        expect(StringAttribute.instance.convertToInteger("109.4")).toBe(109)
-        expect(StringAttribute.instance.convertToInteger("-109.8")).toBe(-110)
-        expect(() => StringAttribute.instance.convertToInteger("20%")).toThrow(InvalidTypeConversionException)
-        expect(() => StringAttribute.instance.convertToInteger("SomeChar")).toThrow(InvalidTypeConversionException)
+        expect(StringAttribute.convertToInteger("109")).toBe(109)
+        expect(StringAttribute.convertToInteger("109.8")).toBe(110)
+        expect(StringAttribute.convertToInteger("109.4")).toBe(109)
+        expect(StringAttribute.convertToInteger("-109.8")).toBe(-110)
+        expect(() => StringAttribute.convertToInteger("20%")).toThrow(InvalidTypeConversionException)
+        expect(() => StringAttribute.convertToInteger("SomeChar")).toThrow(InvalidTypeConversionException)
     })
 
     it("convertToDecimal", () => {
-        expect(StringAttribute.instance.convertToDecimal("109")).toBe(109)
-        expect(StringAttribute.instance.convertToDecimal("109.8")).toBe(109.8)
-        expect(StringAttribute.instance.convertToDecimal("109.4")).toBe(109.4)
-        expect(StringAttribute.instance.convertToDecimal("-109.8")).toBe(-109.8)
-        expect(() => StringAttribute.instance.convertToDecimal("20%")).toThrow(InvalidTypeConversionException)
-        expect(() => StringAttribute.instance.convertToDecimal("SomeChar")).toThrow(InvalidTypeConversionException)
+        expect(StringAttribute.convertToDecimal("109")).toBe(109)
+        expect(StringAttribute.convertToDecimal("109.8")).toBe(109.8)
+        expect(StringAttribute.convertToDecimal("109.4")).toBe(109.4)
+        expect(StringAttribute.convertToDecimal("-109.8")).toBe(-109.8)
+        expect(() => StringAttribute.convertToDecimal("20%")).toThrow(InvalidTypeConversionException)
+        expect(() => StringAttribute.convertToDecimal("SomeChar")).toThrow(InvalidTypeConversionException)
     })
 
     it("create", () => {

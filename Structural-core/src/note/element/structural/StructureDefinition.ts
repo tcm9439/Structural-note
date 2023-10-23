@@ -5,6 +5,7 @@ import { EditPath, EditPathNode } from "@/note/util/EditPath"
 import { Cloneable, CloneUtil } from "@/common/Cloneable"
 import { z } from "zod"
 import { ValidateResult, ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
+import { DisplayKey } from "@/note/element/structural/attribute/DisplayKey"
 
 export const StructureDefinitionJson = z.object({
     id: z.string(),
@@ -17,9 +18,14 @@ export const StructureDefinitionJson = z.object({
  */
 export class StructureDefinition extends ComponentBase implements EditPathNode, Cloneable<StructureDefinition> {
     private _attributes: OrderedComponents<AttributeDefinition<any>> = new OrderedComponents()
+    private _display_key: DisplayKey = new DisplayKey()
     
     get attributes(): OrderedComponents<AttributeDefinition<any>> {
         return this._attributes
+    }
+
+    get display_key(): DisplayKey {
+        return this._display_key
     }
 
     getNextEditPathNode(index: string): EditPathNode | undefined {
@@ -69,6 +75,7 @@ export class StructureDefinition extends ComponentBase implements EditPathNode, 
         // copy the order
         let new_order = CloneUtil.cloneDeepWithCloneable(other.attributes.order)
         this.attributes.updateOrder(new_order)
+        this._display_key = CloneUtil.cloneDeepWithCloneable(other._display_key)
     }
 
     cloneDeepWithCustomizer(): StructureDefinition | undefined {

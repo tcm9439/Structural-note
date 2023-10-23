@@ -1,10 +1,9 @@
-import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
-import { IntegerAttribute, DecimalAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
+import { AttributeType, AttributeTypeEnum } from "@/note/element/structural/attribute/type/AttributeType"
 import { InvalidTypeConversionException } from '@/note/element/structural/attribute/exception/AttributeException'
 import { ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
 
 export class StringAttribute extends AttributeType<string> {    
-    public static readonly TYPE: string = "STRING"
+    public static readonly TYPE: string = AttributeTypeEnum.STRING
 
     /**
      * Singleton instance
@@ -14,8 +13,8 @@ export class StringAttribute extends AttributeType<string> {
 
     constructor() {
         super(StringAttribute.TYPE)
-        this.addConvertibleType(IntegerAttribute.TYPE, this.convertToInteger.bind(this))
-        this.addConvertibleType(DecimalAttribute.TYPE, this.convertToDecimal.bind(this))
+        this.addConvertibleType(AttributeTypeEnum.INT, StringAttribute.convertToInteger.bind(this))
+        this.addConvertibleType(AttributeTypeEnum.DECIMAL, StringAttribute.convertToDecimal.bind(this))
         this.addAvailableConstraint(ConstrainType.REGEX)
         this.addAvailableConstraint(ConstrainType.UNIQUE)
     }
@@ -24,16 +23,16 @@ export class StringAttribute extends AttributeType<string> {
         return ""
     }
 
-    convertToDecimal(value: string, mode?: any): number {
+    static convertToDecimal(value: string, mode?: any): number {
         let num = Number(value)
         if (isNaN(num)){
-            throw new InvalidTypeConversionException(IntegerAttribute.TYPE, this.type, "not a number")
+            throw new InvalidTypeConversionException(AttributeTypeEnum.INT, AttributeTypeEnum.STRING, "not a number")
         }
         return num
     }
 
-    convertToInteger(value: string, mode?: any): number {
-        return Math.round(this.convertToDecimal(value))
+    static convertToInteger(value: string, mode?: any): number {
+        return Math.round(StringAttribute.convertToDecimal(value))
     }
 
     static get instance(): StringAttribute {

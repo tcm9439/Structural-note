@@ -3,6 +3,14 @@ import { Cloneable } from "@/common/Cloneable"
 import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/note/element/structural/attribute/exception/AttributeException"
 import { ConstrainType, Constrain } from "@/note/element/structural/attribute/constrain/Constrain"
 
+export enum AttributeTypeEnum {
+    STRING = "STRING",
+    BOOLEAN = "BOOLEAN",
+    MARKDOWN = "MARKDOWN",
+    INT = "INT",
+    DECIMAL = "DECIMAL",
+}
+
 export interface AttributeValueConverter<OriType,NewType> {
     (value: OriType, mode?: any): NewType
 }

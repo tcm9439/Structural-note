@@ -26,7 +26,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     private _constrains: Map<UUID, Constrain> = new Map()
     private _default_value: T | null = null
     private _require_constrain: RequireConstrain | null = null
-    
+
     constructor(name?: string, attribute_type?: AttributeType<T>, description?: string) {
         super()
         this._name = name || ""

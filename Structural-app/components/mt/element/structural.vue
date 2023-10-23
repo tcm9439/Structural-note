@@ -18,6 +18,7 @@ function getElementsValues(){
     return elementListGetter(editing_note, struct_element, props.edit_path, attrValueComponentMapper)
 }
 const elements_values = shallowRef(getElementsValues())
+const element_display_key = computed(() => struct_element.definition.display_key.getDisplayKey(struct_element))
 
 // on structural section definition change
 const render_value_components = ref(0)
@@ -40,6 +41,7 @@ onBeforeUnmount(() => {
 <template>
     <Collapse v-model="collapse_open_panel">
         <Panel :name="struct_element.id">
+            {{element_display_key}}
             <template #content>
                 <!-- One form per element so that form-item can use attr id as prop (key) -->
                 <Form inline label-position="top">

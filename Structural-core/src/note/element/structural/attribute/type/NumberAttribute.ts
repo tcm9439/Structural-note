@@ -1,11 +1,10 @@
 import { ConstrainType } from "@/index"
-import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
+import { AttributeType, AttributeTypeEnum } from "@/note/element/structural/attribute/type/AttributeType"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
 
 export class NumberAttribute extends AttributeType<number> {
     constructor(type: string) {
-        super(type)
-        this.addConvertibleType(StringAttribute.TYPE, this.convertToString.bind(this))
+        super(type) 
         this.addAvailableConstraint(ConstrainType.MIN)
         this.addAvailableConstraint(ConstrainType.MAX)
         this.addAvailableConstraint(ConstrainType.UNIQUE)
@@ -15,20 +14,28 @@ export class NumberAttribute extends AttributeType<number> {
         return 0
     }
 
-    convertToString(value: number, mode?: any): string {
+    static convertToString(value: number, mode?: any): string {
         if (isNaN(value)){
             return ""
         }
-        return String(value)
+        if (mode === undefined){
+            mode = 0
+        }
+
+        if (mode == -1){
+            return String(value)
+        }
+        return value.toFixed(mode)
     }
 }
 
 export class IntegerAttribute extends NumberAttribute {
-    public static readonly TYPE: string = "INT"
+    public static readonly TYPE: string = AttributeTypeEnum.INT
     private static _instance: IntegerAttribute
 
     constructor() {
         super(IntegerAttribute.TYPE)
+        this.addConvertibleType(StringAttribute.TYPE, NumberAttribute.convertToString)
     }
 
     static get instance(): IntegerAttribute {
@@ -45,11 +52,12 @@ export class IntegerAttribute extends NumberAttribute {
 }
 
 export class DecimalAttribute extends NumberAttribute {
-    public static readonly TYPE: string = "DECIMAL"
+    public static readonly TYPE: string = AttributeTypeEnum.DECIMAL
     private static _instance: DecimalAttribute
 
     constructor() {
         super(DecimalAttribute.TYPE)
+        this.addConvertibleType(StringAttribute.TYPE, () => NumberAttribute.convertToString(-1))
     }
 
     static get instance(): DecimalAttribute {

@@ -125,6 +125,7 @@ export class StructEditQueue {
 export class StructDefEditContext {
     private _state: StructDefEditState = StructDefEditState.EDITING_STRUCT
     private _edit_queue: StructEditQueue = new StructEditQueue()
+    private _has_changes_on_struct: boolean = false
 
     // the callback when the end state is reached
     private _exitCallback: ExitCallback
@@ -148,7 +149,7 @@ export class StructDefEditContext {
         } else {
             // this.state == StructDefEditState.EDITING_STRUCT
             // finish editing the struct def => execute the exit callback
-            if (this.hasAttrChange()) {
+            if (this.hasChange()) {
                 this._exitCallback(true)
             } else {
                 this._exitCallback(false)
@@ -165,8 +166,12 @@ export class StructDefEditContext {
         this.state = StructDefEditState.EDITING_ATTR
     }
 
-    hasAttrChange(): boolean {
-        return this.edit_queue.hasConfirmedItem()
+    hasChange(): boolean {
+        return this._has_changes_on_struct || this.edit_queue.hasConfirmedItem()
+    }
+
+    setChange(){
+        this._has_changes_on_struct = true
     }
 
     commitAttr() {
@@ -229,6 +234,10 @@ export class StructDefEditContext {
 }
 
 export class StructDefEditEvent {
+    static updateDisplayKey(state_context: StructDefEditContext){
+        state_context.setChange()
+    }
+    
     static startAddAttr(state_context: StructDefEditContext, confirm_callback?: AttrDefCallback): UUID {
         // init the attr & add the attr to the struct_def
         let attr = new AttributeDefinition()

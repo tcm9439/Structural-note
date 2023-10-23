@@ -1,7 +1,8 @@
 import { EditPath } from "@/note/util/EditPath"
 
 export type IViewUITableColumn = {
-    title: string,
+    title?: string,
+    type?: string,
     key?: string,
     slot?: string,
     width?: number,

@@ -1,9 +1,7 @@
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
+import { AttributeTypeEnum } from "@/note/element/structural/attribute/type/AttributeType"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
-import { BooleanAttribute } from "@/note/element/structural/attribute/type/BooleanAttribute"
-import { IntegerAttribute, DecimalAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
-import { MarkdownAttribute } from "@/note/element/structural/attribute/type/MarkdownAttribute"
+import { NumberAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
 import { ConverterHelper } from "@/converter/ConverterHelper"
 
 export class AttributeValueMarkdownConverter {
@@ -15,16 +13,22 @@ export class AttributeValueMarkdownConverter {
 
         // convert value
         let value = ""
-        if (attr_def.attribute_type instanceof BooleanAttribute){
-            value = this.fromBoolean(element)
-        } else if (attr_def.attribute_type instanceof IntegerAttribute){
-            value = this.fromInteger(element)
-        } else if (attr_def.attribute_type instanceof DecimalAttribute){
-            value = this.fromDecimal(element)
-        } else if (attr_def.attribute_type instanceof StringAttribute){
-            value = this.fromString(element)
-        } else if (attr_def.attribute_type instanceof MarkdownAttribute){
-            value = this.fromMarkdown(element)
+        switch (attr_def.attribute_type.type){
+            case AttributeTypeEnum.BOOLEAN:
+                value = this.fromBoolean(element)
+                break
+            case AttributeTypeEnum.INT:
+                value = this.fromInteger(element)
+                break
+            case AttributeTypeEnum.DECIMAL:
+                value = this.fromDecimal(element)
+                break
+            case AttributeTypeEnum.STRING:
+                value = this.fromString(element)
+                break
+            case AttributeTypeEnum.MARKDOWN:
+                value = this.fromMarkdown(element)
+                break
         }
 
         if (value == ""){
@@ -45,14 +49,14 @@ export class AttributeValueMarkdownConverter {
         if (element.value === null){
             return ""
         }
-        return element.value.toString()
+        return NumberAttribute.convertToString(element.value)
     }
 
     static fromDecimal(element: AttributeValue<number>): string {
         if (element.value === null){
             return ""
         }
-        return element.value.toFixed(4)
+        return NumberAttribute.convertToString(element.value, 4)
     }
 
     static fromString(element: AttributeValue<string>): string {

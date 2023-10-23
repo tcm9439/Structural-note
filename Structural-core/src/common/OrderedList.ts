@@ -16,6 +16,10 @@ export class OrderedList<T>{
         this._order.push(item)
     }
 
+    clear(): void {
+        this._order = []
+    }
+
     /**
      * Add an item before another item.
      * If the before item is not in the list, add the item to the end of the list.
