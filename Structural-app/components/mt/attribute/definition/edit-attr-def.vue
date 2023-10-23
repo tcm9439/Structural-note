@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { EditPath, Note, AttributeDefinition, AttrTypeHelper, AttrTypeNameAndInstance, AttributeType, InjectConstant, ConstrainTypeToClassMap, ValidValidateResult, ConstrainType } from "structural-core"
-import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
+import { EditPath, Note, AttributeDefinition, AttrTypeHelper, AttrTypeNameAndInstance, AttributeType, ConstrainTypeToClassMap, ValidValidateResult, ConstrainType } from "structural-core"
 import { getAttrConstrainEditComponents, type AttrConstrainEditComponent, getGroupedAttrConstrain } from "@/composables/active-data/Constrain"
 
 const props = defineProps<{
-    edit_path: EditPath, // edit_path to the AttributeDefinition
+    attr_def: AttributeDefinition<any>,
     render: number
 }>()
 
@@ -18,16 +17,14 @@ watch(active_tab, () => {
 })
 
 // # base
-const editing_note = inject(InjectConstant.EDITING_NOTE) as Note
-let attr_def = activeDataGetter(editing_note, props.edit_path) as AttributeDefinition<any>
+let attr_def = props.attr_def
 
 // # reload (after attr type changed)
 const reload_done = ref(0)
 watch(() => props.render, () => {
-    attr_def = activeDataGetter(editing_note, props.edit_path) as AttributeDefinition<any>
     attr_types_that_can_be_set.value = getAllTypes()
     current_attr_type_name.value = attr_def.attribute_type?.type || ""
-    default_value.value = attr_def.default_value_for_attr
+    // default_value.value = attr_def.default_value_for_attr
     reload_done.value += 1
 })
 
@@ -82,7 +79,7 @@ function selectedType(attr_type: AttrTypeNameAndInstance){
 const available_constrains: Ref<AttrConstrainEditComponent[][]> = ref([])
 watch([reload_done, constrain_changed_count], () => {
     // get the available constrains from the attr_def
-    let constrains = getAttrConstrainEditComponents(props.edit_path, attr_def)
+    let constrains = getAttrConstrainEditComponents(new EditPath(), attr_def)
     available_constrains.value = getGroupedAttrConstrain(constrains)
 }, { immediate: true })
 
@@ -105,7 +102,8 @@ function onConstrainStatusChange(is_set: boolean, type: ConstrainType, id: strin
 // # default value
 const has_default_value = computed({
     get: () => {
-        return attr_def.explicit_default_value != null
+        console.log("attr_def.explicit_default_value", attr_def.explicit_default_value)
+        return attr_def.explicit_default_value !== null
     },
     set: (has_default_value) => {
         if (has_default_value){
@@ -120,6 +118,7 @@ const default_value = computed({
     get: () => attr_def.default_value_for_attr,
     set: (v) => { 
         default_value_validate_result.value = attr_def.setDefaultValue(v)
+        console.log("setDefaultValue", attr_def.explicit_default_value)
     }
 })
 

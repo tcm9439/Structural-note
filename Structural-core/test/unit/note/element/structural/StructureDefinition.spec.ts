@@ -73,6 +73,35 @@ describe('StructureDefinition', () => {
         expect(clone).toBeUndefined()
     })
 
+    it("cloneFrom: attr same id", () => {
+        let clone = definition.clone()
+        let ori_attr = clone.attributes.get(str_attr.id)
+        expect(ori_attr).not.toBeUndefined()
+        if (ori_attr != undefined){
+            ori_attr.name = "New name after clone"
+        }
+        clone.attributes.remove(bool_attr.id)
+
+        clone.cloneFrom(definition)
+        expect(clone).not.toBeNull()
+        expect(clone.id).toEqual(definition.id)
+
+        // attributes
+        expect(clone.attributes.length()).toBe(2)
+        expect(clone.attributes.get(str_attr.id)).toBe(ori_attr)
+        expect(clone.attributes.get(str_attr.id)).toEqual(str_attr)
+        expect(clone.attributes.get(bool_attr.id)).not.toBe(bool_attr)
+        expect(clone.attributes.get(bool_attr.id)).toEqual(bool_attr)
+
+        // order
+        expect(clone.attributes.order.order).toEqual(definition.attributes.order.order)
+
+        // if delete an attribute from clone, the original definition should not be affected
+        clone.attributes.remove(str_attr.id)
+        expect(clone.attributes.length()).toBe(1)
+        expect(definition.attributes.length()).toBe(2)
+    })
+
     it("cloneFrom", () => {
         let clone = new StructureDefinition()
         clone.cloneFrom(definition)

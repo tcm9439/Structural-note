@@ -11,6 +11,7 @@ const props = defineProps<{
 const editing_note = inject(InjectConstant.EDITING_NOTE) as Note
 let attr_value = activeDataGetter(editing_note, props.edit_path) as AttributeValue<any>
 const attr_id = attr_value.definition.id
+const attr_name = ref(attr_value.definition.name)
 
 const set_value_checkbox = computed(() => {
     return attr_value.definition.isOptionalAttr()
@@ -29,6 +30,7 @@ const div_background_color_class = computed(() => set_value_checkbox.value? "att
 
 watch(() => props.render, () => {
     attr_value = activeDataGetter(editing_note, props.edit_path) as AttributeValue<any>
+    attr_name.value = attr_value.definition.name
 })
 </script>
 
@@ -39,9 +41,8 @@ watch(() => props.render, () => {
                 <Checkbox v-model="value_is_set_for_optional_attr" />
             </FormItem>
         </div>
-        <FormItem 
-        :label="attr_value.definition.name" :prop="attr_id" :error="attr_value.validate_result.invalid_message">
-        <mt-attribute-value-editor :type="props.type" v-model:value="attr_value.value" />
+        <FormItem :label="attr_name" :prop="attr_id" :error="attr_value.validate_result.invalid_message">
+            <mt-attribute-value-editor :type="props.type" v-model:value="attr_value.value" />
         </FormItem>
     </div>
 </template>

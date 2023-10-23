@@ -10,8 +10,8 @@ export class EditingComponent<T extends ICloneable> {
     constructor(component: T, 
         commit_callback?: (new_component: T) => void, 
         rollback_callback?: (untainted_component: T) => void) {
-        this._untainted_component = component.clone()
-        this._editing_component = component
+        this._untainted_component = component
+        this._editing_component = component.clone()
         this._commit_callback = commit_callback || null
         this._rollback_callback = rollback_callback || null
     }
@@ -39,7 +39,7 @@ export class EditingComponent<T extends ICloneable> {
     commit() {
         this.setCommit()
         this._commit_callback && this._commit_callback(this._editing_component)
-        this._untainted_component = this._editing_component.clone()
+        this._untainted_component.cloneFrom(this._editing_component)
     }
 
     /**

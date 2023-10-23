@@ -91,7 +91,7 @@ onBeforeUnmount(() => {
             :available_section_types="available_section_types" 
         />
     </template>
-    <!-- {{ editing_note }} -->
+    <!-- {{editing_note}} -->
 </template>
 
 <style>

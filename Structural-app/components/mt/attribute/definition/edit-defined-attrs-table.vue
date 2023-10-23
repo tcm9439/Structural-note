@@ -5,18 +5,14 @@
 
 <script setup lang="ts">
 import { StructureDefinition, EditPath, Note, StructuralDefinitionHelper, InjectConstant } from "structural-core"
-import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 import { Icon } from "view-ui-plus"
 
 const props = defineProps<{
-    edit_path: EditPath, // edit_path to the StructureDefinition
+    struct_def: StructureDefinition,
 }>()
 
-const editing_note = inject(InjectConstant.EDITING_NOTE) as Note
-const struct_def = activeDataGetter(editing_note, props.edit_path) as StructureDefinition
-
 const data = computed(() => {
-    return StructuralDefinitionHelper.getAttributesInTableFormat(struct_def)
+    return StructuralDefinitionHelper.getAttributesInTableFormat(props.struct_def)
 })
 
 const emit = defineEmits<{
@@ -54,10 +50,10 @@ function moveDownAttr(id: string) {
 <template>
     <!-- Current defined attributes inside this section. -->
     <Table border :columns="StructuralDefinitionHelper.ATTR_TABLE_COLUMNS" :data="data">
-        <template #name="{ row, index }">
+        <template #name="{row, index}">
             <strong>{{row.name}}</strong>
         </template>
-        <template #action="{ row }">
+        <template #action="{row}">
             <ButtonGroup>
                 <Button class="operation-button" @click="moveUpAttr(row.id)">
                     <Icon type="md-arrow-up" />

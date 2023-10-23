@@ -119,8 +119,8 @@ describe("StructDefEditContext", () => {
     })
 
     it("constructor", () => {
-        expect(context.editing_struct_def.untainted).toEqual(struct_def)
-        expect(context.editing_struct_def.editing).toBe(struct_def)
+        expect(context.editing_struct_def.editing).toEqual(struct_def)
+        expect(context.editing_struct_def.untainted).toBe(struct_def)
         expect(context.state).toBe(StructDefEditState.EDITING_STRUCT)
     })
 
@@ -133,8 +133,8 @@ describe("StructDefEditContext", () => {
     it("startEditAttr", () => {
         context.startEditAttr(attr_def.id, confirm_attr_callback_spy)
         expect(context.state).toBe(StructDefEditState.EDITING_ATTR)
-        expect(context.editing_attr_def?.editing).toBe(attr_def)
-        expect(context.editing_attr_def?.untainted).toEqual(attr_def)
+        expect(context.editing_attr_def.editing).toEqual(attr_def)
+        expect(context.editing_attr_def.untainted).not.toBe(attr_def)
     })
 
     it("startEditAttr", () => {
@@ -166,7 +166,7 @@ describe("StructDefEditContext", () => {
         context.startEditAttr(attr_def.id, confirm_attr_callback_spy)
         context.exitEdit()
         expect(context.state).toBe(StructDefEditState.EDITING_STRUCT)
-        expect(context.editing_attr_def).toBeNull()
+        expect(context["_attr_def"]).toBeNull()
         expect(exit_callback_spy).toBeCalledTimes(0)
     })
 
@@ -181,7 +181,7 @@ describe("StructDefEditContext", () => {
         context.startEditAttr(attr_def.id, confirm_attr_callback_spy)
         expect(context.edit_queue.hasPendingItem()).toBeFalsy()
         expect(context.hasAttrChange()).toBeFalsy()
-        attr_def.name = "New Name"
+        context.editing_attr_def.editing.name = "New Name"
         context.edit_queue.push(new StructEditQueueItem(attr_def.id, StructEditOperation.CHANGE_ATTR))
         expect(context.edit_queue.hasPendingItem()).toBeTruthy()
 
@@ -196,7 +196,7 @@ describe("StructDefEditContext", () => {
         context.startEditAttr(attr_def.id, confirm_attr_callback_spy)
         expect(context.edit_queue.hasPendingItem()).toBeFalsy()
         expect(context.hasAttrChange()).toBeFalsy()
-        attr_def.name = "New Name"
+        context.editing_attr_def.editing.name = "New Name"
         context.edit_queue.push(new StructEditQueueItem(attr_def.id, StructEditOperation.CHANGE_ATTR))
         expect(context.edit_queue.hasPendingItem()).toBeTruthy()
 
@@ -233,35 +233,45 @@ describe("StructDefEditEvent", () => {
 
     it("startAddAttr then commit", () => {
         let attr_id = StructDefEditEvent.startAddAttr(context, confirm_attr_callback_spy)
-        expect(struct_def.attributes.get(attr_id)).toBeDefined()
-        expect(struct_def.attributes.length()).toBe(2)
+        expect(context.editing_struct_def.editing.attributes.get(attr_id)).toBeDefined()
+        expect(context.editing_struct_def.editing.attributes.length()).toBe(2)
         expect(context.state).toBe(StructDefEditState.EDITING_ATTR)
         expect(context.edit_queue.hasPendingItem()).toBeTruthy()
 
+        // the attr name (& other stuff) is not set yet => invalid
         let validate_def_result = StructDefEditEvent.confirmEditAttr(context)
         expect(validate_def_result.valid).toBeFalsy()
-        let editing_attr_def = context.editing_attr_def?.editing as AttributeDefinition<any>
+
+        // set the attr props
+        let editing_attr_def = context.editing_attr_def.editing
         editing_attr_def.name = "New Name"
         editing_attr_def.description = "New Description"
         editing_attr_def.attribute_type = IntegerAttribute.instance
+
+        // confirm changes
         validate_def_result = StructDefEditEvent.confirmEditAttr(context)
         expect(validate_def_result.valid).toBeTruthy()
         expect(context.state).toBe(StructDefEditState.EDITING_STRUCT)
-        expect(context.editing_attr_def).toBeNull()
+
+        expect(context["_attr_def"]).toBeNull()
         expect(context.edit_queue.hasPendingItem()).toBeFalsy()
-        expect(struct_def.attributes.length()).toBe(2)
+
+        // editing struct def is updated
+        expect(context.editing_struct_def.editing.attributes.length()).toBe(2)
+        // the ori struct def is not affected
+        expect(struct_def.attributes.length()).toBe(1)
     })
 
     it("startAddAttr then rollback", () => {
         let attr_id = StructDefEditEvent.startAddAttr(context, confirm_attr_callback_spy)
-        expect(struct_def.attributes.get(attr_id)).toBeDefined()
-        expect(struct_def.attributes.length()).toBe(2)
+        expect(context.editing_struct_def.editing.attributes.get(attr_id)).toBeDefined()
+        expect(context.editing_struct_def.editing.attributes.length()).toBe(2)
         expect(context.state).toBe(StructDefEditState.EDITING_ATTR)
         expect(context.edit_queue.hasPendingItem()).toBeTruthy()
 
         StructDefEditEvent.cancelEditAttr(context)
         expect(context.state).toBe(StructDefEditState.EDITING_STRUCT)
-        expect(context.editing_attr_def).toBeNull()
+        expect(context["_attr_def"]).toBeNull()
         expect(context.edit_queue.hasPendingItem()).toBeFalsy()
         expect(struct_def.attributes.length()).toBe(1)
     })
@@ -271,29 +281,37 @@ describe("StructDefEditEvent", () => {
         expect(context.state).toBe(StructDefEditState.EDITING_ATTR)
         expect(context.edit_queue.hasPendingItem()).toBeTruthy()
 
-        attr_def.name = "New Name"
+        context.editing_attr_def.editing.name = "New Name"
         StructDefEditEvent.confirmEditAttr(context)
         expect(confirm_attr_callback_spy).toBeCalledTimes(1)
-        expect(attr_def.name).toBe("New Name")
+        expect(context.editing_struct_def.editing.attributes.get(attr_def.id)?.name).toBe("New Name")
         expect(context.edit_queue.hasPendingItem()).toBeFalsy()
     })
 
     it("deleteAttr", () => {
+        console.log(context.editing_struct_def.editing.attributes.components)
+        console.log(attr_def.id)
         StructDefEditEvent.deleteAttr(context, attr_def.id)
-        expect(struct_def.attributes.length()).toBe(0)
+        expect(context.editing_struct_def.editing.attributes.length()).toBe(0)
+        expect(struct_def.attributes.length()).toBe(1)
     })
 
     it("confirmEditStruct after change", () => {
+        let value = new AttributeValue(attr_def, "1234")
         StructDefEditEvent.startEditAttr(context, attr_def.id, confirm_attr_callback_spy)
-        attr_def.name = "New Name"
+        context.editing_attr_def.editing.name = "New Name"
+        let new_attr_def = context.editing_attr_def.editing
         StructDefEditEvent.confirmEditAttr(context)
         StructDefEditEvent.confirmEditStruct(context)
-        expect(struct_def.attributes.get(attr_def.id)?.name).toBe("New Name")
+        expect(context.editing_struct_def.editing.attributes.get(attr_def.id)?.name).toBe("New Name")
+        expect(context.editing_struct_def.untainted.attributes.get(attr_def.id)?.name).toBe("New Name")
+        expect(value.definition).toEqual(new_attr_def)
+        expect(value.definition.name).toBe("New Name")
     })
 
     it("cancelEditStruct after change", () => {
         StructDefEditEvent.startEditAttr(context, attr_def.id, confirm_attr_callback_spy)
-        attr_def.name = "New Name"
+        context.editing_attr_def.editing.name = "New Name"
         StructDefEditEvent.confirmEditAttr(context)
         StructDefEditEvent.cancelEditStruct(context)
         expect(struct_def.attributes.get(attr_def.id)?.name).toBe("Test String Attr")
@@ -318,9 +336,7 @@ describe("StructDefEditEvent", () => {
         expect(context.edit_queue["_pending_items"][0].operation).toBe(StructEditOperation.CHANGE_ATTR)
         expect(context.edit_queue["_pending_items"][1].operation).toBe(StructEditOperation.CHANGE_ATTR_TYPE)
         // attr def
-        expect(struct_def.attributes.get(attr_def.id)?.attribute_type).toBe(IntegerAttribute.instance)
-        // but the value is still pointing to the old attr def
-        expect(value.definition.attribute_type).toBe(StringAttribute.instance)
+        expect(context.editing_struct_def.editing.attributes.get(attr_def.id)?.attribute_type).toBe(IntegerAttribute.instance)
     })
 })
 

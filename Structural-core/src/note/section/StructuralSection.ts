@@ -37,6 +37,13 @@ export class StructuralSection extends NoteSection {
         return this._definition
     }
 
+    updateDefinition(value: StructureDefinition){
+        if (this.definition.id !== value.id){
+            return
+        }
+        this.definition = value
+    }
+
     getNextEditPathNode(index: UUID): EditPathNode | undefined {
         if (index === this._definition.id) return this._definition
         return this.elements.get(index)

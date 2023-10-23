@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, Note, InjectConstant, MinConstrain, AttributeDefinition } from "structural-core"
+import { EditPath, MinConstrain, AttributeDefinition } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 
 const props = defineProps<{
@@ -7,8 +7,7 @@ const props = defineProps<{
     attr_def: AttributeDefinition<any>,
 }>()
 
-const editing_note = inject(InjectConstant.EDITING_NOTE) as Note
-const constrain = activeDataGetter(editing_note, props.edit_path) as MinConstrain<any>
+const constrain = activeDataGetter(props.attr_def, props.edit_path) as MinConstrain<any>
 const constrain_type = props.attr_def.attribute_type?.type || ""
 </script>
 

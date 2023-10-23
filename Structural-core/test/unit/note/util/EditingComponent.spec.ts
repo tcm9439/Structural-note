@@ -16,6 +16,7 @@ describe("EditingComponent", () => {
     })
 
 	it("constructor", () => {
+        expect(editing_component.untainted).toBe(attr_def)
         expect(editing_component.editing.name).toBe("test")
         expect(editing_component.untainted.name).toBe("test")
         expect(editing_component.hasCommit).toBe(false)
@@ -30,9 +31,10 @@ describe("EditingComponent", () => {
 	})
 
     it("get editing", () => {
-        expect(editing_component.editing).toBe(attr_def)
+        expect(editing_component.editing).toEqual(attr_def)
         expect(editing_component.editing.name).toBe("test")
-        attr_def.name = "test2"
+        editing_component.editing.name = "test2"
+        attr_def.name = "test3"
         expect(editing_component.editing.name).toBe("test2")
     })
 

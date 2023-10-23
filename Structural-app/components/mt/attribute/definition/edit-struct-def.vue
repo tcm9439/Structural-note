@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { EditPath, Note, StructureDefinition, EventConstant, StructDefEditContext, StructDefEditState, StructDefEditEvent, InjectConstant, AttributeDefinition } from "structural-core"
+import { EditPath, Note, StructureDefinition, EventConstant, StructDefEditContext, StructDefEditState, StructDefEditEvent, InjectConstant, AttributeDefinition, StructuralSection } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 import { Icon } from "view-ui-plus"
 const { $Message } = useNuxtApp()
 
 const props = defineProps<{
     edit_path: EditPath, // edit_path to the StructureDefinition
-    edit_def_mode: boolean
+    edit_def_mode: boolean,
+    struct_section: StructuralSection,
 }>()
 
 const emit = defineEmits<{
@@ -18,6 +19,7 @@ const editing_note = inject(InjectConstant.EDITING_NOTE) as Note
 const struct_def = activeDataGetter(editing_note, props.edit_path) as StructureDefinition
 
 const edit_context = ref(new StructDefEditContext(struct_def, onExitEditStruct)) as Ref<StructDefEditContext>
+const editing_struct_def = edit_context.value.editing_struct_def.editing
 const edit_state = computed(() => edit_context.value.state)
 const struct_has_change = computed(() => edit_context.value.edit_queue.hasConfirmedItem())
 
@@ -26,9 +28,9 @@ const show_error_modal = ref(false)
 const error_title = ref("")
 const error_content = ref("")
 
-let attr_def_edit_path: Ref<EditPath | null> = ref(null)
+let attr_def: Ref<AttributeDefinition<any> | null> = ref(null)
 function setAttrToEdit(id: string){
-    attr_def_edit_path.value = props.edit_path.clone().append(id)
+    attr_def.value = edit_context.value.editing_attr_def.editing
 }
 
 function showInvalidDefinitionMessage(def_type: string, error_msg: string){
@@ -128,14 +130,14 @@ function attrTypeUpdate(attr_def: AttributeDefinition<any> | null){
                 @edit="startEditAttr"
                 @move-up="moveUpAttr"
                 @move-down="moveDownAttr"
-                :edit_path="edit_path" />
+                :struct_def="editing_struct_def" />
         </div>
 
         <!-- Edit one of the attribute -->
-        <div v-if="edit_state === StructDefEditState.EDITING_ATTR && attr_def_edit_path != null">
+        <div v-if="edit_state === StructDefEditState.EDITING_ATTR && attr_def != null">
             <mt-attribute-definition-edit-attr-def 
                 @attrTypeUpdate="attrTypeUpdate"
-                :edit_path="attr_def_edit_path" 
+                :attr_def="attr_def"
                 :render="render_attr_def"
             />
         </div>

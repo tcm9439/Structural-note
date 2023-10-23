@@ -2,6 +2,7 @@
 import { EditPath, StructuralSection, Note, InjectConstant, ElementType, StructuralElement } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 import { type AvailableSection } from "@/composables/active-data/Note"
+import { Icon } from "view-ui-plus"
 
 const props = defineProps<{
     edit_path: EditPath,
@@ -47,7 +48,7 @@ function addElement(element_type: ElementType, last_element_id?: string){
             <Button 
                 type="primary" class="section-operation-button"
                 @click="startEditDef">
-                Edit Def
+                <Icon type="md-options" />
             </Button>
         </template>
     </mt-section-base>
@@ -55,7 +56,8 @@ function addElement(element_type: ElementType, last_element_id?: string){
     <!-- Show the edit def window once user click the Edit button -->
     <mt-attribute-definition-edit-struct-def 
         v-if="edit_def_mode"
-        :edit_path="def_path" 
+        :edit_path="def_path"
+        :struct_section="section"
         v-model:edit_def_mode="edit_def_mode"
     />
 </template>

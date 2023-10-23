@@ -157,7 +157,7 @@ export class StructDefEditContext {
     }
 
     startEditAttr(attr_id: UUID, confirm_callback?: AttrDefCallback) {
-        const attr = this._struct_def.editing.attributes.get(attr_id)
+        let attr = this._struct_def.editing.attributes.get(attr_id)
         if (attr == null){
             throw new Error(`Attribute with id ${attr_id} not found`)
         }
@@ -220,7 +220,10 @@ export class StructDefEditContext {
         return this._struct_def
     }
 
-    get editing_attr_def(): EditingComponent<AttributeDefinition<any>> | null {
+    get editing_attr_def(): EditingComponent<AttributeDefinition<any>> {
+        if (this._attr_def === null){
+            throw Error("No editing attribute.")
+        }
         return this._attr_def
     }
 }

@@ -37,8 +37,38 @@ export class StructureDefinition extends ComponentBase implements EditPathNode, 
     }
 
     cloneFrom(other: StructureDefinition): void {
-        // id is not cloned
-        this._attributes = CloneUtil.cloneDeepWithCloneable(other._attributes)
+        let this_attr_ids = new Set(this.attributes.order.order)
+        let other_attr_ids = new Set(other.attributes.order.order)
+
+        let intersection = new Set<string>([...this_attr_ids].filter(x => other_attr_ids.has(x)))
+
+        // if this & other both has attribute with same id, clone from that attr
+        intersection.forEach((attr_id) => {
+            let this_attr = this.attributes.get(attr_id)
+            let other_attr = other.attributes.get(attr_id)
+            if (this_attr !== undefined && other_attr !== undefined) {
+                this_attr.cloneFrom(other_attr)
+            }
+        })
+
+        // if this has an attribute that other does not have, delete that attr
+        let this_only = new Set<string>([...this_attr_ids].filter(x => !other_attr_ids.has(x)))
+        this_only.forEach((attr_id) => {
+            this.attributes.remove(attr_id)
+        })
+
+        // if other has an attribute that this does not have, add that attr by making a clone
+        let other_only = new Set<string>([...other_attr_ids].filter(x => !this_attr_ids.has(x)))
+        other_only.forEach((attr_id) => {
+            let other_attr = other.attributes.get(attr_id)
+            if (other_attr !== undefined) {
+                this.attributes.add(other_attr.clone())
+            }
+        })
+
+        // copy the order
+        let new_order = CloneUtil.cloneDeepWithCloneable(other.attributes.order)
+        this.attributes.updateOrder(new_order)
     }
 
     cloneDeepWithCustomizer(): StructureDefinition | undefined {

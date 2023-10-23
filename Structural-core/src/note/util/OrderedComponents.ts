@@ -13,6 +13,10 @@ export class OrderedComponents<T extends ComponentBase> {
         return this._order
     }
 
+    updateOrder(new_order: OrderedList<UUID>){
+        this._order = new_order
+    }
+
     get components(): Map<UUID, T> {
         return this._components
     }
