@@ -1,6 +1,6 @@
 import { MaxConstrain } from "@/index"
 import { Constrain, ConstrainType, ConstrainJson } from "@/note/element/structural/attribute/constrain/Constrain"
-import { ValidateResult, ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
+import { OperationResult, ValidOperationResult } from "@/common/OperationResult"
 import { z } from "zod"
 
 export const MinConstrainJson = ConstrainJson.extend({
@@ -26,14 +26,14 @@ export class MinConstrain<T> extends Constrain {
         return this._min
     }
 
-    constrainIsValid(): ValidateResult {
+    constrainIsValid(): OperationResult {
         if (this.min == null) {
             this._validate_constrain_result = {
                 valid: false,
                 invalid_message: "The minimum value is not set"
             }
         } else {
-            this._validate_constrain_result = ValidValidateResult
+            this._validate_constrain_result = ValidOperationResult
         }
 
         return this.validate_constrain_result
@@ -61,14 +61,14 @@ export class MinConstrain<T> extends Constrain {
         return MinConstrain.type
     }
 
-    public validate(value: T): ValidateResult {
+    public validate(value: T): OperationResult {
         if (this.min != null && value < this.min) {
             return {
                 valid: false,
                 invalid_message: "The value is smaller than the minimum"
             }
         }
-        return ValidValidateResult
+        return ValidOperationResult
     }
     
     saveAsJson(): z.infer<typeof MinConstrainJson> {

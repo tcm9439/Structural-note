@@ -1,7 +1,7 @@
 import { ComponentBase } from "@/note/util/ComponentBase"
 import { EditPath, EditPathNode, EndOfEditPathError } from "@/note/util/EditPath"
 import { z } from "zod"
-import { ValidateResult, ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
+import { OperationResult, ValidOperationResult } from "@/common/OperationResult"
 
 export enum ConstrainType {
     REQUIRE = "REQUIRE",
@@ -18,11 +18,11 @@ export const ConstrainJson = z.object({
 
 export abstract class Constrain extends ComponentBase implements EditPathNode {
     // if this constrain is valid
-    protected _validate_constrain_result : ValidateResult = ValidValidateResult
+    protected _validate_constrain_result : OperationResult = ValidOperationResult
 
     abstract getType(): ConstrainType
 
-    get validate_constrain_result(): ValidateResult {
+    get validate_constrain_result(): OperationResult {
         return this._validate_constrain_result
     }
 
@@ -30,12 +30,12 @@ export abstract class Constrain extends ComponentBase implements EditPathNode {
      * Check if the given value is valid regarding to this constrain
      * @param value the value to validate
      */
-    abstract validate(value: any): ValidateResult
+    abstract validate(value: any): OperationResult
 
     /**
      * Check if this constrain is valid
      */
-    abstract constrainIsValid(): ValidateResult
+    abstract constrainIsValid(): OperationResult
 
     /**
      * Check if this constrain is compatible to the given constrain

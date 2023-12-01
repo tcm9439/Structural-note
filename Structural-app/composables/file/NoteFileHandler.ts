@@ -1,17 +1,26 @@
 import { TauriFileSystem } from "tauri-fs-util"
 import { open, save } from "@tauri-apps/api/dialog"
 import { basename } from "@tauri-apps/api/path"
-import { Note, EventConstant, NoteMarkdownConverter } from "structural-core"
+import { Note, EventConstant, NoteMarkdownConverter, type OperationResult } from "structural-core"
+import { appWindow } from "@tauri-apps/api/window"
+import { invoke } from '@tauri-apps/api/tauri'
 
 const struct_note_file_extension = "structnote"
 
 export class NoteFileHandler {
+    /**
+     * Get the title of the note from the filename, which is the basename of the filename.
+     */
     private static async getTitle(filename: string): Promise<string>{
         const base_filename = await basename(filename)
         const title = base_filename.replace("." + struct_note_file_extension, "")
         return Promise.resolve(title)
     }
 
+    /**
+     * Load a note from a file.
+     * @param filename The path of the file to load.
+     */
     private static loadFile(filename: string): Promise<Note> {
         return new Promise<Note>(async (resolve, reject) => {
             try {
@@ -21,9 +30,9 @@ export class NoteFileHandler {
                 let loaded_note = Note.loadFromJson(title, content_json)
                 
                 if (loaded_note == null) {
-                    reject("Invalid note file")
+                    reject("Invalid note file.")
                 } else {
-                    resolve(loaded_note);
+                    resolve(loaded_note)
                 }
             } catch (error) {
                 reject(error);
@@ -31,6 +40,11 @@ export class NoteFileHandler {
         })
     }
 
+    /**
+     * Save a note to a file.
+     * @param note The note to save.
+     * @param filename The path of the file to save.
+     */
     private static saveAsFile(note: Note, filename: string): Promise<void> {
         return new Promise<void>(async (resolve, reject) => {
             try {
@@ -43,6 +57,33 @@ export class NoteFileHandler {
         })
     }
 
+    private static async askSavePath(default_note_filename: string): Promise<string | null> {
+        return save({
+            title: "Save",
+            filters: [
+                { name: "Note", extensions: [ struct_note_file_extension ] },
+            ],
+            defaultPath: default_note_filename
+        })
+    }
+
+    static getPathFromSelectedFiles(selected_files: string | string[] | null): string | null {
+        if (selected_files === null){
+            return null
+        } 
+
+        // check if the selected open path is a String[]
+        if (Array.isArray(selected_files)){
+            console.warn("The selected open path is an array, which is not expected. Use the first file.")
+            if (selected_files.length === 0){
+                return null
+            }
+            return selected_files[0]
+        }
+
+        return selected_files
+    }
+
     /**
      * Open a dialog to ask for save path (if no save-path is found).
      * And save the file to that path.
@@ -50,7 +91,7 @@ export class NoteFileHandler {
      */
     static async saveNote(save_as_mode: boolean = false){
         try {
-            const { $viewState, $Message } = useNuxtApp();
+            const { $viewState, $Message } = useNuxtApp()
             if ($viewState.editing_note === null){
                 console.warn("No note is opened to save.")
                 return
@@ -58,19 +99,12 @@ export class NoteFileHandler {
 
             let this_save_path = $viewState.save_path
             if (this_save_path === null || save_as_mode){
-                // there is no save path set,
-                // ask the user to chose a save path
+                // there is no save path set or this is a save-as operation
                 const default_note_filename = $viewState.editing_note.title + "." + struct_note_file_extension
-                this_save_path = await save({
-                    title: "Save",
-                    filters: [
-                        { name: "Note", extensions: [ struct_note_file_extension ] },
-                    ],
-                    defaultPath: default_note_filename
-                })
+                this_save_path = await this.askSavePath(default_note_filename)
             }
             if (this_save_path === null){
-                console.warn("No path is chosen to save.")
+                return Promise.reject("No path is chosen to save.")
             } else {
                 await NoteFileHandler.saveAsFile($viewState.editing_note, this_save_path)
             }
@@ -83,46 +117,72 @@ export class NoteFileHandler {
             console.error("Error when trying to save Note.", err);
         }
     }
+
+    static async createNote(title: string){
+        try {
+            if (title.trim() === ""){
+                return Promise.reject("Filename cannot be empty")
+            }
+            const { $viewState, $emitter } = useNuxtApp()
+
+            // create a new note
+            let new_note = new Note(title)
+            console.log("Created note with title", title)
+            console.log("viewState", $viewState)
+            $viewState.editing_note = new_note
+
+            appWindow.setTitle(new_note.title)
+            $emitter.emit(EventConstant.NOTE_OPENED)
+        } catch (err) {
+            console.error(err);
+        }
+    }
     
     /**
-     * Open a dialog to ask for an exiting not to open.
+     * Open a dialog to ask for an exiting note to open.
      * The chosen path is kept as save-path which is used to save current file.
      */
-    static async openNote(){
-        try {
-            const { $viewState, $emitter } = useNuxtApp();
+    static async openNote(window_id: string, filepath?: string | null){
+        const { $viewState, $emitter } = useNuxtApp()
 
-            const selected_open_path = await open({
-                title: "Open",
-                multiple: false,
-                directory: false,
-                filters: [
-                    { name: "Note", extensions: [ struct_note_file_extension ] },
-                ]
-            })
-    
-            if (selected_open_path === null){
-                console.warn("No path is chosen to open.")
-                return
-            } 
-    
-            // check if the selected open path is a String[]
-            if (Array.isArray(selected_open_path)){
-                console.warn("The selected open path is an array, which is not expected.")
-                return
+        try {
+        // get the filepath from argument or dialog
+            let selected_open_path: string | string[] | null
+            if (filepath != null){
+                selected_open_path = filepath
+            } else {
+                selected_open_path = await open({
+                    title: "Open",
+                    multiple: false,
+                    directory: false,
+                    filters: [
+                        { name: "Note", extensions: [ struct_note_file_extension ] },
+                    ]
+                })
+                selected_open_path = this.getPathFromSelectedFiles(selected_open_path)
+                if (selected_open_path === null){
+                    return Promise.reject("Invalid path.")
+                }
             }
-    
+
+            // check if the path is already opened
+            let success: boolean = await invoke("try_open_file", { windowId: window_id, filepath: selected_open_path })
+            if (!success){
+                return Promise.reject("File is already opened in another window.")
+            }
+
+            console.log("selected_open_path", selected_open_path)
+
             // selected_open_path === String
             $viewState.editing_note = await NoteFileHandler.loadFile(selected_open_path)
-    
+            console.log("note:", $viewState.editing_note)
             // set default save path as the open path
             $viewState.save_path = selected_open_path
-    
             // emit the open note event
-            $emitter.emit(EventConstant.OPEN_NOTE)
+            $emitter.emit(EventConstant.NOTE_OPENED)
         } catch (err) {
-            // TODO show the error on screen to acknowledge user
-            console.error("Error when trying to open note.", err);
+            // TODO popup error prompt
+            console.error(err);
         }
     }
 }

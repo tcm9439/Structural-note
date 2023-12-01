@@ -20,13 +20,18 @@
         ],
         "readFile": true,
         "writeFile": true,
-        "readDir": true,
+        "readDir": false,
         "copyFile": false,
-        "createDir": true,
-        "removeDir": true,
+        "createDir": false,
+        "removeDir": false,
         "removeFile": false,
         "renameFile": false,
         "exists": true
+      },
+      "window": {
+        "all": false,
+        "create": true,
+        "setTitle": true
       },
       "path": {
         "all": true
@@ -82,10 +87,12 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
         "resizable": true,
         "title": "Structural",
-        "width": 800
+        "height": 600,
+        "width": 800,
+        "minHeight": 400,
+        "minWidth": 600
       }
     ]
   }

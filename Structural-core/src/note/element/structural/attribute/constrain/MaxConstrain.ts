@@ -1,6 +1,6 @@
 import { Constrain, ConstrainType, ConstrainJson } from "@/note/element/structural/attribute/constrain/Constrain"
 import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinConstrain"
-import { ValidateResult, ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
+import { OperationResult, ValidOperationResult } from "@/common/OperationResult"
 import { z } from "zod"
 
 export const MaxConstrainJson = ConstrainJson.extend({
@@ -26,14 +26,14 @@ export class MaxConstrain<T> extends Constrain {
         return this._max
     }
 
-    constrainIsValid(): ValidateResult {
+    constrainIsValid(): OperationResult {
         if (this.max == null) {
             this._validate_constrain_result = {
                 valid: false,
                 invalid_message: "The maximum value is not set"
             }
         } else {
-            this._validate_constrain_result = ValidValidateResult
+            this._validate_constrain_result = ValidOperationResult
         }
 
         return this.validate_constrain_result
@@ -62,14 +62,14 @@ export class MaxConstrain<T> extends Constrain {
         return MaxConstrain.type
     }
     
-    public validate(value: T): ValidateResult {
+    public validate(value: T): OperationResult {
         if (this.max != null && value > this.max) {
             return {
                 valid: false,
                 invalid_message: "The value is larger than the maximum"
             }
         }
-        return ValidValidateResult
+        return ValidOperationResult
     }
     
     saveAsJson(): z.infer<typeof MaxConstrainJson> {

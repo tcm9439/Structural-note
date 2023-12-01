@@ -5,7 +5,7 @@ import { AttributeDefinition } from "@/note/element/structural/attribute/Attribu
 import { AttributeValue, AttributeValueJson } from "@/note/element/structural/attribute/value/AttributeValue"
 import { StructureDefinition } from "@/note/element/structural/StructureDefinition"
 import { NoteElement, NoteElementJson } from "@/note/element/NoteElement"
-import { ValidValidateResult, ValidateResult } from "./attribute/ValidateResult"
+import { ValidOperationResult, OperationResult } from "@/common/OperationResult"
 import { z } from "zod"
 
 export const StructuralElementJson = NoteElementJson.extend({
@@ -62,7 +62,7 @@ export class StructuralElement extends NoteElement {
      * // - and all required attribute are present (now moved to RequireConstrain)
      * @returns true if the element is valid
      */
-    validate(): ValidateResult {
+    validate(): OperationResult {
         for (let [id, value] of this.values) {
             let value_result = value.validate_result
             if (!value_result.valid) {
@@ -70,7 +70,7 @@ export class StructuralElement extends NoteElement {
                 return value_result
             }
         }
-        return ValidValidateResult
+        return ValidOperationResult
     }
 
     getNextEditPathNode(index: UUID): EditPathNode | undefined {

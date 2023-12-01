@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest"
 import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinConstrain"
 import { MaxConstrain } from "@/note/element/structural/attribute/constrain/MaxConstrain"
-import { ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
+import { ValidOperationResult } from "@/common/OperationResult"
 
 describe("MaxConstrain", () => {
     let max_constrain: MaxConstrain<number>
@@ -54,8 +54,8 @@ describe("MaxConstrain", () => {
     })
 
     it("validate", () => {
-        expect(max_constrain.validate(-9)).toBe(ValidValidateResult)
-        expect(max_constrain.validate(100)).toBe(ValidValidateResult)
+        expect(max_constrain.validate(-9)).toBe(ValidOperationResult)
+        expect(max_constrain.validate(100)).toBe(ValidOperationResult)
         expect(max_constrain.validate(999).valid).toBe(false)
     })
 
@@ -68,8 +68,8 @@ describe("MaxConstrain", () => {
     it("different type", () => {
         // date
         let date_max_constrain = new MaxConstrain<Date>(new Date(2020, 1, 1))
-        expect(date_max_constrain.validate(new Date(2020, 1, 1))).toBe(ValidValidateResult)
-        expect(date_max_constrain.validate(new Date(2019, 12, 30))).toBe(ValidValidateResult)
+        expect(date_max_constrain.validate(new Date(2020, 1, 1))).toBe(ValidOperationResult)
+        expect(date_max_constrain.validate(new Date(2019, 12, 30))).toBe(ValidOperationResult)
         expect(date_max_constrain.validate(new Date(2020, 1, 2)).valid).toBe(false)
     })
 })

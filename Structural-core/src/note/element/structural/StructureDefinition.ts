@@ -4,7 +4,7 @@ import { ComponentBase } from "@/note/util/ComponentBase"
 import { EditPath, EditPathNode } from "@/note/util/EditPath"
 import { Cloneable, CloneUtil } from "@/common/Cloneable"
 import { z } from "zod"
-import { ValidateResult, ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
+import { OperationResult, ValidOperationResult } from "@/common/OperationResult"
 import { DisplayKey } from "@/note/element/structural/attribute/DisplayKey"
 
 export const StructureDefinitionJson = z.object({
@@ -131,7 +131,7 @@ export class StructureDefinition extends ComponentBase implements EditPathNode, 
     /**
      * Check if the definition is valid.
      */
-    validateDefinition(): ValidateResult {
+    validateDefinition(): OperationResult {
         // at least one attribute
         if (this.attributes.ordered_components.length === 0) {
             return {
@@ -160,6 +160,6 @@ export class StructureDefinition extends ComponentBase implements EditPathNode, 
             name_set.add(attr_def.name)
         }
 
-        return ValidValidateResult
+        return ValidOperationResult
     }
 }

@@ -154,7 +154,7 @@ describe("StructDefEditContext", () => {
     
     it("exitEdit: exit edit struct, with change", () => {
         context.state = StructDefEditState.EDITING_STRUCT
-        const spy = vi.spyOn(context, 'hasAttrChange')
+        const spy = vi.spyOn(context, 'hasChange')
         spy.mockImplementation(() => true)
         context.exitEdit()
         expect(context.state).toBe(StructDefEditState.EDITING_STRUCT)

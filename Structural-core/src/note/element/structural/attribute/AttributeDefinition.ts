@@ -4,7 +4,7 @@ import { CloneUtil, Cloneable } from "@/common/Cloneable"
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
 import { Constrain, ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
 import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain"
-import { ValidateResult, ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
+import { OperationResult, ValidOperationResult } from "@/common/OperationResult"
 import { ForbiddenConstrain, IncompatibleConstrain } from "@/note/element/structural/attribute/exception/AttributeException"
 import { EditPath, EditPathNode } from "@/note/util/EditPath"
 import { z } from "zod"
@@ -56,10 +56,10 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         return this._require_constrain?.required === false
     }
 
-    setDefaultValue(value: T | null): ValidateResult {
+    setDefaultValue(value: T | null): OperationResult {
         this._default_value = value
         if (value === null){
-            return ValidValidateResult
+            return ValidOperationResult
         }
         return this.validate(value)
     }
@@ -159,14 +159,14 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     /**
      * Check if the value pass all the constrains
      */
-    validate(value: any): ValidateResult {
+    validate(value: any): OperationResult {
         for (const [id, constrain] of this.constrains) {
             const result = constrain.validate(value)
             if (!result.valid) {
                 return result
             }
         }
-        return ValidValidateResult
+        return ValidOperationResult
     }
 
 
@@ -243,7 +243,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     /**
      * Check if the definition is valid.
      */
-    validateDefinition(): ValidateResult {
+    validateDefinition(): OperationResult {
         // name not null
         if (this.name.trim() === "") {
             return {
@@ -290,6 +290,6 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
             }
         }
 
-        return ValidValidateResult
+        return ValidOperationResult
     }
 }

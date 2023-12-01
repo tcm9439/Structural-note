@@ -1,5 +1,5 @@
 import { UUID } from "@/common/CommonTypes"
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid"
 
 export abstract class ComponentBase {
     private _id: UUID

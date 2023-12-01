@@ -38,7 +38,7 @@ describe("DisplayKey", () => {
 	})
 
 	it("display key: int + str", () => {
-        definition.display_key.setSeparator("~")
+        definition.display_key.separator = "~"
         definition.display_key.addKey(int_attr)
         definition.display_key.addKey(string_attr)
 

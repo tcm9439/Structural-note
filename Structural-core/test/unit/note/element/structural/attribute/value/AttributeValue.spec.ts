@@ -4,7 +4,7 @@ import { AttributeValue } from "@/note/element/structural/attribute/value/Attrib
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
 import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
 import { EditPath, EndOfEditPathError } from "@/note/util/EditPath"
-import { ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
+import { ValidOperationResult } from "@/common/OperationResult"
 import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain"
 
 describe('AttributeValue', () => {
@@ -147,8 +147,8 @@ describe('AttributeValue', () => {
     it("validate", () => {
         // add a require constrain
         definition.addConstrain(new RequireConstrain())
-        expect(attr_value.validate()).toEqual(ValidValidateResult)
-        expect(attr_value.validate_result).toEqual(ValidValidateResult)
+        expect(attr_value.validate()).toEqual(ValidOperationResult)
+        expect(attr_value.validate_result).toEqual(ValidOperationResult)
 
         attr_value.value = null
         let expected_result = {

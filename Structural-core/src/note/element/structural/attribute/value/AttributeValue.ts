@@ -3,7 +3,7 @@ import { ComponentBase } from "@/note/util/ComponentBase"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
 import { EditPath, EditPathNode, EndOfEditPathError } from "@/note/util/EditPath"
 import { InvalidTypeConversionForDataException, NullAttrTypeException } from "@/note/element/structural/attribute/exception/AttributeException"
-import { ValidateResult, ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
+import { OperationResult, ValidOperationResult } from "@/common/OperationResult"
 import { z } from "zod"
 
 export const AttributeValueJson = z.object({
@@ -18,7 +18,7 @@ export const AttributeValueJson = z.object({
 export class AttributeValue<T> extends ComponentBase implements EditPathNode {
     private _definition: AttributeDefinition<T>
     private _value: T | null = null
-    private _validate_result: ValidateResult = ValidValidateResult
+    private _validate_result: OperationResult = ValidOperationResult
     private _is_set: boolean = true
 
     constructor(definition: AttributeDefinition<T>, value: T | null = null) {
@@ -78,16 +78,16 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
         this._is_set = false
     }
 
-    validate(): ValidateResult {
+    validate(): OperationResult {
         this._validate_result = this.definition.validate(this.value)
         return this._validate_result
     }
 
-    get validate_result(): ValidateResult {
+    get validate_result(): OperationResult {
         return this._validate_result
     }
 
-    private set validate_result(value: ValidateResult) {
+    private set validate_result(value: OperationResult) {
         this._validate_result = value
     }
 

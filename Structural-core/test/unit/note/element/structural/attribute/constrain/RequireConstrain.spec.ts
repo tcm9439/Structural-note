@@ -1,18 +1,18 @@
 import { describe, it, expect, beforeEach } from "vitest"
 import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain"
-import { ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
+import { ValidOperationResult } from "@/common/OperationResult"
 
 describe("RequireConstrain", () => {
 	it("validate", () => {
         let require = new RequireConstrain(true)
         expect(require.validate(null).valid).toEqual(false)
         expect(require.validate("").valid).toEqual(false)
-        expect(require.validate("Test")).toEqual(ValidValidateResult)
+        expect(require.validate("Test")).toEqual(ValidOperationResult)
         
         let optional = new RequireConstrain(false)
-        expect(optional.validate(null)).toEqual(ValidValidateResult)
-        expect(optional.validate("")).toEqual(ValidValidateResult)
-        expect(optional.validate("Test")).toEqual(ValidValidateResult)
+        expect(optional.validate(null)).toEqual(ValidOperationResult)
+        expect(optional.validate("")).toEqual(ValidOperationResult)
+        expect(optional.validate("Test")).toEqual(ValidOperationResult)
 	})
 
     it("saveAsJson", () => {

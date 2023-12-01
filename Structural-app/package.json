@@ -22,6 +22,7 @@
     "md-editor-v3": "^4.8.1",
     "structural-core": "file:../Structural-core",
     "tiny-emitter": "^2.1.0",
+    "uuid": "^9.0.1",
     "view-ui-plus": "^1.3.14"
   }
 }

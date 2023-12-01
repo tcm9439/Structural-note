@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest"
 import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinConstrain"
 import { MaxConstrain } from "@/note/element/structural/attribute/constrain/MaxConstrain"
-import { ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
+import { ValidOperationResult } from "@/common/OperationResult"
 
 describe("MinConstrain", () => {
     let min_constrain: MinConstrain<number>
@@ -54,8 +54,8 @@ describe("MinConstrain", () => {
     })
 
     it("validate", () => {
-        expect(min_constrain.validate(0)).toBe(ValidValidateResult)
-        expect(min_constrain.validate(199)).toBe(ValidValidateResult)
+        expect(min_constrain.validate(0)).toBe(ValidOperationResult)
+        expect(min_constrain.validate(199)).toBe(ValidOperationResult)
         expect(min_constrain.validate(-9).valid).toBe(false)
     })
 
@@ -68,8 +68,8 @@ describe("MinConstrain", () => {
     it("different type", () => {
         // date
         let date_min_constrain = new MinConstrain<Date>(new Date(2020, 1, 1))
-        expect(date_min_constrain.validate(new Date(2020, 1, 1))).toBe(ValidValidateResult)
-        expect(date_min_constrain.validate(new Date(2020, 1, 2))).toBe(ValidValidateResult)
+        expect(date_min_constrain.validate(new Date(2020, 1, 1))).toBe(ValidOperationResult)
+        expect(date_min_constrain.validate(new Date(2020, 1, 2))).toBe(ValidOperationResult)
         expect(date_min_constrain.validate(new Date(2019, 12, 31)).valid).toBe(false)
     })
 })

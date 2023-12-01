@@ -7,7 +7,7 @@ import { RequireConstrain } from "@/note/element/structural/attribute/constrain/
 import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinConstrain"
 import { MaxConstrain } from "@/note/element/structural/attribute/constrain/MaxConstrain"
 import { ForbiddenConstrain, IncompatibleConstrain } from "@/note/element/structural/attribute/exception/AttributeException"
-import { ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
+import { ValidOperationResult } from "@/common/OperationResult"
 import { ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
 import _ from "lodash"
 
@@ -191,7 +191,7 @@ describe('AttributeDefinition', () => {
     })
 
     it("validateDefinition: valid", () => {
-        expect(definition.validateDefinition()).toBe(ValidValidateResult)
+        expect(definition.validateDefinition()).toBe(ValidOperationResult)
     })
 
     it("validateDefinition: empty name", () => {

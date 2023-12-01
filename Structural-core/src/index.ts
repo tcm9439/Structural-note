@@ -3,6 +3,7 @@ export * from "./ModuleInit"
 export * from "./common/OrderedList"
 export * from "./common/CommonTypes"
 export * from "./common/Cloneable"
+export * from "./common/OperationResult"
 
 export * from "./note/Note"
 export * from "./note/section/SectionMap"
@@ -18,7 +19,6 @@ export * from "./note/element/structural/StructureDefinition"
 
 export * from "./note/element/structural/attribute/AttributeDefinition"
 export * from "./note/element/structural/attribute/DisplayKey"
-export * from "./note/element/structural/attribute/ValidateResult"
 export * from "./note/element/structural/attribute/exception/AttributeException"
 
 export * from "./note/element/structural/attribute/constrain/Constrain"

@@ -1,5 +1,5 @@
 import { Constrain, ConstrainJson, ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
-import { ValidateResult, ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
+import { OperationResult, ValidOperationResult } from "@/common/OperationResult"
 import { z } from "zod"
 
 export const RequireConstrainJson = ConstrainJson.extend({
@@ -28,9 +28,9 @@ export class RequireConstrain extends Constrain {
         return RequireConstrain.type
     }
     
-    constrainIsValid(): ValidateResult {
+    constrainIsValid(): OperationResult {
         // This constrain is always valid
-        return ValidValidateResult
+        return ValidOperationResult
     }
 
     /**
@@ -38,9 +38,9 @@ export class RequireConstrain extends Constrain {
      * 1. If the value is null or undefined, it is invalid
      * 2. If the value is a string, and it is empty, it is invalid
      */
-    validate(value: any): ValidateResult {
+    validate(value: any): OperationResult {
         if (!this._required) {
-            return ValidValidateResult;
+            return ValidOperationResult;
         }
 
         let isEmpty = false
@@ -59,7 +59,7 @@ export class RequireConstrain extends Constrain {
             }
         }
 
-        return ValidValidateResult;
+        return ValidOperationResult;
     }
 
     saveAsJson(): z.infer<typeof RequireConstrainJson> {

@@ -5,7 +5,7 @@ import { StringAttribute } from "@/note/element/structural/attribute/type/String
 import { StructuralElement } from "@/note/element/structural/StructuralElement"
 import { StructureDefinition } from "@/note/element/structural/StructureDefinition"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
-import { ValidValidateResult } from "@/note/element/structural/attribute/ValidateResult"
+import { ValidOperationResult } from "@/common/OperationResult"
 import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinConstrain"
 import { EditPath } from "@/note/util/EditPath"
 import { MaxConstrain } from "@/note/element/structural/attribute/constrain/MaxConstrain"
@@ -52,7 +52,7 @@ describe('StructuralElement', () => {
         element.setValue(num_attr, num_value)
 
         let result = element.validate()
-        expect(result).toBe(ValidValidateResult)
+        expect(result).toBe(ValidOperationResult)
     })
 
     it("validate: not passing the constrain", () => {

@@ -6,13 +6,16 @@ pub struct OpenedFile {
     // Abs path to file
     pub file_path: PathBuf,
     pub window_id: String,
+    pub finish_init: bool,
 }
 
 impl OpenedFile {
     pub fn new(file_path: &Path, window_id: String) -> OpenedFile {
+        print!("new OpenedFile: {:?}", file_path);
         OpenedFile {
             file_path: fs::canonicalize(file_path).expect("Invalid file path").to_path_buf(),
             window_id,
+            finish_init: false,
         }
     }
 
@@ -33,6 +36,7 @@ impl OpenedFileList {
     }
 
     pub fn add_file(&mut self, file: OpenedFile) {
+        println!("add_file: {:?}", file);
         self.files.push(file);
     }
 
@@ -40,9 +44,32 @@ impl OpenedFileList {
         self.files.retain(|f| f.file_path != file.file_path);
     }
 
-    pub fn already_open(&self, file_path: &str) -> bool {
+    pub fn remove_file_by_window_id(&mut self, window_id: &str) {
+        println!("remove_file_by_window_id: {}", window_id);
+        self.files.retain(|f| f.window_id != window_id);
+    }
+
+    /// Check if a file is already opened and initialized
+    pub fn already_open(&self, file_path: &str) -> (bool, bool) {
         let file_path: PathBuf = fs::canonicalize(file_path).expect("Invalid file path").to_path_buf();
-        self.files.iter().any(|f| f.file_path == file_path)
+        match self.files.iter().find(|f| f.file_path == file_path) {
+            Some(file) => {
+                (true, file.finish_init)
+            },
+            None => (false, false),
+        }
+    }
+
+    pub fn init_file(&mut self, file_path: &str) -> Option<&mut OpenedFile> {
+        let file_path: PathBuf = fs::canonicalize(file_path).expect("Invalid file path").to_path_buf();
+        match self.files.iter_mut().find(|f| f.file_path == file_path) {
+            Some(file) => {
+                println!("init_file: {:?}", file);
+                file.finish_init = true;
+                Some(file)
+            },
+            None => None,
+        }
     }
 
     pub fn get_file(&self, window_id: &str) -> Option<&OpenedFile> {
@@ -110,8 +137,13 @@ mod tests {
         let mut list = OpenedFileList::new();
         let (file, _) = get_test_file();
         list.add_file(file);
-        assert_eq!(true, list.already_open("./src/main.rs"));
-        assert_eq!(false, list.already_open("./src/open_file.rs"));
+
+        let (opened, init_finish) = list.already_open("./src/main.rs");
+        assert_eq!(true, opened);
+        assert_eq!(false, init_finish);
+        let (opened, init_finish) = list.already_open("./src/open_file.rs");
+        assert_eq!(false, opened);
+        assert_eq!(false, init_finish);
     }
 
     #[test]

@@ -2,6 +2,7 @@
 import { EventConstant } from "structural-core"
 import { Icon } from "view-ui-plus"
 import { NoteFileHandler, NoteExportHandler } from "@/composables/file/NoteFileHandler"
+import { appWindow } from "@tauri-apps/api/window"
 const { $viewState, $emitter } = useNuxtApp()
 
 const editing_note_name = ref<string>($viewState.editing_note_name)
@@ -13,7 +14,7 @@ async function menuSelectHandler(menu_item: string){
     console.log("menu select", menu_item)
     switch (menu_item){
         case "open-file":
-            NoteFileHandler.openNote()
+            NoteFileHandler.openNote(appWindow.label)
             break
         case "save-file":
             NoteFileHandler.saveNote()
@@ -32,9 +33,9 @@ async function menuSelectHandler(menu_item: string){
 function openNoteHandler(){
     editing_note_name.value = $viewState.editing_note_name
 }
-$emitter.on(EventConstant.OPEN_NOTE, openNoteHandler);
+$emitter.on(EventConstant.NOTE_OPENED, openNoteHandler);
 onBeforeUnmount(() => {
-    $emitter.off(EventConstant.OPEN_NOTE, openNoteHandler);
+    $emitter.off(EventConstant.NOTE_OPENED, openNoteHandler);
 })
 </script>
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, Note, AttributeDefinition, AttrTypeHelper, AttrTypeNameAndInstance, AttributeType, ConstrainTypeToClassMap, ValidValidateResult, ConstrainType } from "structural-core"
+import { EditPath, Note, AttributeDefinition, AttrTypeHelper, AttrTypeNameAndInstance, AttributeType, ConstrainTypeToClassMap, ValidOperationResult, ConstrainType } from "structural-core"
 import { getAttrConstrainEditComponents, type AttrConstrainEditComponent, getGroupedAttrConstrain } from "@/composables/active-data/Constrain"
 
 const props = defineProps<{
@@ -113,7 +113,7 @@ const has_default_value = computed({
         }
     }
 })
-const default_value_validate_result = ref(ValidValidateResult)
+const default_value_validate_result = ref(ValidOperationResult)
 const default_value = computed({
     get: () => attr_def.default_value_for_attr,
     set: (v) => { 
