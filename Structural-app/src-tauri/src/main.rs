@@ -22,7 +22,7 @@ impl AppState {
 /// If the file is already opened, return false
 #[tauri::command]
 fn try_open_file(state: tauri::State<AppState>, filepath: String, window_id: String) -> bool {
-    let file = OpenedFile::new_from_str(&filepath, window_id);
+    let file = OpenedFile::new(&filepath, window_id);
     let mut opened_files = state.open_files.lock().unwrap();
     let (opened, init_finish) = opened_files.already_open(&filepath);
     if opened && init_finish {
@@ -39,22 +39,22 @@ fn try_open_file(state: tauri::State<AppState>, filepath: String, window_id: Str
 }
 
 #[tauri::command]
-fn is_file_already_open(state: tauri::State<AppState>, filepath: &str) -> bool {
+fn is_file_already_open(state: tauri::State<AppState>, filepath: String) -> bool {
     let opened_files = state.open_files.lock().unwrap();
-    let (opened, _init_finish) = opened_files.already_open(filepath);
+    let (opened, _init_finish) = opened_files.already_open(&filepath);
     println!("is_file_already_open: {}", opened);
     opened
 }
 
 #[tauri::command]
-fn remove_opened_file(state: tauri::State<AppState>, window_id: &str) {
+fn remove_opened_file(state: tauri::State<AppState>, window_id: String) {
     let mut opened_files = state.open_files.lock().unwrap();
-    opened_files.remove_file_by_window_id(window_id);
+    opened_files.remove_file_by_window_id(&window_id);
 }
 
 #[tauri::command]
 fn get_opened_note_for_window(state: tauri::State<AppState>, window_id: String) -> String {
-    match state.open_files.lock().unwrap().get_file(&window_id) {
+    match state.open_files.lock().unwrap().get_file_by_window_id(&window_id) {
         Some(opened_file) => opened_file.file_path.to_str().unwrap().to_string(),
         None => String::from(""),
     }
@@ -66,7 +66,7 @@ fn on_window_event_handler(event: tauri::GlobalWindowEvent) {
         println!("Window {:?} close requested", window_id);
         let state: tauri::State<AppState> = event.window().state();
         let mut opened_files = state.open_files.lock().unwrap();
-        opened_files.remove_file_by_window_id(&window_id);
+        opened_files.remove_file_by_window_id(window_id);
     }
 }
 

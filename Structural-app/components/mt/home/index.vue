@@ -70,27 +70,6 @@ const unlisten_drop_file = await appWindow.onFileDropEvent(async (event) => {
     }
 })
 
-// const unlisten_drop_file = await listen(TauriEvent.WINDOW_FILE_DROP, async (event) => {
-//     console.log(`Got event in window ${event.windowLabel}, payload: ${event.payload}`)
-//     if (window_id !== event.windowLabel){
-//         console.log("Not event for this window. Skip.")
-//         return
-//     }
-
-//     let selected_open_path = NoteFileHandler.getPathFromSelectedFiles(event.payload)
-//     console.log(`Selected open path: ${selected_open_path}`)
-
-//     let already_open: boolean = await invoke("is_file_already_open", { filepath: selected_open_path })
-//     if (already_open){
-//         console.error("Fail to add opened file.")
-//     } else {
-//         console.log("create new window..")
-//         let new_window_id = WindowUtil.generateNewWindowId()
-//         await invoke("try_open_file", { windowId: new_window_id, filepath: selected_open_path })
-//         WindowUtil.createNewWindow(new_window_id)
-//     }
-// })
-
 onBeforeUnmount(() => {
     $emitter.off(EventConstant.NOTE_OPENED, noteOpenedHandler)
     unlisten_drop_file()
