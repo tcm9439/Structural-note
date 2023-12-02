@@ -4,6 +4,7 @@ export * from "./common/OrderedList"
 export * from "./common/CommonTypes"
 export * from "./common/Cloneable"
 export * from "./common/OperationResult"
+export * from "./common/Logger"
 
 export * from "./note/Note"
 export * from "./note/section/SectionMap"

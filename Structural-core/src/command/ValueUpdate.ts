@@ -1,4 +1,4 @@
-import { ICommand } from "@/command/ICommand";
+import { ICommand } from "@/command/ICommand"
 
 export class ValueUpdateCommand implements ICommand {
     private _old_value: any

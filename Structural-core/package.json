@@ -36,6 +36,7 @@
         "@tauri-apps/api": "^1.4.0",
         "lodash": "^4.17.21",
         "tauri-fs-util": "file:/Users/maisytse/Documents/Workspace/ts-util/tauri-fs-util",
+        "tauri-plugin-log-api": "github:tauri-apps/tauri-plugin-log#v1",
         "uuid": "^9.0.0",
         "zod": "^3.22.2"
     }

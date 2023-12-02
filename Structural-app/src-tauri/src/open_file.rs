@@ -1,7 +1,10 @@
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::fs;
+// use log::{debug, info, warn, error};
 
+/// A file opened by one window of the app
+/// One file can only be opened by one window at a time
 #[derive(PartialEq,Clone,Debug)]
 pub struct OpenedFile {
     // Abs path to file
@@ -19,6 +22,7 @@ impl OpenedFile {
         }
     }
 
+    /// Get the absolute path of a file
     pub fn get_full_path(file_path: &str) -> PathBuf {
         fs::canonicalize(file_path).expect("Invalid file path").to_path_buf()
     }

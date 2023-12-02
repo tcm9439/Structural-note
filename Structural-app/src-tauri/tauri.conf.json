@@ -31,7 +31,8 @@
       "window": {
         "all": false,
         "create": true,
-        "setTitle": true
+        "setTitle": true,
+        "close": true
       },
       "path": {
         "all": true

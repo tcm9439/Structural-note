@@ -6,7 +6,7 @@
  -->
 
 <script setup lang="ts">
-import { Note, EventConstant } from "structural-core"
+import { Note, EventConstant, Logger } from "structural-core"
 import { NoteFileHandler } from "@/composables/file/NoteFileHandler"
 const { $emitter, $viewState } = useNuxtApp()
 import { appWindow } from "@tauri-apps/api/window"
@@ -70,9 +70,26 @@ const unlisten_drop_file = await appWindow.onFileDropEvent(async (event) => {
     }
 })
 
+// # listen to close window request event
+const unlisten_close_window = await appWindow.onCloseRequested(async (event) => {
+    Logger.info("Close window request.")
+    if (editing_note.value != null){
+        // TODO ask to save note
+        // const confirmed = await confirm('Are you sure?');
+        // if (!confirmed) {
+        //     // user did not confirm closing the window; let's prevent it
+        //     event.preventDefault();
+        // }
+        // await NoteFileHandler.saveNote()
+    }
+    // close Logger
+    await Logger.close()
+})
+
 onBeforeUnmount(() => {
     $emitter.off(EventConstant.NOTE_OPENED, noteOpenedHandler)
     unlisten_drop_file()
+    unlisten_close_window()
     invoke("remove_opened_file", { windowId: window_id })
 })
 
