@@ -74,8 +74,8 @@ impl OpenedFileList {
         }
     }
 
-    pub fn init_file(&mut self, file_path: &str) {
-        if let Some(file) = self.get_mut_file_by_filepath(file_path) {
+    pub fn init_window(&mut self, window_id: &str) {
+        if let Some(file) = self.get_mut_file_by_window_id(window_id) {
             file.finish_init = true;
         }
     }
@@ -100,6 +100,14 @@ impl OpenedFileList {
     pub fn get_mut_file_by_filepath(&mut self, file_path: &str) -> Option<&mut OpenedFile> {
         let file_path: PathBuf = OpenedFile::get_full_path(file_path);
         let index = self.file_to_opened_file.get(&file_path);
+        match index {
+            Some(index) => self.files.get_mut(*index),
+            None => None,
+        }
+    }
+
+    pub fn get_mut_file_by_window_id(&mut self, window_id: &str) -> Option<&mut OpenedFile> {
+        let index = self.window_id_to_opened_file.get(window_id);
         match index {
             Some(index) => self.files.get_mut(*index),
             None => None,

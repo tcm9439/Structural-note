@@ -1,6 +1,6 @@
 import { ID } from "@/common/CommonTypes"
 import { Cloneable } from "@/common/Cloneable"
-import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/note/element/structural/attribute/exception/AttributeException"
+import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/exception/AttributeException"
 import { ConstrainType, Constrain } from "@/note/element/structural/attribute/constrain/Constrain"
 
 export enum AttributeTypeEnum {

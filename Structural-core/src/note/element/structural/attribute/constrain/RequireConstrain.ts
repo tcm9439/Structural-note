@@ -1,5 +1,6 @@
 import { Constrain, ConstrainJson, ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
 import { OperationResult, ValidOperationResult } from "@/common/OperationResult"
+import { InvalidJsonFormatException } from "@/exception/ConversionException"
 import { z } from "zod"
 
 export const RequireConstrainJson = ConstrainJson.extend({
@@ -70,12 +71,11 @@ export class RequireConstrain extends Constrain {
         }
     }
 
-    static loadFromJson(json: z.infer<typeof RequireConstrainJson>): RequireConstrain | null {
+    static loadFromJson(json: z.infer<typeof RequireConstrainJson>): RequireConstrain {
         // check if the json_data match the schema
         const result = RequireConstrainJson.safeParse(json)
         if (!result.success) {
-            console.error(result.error)
-            return null
+            throw new InvalidJsonFormatException("RequireConstrain", result.error.toString())
         }
         const valid_json = result.data
 

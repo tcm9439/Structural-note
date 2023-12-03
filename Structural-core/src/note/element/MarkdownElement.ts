@@ -1,5 +1,6 @@
 import { TextElement, TextElementJson } from "@/note/element/TextElement"
 import { z } from "zod"
+import { InvalidJsonFormatException } from "@/exception/ConversionException"
 
 export const MarkdownElementJson = TextElementJson.extend({
     type: z.literal("MdElement"),
@@ -15,12 +16,10 @@ export class MarkdownElement extends TextElement {
         }
     }
 
-    static loadFromJson(json: object): MarkdownElement | null {
+    static loadFromJson(json: object): MarkdownElement {
         let result = MarkdownElementJson.safeParse(json)
         if (!result.success) {
-            console.error("Failed to load TextElement from JSON", json)
-            console.error(result.error)
-            return null
+            throw new InvalidJsonFormatException("MarkdownElement", result.error.toString())
         }
         const element = new MarkdownElement(result.data.content)
         element.id = result.data.id

@@ -1,3 +1,6 @@
+/**
+ * A list of items with order.
+ */
 export class OrderedList<T>{
     private _order: Array<T> = []
 

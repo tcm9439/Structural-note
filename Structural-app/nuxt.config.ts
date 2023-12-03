@@ -5,5 +5,10 @@ export default defineNuxtConfig({
     modules: [
         "nuxt-icon",
         "@vueuse/nuxt",
-    ]
+    ],
+    runtimeConfig: {
+        public: {
+            tauriEnv: false,
+        },
+    },
 });

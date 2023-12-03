@@ -6,6 +6,7 @@ import { Cloneable, CloneUtil } from "@/common/Cloneable"
 import { z } from "zod"
 import { OperationResult, ValidOperationResult } from "@/common/OperationResult"
 import { DisplayKey } from "@/note/element/structural/attribute/DisplayKey"
+import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException"
 
 export const StructureDefinitionJson = z.object({
     id: z.string(),
@@ -94,11 +95,10 @@ export class StructureDefinition extends ComponentBase implements EditPathNode, 
         }
     }
 
-    static loadFromJson(json: object): StructureDefinition | null {
+    static loadFromJson(json: object): StructureDefinition {
         const result = StructureDefinitionJson.safeParse(json)
         if (!result.success) {
-            console.error("Failed to load StructureDefinition from JSON", json)
-            return null
+            throw new InvalidJsonFormatException("StructureDefinition", result.error.toString())
         }
         const valid_json = result.data
         let definition = new StructureDefinition()
@@ -108,9 +108,7 @@ export class StructureDefinition extends ComponentBase implements EditPathNode, 
         let loaded_attr = new Map<string, AttributeDefinition<any>>()
         valid_json.attributes.forEach((attr_json: object) => {
             let attr_def = AttributeDefinition.loadFromJson(attr_json)
-            if (attr_def !== null) {
-                loaded_attr.set(attr_def.id, attr_def)
-            }
+            loaded_attr.set(attr_def.id, attr_def)
         })
 
         // add the attribute definitions in the order
@@ -119,8 +117,7 @@ export class StructureDefinition extends ComponentBase implements EditPathNode, 
             let attr_def = loaded_attr.get(order[i])
             if (attr_def === undefined) {
                 // the attribute definition is not loaded in the previous step
-                // INVALID JSON
-                return null
+                throw new InvalidDataException("StructureDefinition", `Attribute definition with order ${order[i]} not found in loaded attributes`)
             }
             definition.attributes.add(attr_def)
         }

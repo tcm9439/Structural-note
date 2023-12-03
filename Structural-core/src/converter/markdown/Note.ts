@@ -3,6 +3,9 @@ import { Note } from "@/note/Note"
 import { SectionMarkdownConverter } from "@/converter/markdown/Section"
 import { StringBuilder } from "@/converter/ConverterHelper"
 
+/**
+ * The "root" markdown converter for a note.
+ */
 export class NoteMarkdownConverter extends Converter<Note, string>{
     convert(note: Note): string {
         let result = new StringBuilder()

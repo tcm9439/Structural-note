@@ -8,10 +8,9 @@
 <script setup lang="ts">
 import { Note, EventConstant, Logger } from "structural-core"
 import { NoteFileHandler } from "@/composables/file/NoteFileHandler"
-const { $emitter, $viewState } = useNuxtApp()
+const { $emitter, $viewState, $Modal } = useNuxtApp()
 import { appWindow } from "@tauri-apps/api/window"
 import { invoke } from "@tauri-apps/api/tauri"
-import { WindowUtil } from "@/composables/app/window"
 import { Icon } from "view-ui-plus"
 
 const editing_note = ref<Note|null>(null)
@@ -19,15 +18,13 @@ const has_open_note = ref<boolean>(false)
 
 // # init page: check if there is any opened note for this window
 const window_id = appWindow.label
-let note_path: string = await invoke("get_opened_note_for_window", { windowId: window_id })
-console.log(`Init window... Note path: ${note_path}`)
-if (note_path != ""){
-    console.log("Has opened note.")
-    has_open_note.value = true
-    NoteFileHandler.openNote(window_id, note_path)
-} else {
-    console.log("No opened note.")
-    has_open_note.value = false
+try {
+    has_open_note.value = await NoteFileHandler.openInitNoteForThisWindow(window_id)
+} catch (error) {
+    $Modal.error({
+        title: "Fail to open note",
+        content: `${error}`
+    })
 }
 
 // # listen to the note opened event (from here or the menu)
@@ -42,37 +39,24 @@ $emitter.on(EventConstant.NOTE_OPENED, noteOpenedHandler)
 // # listen to the file drop event
 const unlisten_drop_file = await appWindow.onFileDropEvent(async (event) => {
     console.log(`Got event in window ${event.windowLabel}, payload: ${event.payload}`)
-    if (event.payload.type !== 'drop') {
-        return
-    }
-    if (window_id !== event.windowLabel){
-        console.log("Not event for this window. Skip.")
-        return
-    }
-
-    let selected_open_path = NoteFileHandler.getPathFromSelectedFiles(event.payload.paths)
-    console.log(`Selected open path: ${selected_open_path}`)
-
-    let already_open: boolean = await invoke("is_file_already_open", { filepath: selected_open_path })
-    if (already_open){
-        console.error("Fail to add opened file.")
-    } else {
-        if (editing_note.value == null){
-            // open in this window
-            has_open_note.value = true
-            NoteFileHandler.openNote(window_id, selected_open_path)
-        } else {
-            console.log("create new window..")
-            let new_window_id = WindowUtil.generateNewWindowId()
-            await invoke("try_open_file", { windowId: new_window_id, filepath: selected_open_path })
-            WindowUtil.createNewWindow(new_window_id)
+    try {
+        if (event.payload.type != "drop"){
+            return
         }
+        let selected_open_path = NoteFileHandler.getPathFromSelectedFiles(event.payload.paths)
+        console.log(`Selected open path: ${selected_open_path}`)
+        await NoteFileHandler.openNote(window_id, !has_open_note.value, selected_open_path)
+    } catch (error) {
+        $Modal.error({
+            title: "Fail to open note",
+            content: `${error}`
+        })
     }
 })
 
 // # listen to close window request event
 const unlisten_close_window = await appWindow.onCloseRequested(async (event) => {
-    Logger.info("Close window request.")
+    Logger.get().info("Close window request.")
     if (editing_note.value != null){
         // TODO ask to save note
         // const confirmed = await confirm('Are you sure?');
@@ -83,7 +67,7 @@ const unlisten_close_window = await appWindow.onCloseRequested(async (event) => 
         // await NoteFileHandler.saveNote()
     }
     // close Logger
-    await Logger.close()
+    await Logger.get().close()
 })
 
 onBeforeUnmount(() => {

@@ -3,7 +3,7 @@ import { AttributeType } from "@/note/element/structural/attribute/type/Attribut
 import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
 import { AttributeTypeInitializer } from "@/note/element/structural/attribute/type/AttributeTypeInitializer"
-import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/note/element/structural/attribute/exception/AttributeException"
+import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/exception/AttributeException"
 import { ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
 import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain"
 

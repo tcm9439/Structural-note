@@ -1,7 +1,8 @@
 import { TauriFileSystem } from "tauri-fs-util"
 import { open, save } from "@tauri-apps/api/dialog"
 import { basename } from "@tauri-apps/api/path"
-import { Note, EventConstant, NoteMarkdownConverter, type OperationResult } from "structural-core"
+import { Note, EventConstant, NoteMarkdownConverter, Logger } from "structural-core"
+import { WindowUtil } from "@/composables/app/window"
 import { appWindow } from "@tauri-apps/api/window"
 import { invoke } from '@tauri-apps/api/tauri'
 
@@ -137,16 +138,40 @@ export class NoteFileHandler {
             console.error(err);
         }
     }
+
+    /**
+     * Call when app init.
+     * Check if there is a note for this window to open.
+     */
+    static async openInitNoteForThisWindow(this_window_id: string): Promise<boolean>{
+        try {
+            let note_path: string = await invoke("get_opened_note_for_window", { windowId: this_window_id })
+            Logger.get().debug(`Init window with note path: ${note_path}`)
+            if (note_path != ""){
+                Logger.get().debug("Has opened note.")
+                NoteFileHandler.openNote(this_window_id, true, note_path, true)
+                return true
+            } else {
+                Logger.get().debug("No opened note.")
+                return false
+            }
+        } catch (error){
+            Promise.reject(error)
+        }
+        return false
+    }
     
     /**
+     * Open a note.
      * Open a dialog to ask for an exiting note to open.
      * The chosen path is kept as save-path which is used to save current file.
+     * If this window already has a note opened, open it in another window.
      */
-    static async openNote(window_id: string, filepath?: string | null){
+    static async openNote(this_window_id: string, open_in_this_window: boolean, filepath?: string | null, init_mode: boolean = false){
         const { $viewState, $emitter } = useNuxtApp()
 
         try {
-        // get the filepath from argument or dialog
+            // get the filepath from argument or dialog
             let selected_open_path: string | string[] | null
             if (filepath != null){
                 selected_open_path = filepath
@@ -166,23 +191,37 @@ export class NoteFileHandler {
             }
 
             // check if the path is already opened
-            let success: boolean = await invoke("try_open_file", { windowId: window_id, filepath: selected_open_path })
-            if (!success){
-                return Promise.reject("File is already opened in another window.")
+            if (!init_mode){
+                let already_opened: boolean = await invoke("is_file_already_open", { filepath: selected_open_path })
+                if (already_opened){
+                    return Promise.reject("File is already opened in another window.")
+                }
             }
 
-            console.log("selected_open_path", selected_open_path)
+            let window_id = this_window_id
+            if (open_in_this_window){
+                // selected_open_path === String
+                $viewState.editing_note = await NoteFileHandler.loadFile(selected_open_path)
+                console.log("note:", $viewState.editing_note)
+                // set default save path as the open path
+                $viewState.save_path = selected_open_path
+                // emit the open note event
+                $emitter.emit(EventConstant.NOTE_OPENED)
+                appWindow.setTitle($viewState.editing_note.title)
+            } else {
+                console.log("create new window..")
+                window_id = WindowUtil.generateNewWindowId()
+                WindowUtil.createNewWindow(window_id)
+            }
 
-            // selected_open_path === String
-            $viewState.editing_note = await NoteFileHandler.loadFile(selected_open_path)
-            console.log("note:", $viewState.editing_note)
-            // set default save path as the open path
-            $viewState.save_path = selected_open_path
-            // emit the open note event
-            $emitter.emit(EventConstant.NOTE_OPENED)
-        } catch (err) {
-            // TODO popup error prompt
-            console.error(err);
+            // update the file state
+            if (!init_mode){
+                // init mode => already added to file list
+                await invoke("add_file", { windowId: window_id, filepath: selected_open_path })
+            } 
+            await invoke("init_file", { windowId: window_id, filepath: selected_open_path })
+        } catch (error) {
+            Promise.reject(error)
         }
     }
 }

@@ -1,3 +1,6 @@
+/**
+ * A string util for building string / html / md with line breaks, indentations, etc.
+ */
 export class StringBuilder {
     private content: string[] = []
     private current_row: string = ""

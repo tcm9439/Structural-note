@@ -74,5 +74,5 @@ export abstract class Constrain extends ComponentBase implements EditPathNode {
 
     abstract saveAsJson(): z.infer<typeof ConstrainJson>
 
-    // static loadFromJson(json: z.infer<typeof ConstrainJson>): Constrain | null {}
+    // static loadFromJson(json: z.infer<typeof ConstrainJson>): Constrain {}
 }

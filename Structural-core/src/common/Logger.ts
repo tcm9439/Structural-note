@@ -13,42 +13,107 @@ type LoggerModule = {
     attachConsole(): Promise<any>
 }
 
-export class Logger {
-    private static module: LoggerModule
-    private static detached_function: any
-    private static instance: Logger
+export abstract class Logger {
+    protected static instance: Logger
+    public static get(): Logger {
+        if (!Logger.instance) {
+            WebLogger.initLogger()
+        }
+        return Logger.instance
+    }
 
-    private constructor() {}
+    abstract error(message: string, options?: LogOptions): Promise<void>
+    abstract warn(message: string, options?: LogOptions): Promise<void>
+    abstract info(message: string, options?: LogOptions): Promise<void>
+    abstract debug(message: string, options?: LogOptions): Promise<void>
+    abstract trace(message: string, options?: LogOptions): Promise<void>
+    abstract close(): Promise<void>
+}
+
+/**
+ * A logger implementation for the web (Nuxt only env). 
+ */
+export class WebLogger extends Logger {
+    private constructor() {
+        super()
+    }
 
     static async initLogger(){
-        if (!this.instance) {
-            this.instance = new Logger()
+        if (!Logger.instance) {
+            Logger.instance = new WebLogger()
+        }
+    }
+
+    async error(message: string, options?: LogOptions): Promise<void> {
+        console.error(message)
+    }
+
+    async warn(message: string, options?: LogOptions): Promise<void> {
+        console.warn(message)
+    }
+
+    async info(message: string, options?: LogOptions): Promise<void> {
+        console.info(message)
+    }
+
+    async debug(message: string, options?: LogOptions): Promise<void> {
+        console.debug(message)
+    }
+
+    async trace(message: string, options?: LogOptions): Promise<void> {
+        console.trace(message)
+    }
+
+    async close(): Promise<void> {
+        // Nothing to do here
+    }
+}
+
+/**
+ * A wrapper class for the tauri-plugin-log-api.
+ * As I need to import that module dynamically due to error related to type: "module"
+ */
+export class TauriLogger extends Logger {
+    private static module: LoggerModule
+    private static detached_function: any
+
+    private constructor() {
+        super()
+    }
+
+    static async initLogger(){
+        if (!Logger.instance) {
+            Logger.instance = new TauriLogger()
             this.module = await import("tauri-plugin-log-api")
             this.detached_function = await this.module.attachConsole()
         }
     }
 
-    static async error(message: string) {
-        await this.module.error(message)
+    static getInstance(): TauriLogger {
+        return this.instance
     }
 
-    static async warn(message: string) {
-        await this.module.warn(message)
+    async error(message: string) {
+        await TauriLogger.module.error(message)
     }
 
-    static async info(message: string) {
-        await this.module.info(message)
+    async warn(message: string) {
+        await TauriLogger.module.warn(message)
     }
 
-    static async debug(message: string) {
-        await this.module.debug(message)
+    async info(message: string) {
+        await TauriLogger.module.info(message)
     }
 
-    static async trace(message: string) {
-        await this.module.trace(message)
+    async debug(message: string) {
+        await TauriLogger.module.debug(message)
     }
 
-    static async close(){
-        this.detached_function()
+    async trace(message: string) {
+        await TauriLogger.module.trace(message)
+    }
+
+    async close(){
+        await TauriLogger.detached_function()
     }
 }

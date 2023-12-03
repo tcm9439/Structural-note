@@ -2,6 +2,8 @@ import { Constrain, ConstrainType, ConstrainJson } from "@/note/element/structur
 import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinConstrain"
 import { OperationResult, ValidOperationResult } from "@/common/OperationResult"
 import { z } from "zod"
+import { InvalidJsonFormatException } from "@/exception/ConversionException"
+
 
 export const MaxConstrainJson = ConstrainJson.extend({
     type: z.literal("MaxConstrain"),
@@ -80,12 +82,11 @@ export class MaxConstrain<T> extends Constrain {
         }
     }
 
-    static loadFromJson(json: z.infer<typeof MaxConstrainJson>): MaxConstrain<any> | null {
+    static loadFromJson(json: z.infer<typeof MaxConstrainJson>): MaxConstrain<any> {
         // check if the json_data match the schema
         const result = MaxConstrainJson.safeParse(json)
         if (!result.success) {
-            console.error(result.error)
-            return null
+            throw new InvalidJsonFormatException("MaxConstrain", result.error.toString())
         }
         const valid_json = result.data
 

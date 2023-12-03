@@ -24,21 +24,21 @@ impl AppState {
 /// Add a file to the list of opened files
 /// If the file is already opened, return false
 #[tauri::command]
-fn try_open_file(state: tauri::State<AppState>, filepath: String, window_id: String) -> bool {
+fn add_file(state: tauri::State<AppState>, filepath: String, window_id: String) -> bool {
     let file = OpenedFile::new(&filepath, window_id);
     let mut opened_files = state.open_files.lock().unwrap();
-    let (opened, init_finish) = opened_files.already_open(&filepath);
-    if opened && init_finish {
+    let (opened, _init_finish) = opened_files.already_open(&filepath);
+    if opened {
         false
-    } else if opened && !init_finish {
-        // this is a call to init the window
-        opened_files.init_file(&filepath);
-        true
     } else {
-        // file is not opened by other window
         opened_files.add_file(file);
         true
     }
+}
+
+#[tauri::command]
+fn init_file(state: tauri::State<AppState>, window_id: String) {
+    state.open_files.lock().unwrap().init_window(&window_id);
 }
 
 /// Check if a file is already opened in any window
@@ -107,7 +107,7 @@ fn main() {
         // add the app state to tauri context
         .manage(app_state)
         // register commands
-        .invoke_handler(tauri::generate_handler![try_open_file, remove_opened_file, is_file_already_open, get_opened_note_for_window])
+        .invoke_handler(tauri::generate_handler![add_file, init_file, remove_opened_file, is_file_already_open, get_opened_note_for_window])
         // register window event handler 
         .on_window_event(on_window_event_handler)
         .run(tauri::generate_context!())

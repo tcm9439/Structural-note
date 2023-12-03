@@ -11,12 +11,12 @@ import { NoteFileHandler } from "@/composables/file/NoteFileHandler"
 const show_error_modal = ref(false)
 const error_content = ref("")
 
-// # open note
+// # open note button
 const opening_note = ref(false)
 async function openNote(){
     opening_note.value = true
     try {
-        await NoteFileHandler.openNote(appWindow.label)
+        await NoteFileHandler.openNote(appWindow.label, true)
     } catch (error) {
         error_content.value = `Fail to open note: ${error}`
         show_error_modal.value = true

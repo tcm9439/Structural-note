@@ -1,5 +1,5 @@
 import { AttributeType, AttributeTypeEnum } from "@/note/element/structural/attribute/type/AttributeType"
-import { InvalidTypeConversionException } from '@/note/element/structural/attribute/exception/AttributeException'
+import { InvalidTypeConversionException } from '@/exception/AttributeException'
 import { ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
 
 export class StringAttribute extends AttributeType<string> {    

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { InvalidTypeConversionForDataException, InvalidTypeConversionException } from '@/note/element/structural/attribute/exception/AttributeException'
+import { InvalidTypeConversionForDataException, InvalidTypeConversionException } from '@/exception/AttributeException'
 
 describe('InvalidTypeConversionForDataException', () => {
 	it('constructor', () => {

@@ -5,6 +5,7 @@ import { EditingComponent } from "@/note/util/EditingComponent"
 import { StructuralElement } from "@/note/element/structural/StructuralElement"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
 import { ValidOperationResult, OperationResult } from "@/common/OperationResult"
+import { Logger } from "@/common/Logger"
 
 export type AttrDefCallback = (new_attr: AttributeDefinition<any>) => void
 export type StructDefCallback = (new_struct: StructureDefinition) => void
@@ -176,11 +177,11 @@ export class StructDefEditContext {
 
     commitAttr() {
         if (this.state != StructDefEditState.EDITING_ATTR){
-            console.warn("Commit attr when not editing attr")
+            Logger.get().warn("Commit attr when not editing attr")
             return 
         }
         if (this.editing_attr_def == null){
-            console.warn("Commit attr when editing attr is null")
+            Logger.get().warn("Commit attr when editing attr is null")
             return
         }
         if (this.edit_queue.hasPendingItem()) {
@@ -191,11 +192,11 @@ export class StructDefEditContext {
 
     rollbackAttr() {
         if (this.state != StructDefEditState.EDITING_ATTR){
-            console.warn("Rollback attr when not editing attr")
+            Logger.get().warn("Rollback attr when not editing attr")
             return 
         }
         if (this.editing_attr_def == null){
-            console.warn("Rollback attr when editing attr is null")
+            Logger.get().warn("Rollback attr when editing attr is null")
             return
         }
         let attr_id = this.editing_attr_def.editing.id
@@ -328,7 +329,7 @@ export class StructDefEditEventElementHandler {
         while (edit_queue.hasConfirmedItem()){
             let edit_queue_item = edit_queue.consume()
             if (edit_queue_item == null){
-                console.warn("Edit queue item is null")
+                Logger.get().warn("Edit queue item is null")
                 return
             }
             switch(edit_queue_item.operation){

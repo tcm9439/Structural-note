@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, StringAttribute, StructuralElement, MarkdownElement, MarkdownAttribute, RequireConstrain } from "structural-core"
+import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, StringAttribute, StructuralElement, MarkdownElement, MarkdownAttribute, RequireConstrain, Logger } from "structural-core"
 
 let test_note: Ref<Note> = ref(new Note("My first note")) as Ref<Note>
 

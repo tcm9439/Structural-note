@@ -6,6 +6,10 @@ export * from "./common/Cloneable"
 export * from "./common/OperationResult"
 export * from "./common/Logger"
 
+export * from "./exception/AppException"
+export * from "./exception/ConversionException"
+export * from "./exception/AttributeException"
+
 export * from "./note/Note"
 export * from "./note/section/SectionMap"
 export * from "./note/section/NoteSection"
@@ -20,7 +24,6 @@ export * from "./note/element/structural/StructureDefinition"
 
 export * from "./note/element/structural/attribute/AttributeDefinition"
 export * from "./note/element/structural/attribute/DisplayKey"
-export * from "./note/element/structural/attribute/exception/AttributeException"
 
 export * from "./note/element/structural/attribute/constrain/Constrain"
 export * from "./note/element/structural/attribute/constrain/ConstrainMap"

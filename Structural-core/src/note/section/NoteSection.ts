@@ -6,6 +6,7 @@ import { NoteElement, NoteElementJson, ElementType } from "@/note/element/NoteEl
 import { TextElement } from "@/note/element/TextElement"
 import { MarkdownElement } from "@/note/element/MarkdownElement"
 import { z } from "zod"
+import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException"
 
 export enum SectionType {
     BASE = "BASE",
@@ -81,11 +82,10 @@ export class NoteSection extends ComponentBase implements EditPathNode {
         }
     }
 
-    static loadFromJson(json: object): NoteSection | null {
+    static loadFromJson(json: object): NoteSection {
         let result = NoteSectionJson.safeParse(json)
         if (!result.success) {
-            console.error(result.error)
-            return null
+            throw new InvalidJsonFormatException("NoteSection", result.error.toString())
         }
         const valid_json = result.data
         const section = new NoteSection(valid_json.title)
@@ -93,20 +93,16 @@ export class NoteSection extends ComponentBase implements EditPathNode {
 
         let loaded_elements: Map<UUID, NoteElement> = new Map()
         valid_json.elements.forEach((element_json) => {
-            let element: NoteElement | null
+            let element: NoteElement
             if (element_json.type === "TextElement") {
                 element = TextElement.loadFromJson(element_json)
             } else if (element_json.type === "MdElement") {
                 element = MarkdownElement.loadFromJson(element_json)
             } else {
-                console.error(`Unknown element type: ${element_json.type}`)
-                return null
+                throw new InvalidDataException("NoteSection", `Unknown element type: ${element_json.type}`)
             }
 
-            if (element !== null) {
-                // section.elements.add(element)
-                loaded_elements.set(element.id, element)
-            }
+            loaded_elements.set(element.id, element)
         })
 
         // add elements in order
@@ -114,8 +110,7 @@ export class NoteSection extends ComponentBase implements EditPathNode {
             let element_id = valid_json.elements_order[i]
             let element = loaded_elements.get(element_id)
             if (element === undefined) {
-                console.error(`Fail to load element: ${element_id}`)
-                return null
+                throw new InvalidDataException("NoteSection", `Element not found. ID: ${element_id}`)
             }
             section.elements.add(element)
         }

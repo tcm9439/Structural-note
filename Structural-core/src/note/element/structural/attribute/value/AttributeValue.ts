@@ -1,8 +1,10 @@
+import { Logger } from "@/common/Logger"
 import { UUID, ID } from "@/common/CommonTypes"
 import { ComponentBase } from "@/note/util/ComponentBase"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
 import { EditPath, EditPathNode, EndOfEditPathError } from "@/note/util/EditPath"
-import { InvalidTypeConversionForDataException, NullAttrTypeException } from "@/note/element/structural/attribute/exception/AttributeException"
+import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException"
+import { InvalidTypeConversionForDataException, NullAttrTypeException } from "@/exception/AttributeException"
 import { OperationResult, ValidOperationResult } from "@/common/OperationResult"
 import { z } from "zod"
 
@@ -100,7 +102,7 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
             return old_attr_def.attribute_type.convertTo(new_attr_def.attribute_type, value, mode)
         } catch (error) {
             if (error instanceof InvalidTypeConversionForDataException) {
-                console.warn(`Failed to convert attribute value with id ${old_attr_def.id} to new type: ${error.message}`)
+                Logger.get().warn(`Failed to convert attribute value with id ${old_attr_def.id} to new type: ${error.message}`)
             }
             return null
         }
@@ -130,24 +132,21 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
         }
     }
 
-    static loadFromJson(json: object, attribute_def: AttributeDefinition<any>): AttributeValue<any> | null {
+    static loadFromJson(json: object, attribute_def: AttributeDefinition<any>): AttributeValue<any> {
         // check if the json_data match the schema
         const result = AttributeValueJson.safeParse(json)
         if (!result.success) {
-            console.error(result.error)
-            return null
+            throw new InvalidJsonFormatException("AttributeValue", result.error.toString())
         }
         const valid_json = result.data
 
         // check if the attribute definition match
         if (valid_json.definition_id !== attribute_def.id) {
-            console.error("AttrValue loadFromJson: Definition id not match")
-            return null
+            throw new InvalidDataException("AttributeValue", `Definition id not match. Expected: ${attribute_def.id}, Actual: ${valid_json.definition_id}`)
         }
         
         if (result.data.value == null){
-            console.error("AttrValue loadFromJson: No value")
-            return null
+            throw new InvalidDataException("AttributeValue", "Value cannot be null")
         }
 
         const value = new AttributeValue(attribute_def, valid_json.value)

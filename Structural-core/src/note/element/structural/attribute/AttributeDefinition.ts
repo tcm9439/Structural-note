@@ -1,3 +1,4 @@
+import { Logger } from "@/common/Logger"
 import { UUID } from "@/common/CommonTypes"
 import { ComponentBase } from "@/note/util/ComponentBase"
 import { CloneUtil, Cloneable } from "@/common/Cloneable"
@@ -5,10 +6,12 @@ import { AttributeType } from "@/note/element/structural/attribute/type/Attribut
 import { Constrain, ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
 import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain"
 import { OperationResult, ValidOperationResult } from "@/common/OperationResult"
-import { ForbiddenConstrain, IncompatibleConstrain } from "@/note/element/structural/attribute/exception/AttributeException"
+import { InvalidJsonFormatException } from "@/exception/ConversionException"
+import { ForbiddenConstrain, IncompatibleConstrain } from "@/exception/AttributeException"
 import { EditPath, EditPathNode } from "@/note/util/EditPath"
 import { z } from "zod"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
+
 
 export const AttributeDefinitionJson = z.object({
     id: z.string(),
@@ -185,7 +188,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
                 if (new_attr_type.allowConstrain(constrain)) {
                     let error = new_attr_def.addConstrain(constrain)
                     if (error !== null) {
-                        console.error("Fail to add the constrain to the new attribute definition.", error)
+                        Logger.get().error(`Fail to add the constrain to the new attribute definition. ${error}`)
                     }
                 }
             })
@@ -226,11 +229,10 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         }
     }
 
-    static loadFromJson(json: object): AttributeDefinition<any> | null {
+    static loadFromJson(json: object): AttributeDefinition<any> {
         const result = AttributeDefinitionJson.safeParse(json)
         if (!result.success) {
-            console.error("Failed to load AttributeDefinition from JSON", result.error)
-            return null
+            throw new InvalidJsonFormatException("AttributeDefinition", result.error.toString())
         }
         const valid_json = result.data
         const attribute_type = AttributeType.getAttrType(valid_json.attribute_type)

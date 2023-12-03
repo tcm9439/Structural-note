@@ -4,6 +4,7 @@ import { AttributeDefinition } from "@/note/element/structural/attribute/Attribu
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
 import { BooleanAttribute } from "@/note/element/structural/attribute/type/BooleanAttribute"
 import { EditPath } from "@/note/util/EditPath"
+import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException"
 
 describe('StructureDefinition', () => {
 	let definition: StructureDefinition
@@ -164,8 +165,9 @@ describe('StructureDefinition', () => {
                 }
             ]
         }
-        let new_definition = StructureDefinition.loadFromJson(json)
-        expect(new_definition).toEqual(null)
+        expect(()=>{
+            StructureDefinition.loadFromJson(json)
+        }).toThrowError(InvalidDataException)
     })
 
     it("loadFromJson: invalid json data type", () => {
@@ -174,8 +176,9 @@ describe('StructureDefinition', () => {
             attribute_order: [],
             attributes: []
         }
-        let new_definition = StructureDefinition.loadFromJson(json)
-        expect(new_definition).toEqual(null)
+        expect(()=>{
+            StructureDefinition.loadFromJson(json)
+        }).toThrowError(InvalidJsonFormatException)
     })
 
     it("validateDefinition: valid", () => {

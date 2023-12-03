@@ -1,6 +1,7 @@
 import { MaxConstrain } from "@/index"
 import { Constrain, ConstrainType, ConstrainJson } from "@/note/element/structural/attribute/constrain/Constrain"
 import { OperationResult, ValidOperationResult } from "@/common/OperationResult"
+import { InvalidJsonFormatException } from "@/exception/ConversionException"
 import { z } from "zod"
 
 export const MinConstrainJson = ConstrainJson.extend({
@@ -79,12 +80,11 @@ export class MinConstrain<T> extends Constrain {
         }
     }
 
-    static loadFromJson(json: z.infer<typeof MinConstrainJson>): MinConstrain<any> | null {
+    static loadFromJson(json: z.infer<typeof MinConstrainJson>): MinConstrain<any> {
         // check if the json_data match the schema
         const result = MinConstrainJson.safeParse(json)
         if (!result.success) {
-            console.error(result.error)
-            return null
+            throw new InvalidJsonFormatException("MinConstrain", result.error.toString())
         }
         const valid_json = result.data
 

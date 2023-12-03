@@ -1,5 +1,6 @@
 import { NoteElement, NoteElementJson } from "@/note/element/NoteElement"
 import { z } from "zod"
+import { InvalidJsonFormatException } from "@/exception/ConversionException"
 
 export const TextElementJson = NoteElementJson.extend({
     type: z.literal("TextElement"),
@@ -35,12 +36,10 @@ export class TextElement extends NoteElement {
         }
     }
 
-    static loadFromJson(json: object): TextElement | null {
+    static loadFromJson(json: object): TextElement {
         let result = TextElementJson.safeParse(json)
         if (!result.success) {
-            console.error("Failed to load TextElement from JSON", json)
-            console.error(result.error)
-            return null
+            throw new InvalidJsonFormatException("TextElement", result.error.toString())
         }
         const element = new TextElement(result.data.content)
         element.id = result.data.id

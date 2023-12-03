@@ -1,4 +1,7 @@
-
+/**
+ * Represent the result of an operation (function).
+ * Useful for displaying error messages.
+ */
 export type OperationResult = {
     valid: boolean;
     invalid_message: string;

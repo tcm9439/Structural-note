@@ -1,3 +1,4 @@
+import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException"
 import { ComponentBase } from "@/note/util/ComponentBase"
 import { UUID } from "@/common/CommonTypes"
 import { OrderedComponents, ComponentsOrderJson } from "@/note/util/OrderedComponents"
@@ -61,11 +62,10 @@ export class Note extends ComponentBase implements EditPathNode {
         }
     }
 
-    static loadFromJson(title: string, json: object): Note | null {
+    static loadFromJson(title: string, json: object): Note {
         let result = NoteJson.safeParse(json)
         if (!result.success) {
-            console.error(result.error)
-            return null
+            throw new InvalidJsonFormatException("Note", result.error.toString())
         }
         const valid_json = result.data
         
@@ -81,22 +81,18 @@ export class Note extends ComponentBase implements EditPathNode {
             } else if (section_json.type === "StructuralSection") {
                 section = StructuralSection.loadFromJson(section_json)
             } else {
-                console.error(`Unknown section type: ${section_json.type}`)
-                return null
+                throw new InvalidDataException("Note", `Unknown section type: ${section_json.type}`)
             }
-
-            if (section !== null) {
-                loaded_sections.set(section.id, section)
-            }
+            loaded_sections.set(section.id, section)
         })
 
         // add the loaded section in order
         let order = valid_json.section_order
-        // forEach may not preserve order
+        // forEach may not preserve order => use for
         for (let i = 0; i < order.length; i++) {
             const section = loaded_sections.get(order[i])
             if (section === undefined) {
-                return null
+                throw new InvalidDataException("Note", `Section with order ${order[i]} not found in loaded sections`)
             }
             note.sections.add(section)
         }

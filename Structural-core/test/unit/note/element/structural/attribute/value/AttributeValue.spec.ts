@@ -6,6 +6,7 @@ import { IntegerAttribute } from "@/note/element/structural/attribute/type/Numbe
 import { EditPath, EndOfEditPathError } from "@/note/util/EditPath"
 import { ValidOperationResult } from "@/common/OperationResult"
 import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain"
+import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException"
 
 describe('AttributeValue', () => {
 	let attr_value: AttributeValue<any>
@@ -119,19 +120,19 @@ describe('AttributeValue', () => {
             value: "Hello World" 
         }
         let value = AttributeValue.loadFromJson(json, definition)
-        expect(value).not.toBeNull()
-        expect(value?.id).toBe("ABC1199")
-        expect(value?.definition).toBe(definition)
-        expect(value?.value).toBe("Hello World")
+        expect(value.id).toBe("ABC1199")
+        expect(value.definition).toBe(definition)
+        expect(value.value).toBe("Hello World")
     })
 
-    it("loadFromJson with invalid json schema", () => {
+    it("loadFromJson with null value", () => {
         let json = { 
             id: "ABC1199", 
             definition_id: definition.id,
         }
-        let value = AttributeValue.loadFromJson(json, definition)
-        expect(value).toBeNull()
+        expect(() => {
+            AttributeValue.loadFromJson(json, definition)
+        }).toThrowError(InvalidDataException)
     })
 
     it("loadFromJson with invalid definition id", () => {
@@ -140,8 +141,9 @@ describe('AttributeValue', () => {
             definition_id: definition.id + "2",
             value: "Hello World" 
         }
-        let value = AttributeValue.loadFromJson(json, definition)
-        expect(value).toBeNull()
+        expect(() => {
+            AttributeValue.loadFromJson(json, definition)
+        }).toThrowError(InvalidDataException)
     })
 
     it("validate", () => {

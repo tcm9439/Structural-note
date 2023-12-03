@@ -9,6 +9,7 @@ import { ValidOperationResult } from "@/common/OperationResult"
 import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinConstrain"
 import { EditPath } from "@/note/util/EditPath"
 import { MaxConstrain } from "@/note/element/structural/attribute/constrain/MaxConstrain"
+import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException"
 
 describe('StructuralElement', () => {
     let element: StructuralElement
@@ -128,18 +129,18 @@ describe('StructuralElement', () => {
         element.setValue(str_attr, value)
         let json = element.saveAsJson()
         let new_element = StructuralElement.loadFromJson(json, definition)
-        expect(new_element).not.toBeNull()
-        expect(new_element?.id).toBe(element.id)
-        expect(new_element?.definition).toBe(definition)
-        expect(new_element?.values.size).toBe(2)
-        expect(new_element?.values.get(str_attr.id)).toEqual(value)
-        expect(new_element?.values.get(num_attr.id)).toEqual(value2)
+        expect(new_element.id).toBe(element.id)
+        expect(new_element.definition).toBe(definition)
+        expect(new_element.values.size).toBe(2)
+        expect(new_element.values.get(str_attr.id)).toEqual(value)
+        expect(new_element.values.get(num_attr.id)).toEqual(value2)
     })
 
     it("loadFromJson: invalid json data type", () => {
         let json = { "abc": 123 }
-        let new_element = StructuralElement.loadFromJson(json, definition)
-        expect(new_element).toBeNull()
+        expect(() => {
+            StructuralElement.loadFromJson(json, definition)
+        }).toThrow(InvalidJsonFormatException)
     })
 
     it("loadFromJson: invalid attr definition id", () => {
@@ -150,7 +151,8 @@ describe('StructuralElement', () => {
         let json = element.saveAsJson()
 
         definition.attributes.remove(str_attr.id)
-        let new_element = StructuralElement.loadFromJson(json, definition)
-        expect(new_element).toBeNull()
+        expect(() => {
+            StructuralElement.loadFromJson(json, definition)
+        }).toThrow(InvalidDataException)
     })
 })

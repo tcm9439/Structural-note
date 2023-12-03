@@ -3,28 +3,36 @@ import { EventConstant } from "structural-core"
 import { Icon } from "view-ui-plus"
 import { NoteFileHandler, NoteExportHandler } from "@/composables/file/NoteFileHandler"
 import { appWindow } from "@tauri-apps/api/window"
-const { $viewState, $emitter } = useNuxtApp()
+const { $viewState, $emitter, $Modal } = useNuxtApp()
 
 const editing_note_name = ref<string>($viewState.editing_note_name)
+const has_open_note = computed(() => $viewState.editing_note != null)
 
 // # menu
 const refresh_menu = ref(0)
 
 async function menuSelectHandler(menu_item: string){
-    console.log("menu select", menu_item)
-    switch (menu_item){
-        case "open-file":
-            NoteFileHandler.openNote(appWindow.label)
-            break
-        case "save-file":
-            NoteFileHandler.saveNote()
-            break
-        case "save-as-file":
-            NoteFileHandler.saveNote(true)
-            break
-        case "export-md":
-            NoteExportHandler.exportToMarkdown()
-            break
+    try {
+        // TODO v-if="has_open_note"
+        switch (menu_item){
+            case "open-file":
+                await NoteFileHandler.openNote(appWindow.label, !has_open_note.value)
+                break
+            case "save-file":
+                await NoteFileHandler.saveNote()
+                break
+            case "save-as-file":
+                await NoteFileHandler.saveNote(true)
+                break
+            case "export-md":
+                await NoteExportHandler.exportToMarkdown()
+                break
+        }
+    } catch (error) {
+        $Modal.error({
+            title: "Fail to open note",
+            content: `${error}`
+        })
     }
     refresh_menu.value++
 }
@@ -56,7 +64,7 @@ onBeforeUnmount(() => {
                             <Icon type="md-folder" />
                             File
                         </template>
-                        <MenuItem name="close-file">Close (TODO)</MenuItem>
+                        <!-- <MenuItem name="close-file">Close (TODO)</MenuItem> -->
                         <MenuItem name="open-file">Open</MenuItem>
                         <MenuItem name="save-file">Save</MenuItem>
                         <MenuItem name="save-as-file">Save As</MenuItem>

@@ -5,8 +5,10 @@ import { StructuralElement } from "@/note/element/structural/StructuralElement"
 import { NoteSection, NoteSectionJson } from "@/note/section/NoteSection"
 import { EditPath, EditPathNode, EndOfEditPathError } from "@/note/util/EditPath"
 import { StructureDefinition, StructureDefinitionJson } from "@/note/element/structural/StructureDefinition"
+import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException"
 import _ from "lodash"
 import { z } from "zod"
+
 
 export const StructuralSectionJson = NoteSectionJson.extend({
     type: z.literal("StructuralSection"),
@@ -68,11 +70,10 @@ export class StructuralSection extends NoteSection {
         return json_base as z.infer<typeof StructuralSectionJson>
     }
 
-    static loadFromJson(json: object): NoteSection | null {
+    static loadFromJson(json: object): NoteSection {
         let result = StructuralSectionJson.safeParse(json)
         if (!result.success) {
-            console.error(result.error)
-            return null
+            throw new InvalidJsonFormatException("StructuralSection", result.error.toString())
         }
         const valid_json = result.data
 
@@ -80,25 +81,18 @@ export class StructuralSection extends NoteSection {
         section.id = valid_json.id
 
         const def = StructureDefinition.loadFromJson(valid_json.definition)
-        if (def === null) {
-            return null
-        }
         section.definition = def
 
         valid_json.elements.forEach((element_json) => {
-            let element: NoteElement | null
+            let element: NoteElement
             if (element_json.type === "TextElement") {
                 element = TextElement.loadFromJson(element_json)
             } else if (element_json.type === "StructuralElement") {
                 element = StructuralElement.loadFromJson(element_json, def)
             } else {
-                console.error(`Unknown element type: ${element_json.type}`)
-                return null
+                throw new InvalidDataException("StructuralSection", `Unknown element type: ${element_json.type}`)
             }
-
-            if (element !== null) {
-                section.elements.add(element)
-            }
+            section.elements.add(element)
         })
         return section
     }

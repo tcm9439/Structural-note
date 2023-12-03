@@ -7,6 +7,7 @@ import { StructureDefinition } from "@/note/element/structural/StructureDefiniti
 import { NoteElement, NoteElementJson } from "@/note/element/NoteElement"
 import { ValidOperationResult, OperationResult } from "@/common/OperationResult"
 import { z } from "zod"
+import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException"
 
 export const StructuralElementJson = NoteElementJson.extend({
     type: z.literal("StructuralElement"),
@@ -99,11 +100,10 @@ export class StructuralElement extends NoteElement {
         }
     }
 
-    static loadFromJson(json: object, definition: StructureDefinition): StructuralElement | null {
+    static loadFromJson(json: object, definition: StructureDefinition): StructuralElement {
         const result = StructuralElementJson.safeParse(json)
         if (!result.success) {
-            console.error(result.error)
-            return null
+            throw new InvalidJsonFormatException("StructuralElement", result.error.toString())
         }
         const valid_json = result.data
         const element = new StructuralElement(definition)
@@ -118,15 +118,10 @@ export class StructuralElement extends NoteElement {
             // get the corresponding attribute definition for the AttributeValue
             let attr_def = definition.attributes.get(value_json.definition_id)
             if (attr_def === undefined) {
-                console.error(`Attribute definition not found: ${value_json.definition_id}`)
-                return null
+                throw new InvalidDataException("StructuralElement", `Attribute definition not found. ID: ${value_json.definition_id}`)
             }
 
             let attr_value = AttributeValue.loadFromJson(value_json, attr_def)
-            if (attr_value === null) {
-                console.error("Fail to load Attribute value")
-                return null
-            }
             element.setValue(attr_def, attr_value)
         }
         

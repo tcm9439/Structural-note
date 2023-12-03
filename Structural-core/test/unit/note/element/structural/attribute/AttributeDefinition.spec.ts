@@ -6,9 +6,11 @@ import { EditPath, EndOfEditPathError } from "@/note/util/EditPath"
 import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain"
 import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinConstrain"
 import { MaxConstrain } from "@/note/element/structural/attribute/constrain/MaxConstrain"
-import { ForbiddenConstrain, IncompatibleConstrain } from "@/note/element/structural/attribute/exception/AttributeException"
+import { ForbiddenConstrain, IncompatibleConstrain } from "@/exception/AttributeException"
 import { ValidOperationResult } from "@/common/OperationResult"
 import { ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
+import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException"
+
 import _ from "lodash"
 
 describe('AttributeDefinition', () => {
@@ -95,7 +97,7 @@ describe('AttributeDefinition', () => {
     it("loadFromJson with null attribute type", () => {
         let json = definition.saveAsJson()
         _.set(json, "attribute_type", null)
-        expect(AttributeDefinition.loadFromJson(json)).toBeNull()
+        expect(() => AttributeDefinition.loadFromJson(json)).toThrow(InvalidJsonFormatException)
     })
 
     it("addConstrain", () => {
