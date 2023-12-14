@@ -2,6 +2,7 @@
 import { MdEditor, MdPreview, type ToolbarNames } from "md-editor-v3"
 import "md-editor-v3/lib/preview.css"
 import "md-editor-v3/lib/style.css"
+import { v4 as uuidv4 } from "uuid"
 
 const props = defineProps<{
     content: string,
@@ -35,13 +36,16 @@ onClickOutside(md_div, (event) => {
     focus.value = false
 })
 
+function getEditorId(){
+    return uuidv4()
+}
+
 </script>
 
 <template>
-    <!-- TODO unique editor id -->
     <div @dblclick="onFocus" ref="md_div" class="md-element full-width-attr">
         <!-- Editor -->
-        <MdEditor v-if="focus" editorId="edit" v-model="content" :toolbarsExclude="md_editor_exclude" :tabWidth="4" codeTheme="github" language="en-US"/>
+        <MdEditor v-if="focus" :editorId="getEditorId()" v-model="content" :toolbarsExclude="md_editor_exclude" :tabWidth="4" codeTheme="github" language="en-US"/>
 
         <!-- Empty preview -->
         <div v-else-if="empty_content" class="empty-content">
@@ -49,7 +53,7 @@ onClickOutside(md_div, (event) => {
         </div>
 
         <!-- Preview with content -->
-        <MdPreview v-else editorId="preview" v-model="content" />
+        <MdPreview v-else :editorId="getEditorId()" v-model="content" />
     </div>
 </template>
 

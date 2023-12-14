@@ -13,24 +13,30 @@ const refresh_menu = ref(0)
 
 async function menuSelectHandler(menu_item: string){
     try {
-        // TODO v-if="has_open_note"
         switch (menu_item){
             case "open-file":
+                // without await, the catch block will not work
                 await NoteFileHandler.openNote(appWindow.label, !has_open_note.value)
                 break
             case "save-file":
-                await NoteFileHandler.saveNote()
+                if (has_open_note.value) {
+                    await NoteFileHandler.saveNote()
+                }
                 break
             case "save-as-file":
-                await NoteFileHandler.saveNote(true)
+                if (has_open_note.value) {
+                    await NoteFileHandler.saveNote(true)
+                }
                 break
             case "export-md":
-                await NoteExportHandler.exportToMarkdown()
+                if (has_open_note.value){
+                    await NoteExportHandler.exportToMarkdown()
+                }
                 break
         }
     } catch (error) {
         $Modal.error({
-            title: "Fail to open note",
+            title: "Fail to handle operation",
             content: `${error}`
         })
     }

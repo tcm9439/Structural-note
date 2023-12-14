@@ -9,6 +9,7 @@ export * from "./common/Logger"
 export * from "./exception/AppException"
 export * from "./exception/ConversionException"
 export * from "./exception/AttributeException"
+export * from "./exception/FileException"
 
 export * from "./note/Note"
 export * from "./note/section/SectionMap"

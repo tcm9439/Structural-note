@@ -16,25 +16,26 @@ import { Icon } from "view-ui-plus"
 const editing_note = ref<Note|null>(null)
 const has_open_note = ref<boolean>(false)
 
+// # listen to the note opened event (from here or the menu)
+function noteOpenedHandler(){
+    Logger.get().debug("Note opened event.")
+    editing_note.value = $viewState.editing_note
+    has_open_note.value = true
+    Logger.get().debug("Note opened.")
+}
+$emitter.on(EventConstant.NOTE_OPENED, noteOpenedHandler)
+
 // # init page: check if there is any opened note for this window
 const window_id = appWindow.label
 try {
     has_open_note.value = await NoteFileHandler.openInitNoteForThisWindow(window_id)
+    console.log(`Has open note: ${has_open_note.value}`)
 } catch (error) {
     $Modal.error({
         title: "Fail to open note",
         content: `${error}`
     })
 }
-
-// # listen to the note opened event (from here or the menu)
-function noteOpenedHandler(){
-    editing_note.value = $viewState.editing_note
-    has_open_note.value = true
-    // loading_note.value = true
-    console.log("Note opened.", editing_note.value)
-}
-$emitter.on(EventConstant.NOTE_OPENED, noteOpenedHandler)
 
 // # listen to the file drop event
 const unlisten_drop_file = await appWindow.onFileDropEvent(async (event) => {

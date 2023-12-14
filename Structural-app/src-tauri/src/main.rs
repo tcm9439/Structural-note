@@ -104,6 +104,10 @@ fn main() {
     tauri::Builder::default()
         // logger
         .plugin(logger)
+        // single instance
+        .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
+            println!("{}, {argv:?}, {cwd}", app.package_info().name);
+        }))
         // add the app state to tauri context
         .manage(app_state)
         // register commands

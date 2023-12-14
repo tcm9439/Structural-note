@@ -2,10 +2,10 @@
   "name": "nuxt-app",
   "private": true,
   "scripts": {
-    "build": "nuxt build",
+    "build": "nuxt build --dotenv config/tauri.env",
     "dev": "nuxt dev --dotenv config/nuxt.env",
     "tauri-nuxt-dev": "nuxt dev --dotenv config/tauri.env",
-    "generate": "nuxt generate",
+    "generate": "nuxt generate --dotenv config/nuxt.env",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "tauri": "tauri"
