@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::io::Error;
 use std::path::PathBuf;
 use std::fs;
 // use log::{debug, info, warn, error};
@@ -14,53 +15,49 @@ pub struct OpenedFile {
 }
 
 impl OpenedFile {
-    pub fn new(file_path: &String, window_id: String) -> OpenedFile {
-        OpenedFile {
-            file_path: OpenedFile::get_full_path(file_path),
+    pub fn new(file_path: &String, window_id: String) -> Result<OpenedFile, Error> {
+        Ok(OpenedFile {
+            file_path: OpenedFile::get_full_path(file_path)?,
             window_id,
             finish_init: false,
-        }
+        })
     }
 
     /// Get the absolute path of a file
-    pub fn get_full_path(file_path: &str) -> PathBuf {
-        fs::canonicalize(file_path).expect("Invalid file path").to_path_buf()
+    pub fn get_full_path(file_path: &str) -> Result<PathBuf, Error> {
+        // fs::canonicalize(file_path).expect("Invalid file path").to_path_buf()
+        fs::canonicalize(file_path)
     }
 }
 
 pub struct OpenedFileList {
-    files: Vec<OpenedFile>,
-    /// Map window_id to opened file index in files
-    window_id_to_opened_file: HashMap<String, usize>,
-    /// Map file path to opened file index in files
-    file_to_opened_file: HashMap<PathBuf, usize>,
+    /// Map window_id to opened file
+    window_id_to_opened_file: HashMap<String, OpenedFile>,
+    /// Map file path to windowId
+    filepath_to_window_id: HashMap<PathBuf, String>,
 }
 
 impl OpenedFileList {
     pub fn new() -> OpenedFileList {
         OpenedFileList {
-            file_to_opened_file: HashMap::new(),
             window_id_to_opened_file: HashMap::new(),
-            files: Vec::new(),
+            filepath_to_window_id: HashMap::new(),
         }
     }
 
     pub fn add_file(&mut self, file: OpenedFile) {
-        let index = self.files.len();
-        self.files.push(file.clone());
-        self.window_id_to_opened_file.insert(file.window_id.clone(), index);
-        self.file_to_opened_file.insert(file.file_path.clone(), index);
+        self.filepath_to_window_id.insert(file.file_path.clone(), file.window_id.clone());
+        self.window_id_to_opened_file.insert(file.window_id.clone(), file);
     }
 
     pub fn remove_file_by_window_id(&mut self, window_id: &str) {
         match self.window_id_to_opened_file.get(window_id) {
-            Some(index) => {
-                let file = self.files.get(*index).unwrap();
-                self.window_id_to_opened_file.remove(window_id);
-                self.file_to_opened_file.remove(&file.file_path);
+            Some(file) => {
+                self.filepath_to_window_id.remove(&file.file_path);
             },
             None => (),
         }
+        self.window_id_to_opened_file.remove(window_id);
     }
 
     /// Check if a file is already opened and initialized
@@ -81,37 +78,29 @@ impl OpenedFileList {
     }
 
     pub fn get_file_by_window_id(&self, window_id: &str) -> Option<&OpenedFile> {
-        let index = self.window_id_to_opened_file.get(window_id);
-        match index {
-            Some(index) => self.files.get(*index),
-            None => None,
-        }
+        self.window_id_to_opened_file.get(window_id)
     }
 
     pub fn get_file_by_filepath(&self, file_path: &str) -> Option<&OpenedFile> {
-        let file_path: PathBuf = OpenedFile::get_full_path(file_path);
-        let index = self.file_to_opened_file.get(&file_path);
-        match index {
-            Some(index) => self.files.get(*index),
-            None => None,
+        if let Ok(full_file_path) = OpenedFile::get_full_path(file_path){
+            if let Some(window_id) = self.filepath_to_window_id.get(&full_file_path){
+                return self.get_file_by_window_id(window_id)
+            }
         }
+        None
     }
 
     pub fn get_mut_file_by_filepath(&mut self, file_path: &str) -> Option<&mut OpenedFile> {
-        let file_path: PathBuf = OpenedFile::get_full_path(file_path);
-        let index = self.file_to_opened_file.get(&file_path);
-        match index {
-            Some(index) => self.files.get_mut(*index),
-            None => None,
+        if let Ok(full_file_path) = OpenedFile::get_full_path(file_path){
+            if let Some(window_id) = self.filepath_to_window_id.get(&full_file_path){
+                return self.window_id_to_opened_file.get_mut(window_id)
+            }
         }
+        None
     }
 
     pub fn get_mut_file_by_window_id(&mut self, window_id: &str) -> Option<&mut OpenedFile> {
-        let index = self.window_id_to_opened_file.get(window_id);
-        match index {
-            Some(index) => self.files.get_mut(*index),
-            None => None,
-        }
+        self.window_id_to_opened_file.get_mut(window_id)
     }
 }
 
@@ -120,20 +109,26 @@ mod tests {
     use super::*;
 
     fn get_test_file() -> (OpenedFile, OpenedFile) {
-        (OpenedFile::new(&String::from("./src/main.rs"), String::from("TEST")), 
-        OpenedFile::new(&String::from("./src/open_file.rs"), String::from("TEST_2")))
+
+        (
+            OpenedFile::new(&String::from("./src/main.rs"), String::from("TEST")).unwrap(), 
+            OpenedFile::new(&String::from("./src/open_file.rs"), String::from("TEST_2")).unwrap()
+        )
     }
 
     fn assert_file_count(list: &OpenedFileList, count: usize) {
         assert_eq!(count, list.window_id_to_opened_file.len());
-        assert_eq!(count, list.file_to_opened_file.len());
+        assert_eq!(count, list.filepath_to_window_id.len());
     }
     
     #[test]
     fn test_new_opened_file() {
-        let file = OpenedFile::new(&String::from("./src/main.rs"), String::from("TEST"));
+        let file = OpenedFile::new(&String::from("./src/main.rs"), String::from("TEST")).unwrap();
         assert_eq!("TEST", file.window_id);
         assert!(file.file_path.to_str().unwrap().ends_with("src/main.rs"));
+
+        let not_exist_file_result = OpenedFile::new(&String::from("./src/main9999.rs"), String::from("TEST"));
+        assert!(not_exist_file_result.is_err())
     }
 
     #[test]
@@ -144,8 +139,8 @@ mod tests {
 
     #[test]
     fn test_eq_file() {
-        let file = OpenedFile::new(&String::from("./src/main.rs"), String::from("TEST"));
-        let file2 = OpenedFile::new(&String::from("../src-tauri/src/main.rs"), String::from("TEST"));
+        let file = OpenedFile::new(&String::from("./src/main.rs"), String::from("TEST")).unwrap();
+        let file2 = OpenedFile::new(&String::from("../src-tauri/src/main.rs"), String::from("TEST")).unwrap();
         assert_eq!(file, file2);
     }
 

@@ -5,7 +5,7 @@ mod open_file;
 use open_file::{OpenedFile, OpenedFileList};
 use tauri::Manager;
 use tauri_plugin_log::{LogTarget, Builder, TimezoneStrategy};
-use log::{LevelFilter, info, debug};
+use log::{LevelFilter, info, debug, error, warn};
 use std::sync::Mutex;
 
 /// App state share by all windows
@@ -25,14 +25,22 @@ impl AppState {
 /// If the file is already opened, return false
 #[tauri::command]
 fn add_file(state: tauri::State<AppState>, filepath: String, window_id: String) -> bool {
-    let file = OpenedFile::new(&filepath, window_id);
-    let mut opened_files = state.open_files.lock().unwrap();
-    let (opened, _init_finish) = opened_files.already_open(&filepath);
-    if opened {
-        false
-    } else {
-        opened_files.add_file(file);
-        true
+    match OpenedFile::new(&filepath, window_id){
+        Ok(file) => {
+            let mut opened_files = state.open_files.lock().unwrap();
+            let (opened, _init_finish) = opened_files.already_open(&filepath);
+            if opened {
+                warn!("File {} is already opened", filepath);
+                false
+            } else {
+                opened_files.add_file(file);
+                true
+            }
+        }
+        Err(e) => {
+            error!("Fail to add file {} to opened file list: {}", filepath, e);
+            false
+        }
     }
 }
 
