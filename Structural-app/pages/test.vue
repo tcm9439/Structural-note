@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, StringAttribute, StructuralElement, MarkdownElement, MarkdownAttribute, RequireConstrain, Logger } from "structural-core"
+import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, StringAttribute, StructuralElement, MarkdownElement, MarkdownAttribute, Logger } from "structural-core"
 
 let test_note: Ref<Note> = ref(new Note("My first note")) as Ref<Note>
 
@@ -16,8 +16,8 @@ let section2 = new StructuralSection("Section struct")
 
 let attr_definition = new AttributeDefinition("test string attr", StringAttribute.instance)
 let attr_definition2 = new AttributeDefinition("test string attr2", StringAttribute.instance)
+attr_definition2.require_constrain.required = true
 let md_attr_definition = new AttributeDefinition("test markdown attr", MarkdownAttribute.instance)
-md_attr_definition.addConstrain(new RequireConstrain(false))
 section2.definition.display_key.addKey(attr_definition)
 section2.definition.attributes.add(attr_definition)
 section2.definition.attributes.add(attr_definition2)

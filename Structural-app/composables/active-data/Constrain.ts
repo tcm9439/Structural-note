@@ -22,22 +22,21 @@ export function getAttrConstrainEditComponents(attr_def_edit_path: EditPath, att
             id: constrain_id,
             label: constrain_type,
             path: attr_def_edit_path.clone().append(constrain_id),
-            component_type: markRaw(definedConstrainMapper(constrain_type)),
+            component_type: markRaw(constrainMapper(constrain_type)),
             constrain_type: constrain_type,
         }
         
         attr_constrain_edit_components.set(constrain_type, component)
     })
     
-    // filter the available constrains
+    // add the available constrains that are not yet added to the attribute definition
     let available_constrains = attr_def.getAvailableConstrains()
     available_constrains.forEach((constrain_type) => {
-        // not defined => create a new component
         let component = {
             id: attr_def + "_" + constrain_type,
             label: constrain_type,
             path: null,
-            component_type: markRaw(definedConstrainMapper(constrain_type)),
+            component_type: markRaw(constrainMapper(constrain_type)),
             constrain_type: constrain_type,
         }
         attr_constrain_edit_components.set(constrain_type, component)
@@ -45,7 +44,7 @@ export function getAttrConstrainEditComponents(attr_def_edit_path: EditPath, att
     return attr_constrain_edit_components
 }
 
-function definedConstrainMapper(type: ConstrainType){
+function constrainMapper(type: ConstrainType){
     switch (type){
         case ConstrainType.REQUIRE:
         case ConstrainType.REGEX:

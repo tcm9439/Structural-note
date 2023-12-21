@@ -133,14 +133,28 @@ describe('StructureDefinition', () => {
                     name: str_attr.name,
                     description: str_attr.description,
                     attribute_type: str_attr.attribute_type?.type,
-                    default_value: null
+                    default_value: null,
+                    constrains: [
+                        {
+                            id: str_attr.require_constrain.id,
+                            type: "RequireConstrain",
+                            required: false
+                        }
+                    ]
                 },
                 {
                     id: bool_attr.id,
                     name: bool_attr.name,
                     description: bool_attr.description,
                     attribute_type: bool_attr.attribute_type?.type,
-                    default_value: true
+                    default_value: true,
+                    constrains: [
+                        {
+                            id: bool_attr.require_constrain.id,
+                            type: "RequireConstrain",
+                            required: false
+                        }
+                    ]
                 }
             ]
         })
@@ -161,13 +175,13 @@ describe('StructureDefinition', () => {
                     id: bool_attr.id,
                     name: bool_attr.name,
                     description: bool_attr.description,
-                    attribute_type: bool_attr.attribute_type?.type
+                    attribute_type: bool_attr.attribute_type?.type,
                 }
             ]
         }
         expect(()=>{
             StructureDefinition.loadFromJson(json)
-        }).toThrowError(InvalidDataException)
+        }).toThrowError(InvalidJsonFormatException)
     })
 
     it("loadFromJson: invalid json data type", () => {

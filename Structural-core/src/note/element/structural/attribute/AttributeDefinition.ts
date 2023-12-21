@@ -3,8 +3,10 @@ import { UUID } from "@/common/CommonTypes"
 import { ComponentBase } from "@/note/util/ComponentBase"
 import { CloneUtil, Cloneable } from "@/common/Cloneable"
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
-import { Constrain, ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
+import { Constrain, ConstrainType, ConstrainJson } from "@/note/element/structural/attribute/constrain/Constrain"
 import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain"
+import { MaxConstrain } from "@/note/element/structural/attribute/constrain/MaxConstrain"
+import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinConstrain"
 import { OperationResult, ValidOperationResult } from "@/common/OperationResult"
 import { InvalidJsonFormatException } from "@/exception/ConversionException"
 import { ForbiddenConstrain, IncompatibleConstrain } from "@/exception/AttributeException"
@@ -12,13 +14,13 @@ import { EditPath, EditPathNode } from "@/note/util/EditPath"
 import { z } from "zod"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
 
-
 export const AttributeDefinitionJson = z.object({
     id: z.string(),
     name: z.string(),
     description: z.string(),
     attribute_type: z.string(),
     default_value: z.any().optional(),
+    constrains: z.array(ConstrainJson.passthrough())
 }).required()
 
 
@@ -26,15 +28,26 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     private _name: string
     private _description: string
     private _attribute_type: AttributeType<T> | null
-    private _constrains: Map<UUID, Constrain> = new Map()
     private _default_value: T | null = null
-    private _require_constrain: RequireConstrain | null = null
 
+    private _constrains: Map<UUID, Constrain> = new Map()
+    private _require_constrain: RequireConstrain
+
+    /**
+     * An attribute default to be 
+     * - optional
+     * - no description
+     */
     constructor(name?: string, attribute_type?: AttributeType<T>, description?: string) {
         super()
         this._name = name || ""
         this._attribute_type = attribute_type || null
         this._description = description || ""
+
+        // create a default require constrain
+        let default_require_constrain = new RequireConstrain(false)
+        this.addConstrain(default_require_constrain)
+        this._require_constrain = default_require_constrain
     }
 
     /**
@@ -55,8 +68,12 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         return this._default_value
     }
 
+    /**
+     * Check if this is an optional attribute.
+     * Which is defined as an attribute with a require_constrain = true
+     */
     isOptionalAttr(): boolean {
-        return this._require_constrain?.required === false
+        return !this._require_constrain.required
     }
 
     setDefaultValue(value: T | null): OperationResult {
@@ -73,6 +90,18 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
 
     get constrains(): Map<UUID, Constrain> {
         return this._constrains
+    }
+
+    private set require_constrain(value: RequireConstrain) {
+        if (this._require_constrain !== null) {
+            this._constrains.delete(this._require_constrain.id)
+        }
+        this._require_constrain = value
+        this._constrains.set(value.id, value)
+    }
+
+    get require_constrain(): RequireConstrain {
+        return this._require_constrain
     }
 
     set attribute_type(value: AttributeType<T> ) {
@@ -112,8 +141,17 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         return CloneUtil.cloneDeepWithCloneable(this)
     }
 
+    /**
+     * Add a constrain to the attribute definition.
+     * @param constrain 
+     * @returns Error if the constrain is not allowed or incompatible with the existing constrains. Null if the constrain is added successfully.
+     */
     addConstrain(constrain: Constrain): Error | null {
         if (this._attribute_type !== null) {
+            if (this._constrains.has(constrain.id)) {
+                return null
+            }
+
             // check if the constrain is allowed by the attribute type
             if (!this._attribute_type.allowConstrain(constrain)) {
                 return new ForbiddenConstrain(constrain.getType())
@@ -137,11 +175,12 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     }
 
     removeConstrain(constrain_id: UUID): void {
-        // if constrain is requiredConstrain, set the required to false
-        if (this._constrains.get(constrain_id)?.getType() == ConstrainType.REQUIRE) {
-            this._require_constrain = null
+        // if constrain is requiredConstrain, set the required to default (false)
+        if (this._require_constrain.id === constrain_id) {
+            this._require_constrain.required = false
+        } else {
+            this._constrains.delete(constrain_id)
         }
-        this._constrains.delete(constrain_id)
     }
 
     getAvailableConstrains(): ConstrainType[] {
@@ -226,6 +265,9 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
             description: this.description,
             attribute_type: this.attribute_type.type,
             default_value: this.explicit_default_value,
+            constrains: Array.from(this.constrains.values()).map((constrain) => {
+                return constrain.saveAsJson()
+            })
         }
     }
 
@@ -239,6 +281,24 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         const def = new AttributeDefinition(valid_json.name, attribute_type, valid_json.description)
         def.id = valid_json.id
         def.setDefaultValue(valid_json.default_value)
+
+        // load constrains
+        valid_json.constrains.forEach((constrain_json) => {
+            let constrain: Constrain
+            if (constrain_json.type === "RequireConstrain") {
+                let r_constrain = RequireConstrain.loadFromJson(constrain_json)
+                def.require_constrain = r_constrain
+                constrain = r_constrain
+            } else if (constrain_json.type === "MinConstrain") {
+                constrain = MinConstrain.loadFromJson(constrain_json)
+            } else if (constrain_json.type === "MaxConstrain") {
+                constrain = MaxConstrain.loadFromJson(constrain_json)
+            } else {
+                throw new InvalidJsonFormatException("AttributeDefinition", `Unknown constrain type: ${constrain_json.type}`)
+            }
+            def.addConstrain(constrain)
+        })
+
         return def
     }
 

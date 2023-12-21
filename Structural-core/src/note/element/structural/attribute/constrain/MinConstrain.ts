@@ -50,9 +50,11 @@ export class MinConstrain<T> extends Constrain {
             return false
         }
 
-        if (constrain instanceof MaxConstrain) {
-            if (this.min != null && constrain.max != null) {
-                return this.min <= constrain.max
+        // if (constrain instanceof MaxConstrain) { // error: RHS is not object
+        if (constrain.getType() == ConstrainType.MAX) {
+            let max_constrain = constrain as MaxConstrain<T>
+            if (this.min != null && max_constrain.max != null) {
+                return this.min <= max_constrain.max
             }
         }
         return true
@@ -80,7 +82,7 @@ export class MinConstrain<T> extends Constrain {
         }
     }
 
-    static loadFromJson(json: z.infer<typeof MinConstrainJson>): MinConstrain<any> {
+    static loadFromJson(json: object): MinConstrain<any> {
         // check if the json_data match the schema
         const result = MinConstrainJson.safeParse(json)
         if (!result.success) {

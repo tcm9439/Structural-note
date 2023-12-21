@@ -26,18 +26,28 @@ function onFocus(){
 // if content is empty, show hints instead of preview
 const empty_content = computed(() => props.content == null || props.content.trim() === "")
 
+// a computed value with getter and setter => give "" if null
+const editor_content = computed({
+    get: () => content.value ?? "",
+    set: (v) => content.value = v
+})
+
 // only show part of the toolbar
 const md_editor_exclude: ToolbarNames[] = [
     "save", "github", "htmlPreview", "catalog",
+    "pageFullscreen", "fullscreen" // avoid resize bugs
 ]
 
 const md_div = ref(null)
 onClickOutside(md_div, (event) => {
+    console.log("click outside")
     focus.value = false
 })
 
 function getEditorId(){
-    return uuidv4()
+    // seem the editor will throw error if id start with number
+    let generated_id = 'A' + uuidv4().replace(/-/g, "")
+    return generated_id
 }
 
 </script>
@@ -45,7 +55,8 @@ function getEditorId(){
 <template>
     <div @dblclick="onFocus" ref="md_div" class="md-element full-width-attr">
         <!-- Editor -->
-        <MdEditor v-if="focus" :editorId="getEditorId()" v-model="content" :toolbarsExclude="md_editor_exclude" :tabWidth="4" codeTheme="github" language="en-US"/>
+        <MdEditor v-if="focus" :editorId="getEditorId()" v-model="editor_content" :toolbarsExclude="md_editor_exclude"
+        :tabWidth="4" codeTheme="github" language="en-US"/>
 
         <!-- Empty preview -->
         <div v-else-if="empty_content" class="empty-content">
@@ -53,7 +64,7 @@ function getEditorId(){
         </div>
 
         <!-- Preview with content -->
-        <MdPreview v-else :editorId="getEditorId()" v-model="content" />
+        <MdPreview v-else :editorId="getEditorId()" v-model="editor_content" />
     </div>
 </template>
 

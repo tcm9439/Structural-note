@@ -145,7 +145,8 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
             throw new InvalidDataException("AttributeValue", `Definition id not match. Expected: ${attribute_def.id}, Actual: ${valid_json.definition_id}`)
         }
         
-        if (result.data.value == null){
+        // the value can be null iff it is optional
+        if (result.data.value == null && !attribute_def.isOptionalAttr()){
             throw new InvalidDataException("AttributeValue", "Value cannot be null")
         }
 

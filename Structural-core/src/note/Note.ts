@@ -75,7 +75,7 @@ export class Note extends ComponentBase implements EditPathNode {
         // load sections
         let loaded_sections: Map<UUID, NoteSection> = new Map()
         valid_json.sections.forEach((section_json) => {
-            let section: NoteSection | null
+            let section: NoteSection
             if (section_json.type === "NoteSection") {
                 section = NoteSection.loadFromJson(section_json)
             } else if (section_json.type === "StructuralSection") {

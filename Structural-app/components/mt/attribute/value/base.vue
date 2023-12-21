@@ -12,37 +12,39 @@ const editing_note = inject(InjectConstant.EDITING_NOTE) as Note
 let attr_value = activeDataGetter(editing_note, props.edit_path) as AttributeValue<any>
 const attr_id = attr_value.definition.id
 const attr_name = ref(attr_value.definition.name)
+const full_width_form_item = ref(false)
+const attr_description = ref(attr_value.definition.description)
 
-const set_value_checkbox = computed(() => {
-    return attr_value.definition.isOptionalAttr()
+const is_required_attr = computed(() => {
+    return !attr_value.definition.isOptionalAttr()
 })
-const value_is_set_for_optional_attr = computed({
-    get: () => attr_value.is_set,
-    set: (is_set) => {
-        if (is_set){
-            attr_value.value = attr_value.definition.default_value_for_attr
-        } else {
-            attr_value.unsetValue()
-        }
+
+const container_div_class = computed(() => {
+    let class_var = "attr-wrapper"
+    if (full_width_form_item.value){
+        class_var += " full-width-attr"
     }
+    return class_var
 })
-const div_background_color_class = computed(() => set_value_checkbox.value? "attr-wrapper optional-attr" : "attr-wrapper compulsory-attr")
 
 watch(() => props.render, () => {
     attr_value = activeDataGetter(editing_note, props.edit_path) as AttributeValue<any>
     attr_name.value = attr_value.definition.name
+    attr_description.value = attr_value.definition.description
+    console.log("description changed in base", attr_description.value)
 })
 </script>
 
 <template>
-    <div :class="div_background_color_class">
-        <div class="optional-checkbox">
-            <FormItem v-if="set_value_checkbox" :prop="attr_id + '_checkbox'" >
-                <Checkbox v-model="value_is_set_for_optional_attr" />
-            </FormItem>
-        </div>
-        <FormItem :label="attr_name" :prop="attr_id" :error="attr_value.validate_result.invalid_message">
-            <mt-attribute-value-editor :type="props.type" v-model:value="attr_value.value" />
+    <div :class="container_div_class">
+        <mt-attribute-value-form-label 
+            :label="attr_name" :required="is_required_attr"
+            :description="attr_description"
+            />
+        <FormItem 
+            :prop="attr_id" 
+            :error="attr_value.validate_result.invalid_message" >
+            <mt-attribute-value-editor :type="props.type" v-model:value="attr_value.value" v-model:full_width="full_width_form_item"/>
         </FormItem>
     </div>
 </template>
@@ -52,32 +54,18 @@ watch(() => props.render, () => {
         resize: none;
     }
 
-    .optional-attr {
-        background-color: whitesmoke;
-        padding: 10px;
-    }
-
     .attr-wrapper {
         display: inline-block;
         margin: 5px;
+        padding-right: 10px;
     }
 
-    .attr-wrapper.compulsory-attr:has(.full-width-attr), .attr-wrapper.compulsory-attr:has(.full-width-attr) *:not(.full-width-attr){
+    .attr-wrapper.full-width-attr{
         width: 100%;
-    }
-
-    /* Optional attr need space for the checkbox */
-    .attr-wrapper.optional-attr:has(.full-width-attr), .attr-wrapper.optional-attr:has(.full-width-attr) *:not(.full-width-attr){
-        width: calc(100% - 35px);
-    }
-
-    .optional-checkbox {
-        display: inline-block;
-        margin-right: 5px;
-        max-width: 20px;
     }
 
     .ivu-form-item {
         margin-bottom: 12px;
+        width: 100%;
     }
 </style>

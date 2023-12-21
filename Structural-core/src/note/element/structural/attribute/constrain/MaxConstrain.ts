@@ -82,7 +82,7 @@ export class MaxConstrain<T> extends Constrain {
         }
     }
 
-    static loadFromJson(json: z.infer<typeof MaxConstrainJson>): MaxConstrain<any> {
+    static loadFromJson(json: object): MaxConstrain<any> {
         // check if the json_data match the schema
         const result = MaxConstrainJson.safeParse(json)
         if (!result.success) {

@@ -194,7 +194,9 @@ const default_value = computed({
                     <FormItem prop="default_value" 
                         v-show="has_default_value"
                         :error="default_value_validate_result.invalid_message" >
-                        <mt-attribute-value-editor :type="current_attr_type_name" v-model:value="default_value" />
+                        <mt-attribute-value-editor 
+                            :type="current_attr_type_name" 
+                            v-model:value="default_value" />
                     </FormItem>
 
                     <!-- Constrains editor -->

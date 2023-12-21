@@ -14,7 +14,11 @@ export class WindowUtil {
         const webview = new WebviewWindow(new_window_uuid, {
             url: url,
             title: title,
-            focus: true
+            focus: true,
+            height: 600,
+            width: 800,
+            minHeight: 400,
+            minWidth: 600,
         })
     
         // Tauri emits the `tauri://created` and `tauri://error` to notify you of the creation response

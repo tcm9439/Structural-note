@@ -71,7 +71,7 @@ export class RequireConstrain extends Constrain {
         }
     }
 
-    static loadFromJson(json: z.infer<typeof RequireConstrainJson>): RequireConstrain {
+    static loadFromJson(json: object): RequireConstrain {
         // check if the json_data match the schema
         const result = RequireConstrainJson.safeParse(json)
         if (!result.success) {
@@ -80,7 +80,7 @@ export class RequireConstrain extends Constrain {
         const valid_json = result.data
 
         let loaded_constrain = new RequireConstrain(valid_json.required)
-        loaded_constrain.id = json.id
+        loaded_constrain.id = valid_json.id
         return loaded_constrain
     }
 }

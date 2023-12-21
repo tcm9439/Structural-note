@@ -8,10 +8,8 @@ const props = defineProps<{
 
 const editing_note = inject(InjectConstant.EDITING_NOTE) as Note
 const element = shallowReactive(activeDataGetter(editing_note, props.edit_path) as MarkdownElement)
-const content = ref(element.content) as Ref<string>
-
 </script>
 
 <template>
-    <mt-editor-markdown v-model:content="content"/>
+    <mt-editor-markdown v-model:content="element.content"/>
 </template>

@@ -4,17 +4,28 @@ import { IntegerAttribute, DecimalAttribute, StringAttribute, BooleanAttribute, 
 const props = defineProps<{
     value: any,
     type: string,
+    full_width?: boolean,
 }>()
 
-// v-modal value
+// v-modal value & full_width
 const value = computed({
     get: () => props.value,
     set: (v) => emit('update:value', v)
 })
 
+const full_width = computed({
+    get: () => props.full_width,
+    set: (v) => emit('update:full_width', v)
+})
+
 const emit = defineEmits<{
     (event: 'update:value', value: any): void
+    (event: 'update:full_width', full_width: boolean): void
 }>()
+
+if (props.type === MarkdownAttribute.TYPE){
+    full_width.value = true
+}
 
 </script>
 

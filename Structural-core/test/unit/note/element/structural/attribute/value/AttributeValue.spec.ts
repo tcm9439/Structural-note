@@ -32,8 +32,8 @@ describe('AttributeValue', () => {
         attr_value.value = "Foo Bar"
         expect(attr_value.value).toBe("Foo Bar")
 
+        attr_value.definition.require_constrain.required = true
         expect(attr_value.validate_result.valid).toBeTruthy()
-        definition.addConstrain(new RequireConstrain())
         attr_value.value = null
         expect(attr_value.validate_result.valid).toBeFalsy()
     })
@@ -46,26 +46,15 @@ describe('AttributeValue', () => {
         expect(attr_value.value).toBe("Foo Bar")
         
         expect(attr_value.validate_result.valid).toBeTruthy()
-        definition.addConstrain(new RequireConstrain())
+        attr_value.definition.require_constrain.required = true
         attr_value.value = null
         expect(attr_value.is_set).toBeFalsy()
         expect(attr_value.validate_result.valid).toBeFalsy()
     })
 
-    it("is_set: no constrain", () => {
-        // => set to attr default
-        let attr_value_null = new AttributeValue(definition)
-        expect(attr_value_null.is_set).toBeTruthy()
-        expect(attr_value_null.value).toBe("")
-
-        let attr_value_set = new AttributeValue(definition, "Hello World")
-        expect(attr_value_set.is_set).toBeTruthy()
-        expect(attr_value_set.value).toBe("Hello World")
-    })
-
     it("is_set: has require constrain = true", () => {
         // => set to attr default
-        definition.addConstrain(new RequireConstrain(true))
+        attr_value.definition.require_constrain.required = true
 
         let attr_value_null = new AttributeValue(definition)
         expect(attr_value_null.is_set).toBeTruthy()
@@ -126,6 +115,7 @@ describe('AttributeValue', () => {
     })
 
     it("loadFromJson with null value", () => {
+        definition.require_constrain.required = true
         let json = { 
             id: "ABC1199", 
             definition_id: definition.id,
@@ -148,7 +138,7 @@ describe('AttributeValue', () => {
 
     it("validate", () => {
         // add a require constrain
-        definition.addConstrain(new RequireConstrain())
+        definition.require_constrain.required = true
         expect(attr_value.validate()).toEqual(ValidOperationResult)
         expect(attr_value.validate_result).toEqual(ValidOperationResult)
 
