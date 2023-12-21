@@ -9,6 +9,7 @@ import { BooleanAttribute } from "@/note/element/structural/attribute/type/Boole
 import { TextElement } from "@/note/element/TextElement"
 import { StructuralElement } from "@/note/element/structural/StructuralElement"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
+import fs from "fs"
 
 describe('Note', () => {
     let note: Note 
@@ -110,5 +111,16 @@ describe("Save & load Note", () => {
         let json = note.saveAsJson()
         let loaded_note = Note.loadFromJson(note.title, json)
         expect(loaded_note).toEqual(note)
+    })
+})
+
+describe("More loading Note test", () => {
+    it("load from test1.structnote", () => {
+        fs.readFile("./test/resources/test1.structnote", (err, data) => {
+            if (err) throw err;
+            let json = JSON.parse(data.toString())
+            let note = Note.loadFromJson("test1.structnote", json)
+            expect(note).not.toBeUndefined()
+        })
     })
 })
