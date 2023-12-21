@@ -46,7 +46,7 @@ function addElement(element_type: ElementType, last_element_id?: string){
         class="no-pad">
         <template #operation>
             <Button 
-                type="primary" class="section-operation-button"
+                type="primary" class="section-operation-button-gp"
                 @click="startEditDef">
                 <Icon type="md-options" />
             </Button>

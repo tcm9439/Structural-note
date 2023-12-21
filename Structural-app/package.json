@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "nuxt build --dotenv config/tauri.env",
-    "dev": "nuxt dev --dotenv config/nuxt.env",
+    "dev": "MT_APP_ENV=test nuxt dev --dotenv config/nuxt.env",
     "tauri-nuxt-dev": "nuxt dev --dotenv config/tauri.env",
     "generate": "nuxt generate --dotenv config/nuxt.env",
     "preview": "nuxt preview",

@@ -19,7 +19,6 @@ const editing_note: Note | undefined = inject(InjectConstant.EDITING_NOTE)
 const section = shallowReactive(activeDataGetter(editing_note, props.edit_path) as NoteSection)
 const section_elements = ref(null) as Ref<ComponentVForElement[] | null>
 const rerender_elements = ref(0)
-const no_element = computed(() => section.elements.length() === 0)
 
 watch([() => section.elements.length(), rerender_elements], () => {
     section_elements.value = elementListGetter(editing_note, section, props.edit_path, elementComponentMapper)
@@ -88,45 +87,25 @@ function moveDownSection(){
             </div>
         </template>
 
-        <!-- Add element button when there is NO element in this section -->
-        <div v-if="no_element" class="add-element-container">
-            <Dropdown 
-                class="add-element-button"
-                @on-click="addElement" 
-                trigger="click">
-                <Button shape="circle" icon="md-add" long>
-                    Add Element
-                </Button>
-                
-                <template #list>
-                    <DropdownMenu>
-                        <DropdownItem v-for="element_type in available_element_types" :name="element_type.id">
-                            {{element_type.display_choice}}
-                        </DropdownItem>
-                    </DropdownMenu>
-                </template>
-            </Dropdown>
-        </div>
-
         <!-- Operation Buttons -->
         <template #extra>
             <!-- Child class operation -->
             <slot name="operation"></slot>
 
-            <ButtonGroup class="section-operation-button">
-                <Button @click="moveUpSection">
+            <ButtonGroup class="section-operation-button-gp">
+                <Button @click="moveUpSection" type="primary" ghost>
                     <Icon type="md-arrow-up" />
                 </Button>
-                <Button @click="moveDownSection">
+                <Button @click="moveDownSection" type="primary" ghost>
                     <Icon type="md-arrow-down" />
                 </Button>
-                <Button @click="removeSection">
+                <Button @click="removeSection" type="primary" ghost>
                     <Icon type="md-trash" />
                 </Button>
 
                 <!-- Add section button -->
                 <Dropdown @on-click="addSection" trigger="click" class="add-section-dropdown">
-                    <Button>
+                    <Button type="primary" ghost>
                         <Icon type="md-add"/>
                     </Button>
                     <template #list>
@@ -157,6 +136,26 @@ function moveDownSection(){
                 </template>
             </mt-element-base>
         </template>
+
+        <!-- Add element button when there is NO element in this section -->
+        <div class="add-element-container">
+            <Dropdown 
+                class="add-element-button"
+                @on-click="addElement" 
+                trigger="click">
+                <Button shape="circle" icon="md-add" long>
+                    Add Element
+                </Button>
+                
+                <template #list>
+                    <DropdownMenu>
+                        <DropdownItem v-for="element_type in available_element_types" :name="element_type.id">
+                            {{element_type.display_choice}}
+                        </DropdownItem>
+                    </DropdownMenu>
+                </template>
+            </Dropdown>
+        </div>
     </Card>
 </template>
 
@@ -178,7 +177,7 @@ function moveDownSection(){
     text-align: center;
 }
 
-:deep(.section-operation-button) {
+:deep(.section-operation-button-gp) {
     margin-right: 8px;
 }
 

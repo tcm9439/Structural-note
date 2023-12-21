@@ -20,7 +20,6 @@ $viewState.editing_note = props.note
 
 const rerender_section = ref(0)
 const sections = ref(null) as Ref<ComponentVForElement[] | null>
-const no_section = computed(() => props.note.sections.length() === 0)
 watch([() => props.note.sections.length(), rerender_section], () => {
     sections.value = elementListGetter(props.note, props.note, edit_path, sectionComponentMapper)
 }, { immediate: true })
@@ -64,10 +63,17 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
+    <template v-for="section of sections" :key="section.id">
+        <!-- Section List -->
+        <component :is="section.type" 
+            :edit_path="section.path" 
+            :available_section_types="available_section_types" 
+        />
+    </template>
+
     <div class="add-section-container">
         <Dropdown 
             class="add-section-button"
-            v-if="no_section"
             @on-click="addSection" 
             trigger="click">
             <Button type="primary" shape="circle" icon="md-add" long>
@@ -83,15 +89,6 @@ onBeforeUnmount(() => {
             </template>
         </Dropdown>
     </div>
-
-    <template v-for="section of sections" :key="section.id">
-        <!-- Section List -->
-        <component :is="section.type" 
-            :edit_path="section.path" 
-            :available_section_types="available_section_types" 
-        />
-    </template>
-    <!-- {{editing_note}} -->
 </template>
 
 <style>
@@ -102,5 +99,6 @@ onBeforeUnmount(() => {
 .add-section-container {
     width: 100%;
     text-align: center;
+    margin-bottom: 20px;
 }
 </style>
