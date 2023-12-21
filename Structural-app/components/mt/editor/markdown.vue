@@ -40,7 +40,6 @@ const md_editor_exclude: ToolbarNames[] = [
 
 const md_div = ref(null)
 onClickOutside(md_div, (event) => {
-    console.log("click outside")
     focus.value = false
 })
 

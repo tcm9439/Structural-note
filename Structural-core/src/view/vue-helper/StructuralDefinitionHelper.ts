@@ -18,6 +18,7 @@ export class StructuralDefinitionHelper {
         {
             title: 'Action',
             slot: 'action',
+            width: 125,
         }
     ]
 

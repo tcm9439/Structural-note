@@ -83,26 +83,26 @@ watch([reload_done, constrain_changed_count], () => {
     available_constrains.value = getGroupedAttrConstrain(constrains)
 }, { immediate: true })
 
-function onConstrainStatusChange(is_set: boolean, type: ConstrainType, id: string | null){
+function onConstrainStatusChange(is_set: boolean, params: AttrConstrainEditComponent){
     if (is_set){
-        // add constrain
-        let constrain = ConstrainTypeToClassMap.get(type)
-        if (constrain !== undefined){
-            let new_constrain = new constrain()
-            attr_def.addConstrain(new_constrain)
-            constrain_changed_count.value += 1
+        if (!attr_def.constrains.has(params.id)){
+            // add constrain
+            let constrain = ConstrainTypeToClassMap.get(params.constrain_type)
+            if (constrain !== undefined){
+                let new_constrain = new constrain()
+                attr_def.addConstrain(new_constrain)                
+            }
         }
     } else {
         // remove constrain
-        attr_def.removeConstrain(id as string)
-        constrain_changed_count.value += 1
+        attr_def.removeConstrain(params.id)
     }
+    constrain_changed_count.value += 1
 }
 
 // # default value
 const has_default_value = computed({
     get: () => {
-        console.log("attr_def.explicit_default_value", attr_def.explicit_default_value)
         return attr_def.explicit_default_value !== null
     },
     set: (has_default_value) => {
@@ -184,6 +184,7 @@ const default_value = computed({
         <!-- Tab that only show after the type is set  -->
         <template v-if="attr_has_type">
             <TabPane label="Constrain" name="constrain">
+                {{ attr_def }}
                 <Form inline>
                     <!-- Default value editor -->
                     <FormItem prop="default_value_checkbox">

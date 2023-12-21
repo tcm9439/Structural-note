@@ -9,37 +9,50 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-    (event: "update", is_set: boolean, type: ConstrainType, id: string | null): void
+    (event: "update", is_set: boolean, params: AttrConstrainEditComponent): void
 }>()
 
-const show_editor = ref(false)
+const constrain_enabled = ref(false)
+const constrains_that_exist_means_true = [
+    ConstrainType.REQUIRE
+]
+const constrain_exist_means_true = computed(() => {
+    return constrains_that_exist_means_true.includes(props.params.constrain_type)
+})
+const load_constrain_editor = computed(() => {
+    return constrain_exist_means_true.value || constrain_enabled.value
+})
 const label = ref("")
 
 watch(
     () => props.render,
     () => {
-        show_editor.value = props.params.path !== null
+        constrain_enabled.value = props.params.path !== null
         label.value = props.params.label
     },
     { immediate: true }
 )
 
 function onToggleConstrain() {
-    emit("update", show_editor.value, props.params.constrain_type, props.params.id)
+    if (!constrain_exist_means_true.value) {
+        emit("update", constrain_enabled.value, props.params)
+    }
 }
 </script>
 
 <template>
     <FormItem :prop="label + '_checkbox'">
-        <Checkbox v-model="show_editor" @on-change="onToggleConstrain">
+        <Checkbox v-model="constrain_enabled" @on-change="onToggleConstrain">
             {{label}}
         </Checkbox>
     </FormItem>
-    <template v-if="show_editor">
+    <template v-if="load_constrain_editor">
         <component
             :is="props.params.component_type"
             :id="props.params.id"
             :edit_path="props.params.path"
-            :attr_def="attr_def" />
+            :enable="constrain_enabled"
+            :attr_def="attr_def" 
+        />
     </template>
 </template>

@@ -55,17 +55,17 @@ function moveDownAttr(id: string) {
         </template>
         <template #action="{row}">
             <ButtonGroup>
-                <Button class="operation-button" @click="moveUpAttr(row.id)">
+                <Button class="operation-button" @click="moveUpAttr(row.id)" size="small">
                     <Icon type="md-arrow-up" />
                 </Button>
-                <Button class="operation-button" @click="moveDownAttr(row.id)">
+                <Button class="operation-button" @click="moveDownAttr(row.id)" size="small">
                     <Icon type="md-arrow-down" />
                 </Button>
-                <Button type="primary" class="operation-button"
+                <Button type="primary" class="operation-button" size="small"
                     @click="editAttr(row.id)">
                     <Icon type="md-create" />
                 </Button>
-                <Button type="error" class="operation-button"
+                <Button type="error" class="operation-button" size="small"
                     @click="deleteAttr(row.id)">
                     <Icon type="md-trash" />
                 </Button>

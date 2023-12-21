@@ -138,10 +138,10 @@ describe('AttributeDefinition', () => {
 
     it("isOptionalAttr", () => {
         // default optional
-        expect(definition['_require_constrain']).not.toBeNull()
+        expect(definition.require_constrain).not.toBeNull()
         expect(definition.isOptionalAttr()).toBeTruthy()
         // change to required
-        definition['_require_constrain'].required = true
+        definition.require_constrain.required = true
         expect(definition.isOptionalAttr()).toBeFalsy()
     })
 

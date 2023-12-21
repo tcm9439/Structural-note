@@ -31,7 +31,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     private _default_value: T | null = null
 
     private _constrains: Map<UUID, Constrain> = new Map()
-    private _require_constrain: RequireConstrain
+    private _require_constrain: UUID
 
     /**
      * An attribute default to be 
@@ -47,7 +47,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         // create a default require constrain
         let default_require_constrain = new RequireConstrain(false)
         this.addConstrain(default_require_constrain)
-        this._require_constrain = default_require_constrain
+        this._require_constrain = default_require_constrain.id
     }
 
     /**
@@ -73,7 +73,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
      * Which is defined as an attribute with a require_constrain = true
      */
     isOptionalAttr(): boolean {
-        return !this._require_constrain.required
+        return !this.require_constrain.required
     }
 
     setDefaultValue(value: T | null): OperationResult {
@@ -92,16 +92,8 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         return this._constrains
     }
 
-    private set require_constrain(value: RequireConstrain) {
-        if (this._require_constrain !== null) {
-            this._constrains.delete(this._require_constrain.id)
-        }
-        this._require_constrain = value
-        this._constrains.set(value.id, value)
-    }
-
     get require_constrain(): RequireConstrain {
-        return this._require_constrain
+        return this.constrains.get(this._require_constrain) as RequireConstrain
     }
 
     set attribute_type(value: AttributeType<T> ) {
@@ -149,6 +141,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     addConstrain(constrain: Constrain): Error | null {
         if (this._attribute_type !== null) {
             if (this._constrains.has(constrain.id)) {
+                // constrain already exists
                 return null
             }
 
@@ -167,7 +160,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
             // pass all the checks, add the constrain
             // if constrain is requiredConstrain, check if it is required
             if (constrain instanceof RequireConstrain) {
-                this._require_constrain = constrain
+                this._require_constrain = constrain.id
             }
             this._constrains.set(constrain.id, constrain)
         }
@@ -176,8 +169,8 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
 
     removeConstrain(constrain_id: UUID): void {
         // if constrain is requiredConstrain, set the required to default (false)
-        if (this._require_constrain.id === constrain_id) {
-            this._require_constrain.required = false
+        if (this._require_constrain === constrain_id) {
+            this.require_constrain.required = false
         } else {
             this._constrains.delete(constrain_id)
         }
@@ -280,15 +273,14 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         const attribute_type = AttributeType.getAttrType(valid_json.attribute_type)
         const def = new AttributeDefinition(valid_json.name, attribute_type, valid_json.description)
         def.id = valid_json.id
+        def.constrains.clear() // remove the default require_constrain
         def.setDefaultValue(valid_json.default_value)
 
         // load constrains
         valid_json.constrains.forEach((constrain_json) => {
             let constrain: Constrain
             if (constrain_json.type === "RequireConstrain") {
-                let r_constrain = RequireConstrain.loadFromJson(constrain_json)
-                def.require_constrain = r_constrain
-                constrain = r_constrain
+                constrain = RequireConstrain.loadFromJson(constrain_json)
             } else if (constrain_json.type === "MinConstrain") {
                 constrain = MinConstrain.loadFromJson(constrain_json)
             } else if (constrain_json.type === "MaxConstrain") {
