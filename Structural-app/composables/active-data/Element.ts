@@ -1,4 +1,4 @@
-import { type ComponentVForElement, EditPath, type EditPathNode, EndOfEditPathError, Note, ElementType, NoteSection, StructuralElement, TextElement, MarkdownElement } from "structural-core"
+import { type ComponentVForElement, EditPath, type EditPathNode, EndOfEditPathError, Note, ElementType, NoteSection, StructuralElement, TextElement, MarkdownElement, StructuralSection, Logger } from "structural-core"
 import MtElementText from "@/components/mt/element/text.vue"
 import MtElementMarkdown from "@/components/mt/element/markdown.vue"
 import MtElementStructural from "@/components/mt/element/structural.vue"
@@ -49,29 +49,42 @@ export function elementListGetter(editing_note: Note | undefined, parent_node: E
 
 export type AvailableElementComponent = {
     id: string,
+    disable: boolean,
     display_choice: string,
 }
 
 export function availableElementComponentGetter(section: NoteSection): AvailableElementComponent[]{
     return section.available_element_types.map((element_type) => {
         let display_choice = ""
+        let disable = false
+        
+        try {
 
-        switch (element_type) {
-            case ElementType.TEXT:
-                display_choice = "Add Text Section"
-                break;
-            case ElementType.STRUCT:
-                display_choice = "Add Struct Section"
-                break;
-            case ElementType.MARKDOWN:
-                display_choice = "Add Markdown Section"
-                break;
-            default:
-                break;
+            switch (element_type) {
+                case ElementType.TEXT:
+                    display_choice = "Add Text Section"
+                    break;
+                case ElementType.STRUCT:
+                    display_choice = "Add Struct Section"
+                    let struct_section = section as StructuralSection
+                    if (struct_section.definition.attributes.length() == 0){
+                        // disable if no attribute is defined
+                        disable = true
+                    }
+                    break;
+                case ElementType.MARKDOWN:
+                    display_choice = "Add Markdown Section"
+                    break;
+                default:
+                    break;
+            }
+        } catch (error) {
+            Logger.get().error(`Error when getting available element component: ${error}`)
         }
 
         return {
             id: element_type,
+            disable: disable,
             display_choice: display_choice
         }
     })

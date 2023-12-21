@@ -139,31 +139,29 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
      * @returns Error if the constrain is not allowed or incompatible with the existing constrains. Null if the constrain is added successfully.
      */
     addConstrain(constrain: Constrain): Error | null {
-        if (this._attribute_type !== null) {
-            if (this._constrains.has(constrain.id)) {
-                // constrain already exists
-                return null
-            }
-
-            // check if the constrain is allowed by the attribute type
-            if (!this._attribute_type.allowConstrain(constrain)) {
-                return new ForbiddenConstrain(constrain.getType())
-            }
-
-            // check if the constrain is compatible with the existing constrains
-            for (const [id, existing_constrain] of this.constrains) {
-                if (!existing_constrain.isCompatibleTo(constrain)) {
-                    return new IncompatibleConstrain(constrain.getType(), existing_constrain.getType())
-                }
-            }
-
-            // pass all the checks, add the constrain
-            // if constrain is requiredConstrain, check if it is required
-            if (constrain instanceof RequireConstrain) {
-                this._require_constrain = constrain.id
-            }
-            this._constrains.set(constrain.id, constrain)
+        if (this._constrains.has(constrain.id)) {
+            // constrain already exists
+            return null
         }
+
+        // check if the constrain is allowed by the attribute type
+        if (this._attribute_type !== null && !this._attribute_type.allowConstrain(constrain)) {
+            return new ForbiddenConstrain(constrain.getType())
+        }
+
+        // check if the constrain is compatible with the existing constrains
+        for (const [id, existing_constrain] of this.constrains) {
+            if (!existing_constrain.isCompatibleTo(constrain)) {
+                return new IncompatibleConstrain(constrain.getType(), existing_constrain.getType())
+            }
+        }
+
+        // pass all the checks, add the constrain
+        // if constrain is requiredConstrain, check if it is required
+        if (constrain instanceof RequireConstrain) {
+            this._require_constrain = constrain.id
+        }
+        this._constrains.set(constrain.id, constrain)
         return null
     }
 

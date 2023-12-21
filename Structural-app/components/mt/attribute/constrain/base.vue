@@ -38,6 +38,12 @@ function onToggleConstrain() {
         emit("update", constrain_enabled.value, props.params)
     }
 }
+
+function onExistMeansTrueConstrainUpdate(new_val: boolean) {
+    // init the constrain enable checkbox by the constrain init value
+    constrain_enabled.value = new_val
+    onToggleConstrain()
+}
 </script>
 
 <template>
@@ -53,6 +59,7 @@ function onToggleConstrain() {
             :edit_path="props.params.path"
             :enable="constrain_enabled"
             :attr_def="attr_def" 
+            @existMeansTrueConstrainUpdate="onExistMeansTrueConstrainUpdate"
         />
     </template>
 </template>

@@ -11,6 +11,10 @@ const props = defineProps<{
 
 const editing_note: Note | undefined = inject(InjectConstant.EDITING_NOTE)
 const section = activeDataGetter(editing_note, props.edit_path) as StructuralSection
+
+const no_definition = computed(() => section.definition.attributes.length() == 0)
+const render_available_element = ref(0)
+
 let def_path: EditPath
 try {
     def_path = section.stepInEachChildren(props.edit_path, StructuralSection.DEFINITION_FILTER_MODE)[0]
@@ -36,20 +40,38 @@ function addElement(element_type: ElementType, last_element_id?: string){
     section.elements.addAfter(new_element, last_element_id)
 }
 
+watch(edit_def_mode, () => {
+    render_available_element.value += 1
+})
+
 </script>
 
 <template>
     <mt-section-base 
         :edit_path="edit_path" 
         :available_section_types="available_section_types"
+        :render_available_element="render_available_element"
         @add-element="addElement"
         class="no-pad">
+
+        <!-- Edit definition button -->
         <template #operation>
             <Button 
                 type="primary" class="section-operation-button-gp"
                 @click="startEditDef">
                 <Icon type="md-options" />
             </Button>
+        </template>
+
+        <template #body>
+            <div v-if="no_definition" class="mt-add-definition-container">
+                <Button shape="circle" icon="md-add" long 
+                    class="mt-add-definition-button" type="primary"
+                    @click="startEditDef"
+                >
+                    Add Definition
+                </Button>
+            </div>
         </template>
     </mt-section-base>
 
@@ -62,8 +84,18 @@ function addElement(element_type: ElementType, last_element_id?: string){
     />
 </template>
 
-<style>
+<style scoped>
 .no-pad {
     padding: 0;
+}
+
+.mt-add-definition-container {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.mt-add-definition-button {
+    width: 80%;
 }
 </style>

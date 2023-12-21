@@ -8,10 +8,18 @@ const props = defineProps<{
     enable: boolean,
 }>()
 
+const emit = defineEmits<{
+    (event: 'existMeansTrueConstrainUpdate', enable: boolean): void
+}>()
+
 const constrain = activeDataGetter(props.attr_def, props.edit_path) as RequireConstrain
+
+// init the constrain enable checkbox
+emit("existMeansTrueConstrainUpdate", constrain.required)
 
 watch(() => props.enable, (new_val) => {
     constrain.required = new_val
+    emit("existMeansTrueConstrainUpdate", new_val)
 })
 </script>
 

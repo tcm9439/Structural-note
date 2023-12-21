@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { NoteSection, EditPath, Note, InjectConstant, type ComponentVForElement, TextElement, ElementType, EventConstant, MarkdownElement } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
-import { elementListGetter, availableElementComponentGetter, elementComponentMapper } from "@/composables/active-data/Element"
+import { elementListGetter, availableElementComponentGetter, elementComponentMapper, type AvailableElementComponent } from "@/composables/active-data/Element"
 import { Icon } from "view-ui-plus"
 import { type AvailableSection } from "@/composables/active-data/Note"
 const { $emitter } = useNuxtApp()
 
 const props = defineProps<{
     edit_path: EditPath,
+    render_available_element: number,
     available_section_types: AvailableSection[]
 }>()
 
@@ -26,7 +27,11 @@ watch([() => section.elements.length(), rerender_elements], () => {
 
 
 // # Elements
-const available_element_types = availableElementComponentGetter(section)
+let available_element_types: Ref<AvailableElementComponent[]> = ref([])
+watch(() => props.render_available_element, () => {
+    available_element_types.value = availableElementComponentGetter(section)
+}, { immediate: true })
+
 function addElement(element_type: string, last_element_id?: string){
     // if element_type is available in NoteSection, add it directly
     // else, emit event to the extended section component
@@ -127,7 +132,10 @@ function moveDownSection(){
                 @move-up="moveUpElement" 
                 @move-down="moveDownElement">
                 <template #available_element>
-                    <DropdownItem v-for="element_type in available_element_types" :name="element_type.id">
+                    <DropdownItem v-for="element_type in available_element_types" 
+                        :name="element_type.id"
+                        :disabled="element_type.disable"
+                    >
                         {{element_type.display_choice}}
                     </DropdownItem>
                 </template>
@@ -137,7 +145,9 @@ function moveDownSection(){
             </mt-element-base>
         </template>
 
-        <!-- Add element button when there is NO element in this section -->
+        <slot name="body"></slot>
+
+        <!-- Add element button -->
         <div class="add-element-container">
             <Dropdown 
                 class="add-element-button"
@@ -149,7 +159,10 @@ function moveDownSection(){
                 
                 <template #list>
                     <DropdownMenu>
-                        <DropdownItem v-for="element_type in available_element_types" :name="element_type.id">
+                        <DropdownItem v-for="element_type in available_element_types" 
+                            :name="element_type.id"
+                            :disabled="element_type.disable"
+                        >
                             {{element_type.display_choice}}
                         </DropdownItem>
                     </DropdownMenu>
