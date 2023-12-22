@@ -14,7 +14,8 @@
         "build-types": "api-extractor run",
         "build-all": "npm run build && npm run build-types && npm run minify",
         "minify": "minify-all-js ./lib",
-        "dep": "ts_dependency_graph --start src/index.ts --graph_folder | dot -T svg > test/out/dependency-graph.svg"
+        "dep": "ts_dependency_graph --start src/index.ts --graph_folder | dot -T svg > test/out/dependency-graph.svg",
+        "i18n": "typesafe-i18n"
     },
     "keywords": [],
     "author": "MaisyT",
@@ -37,6 +38,7 @@
         "lodash": "^4.17.21",
         "tauri-fs-util": "file:/Users/maisytse/Documents/Workspace/ts-util/tauri-fs-util",
         "tauri-plugin-log-api": "github:tauri-apps/tauri-plugin-log#v1",
+        "typesafe-i18n": "^5.26.2",
         "uuid": "^9.0.0",
         "zod": "^3.22.2"
     }
