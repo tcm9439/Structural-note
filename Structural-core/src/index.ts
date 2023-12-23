@@ -46,6 +46,7 @@ export * from "./note/util/EditingComponent"
 
 export * from "./view/ViewTypes"
 export * from "./view/state/MainViewState"
+export * from "./view/state/UserSetting"
 export * from "./view/state/edit/StructDefEditState"
 
 export * from "./view/vue-helper/ArrayUtil"

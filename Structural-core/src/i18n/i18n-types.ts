@@ -18,7 +18,17 @@ type RootTranslation = {
 		/**
 		 * C​r​e​a​t​e​ ​n​o​t​e
 		 */
-		CREATE_NOTE: string
+		create_note: string
+		setting: {
+			/**
+			 * S​e​t​t​i​n​g
+			 */
+			title: string
+			/**
+			 * L​a​n​g​u​a​g​e
+			 */
+			lang: string
+		}
 	}
 	test: {
 		/**
@@ -56,7 +66,17 @@ export type TranslationFunctions = {
 		/**
 		 * Create note
 		 */
-		CREATE_NOTE: () => LocalizedString
+		create_note: () => LocalizedString
+		setting: {
+			/**
+			 * Setting
+			 */
+			title: () => LocalizedString
+			/**
+			 * Language
+			 */
+			lang: () => LocalizedString
+		}
 	}
 	test: {
 		/**

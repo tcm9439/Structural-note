@@ -11,7 +11,7 @@ type AppConfig = {
  * Initialize the module (structural-core).
  */
 export class ModuleInit {
-    static inTauriEnv(runtimeConfig?: AppConfig): boolean{
+    static isInTauriEnv(runtimeConfig?: AppConfig): boolean{
         if (runtimeConfig === undefined) {
             return false
         }
@@ -26,13 +26,17 @@ export class ModuleInit {
     }
 
     static async init(runtimeConfig?: AppConfig) {
-        if (ModuleInit.inTauriEnv(runtimeConfig)) {
+        // init logger
+        if (ModuleInit.isInTauriEnv(runtimeConfig)) {
             await TauriLogger.initLogger()
         } else {
             WebLogger.initLogger()
         }
         Logger.get().info("Initializing module...")
+
+        // init attribute type
         AttributeTypeInitializer.initialize()
+        // init translationManager
     }
 
     static async close() {

@@ -1,10 +1,10 @@
-type LogOptions = {
+export type LogOptions = {
     file?: string;
     line?: number;
     keyValues?: Record<string, string | undefined>;
 }
 
-type LoggerModule = {
+export type LoggerModule = {
     error(message: string, options?: LogOptions): Promise<void>
     warn(message: string, options?: LogOptions): Promise<void>
     info(message: string, options?: LogOptions): Promise<void>
