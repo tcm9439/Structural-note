@@ -1,4 +1,4 @@
-import { AttributeType, AttributeTypeEnum } from "@/note/element/structural/attribute/type/AttributeType"
+import { AttributeType, AttributeTypeEnum } from "./AttributeType.js"
 
 export class MarkdownAttribute extends AttributeType<string> {    
     public static readonly TYPE: string = AttributeTypeEnum.MARKDOWN

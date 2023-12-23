@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinConstrain"
-import { MaxConstrain } from "@/note/element/structural/attribute/constrain/MaxConstrain"
-import { ValidOperationResult } from "@/common/OperationResult"
+import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinConstrain.js"
+import { MaxConstrain } from "@/note/element/structural/attribute/constrain/MaxConstrain.js"
+import { ValidOperationResult } from "@/common/OperationResult.js"
 
 describe("MinConstrain", () => {
     let min_constrain: MinConstrain<number>

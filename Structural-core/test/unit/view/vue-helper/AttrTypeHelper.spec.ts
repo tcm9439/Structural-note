@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, beforeAll } from "vitest"
-import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
-import { AttrTypeHelper, AttrTypeNameAndInstance } from "@/view/vue-helper/AttrTypeHelper"
-import { AttributeTypeInitializer } from "@/note/element/structural/attribute/type/AttributeTypeInitializer"
-import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
+import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType.js"
+import { AttrTypeHelper, AttrTypeNameAndInstance } from "@/view/vue-helper/AttrTypeHelper.js"
+import { AttributeTypeInitializer } from "@/note/element/structural/attribute/type/AttributeTypeInitializer.js"
+import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
+import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
 
 describe("AttrTypeHelper", () => {
     beforeAll(() => {

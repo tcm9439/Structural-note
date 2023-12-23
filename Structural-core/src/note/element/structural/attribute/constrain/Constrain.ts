@@ -1,7 +1,7 @@
-import { ComponentBase } from "@/note/util/ComponentBase"
-import { EditPath, EditPathNode, EndOfEditPathError } from "@/note/util/EditPath"
+import { ComponentBase } from "@/note/util/ComponentBase.js"
+import { EditPath, EditPathNode, EndOfEditPathError } from "@/note/util/EditPath.js"
+import { OperationResult, ValidOperationResult } from "@/common/OperationResult.js"
 import { z } from "zod"
-import { OperationResult, ValidOperationResult } from "@/common/OperationResult"
 
 export enum ConstrainType {
     REQUIRE = "REQUIRE",

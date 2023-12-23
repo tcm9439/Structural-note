@@ -1,6 +1,6 @@
-import { ConstrainType } from "@/index"
-import { AttributeType, AttributeTypeEnum } from "@/note/element/structural/attribute/type/AttributeType"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
+import { ConstrainType } from "../constrain/Constrain.js"
+import { AttributeType, AttributeTypeEnum } from "./AttributeType.js"
+import { StringAttribute } from "./StringAttribute.js"
 
 export class NumberAttribute extends AttributeType<number> {
     constructor(type: string) {

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { TextElement } from "@/note/element/TextElement"
+import { TextElement } from "@/note/element/TextElement.js"
 
 describe("TextAreaSection", () => {
     let text_area_section: TextElement

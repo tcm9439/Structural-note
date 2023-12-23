@@ -1,12 +1,12 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { AttributeValueMarkdownConverter } from "@/converter/markdown/AttributeValue"
-import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
-import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
-import { BooleanAttribute } from "@/note/element/structural/attribute/type/BooleanAttribute"
-import { IntegerAttribute, DecimalAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
-import { MarkdownAttribute } from "@/note/element/structural/attribute/type/MarkdownAttribute"
-import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain"
+import { AttributeValueMarkdownConverter } from "@/converter/markdown/AttributeValue.js"
+import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
+import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
+import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
+import { BooleanAttribute } from "@/note/element/structural/attribute/type/BooleanAttribute.js"
+import { IntegerAttribute, DecimalAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
+import { MarkdownAttribute } from "@/note/element/structural/attribute/type/MarkdownAttribute.js"
+import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain.js"
 
 describe("AttributeValueMarkdownConverter", () => {
     it("convert", () => {

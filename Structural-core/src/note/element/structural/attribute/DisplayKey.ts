@@ -1,8 +1,8 @@
-import { AttributeTypeEnum } from "@/note/element/structural/attribute/type/AttributeType"
-import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
-import { StructuralElement } from "@/note/element/structural/StructuralElement"
-import { OrderedComponents } from "@/note/util/OrderedComponents"
-import { NumberAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
+import { StructuralElement } from "@/note/element/structural/StructuralElement.js"
+import { OrderedComponents } from "@/note/util/OrderedComponents.js"
+import { AttributeTypeEnum } from "./type/AttributeType.js"
+import { AttributeDefinition } from "./AttributeDefinition.js"
+import { NumberAttribute } from "./type/NumberAttribute.js"
 
 export class DisplayKey {
     public static readonly available_type: AttributeTypeEnum[] = [

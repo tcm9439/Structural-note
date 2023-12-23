@@ -1,5 +1,5 @@
-import { AttributeType, AttributeTypeEnum } from "@/note/element/structural/attribute/type/AttributeType"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
+import { AttributeType, AttributeTypeEnum } from "./AttributeType.js"
+import { StringAttribute } from "./StringAttribute.js"
 
 export class BooleanAttribute extends AttributeType<boolean> {
     public static readonly TYPE: string = AttributeTypeEnum.BOOLEAN

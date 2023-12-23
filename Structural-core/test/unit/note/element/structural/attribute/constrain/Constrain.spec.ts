@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { Constrain, ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
-import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinConstrain"
-import { MaxConstrain } from "@/note/element/structural/attribute/constrain/MaxConstrain"
-import { EditPath, EndOfEditPathError } from "@/note/util/EditPath"
+import { Constrain, ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain.js"
+import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinConstrain.js"
+import { MaxConstrain } from "@/note/element/structural/attribute/constrain/MaxConstrain.js"
+import { EditPath, EndOfEditPathError } from "@/note/util/EditPath.js"
 
 describe("Constrain", () => {
 	it("getNextEditPathNode", () => {

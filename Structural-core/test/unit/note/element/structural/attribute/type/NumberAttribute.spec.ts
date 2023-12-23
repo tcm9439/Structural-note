@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
-import { IntegerAttribute, NumberAttribute, DecimalAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
-import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
+import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
+import { IntegerAttribute, NumberAttribute, DecimalAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
+import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
 
 describe('NumberAttribute', () => {
 	it("instance", () => {

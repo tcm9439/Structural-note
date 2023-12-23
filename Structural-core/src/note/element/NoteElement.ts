@@ -1,6 +1,6 @@
-import { UUID } from "@/common/CommonTypes"
-import { ComponentBase } from "@/note/util/ComponentBase"
-import { EditPathNode, EndOfEditPathError, EditPath } from "@/note/util/EditPath"
+import { UUID } from "@/common/CommonTypes.js"
+import { ComponentBase } from "@/note/util/ComponentBase.js"
+import { EditPathNode, EndOfEditPathError, EditPath } from "@/note/util/EditPath.js"
 import { z } from "zod"
 
 export enum ElementType {

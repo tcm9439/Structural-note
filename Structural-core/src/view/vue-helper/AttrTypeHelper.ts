@@ -1,5 +1,5 @@
-import { ArrayUtil } from "@/view/vue-helper/ArrayUtil"
-import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
+import { ArrayUtil } from "@/view/vue-helper/ArrayUtil.js"
+import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType.js"
 
 export class AttrTypeNameAndInstance {
     private _name: string

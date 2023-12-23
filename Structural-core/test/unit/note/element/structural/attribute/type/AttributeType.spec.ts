@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach, beforeAll } from "vitest"
-import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType"
-import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
-import { AttributeTypeInitializer } from "@/note/element/structural/attribute/type/AttributeTypeInitializer"
-import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/exception/AttributeException"
-import { ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
-import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain"
+import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType.js"
+import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
+import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
+import { AttributeTypeInitializer } from "@/note/element/structural/attribute/type/AttributeTypeInitializer.js"
+import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/exception/AttributeException.js"
+import { ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain.js"
+import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain.js"
 
 class TestAttribute extends AttributeType<number> {
     public static readonly TYPE: string = "TEST"

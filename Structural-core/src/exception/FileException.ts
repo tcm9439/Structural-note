@@ -1,4 +1,4 @@
-import { AppException } from "@/exception/AppException"
+import { AppException } from "./AppException.js"
 
 /**
  * - FileAlreadyOpened

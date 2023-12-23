@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach } from "vitest"
 import { StructuralSection } from '@/note/section/StructuralSection'
-import { EditPath } from "@/note/util/EditPath"
-import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
-import { TextElement } from "@/note/element/TextElement"
+import { EditPath } from "@/note/util/EditPath.js"
+import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
+import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
+import { TextElement } from "@/note/element/TextElement.js"
 
 describe('StructuralSection', () => {
     let section : StructuralSection

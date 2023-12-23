@@ -1,13 +1,14 @@
-import { UUID } from "@/common/CommonTypes"
-import { OrderedComponents } from "@/note/util/OrderedComponents"
-import { EditPath, EditPathNode } from "@/note/util/EditPath"
-import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
-import { AttributeValue, AttributeValueJson } from "@/note/element/structural/attribute/value/AttributeValue"
-import { StructureDefinition } from "@/note/element/structural/StructureDefinition"
-import { NoteElement, NoteElementJson } from "@/note/element/NoteElement"
-import { ValidOperationResult, OperationResult } from "@/common/OperationResult"
+import { UUID } from "@/common/CommonTypes.js"
+import { ValidOperationResult, OperationResult } from "@/common/OperationResult.js"
+import { OrderedComponents } from "@/note/util/OrderedComponents.js"
+import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException.js"
+import { NoteElement, NoteElementJson } from "@/note/element/NoteElement.js"
+import { EditPath, EditPathNode } from "@/note/util/EditPath.js"
+import { AttributeDefinition } from "./attribute/AttributeDefinition.js"
+import { AttributeValue, AttributeValueJson } from "./attribute/value/AttributeValue.js"
+import { StructureDefinition } from "./StructureDefinition.js"
+
 import { z } from "zod"
-import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException"
 
 export const StructuralElementJson = NoteElementJson.extend({
     type: z.literal("StructuralElement"),

@@ -1,10 +1,11 @@
-import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException"
-import { ComponentBase } from "@/note/util/ComponentBase"
-import { UUID } from "@/common/CommonTypes"
-import { OrderedComponents, ComponentsOrderJson } from "@/note/util/OrderedComponents"
-import { EditPathNode, EditPath } from "@/note/util/EditPath"
-import { NoteSection, NoteSectionJson } from "@/note/section/NoteSection"
-import { StructuralSection } from "@/note/section/StructuralSection"
+import { UUID } from "@/common/CommonTypes.js"
+import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException.js"
+import { ComponentBase } from "./util/ComponentBase.js"
+import { OrderedComponents, ComponentsOrderJson } from "./util/OrderedComponents.js"
+import { EditPathNode, EditPath } from "./util/EditPath.js"
+import { NoteSection, NoteSectionJson } from "./section/NoteSection.js"
+import { StructuralSection } from "./section/StructuralSection.js"
+
 import { z } from "zod"
 
 export const NoteJson = z.object({

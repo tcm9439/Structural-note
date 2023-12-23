@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { OrderedList } from "@/common/OrderedList"
+import { OrderedList } from "@/common/OrderedList.js"
 import { OrderedComponents } from '@/note/util/OrderedComponents'
-import { Note } from "@/note/Note"
-import { UUID } from "@/common/CommonTypes"
+import { Note } from "@/note/Note.js"
+import { UUID } from "@/common/CommonTypes.js"
 import _ from "lodash"
 
 function compareComponentsOrder(components: OrderedComponents<Note>, note_ids: Note[], expected_order_index: number[]): void {

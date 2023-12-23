@@ -1,9 +1,8 @@
-import { Constrain, ConstrainType, ConstrainJson } from "@/note/element/structural/attribute/constrain/Constrain"
-import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinConstrain"
-import { OperationResult, ValidOperationResult } from "@/common/OperationResult"
+import { Constrain, ConstrainType, ConstrainJson } from "./Constrain.js"
+import { OperationResult, ValidOperationResult } from "@/common/OperationResult.js"
+import { InvalidJsonFormatException } from "@/exception/ConversionException.js"
 import { z } from "zod"
-import { InvalidJsonFormatException } from "@/exception/ConversionException"
-
+import _ from "lodash"
 
 export const MaxConstrainJson = ConstrainJson.extend({
     type: z.literal("MaxConstrain"),
@@ -51,9 +50,10 @@ export class MaxConstrain<T> extends Constrain {
             return false
         }
 
-        if (constrain instanceof MinConstrain) {
-            if (this.max != null && constrain.min != null) {
-                return this.max >= constrain.min
+        if (constrain.getType() == ConstrainType.MIN) {
+            let min = _.get(constrain, "min") as unknown
+            if (this.max != null && min != null) {
+                return this.max >= min
             }
         }
 

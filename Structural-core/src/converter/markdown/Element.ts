@@ -1,9 +1,9 @@
-import { NoteElement } from "@/note/element/NoteElement"
-import { StructuralElement } from "@/note/element/structural/StructuralElement"
-import { TextElement } from "@/note/element/TextElement"
-import { MarkdownElement } from "@/note/element/MarkdownElement"
-import { ConverterHelper, StringBuilder } from "@/converter/ConverterHelper"
-import { AttributeValueMarkdownConverter } from "@/converter/markdown/AttributeValue"
+import { NoteElement } from "@/note/element/NoteElement.js"
+import { StructuralElement } from "@/note/element/structural/StructuralElement.js"
+import { TextElement } from "@/note/element/TextElement.js"
+import { MarkdownElement } from "@/note/element/MarkdownElement.js"
+import { ConverterHelper, StringBuilder } from "../ConverterHelper.js"
+import { AttributeValueMarkdownConverter } from "./AttributeValue.js"
 
 export class ElementMarkdownConverter {
     static convert(element: NoteElement): string {

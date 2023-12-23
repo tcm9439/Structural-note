@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest"
-import { EditingComponent } from "@/note/util/EditingComponent"
-import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
+import { EditingComponent } from "@/note/util/EditingComponent.js"
+import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
 
 describe("EditingComponent", () => {
     let commit_callback: (new_component: AttributeDefinition<string>) => void

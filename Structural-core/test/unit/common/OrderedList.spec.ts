@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { OrderedList } from "@/common/OrderedList"
+import { OrderedList } from "@/common/OrderedList.js"
 
 describe("OrderedList", () => {
     let ordered_list: OrderedList<number>

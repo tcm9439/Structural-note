@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
-import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/exception/AttributeException"
-import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
+import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
+import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
+import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/exception/AttributeException.js"
+import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
 
 describe("StringAttribute", () => {
     it("instance", () => {

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { TranslationManager } from "@/common/TranslationManager"
+import { TranslationManager } from "@/common/TranslationManager.js"
 
 describe('TranslationManager', () => {
     it('translate - no parameter', () => {

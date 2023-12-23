@@ -1,12 +1,12 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
-import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
-import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
-import { EditPath, EndOfEditPathError } from "@/note/util/EditPath"
-import { ValidOperationResult } from "@/common/OperationResult"
-import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain"
-import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException"
+import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
+import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
+import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
+import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
+import { EditPath, EndOfEditPathError } from "@/note/util/EditPath.js"
+import { ValidOperationResult } from "@/common/OperationResult.js"
+import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain.js"
+import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException.js"
 
 describe('AttributeValue', () => {
 	let attr_value: AttributeValue<any>

@@ -1,7 +1,7 @@
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
-import { IntegerAttribute, DecimalAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
-import { BooleanAttribute } from "@/note/element/structural/attribute/type/BooleanAttribute"
-import { MarkdownAttribute } from "@/note/element/structural/attribute/type/MarkdownAttribute"
+import { StringAttribute } from "./StringAttribute.js"
+import { IntegerAttribute, DecimalAttribute } from "./NumberAttribute.js"
+import { BooleanAttribute } from "./BooleanAttribute.js"
+import { MarkdownAttribute } from "./MarkdownAttribute.js"
 
 
 export class AttributeTypeInitializer {

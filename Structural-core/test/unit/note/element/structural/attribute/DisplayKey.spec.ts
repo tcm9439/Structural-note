@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
-import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
-import { StructureDefinition } from "@/note/element/structural/StructureDefinition"
-import { StructuralElement } from "@/note/element/structural/StructuralElement"
-import { AttributeValue } from "@/index"
+import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
+import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
+import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
+import { StructureDefinition } from "@/note/element/structural/StructureDefinition.js"
+import { StructuralElement } from "@/note/element/structural/StructuralElement.js"
+import { AttributeValue } from "@/index.js"
 
 describe("DisplayKey", () => {
     let definition: StructureDefinition

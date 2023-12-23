@@ -1,4 +1,4 @@
-import { Note } from "@/note/Note"
+import { Note } from "@/note/Note.js"
 
 export class MainViewState {
     private _editing_note: Note | null = null

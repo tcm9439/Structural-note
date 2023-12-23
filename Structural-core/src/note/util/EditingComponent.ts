@@ -1,4 +1,4 @@
-import { ICloneable } from "@/common/Cloneable"
+import { ICloneable } from "@/common/Cloneable.js"
 
 export class EditingComponent<T extends ICloneable> {
     private _untainted_component: T

@@ -1,5 +1,5 @@
-import { UUID } from "@/common/CommonTypes"
-import { Cloneable } from "@/common/Cloneable"
+import { UUID } from "@/common/CommonTypes.js"
+import { Cloneable } from "@/common/Cloneable.js"
 
 export class EndOfEditPathError extends Error {
     constructor(last_element_name?: string) {

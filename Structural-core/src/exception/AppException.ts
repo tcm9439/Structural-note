@@ -1,4 +1,4 @@
-import { Logger } from "@/common/Logger"
+import { Logger } from "@/common/Logger.js"
 
 export class AppException extends Error {
     constructor(message: string, name?: string) {

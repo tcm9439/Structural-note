@@ -1,12 +1,13 @@
-import { OrderedComponents, ComponentsOrderJson } from "@/note/util/OrderedComponents"
-import { AttributeDefinition, AttributeDefinitionJson } from "@/note/element/structural/attribute/AttributeDefinition"
-import { ComponentBase } from "@/note/util/ComponentBase"
-import { EditPath, EditPathNode } from "@/note/util/EditPath"
-import { Cloneable, CloneUtil } from "@/common/Cloneable"
+import { OrderedComponents, ComponentsOrderJson } from "@/note/util/OrderedComponents.js"
+import { ComponentBase } from "@/note/util/ComponentBase.js"
+import { EditPath, EditPathNode } from "@/note/util/EditPath.js"
+import { Cloneable, CloneUtil } from "@/common/Cloneable.js"
+import { OperationResult, ValidOperationResult } from "@/common/OperationResult.js"
+import { AttributeDefinition, AttributeDefinitionJson } from "./attribute/AttributeDefinition.js"
+import { DisplayKey } from "./attribute/DisplayKey.js"
+import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException.js"
+
 import { z } from "zod"
-import { OperationResult, ValidOperationResult } from "@/common/OperationResult"
-import { DisplayKey } from "@/note/element/structural/attribute/DisplayKey"
-import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException"
 
 export const StructureDefinitionJson = z.object({
     id: z.string(),

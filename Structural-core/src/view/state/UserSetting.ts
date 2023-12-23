@@ -1,4 +1,4 @@
-import { LanguageCode } from "@/common/CommonTypes"
+import { LanguageCode } from "@/common/CommonTypes.js"
 
 export class UserSetting {
     private _language: LanguageCode = "en"

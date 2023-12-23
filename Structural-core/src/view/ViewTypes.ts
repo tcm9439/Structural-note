@@ -1,4 +1,4 @@
-import { EditPath } from "@/note/util/EditPath"
+import { EditPath } from "@/note/util/EditPath.js"
 
 export type IViewUITableColumn = {
     title?: string,

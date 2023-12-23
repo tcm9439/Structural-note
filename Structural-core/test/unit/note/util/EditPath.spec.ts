@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { EditPath, EndOfEditPathError, EditPathStep, EditPathNode } from "@/note/util/EditPath"
-import { UUID } from "@/common/CommonTypes"
+import { EditPath, EndOfEditPathError, EditPathStep, EditPathNode } from "@/note/util/EditPath.js"
+import { UUID } from "@/common/CommonTypes.js"
 
 class TestNode implements EditPathNode {
     id: UUID

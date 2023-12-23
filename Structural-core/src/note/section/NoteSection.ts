@@ -1,12 +1,12 @@
-import { ComponentBase } from "@/note/util/ComponentBase"
-import { OrderedComponents, ComponentsOrderJson } from '@/note/util/OrderedComponents'
-import { UUID } from "@/common/CommonTypes"
-import { EditPathNode, EditPath } from "@/note/util/EditPath"
-import { NoteElement, NoteElementJson, ElementType } from "@/note/element/NoteElement"
-import { TextElement } from "@/note/element/TextElement"
-import { MarkdownElement } from "@/note/element/MarkdownElement"
+import { UUID } from "@/common/CommonTypes.js"
+import { ComponentBase } from "@/note/util/ComponentBase.js"
+import { OrderedComponents, ComponentsOrderJson } from '@/note/util/OrderedComponents.js'
+import { EditPathNode, EditPath } from "@/note/util/EditPath.js"
+import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException.js"
+import { NoteElement, NoteElementJson, ElementType } from "@/note/element/NoteElement.js"
+import { TextElement } from "@/note/element/TextElement.js"
+import { MarkdownElement } from "@/note/element/MarkdownElement.js"
 import { z } from "zod"
-import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException"
 
 export enum SectionType {
     BASE = "BASE",

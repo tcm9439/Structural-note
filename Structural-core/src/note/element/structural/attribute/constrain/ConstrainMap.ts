@@ -1,7 +1,7 @@
-import { Constrain, ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
-import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain"
-import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinConstrain"
-import { MaxConstrain } from "@/note/element/structural/attribute/constrain/MaxConstrain"
+import { Constrain, ConstrainType } from "./Constrain.js"
+import { RequireConstrain } from "./RequireConstrain.js"
+import { MinConstrain } from "./MinConstrain.js"
+import { MaxConstrain } from "./MaxConstrain.js"
 
 export const ConstrainTypeToClassMap = new Map<ConstrainType, { new(): Constrain }>([
     [ConstrainType.REQUIRE, RequireConstrain],

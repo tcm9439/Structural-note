@@ -1,7 +1,7 @@
-import { Converter } from "@/converter/Converter"
-import { Note } from "@/note/Note"
-import { SectionMarkdownConverter } from "@/converter/markdown/Section"
-import { StringBuilder } from "@/converter/ConverterHelper"
+import { Note } from "@/note/Note.js"
+import { Converter } from "../Converter.js"
+import { SectionMarkdownConverter } from "./Section.js"
+import { StringBuilder } from "../ConverterHelper.js"
 
 /**
  * The "root" markdown converter for a note.

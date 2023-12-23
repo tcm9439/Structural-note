@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { NoteSection } from "@/note/section/NoteSection"
-import { TextElement } from "@/note/element/TextElement"
+import { NoteSection } from "@/note/section/NoteSection.js"
+import { TextElement } from "@/note/element/TextElement.js"
 import _ from "lodash"
 
 describe("TextAreaSection", () => {

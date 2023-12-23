@@ -5,6 +5,7 @@
         "lib/**/*"
     ],
     "main": "./lib/index.js",
+    "type": "module",
     "types": "./lib/api-index.d.js",
     "scripts": {
         "test": "vitest --run --globals --config ./vitest.config.js",
@@ -15,7 +16,8 @@
         "build-all": "npm run build && npm run build-types && npm run minify",
         "minify": "minify-all-js ./lib",
         "dep": "ts_dependency_graph --start src/index.ts --graph_folder | dot -T svg > test/out/dependency-graph.svg",
-        "i18n": "typesafe-i18n"
+        "i18n": "typesafe-i18n",
+        "typesafe-i18n": "typesafe-i18n"
     },
     "keywords": [],
     "author": "MaisyT",

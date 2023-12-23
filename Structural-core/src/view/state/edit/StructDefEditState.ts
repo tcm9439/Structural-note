@@ -1,11 +1,11 @@
-import { UUID } from "@/common/CommonTypes"
-import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
-import { StructureDefinition } from "@/note/element/structural/StructureDefinition"
-import { EditingComponent } from "@/note/util/EditingComponent"
-import { StructuralElement } from "@/note/element/structural/StructuralElement"
-import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
-import { ValidOperationResult, OperationResult } from "@/common/OperationResult"
-import { Logger } from "@/common/Logger"
+import { UUID } from "@/common/CommonTypes.js"
+import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
+import { StructureDefinition } from "@/note/element/structural/StructureDefinition.js"
+import { EditingComponent } from "@/note/util/EditingComponent.js"
+import { StructuralElement } from "@/note/element/structural/StructuralElement.js"
+import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
+import { ValidOperationResult, OperationResult } from "@/common/OperationResult.js"
+import { Logger } from "@/common/Logger.js"
 
 export type AttrDefCallback = (new_attr: AttributeDefinition<any>) => void
 export type StructDefCallback = (new_struct: StructureDefinition) => void

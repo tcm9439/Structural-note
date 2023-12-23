@@ -1,5 +1,5 @@
-import { NoteSection, SectionType } from "@/note/section/NoteSection"
-import { StructuralSection } from "@/note/section/StructuralSection"
+import { NoteSection, SectionType } from "./NoteSection.js"
+import { StructuralSection } from "./StructuralSection.js"
 
 export const SectionTypeMapper = new Map<SectionType, { new(title?: string): NoteSection }>([
     [SectionType.BASE, NoteSection],

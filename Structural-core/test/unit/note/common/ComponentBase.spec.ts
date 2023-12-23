@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { ComponentBase } from '@/note/util/ComponentBase'
-import { Note } from "@/note/Note"
+import { ComponentBase } from '@/note/util/ComponentBase.js'
+import { Note } from "@/note/Note.js"
 
 describe('ComponentBase', () => {
     it('get set id', () => {

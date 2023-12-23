@@ -1,6 +1,6 @@
-import { Constrain, ConstrainJson, ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
-import { OperationResult, ValidOperationResult } from "@/common/OperationResult"
-import { InvalidJsonFormatException } from "@/exception/ConversionException"
+import { Constrain, ConstrainJson, ConstrainType } from "./Constrain.js"
+import { OperationResult, ValidOperationResult } from "@/common/OperationResult.js"
+import { InvalidJsonFormatException } from "@/exception/ConversionException.js"
 import { z } from "zod"
 
 export const RequireConstrainJson = ConstrainJson.extend({

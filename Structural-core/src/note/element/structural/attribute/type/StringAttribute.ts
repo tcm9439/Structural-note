@@ -1,6 +1,6 @@
-import { AttributeType, AttributeTypeEnum } from "@/note/element/structural/attribute/type/AttributeType"
-import { InvalidTypeConversionException } from '@/exception/AttributeException'
-import { ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain"
+import { InvalidTypeConversionException } from '@/exception/AttributeException.js'
+import { AttributeType, AttributeTypeEnum } from "./AttributeType.js"
+import { ConstrainType } from "../constrain/Constrain.js"
 
 export class StringAttribute extends AttributeType<string> {    
     public static readonly TYPE: string = AttributeTypeEnum.STRING

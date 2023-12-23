@@ -1,6 +1,7 @@
-import { NoteElement, NoteElementJson } from "@/note/element/NoteElement"
+import { NoteElement, NoteElementJson } from "@/note/element/NoteElement.js"
+import { InvalidJsonFormatException } from "@/exception/ConversionException.js"
+
 import { z } from "zod"
-import { InvalidJsonFormatException } from "@/exception/ConversionException"
 
 export const TextElementJson = NoteElementJson.extend({
     type: z.literal("TextElement"),

@@ -1,4 +1,4 @@
-import { AppException } from "@/exception/AppException"
+import { AppException } from "./AppException.js"
 
 export class InvalidJsonFormatException extends AppException {
     constructor(component: string, message: string) {

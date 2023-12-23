@@ -2,13 +2,13 @@ import { describe, it, expect, beforeEach, beforeAll } from "vitest"
 import { Note } from '@/note/Note'
 import { NoteSection } from '@/note/section/NoteSection'
 import { StructuralSection } from '@/note/section/StructuralSection'
-import { EditPath } from "@/note/util/EditPath"
-import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
-import { BooleanAttribute } from "@/note/element/structural/attribute/type/BooleanAttribute"
-import { TextElement } from "@/note/element/TextElement"
-import { StructuralElement } from "@/note/element/structural/StructuralElement"
-import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
+import { EditPath } from "@/note/util/EditPath.js"
+import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
+import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
+import { BooleanAttribute } from "@/note/element/structural/attribute/type/BooleanAttribute.js"
+import { TextElement } from "@/note/element/TextElement.js"
+import { StructuralElement } from "@/note/element/structural/StructuralElement.js"
+import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
 import fs from "fs"
 
 describe('Note', () => {

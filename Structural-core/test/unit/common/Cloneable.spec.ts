@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { CloneUtil } from "@/common/Cloneable"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
+import { CloneUtil } from "@/common/Cloneable.js"
+import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
 
 describe("Cloneable", () => {
     it("Cloneable", () => {

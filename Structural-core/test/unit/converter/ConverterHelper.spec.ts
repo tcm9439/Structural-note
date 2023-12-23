@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { StringBuilder } from "@/converter/ConverterHelper"
+import { StringBuilder } from "@/converter/ConverterHelper.js"
 
 describe("ConverterHelper", () => {
 	it("append", () => {

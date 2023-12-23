@@ -1,6 +1,7 @@
-import { TextElement, TextElementJson } from "@/note/element/TextElement"
+import { TextElement, TextElementJson } from "@/note/element/TextElement.js"
+import { InvalidJsonFormatException } from "@/exception/ConversionException.js"
+
 import { z } from "zod"
-import { InvalidJsonFormatException } from "@/exception/ConversionException"
 
 export const MarkdownElementJson = TextElementJson.extend({
     type: z.literal("MdElement"),

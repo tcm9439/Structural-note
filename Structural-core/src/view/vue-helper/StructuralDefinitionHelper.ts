@@ -1,5 +1,5 @@
-import { IViewUITableColumn, IViewUITableData } from "@/view/ViewTypes"
-import { StructureDefinition } from "@/note/element/structural/StructureDefinition"
+import { IViewUITableColumn, IViewUITableData } from "@/view/ViewTypes.js"
+import { StructureDefinition } from "@/note/element/structural/StructureDefinition.js"
 
 export class StructuralDefinitionHelper {
     static readonly ATTR_TABLE_COLUMNS: IViewUITableColumn[] = [

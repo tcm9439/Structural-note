@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest"
-import { StructDefEditState, StructDefEditContext, StructEditQueueItem, StructEditQueue, StructEditOperation, StructDefEditEvent, AttrDefCallback, StructDefCallback, ExitCallback, StructDefEditEventElementHandler } from "@/view/state/edit/StructDefEditState"
-import { StructureDefinition } from "@/note/element/structural/StructureDefinition"
-import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
-import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
-import { StructuralElement } from "@/index"
-import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
+import { StructDefEditState, StructDefEditContext, StructEditQueueItem, StructEditQueue, StructEditOperation, StructDefEditEvent, AttrDefCallback, StructDefCallback, ExitCallback, StructDefEditEventElementHandler } from "@/view/state/edit/StructDefEditState.js"
+import { StructureDefinition } from "@/note/element/structural/StructureDefinition.js"
+import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
+import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
+import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
+import { StructuralElement } from "@/index.js"
+import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
 
 describe("StructEditQueueItem", () => {
     it("constructor & getter", () => {

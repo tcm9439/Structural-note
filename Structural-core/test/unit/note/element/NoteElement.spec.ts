@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { NoteElement } from "@/note/element/NoteElement"
-import { TextElement } from "@/note/element/TextElement"
-import { EditPath, EndOfEditPathError } from "@/note/util/EditPath"
+import { NoteElement } from "@/note/element/NoteElement.js"
+import { TextElement } from "@/note/element/TextElement.js"
+import { EditPath, EndOfEditPathError } from "@/note/util/EditPath.js"
 
 describe("NoteElement", () => {
     it("constructor", () => {

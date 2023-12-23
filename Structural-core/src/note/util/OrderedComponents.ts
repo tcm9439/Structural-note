@@ -1,6 +1,6 @@
-import { UUID } from "@/common/CommonTypes"
-import { OrderedList } from "@/common/OrderedList"
-import { ComponentBase } from "@/note/util/ComponentBase"
+import { UUID } from "@/common/CommonTypes.js"
+import { OrderedList } from "@/common/OrderedList.js"
+import { ComponentBase } from "./ComponentBase.js"
 import { z } from "zod"
 
 export const ComponentsOrderJson = z.array(z.string())

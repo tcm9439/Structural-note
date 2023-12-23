@@ -1,8 +1,8 @@
-import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
-import { AttributeTypeEnum } from "@/note/element/structural/attribute/type/AttributeType"
-import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
-import { NumberAttribute } from "@/note/element/structural/attribute/type/NumberAttribute"
-import { ConverterHelper } from "@/converter/ConverterHelper"
+import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
+import { AttributeTypeEnum } from "@/note/element/structural/attribute/type/AttributeType.js"
+import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
+import { NumberAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
+import { ConverterHelper } from "../ConverterHelper.js"
 
 export class AttributeValueMarkdownConverter {
     static convert(attr_def: AttributeDefinition<any>, element: AttributeValue<any>): string {

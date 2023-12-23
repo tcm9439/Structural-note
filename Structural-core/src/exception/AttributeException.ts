@@ -1,4 +1,4 @@
-import { AppException } from "@/exception/AppException"
+import { AppException } from "./AppException.js"
 
 export class InvalidTypeConversionForDataException extends AppException {
     constructor(fromType: string, toType: string, data: any) {

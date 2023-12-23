@@ -1,13 +1,16 @@
-import { LanguageCode } from "./CommonTypes"
+import type { Locales } from "@/i18n/i18n-types"
 import L from '@/i18n/i18n-node'
-import type { Locales, TranslationFunctions } from '@/i18n/i18n-types'
 import _ from "lodash"
 
 export class TranslationManager {
-    private _default_language_code: LanguageCode;
+    private _default_language_code: Locales;
    
-    constructor(default_language_code?: LanguageCode){
+    constructor(default_language_code?: Locales){
         this._default_language_code = default_language_code === undefined ? 'en' : default_language_code
+    }
+
+    set default_language_code(language_code: Locales){
+        this._default_language_code = language_code
     }
 
     /**
@@ -22,12 +25,11 @@ export class TranslationManager {
      * 2. named parameter: {name:string}
      * 3. numbered parameter {0}: array of string or number
      */
-    public translate(key: string, language_code?: LanguageCode, param?: Array<string | number> | object | string | number): string {
+    public translate(key: string, language_code?: Locales, param?: Array<string | number> | object | string | number): string {
         const temp: string[] = key.split('.')
 
         language_code = language_code === undefined ? this._default_language_code : language_code
-        let t: TranslationFunctions = L[<Locales>language_code]
-        let localizationFunction: any = t
+        let localizationFunction = L[language_code] as any
         for  (const a of temp){
             localizationFunction = localizationFunction[a]
         }

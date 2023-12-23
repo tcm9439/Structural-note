@@ -1,7 +1,7 @@
-import { ID } from "@/common/CommonTypes"
-import { Cloneable } from "@/common/Cloneable"
-import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/exception/AttributeException"
-import { ConstrainType, Constrain } from "@/note/element/structural/attribute/constrain/Constrain"
+import { ID } from "@/common/CommonTypes.js"
+import { Cloneable } from "@/common/Cloneable.js"
+import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/exception/AttributeException.js"
+import { ConstrainType, Constrain } from "../constrain/Constrain.js"
 
 export enum AttributeTypeEnum {
     STRING = "STRING",

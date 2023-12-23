@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition"
-import { BooleanAttribute } from "@/note/element/structural/attribute/type/BooleanAttribute"
-import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute"
+import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
+import { BooleanAttribute } from "@/note/element/structural/attribute/type/BooleanAttribute.js"
+import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
+import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
 
 describe('BooleanAttribute', () => {
     let definition: AttributeDefinition<boolean>
