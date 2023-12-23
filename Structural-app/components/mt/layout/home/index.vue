@@ -6,7 +6,7 @@
  -->
 
 <script setup lang="ts">
-import { Note, EventConstant, Logger } from "structural-core"
+import { Note, EventConstant, AppState, AppRuntimeEnvironment } from "structural-core"
 import { NoteFileHandler } from "@/composables/file/NoteFileHandler"
 const { $emitter, $viewState, $Modal } = useNuxtApp()
 import { appWindow } from "@tauri-apps/api/window"
@@ -18,18 +18,26 @@ const has_open_note = ref<boolean>(false)
 
 // # listen to the note opened event (from here or the menu)
 function noteOpenedHandler(){
-    Logger.get().debug("Note opened event.")
+    AppState.logger.debug("Note opened event.")
     editing_note.value = $viewState.editing_note
     has_open_note.value = true
-    Logger.get().debug("Note opened.")
+    AppState.logger.debug("Note opened.")
 }
 $emitter.on(EventConstant.NOTE_OPENED, noteOpenedHandler)
 
 // # init page: check if there is any opened note for this window
 const window_id = appWindow.label
 try {
-    has_open_note.value = await NoteFileHandler.openInitNoteForThisWindow(window_id)
-    console.log(`Has open note: ${has_open_note.value}`)
+    AppState.logger.info(`App state: ${AppState.environment === AppRuntimeEnvironment.TARUI }, ${AppState["appSettingFilepath"]}`)
+    console.log(useRuntimeConfig().public)
+    if ($viewState.editing_note != null){
+        // already opened a note (probably from go back in this page from another page)
+        editing_note.value = $viewState.editing_note
+        has_open_note.value = true
+    } else {
+        has_open_note.value = await NoteFileHandler.openInitNoteForThisWindow(window_id)
+        AppState.logger.debug(`Has open note: ${has_open_note.value}`)
+    }
 } catch (error) {
     $Modal.error({
         title: "Fail to open note",
@@ -39,13 +47,13 @@ try {
 
 // # listen to the file drop event
 const unlisten_drop_file = await appWindow.onFileDropEvent(async (event) => {
-    console.log(`Got event in window ${event.windowLabel}, payload: ${event.payload}`)
+    AppState.logger.debug(`Got event in window ${event.windowLabel}, payload: ${event.payload}`)
     try {
         if (event.payload.type != "drop"){
             return
         }
         let selected_open_path = NoteFileHandler.getPathFromSelectedFiles(event.payload.paths)
-        console.log(`Selected open path: ${selected_open_path}`)
+        AppState.logger.debug(`Selected open path: ${selected_open_path}`)
         await NoteFileHandler.openNote(window_id, !has_open_note.value, selected_open_path)
     } catch (error) {
         $Modal.error({
@@ -57,7 +65,7 @@ const unlisten_drop_file = await appWindow.onFileDropEvent(async (event) => {
 
 // # listen to close window request event
 const unlisten_close_window = await appWindow.onCloseRequested(async (event) => {
-    Logger.get().info("Close window request.")
+    AppState.logger.info("Close window request.")
     if (editing_note.value != null){
         // TODO ask to save note
         // const confirmed = await confirm('Are you sure?');
@@ -68,7 +76,7 @@ const unlisten_close_window = await appWindow.onCloseRequested(async (event) => 
         // await NoteFileHandler.saveNote()
     }
     // close Logger
-    await Logger.get().close()
+    await AppState.logger.close()
 })
 
 onBeforeUnmount(() => {
@@ -82,7 +90,7 @@ onBeforeUnmount(() => {
 
 <template>
     <!-- For creating / opening a note -->
-    <mt-home-init-note v-if="!has_open_note" />
+    <mt-layout-home-init-note v-if="!has_open_note" />
 
     <!-- After a note is opened -->
     <div v-if="has_open_note">

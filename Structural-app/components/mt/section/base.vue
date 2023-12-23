@@ -8,8 +8,8 @@ const { $emitter } = useNuxtApp()
 
 const props = defineProps<{
     edit_path: EditPath,
-    render_available_element: number,
     available_section_types: AvailableSection[]
+    render_available_element?: number,
 }>()
 
 const emit = defineEmits<{

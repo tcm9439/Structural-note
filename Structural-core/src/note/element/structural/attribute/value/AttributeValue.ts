@@ -1,4 +1,4 @@
-import { Logger } from "@/common/Logger.js"
+import { AppState } from "@/view/state/AppState.js"
 import { UUID, ID } from "@/common/CommonTypes.js"
 import { ComponentBase } from "@/note/util/ComponentBase.js"
 import { AttributeDefinition } from "../AttributeDefinition.js"
@@ -102,7 +102,7 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
             return old_attr_def.attribute_type.convertTo(new_attr_def.attribute_type, value, mode)
         } catch (error) {
             if (error instanceof InvalidTypeConversionForDataException) {
-                Logger.get().warn(`Failed to convert attribute value with id ${old_attr_def.id} to new type: ${error.message}`)
+                AppState.logger.warn(`Failed to convert attribute value with id ${old_attr_def.id} to new type: ${error.message}`)
             }
             return null
         }

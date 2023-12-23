@@ -1,4 +1,5 @@
 export class EventConstant {
+    public static readonly SETTING_UPDATED: string = "SETTING_UPDATE_EVENT"
     public static readonly NOTE_OPENED: string = "NOTE_OPENED_EVENT"
 
     public static readonly ATTR_DEF_UPDATE: string = "ATTR_DEF_UPDATE_EVENT"

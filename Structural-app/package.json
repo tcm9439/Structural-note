@@ -1,6 +1,7 @@
 {
   "name": "nuxt-app",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "nuxt build --dotenv config/tauri.env",
     "dev": "MT_APP_ENV=test nuxt dev --dotenv config/nuxt.env",

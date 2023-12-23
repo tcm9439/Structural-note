@@ -1,14 +1,6 @@
 import { LogOptions, trace, debug, info, warn, error, attachConsole } from "tauri-plugin-log-api"
 
 export abstract class Logger {
-    protected static instance: Logger
-    public static get(): Logger {
-        if (!Logger.instance) {
-            WebLogger.initLogger()
-        }
-        return Logger.instance
-    }
-
     abstract error(message: string, options?: LogOptions): Promise<void>
     abstract warn(message: string, options?: LogOptions): Promise<void>
     abstract info(message: string, options?: LogOptions): Promise<void>
@@ -25,10 +17,8 @@ export class WebLogger extends Logger {
         super()
     }
 
-    static async initLogger(){
-        if (!Logger.instance) {
-            Logger.instance = new WebLogger()
-        }
+    static async initLogger(): Promise<WebLogger>{
+        return new WebLogger()
     }
 
     async error(message: string, options?: LogOptions): Promise<void> {
@@ -68,14 +58,8 @@ export class TauriLogger extends Logger {
     }
 
     static async initLogger(){
-        if (!Logger.instance) {
-            Logger.instance = new TauriLogger()
-            this.detached_function = await attachConsole()
-        }
-    }
-
-    static getInstance(): TauriLogger {
-        return this.instance
+        this.detached_function = await attachConsole()
+        return new TauriLogger()
     }
 
     async error(message: string) {

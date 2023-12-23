@@ -1,7 +1,7 @@
 import { TauriFileSystem } from "tauri-fs-util"
 import { open, save } from "@tauri-apps/api/dialog"
 import { basename } from "@tauri-apps/api/path"
-import { Note, EventConstant, NoteMarkdownConverter, Logger, AppException } from "structural-core"
+import { Note, EventConstant, NoteMarkdownConverter, AppState, AppException } from "structural-core"
 import { WindowUtil } from "@/composables/app/window"
 import { appWindow } from "@tauri-apps/api/window"
 import { invoke } from '@tauri-apps/api/tauri'
@@ -79,7 +79,7 @@ export class NoteFileHandler {
 
         // check if the selected open path is a String[]
         if (Array.isArray(selected_files)){
-            Logger.get().warn("The selected open path is an array, which is not expected. Use the first file.")
+            AppState.logger.warn("The selected open path is an array, which is not expected. Use the first file.")
             if (selected_files.length === 0){
                 return null
             }
@@ -151,13 +151,13 @@ export class NoteFileHandler {
     static async openInitNoteForThisWindow(this_window_id: string): Promise<boolean>{
         try {
             let note_path: string = await invoke("get_opened_note_for_window", { windowId: this_window_id })
-            Logger.get().debug(`Init window with note path: ${note_path}`)
+            AppState.logger.debug(`Init window with note path: ${note_path}`)
             if (note_path != ""){
-                Logger.get().debug("Has opened note.")
+                AppState.logger.debug("Has opened note.")
                 await NoteFileHandler.openNote(this_window_id, true, note_path, true)
                 return true
             } else {
-                Logger.get().debug("No opened note.")
+                AppState.logger.debug("No opened note.")
                 return false
             }
         } catch (error){
@@ -207,14 +207,14 @@ export class NoteFileHandler {
             if (open_in_this_window){
                 // selected_open_path === String
                 $viewState.editing_note = await NoteFileHandler.loadFile(selected_open_path)
-                Logger.get().trace("note:", $viewState.editing_note)
+                AppState.logger.trace("note:", $viewState.editing_note)
                 // set default save path as the open path
                 $viewState.save_path = selected_open_path
                 // emit the open note event
                 $emitter.emit(EventConstant.NOTE_OPENED)
                 appWindow.setTitle($viewState.editing_note.title)
             } else {
-                Logger.get().debug("Creating new window...")
+                AppState.logger.debug("Creating new window...")
                 window_id = WindowUtil.generateNewWindowId()
                 WindowUtil.createNewWindow(window_id)
             }
@@ -222,10 +222,10 @@ export class NoteFileHandler {
             // update the file state
             if (!init_mode){
                 // init mode => already added to file list
-                Logger.get().trace("add file")
+                AppState.logger.trace("add file")
                 await invoke("add_file", { windowId: window_id, filepath: selected_open_path })
             } 
-            Logger.get().trace("init_file")
+            AppState.logger.trace("init_file")
             await invoke("init_file", { windowId: window_id })
         } catch (error) {
             Promise.reject(error)

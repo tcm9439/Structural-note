@@ -1,5 +1,5 @@
 import { WebviewWindow } from "@tauri-apps/api/window"
-import { Logger } from "structural-core"
+import { AppState } from "structural-core"
 import { v4 as uuidv4 } from "uuid"
 
 export class WindowUtil {
@@ -23,11 +23,11 @@ export class WindowUtil {
     
         // Tauri emits the `tauri://created` and `tauri://error` to notify you of the creation response
         webview.once('tauri://created', function () {
-            Logger.get().info("webview window successfully created")
+            AppState.logger.info("webview window successfully created")
         })
         
         webview.once('tauri://error', function (error) {
-            Logger.get().error(`An error occurred during webview window creation ${error}`)
+            AppState.logger.error(`An error occurred during webview window creation ${error}`)
             Promise.reject("Fail to create new window.")
         })
 

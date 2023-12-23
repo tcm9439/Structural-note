@@ -84,8 +84,10 @@ onBeforeUnmount(() => {
                         </MenuGroup>
                     </Submenu>
                     <MenuItem name="setting">
-                        <Icon type="md-settings" />
-                        Setting
+                        <NuxtLink to="/setting" class="mt-header-link">
+                            <Icon type="md-settings" />
+                            Setting
+                        </NuxtLink>
                     </MenuItem>
                 </Menu>
             </Col>
@@ -118,5 +120,9 @@ onBeforeUnmount(() => {
 .note-name {
     color: #fff;
     padding-right: 10px;
+}
+
+.mt-header-link {
+    color: white;
 }
 </style>

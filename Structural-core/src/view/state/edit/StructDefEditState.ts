@@ -5,7 +5,7 @@ import { EditingComponent } from "@/note/util/EditingComponent.js"
 import { StructuralElement } from "@/note/element/structural/StructuralElement.js"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
 import { ValidOperationResult, OperationResult } from "@/common/OperationResult.js"
-import { Logger } from "@/common/Logger.js"
+import { AppState } from "@/view/state/AppState.js"
 
 export type AttrDefCallback = (new_attr: AttributeDefinition<any>) => void
 export type StructDefCallback = (new_struct: StructureDefinition) => void
@@ -177,11 +177,11 @@ export class StructDefEditContext {
 
     commitAttr() {
         if (this.state != StructDefEditState.EDITING_ATTR){
-            Logger.get().warn("Commit attr when not editing attr")
+            AppState.logger.warn("Commit attr when not editing attr")
             return 
         }
         if (this.editing_attr_def == null){
-            Logger.get().warn("Commit attr when editing attr is null")
+            AppState.logger.warn("Commit attr when editing attr is null")
             return
         }
         if (this.edit_queue.hasPendingItem()) {
@@ -192,11 +192,11 @@ export class StructDefEditContext {
 
     rollbackAttr() {
         if (this.state != StructDefEditState.EDITING_ATTR){
-            Logger.get().warn("Rollback attr when not editing attr")
+            AppState.logger.warn("Rollback attr when not editing attr")
             return 
         }
         if (this.editing_attr_def == null){
-            Logger.get().warn("Rollback attr when editing attr is null")
+            AppState.logger.warn("Rollback attr when editing attr is null")
             return
         }
         let attr_id = this.editing_attr_def.editing.id
@@ -329,7 +329,7 @@ export class StructDefEditEventElementHandler {
         while (edit_queue.hasConfirmedItem()){
             let edit_queue_item = edit_queue.consume()
             if (edit_queue_item == null){
-                Logger.get().warn("Edit queue item is null")
+                AppState.logger.warn("Edit queue item is null")
                 return
             }
             switch(edit_queue_item.operation){

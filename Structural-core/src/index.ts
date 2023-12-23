@@ -5,6 +5,7 @@ export * from "./common/CommonTypes.js"
 export * from "./common/Cloneable.js"
 export * from "./common/OperationResult.js"
 export * from "./common/Logger.js"
+export * from "./common/TranslationManager.js"
 
 export * from "./exception/AppException.js"
 export * from "./exception/ConversionException.js"
@@ -46,7 +47,8 @@ export * from "./note/util/EditingComponent.js"
 
 export * from "./view/ViewTypes.js"
 export * from "./view/state/MainViewState.js"
-export * from "./view/state/UserSetting.js"
+export * from "./view/state/AppSetting.js"
+export * from "./view/state/AppState.js"
 export * from "./view/state/edit/StructDefEditState.js"
 
 export * from "./view/vue-helper/ArrayUtil.js"

@@ -14,8 +14,10 @@ export default defineNuxtConfig({
         "@vueuse/nuxt",
     ],
     runtimeConfig: {
+        // https://stackoverflow.com/questions/67703133/how-to-use-env-variables-in-nuxt-2-or-3
         public: {
-            tauriEnv: false,
+            tauriEnv: process.env.TAURI_ENV,
+            settingFilepath: process.env.SETTING_FILEPATH,
         },
     },
     ignore: ignore_files,

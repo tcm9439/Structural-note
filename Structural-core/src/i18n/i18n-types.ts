@@ -15,10 +15,196 @@ export type Translations = RootTranslation
 
 type RootTranslation = {
 	structural: {
-		/**
-		 * C​r​e​a​t​e​ ​n​o​t​e
-		 */
-		create_note: string
+		file: {
+			/**
+			 * F​i​l​e
+			 */
+			title: string
+			/**
+			 * U​n​t​i​t​l​e​d
+			 */
+			untitled: string
+			/**
+			 * O​p​e​n
+			 */
+			open: string
+			/**
+			 * C​r​e​a​t​e​ ​N​o​t​e
+			 */
+			create_note: string
+			/**
+			 * S​a​v​e
+			 */
+			save: string
+			/**
+			 * S​a​v​e​ ​A​s
+			 */
+			save_as: string
+			/**
+			 * C​l​o​s​e
+			 */
+			close: string
+			/**
+			 * E​x​p​o​r​t
+			 */
+			'export': string
+			/**
+			 * E​x​p​o​r​t​ ​t​o​ ​M​a​r​k​d​o​w​n
+			 */
+			export_md: string
+		}
+		section: {
+			/**
+			 * A​d​d​ ​T​e​x​t​ ​S​e​c​t​i​o​n
+			 */
+			add_text_section: string
+			/**
+			 * A​d​d​ ​S​t​r​u​c​t​u​r​a​l​ ​S​e​c​t​i​o​n
+			 */
+			add_struct_section: string
+			/**
+			 * A​d​d​ ​D​e​f​i​n​i​t​i​o​n
+			 */
+			add_section_definition: string
+			/**
+			 * N​e​w​ ​S​e​c​t​i​o​n
+			 */
+			new_section_default_title: string
+		}
+		element: {
+			/**
+			 * A​d​d​ ​T​e​x​t​ ​E​l​e​m​e​n​t
+			 */
+			add_text_element: string
+			/**
+			 * A​d​d​ ​M​a​r​k​d​o​w​n​ ​E​l​e​m​e​n​t
+			 */
+			add_markdown_element: string
+			/**
+			 * A​d​d​ ​S​t​r​u​c​t​u​r​a​l​ ​E​l​e​m​e​n​t
+			 */
+			add_struct_element: string
+		}
+		struct_def: {
+			/**
+			 * S​e​c​t​i​o​n​ ​D​e​f​i​n​i​t​i​o​n
+			 */
+			section_def_title: string
+			/**
+			 * A​t​t​r​i​b​u​t​e​s
+			 */
+			attributes_tab_title: string
+			/**
+			 * D​i​s​p​l​a​y​ ​N​a​m​e
+			 */
+			display_name_tab_title: string
+			/**
+			 * S​e​p​a​r​a​t​o​r
+			 */
+			display_name_separator_label: string
+			/**
+			 * N​a​m​e
+			 */
+			display_name_table_name_col: string
+			/**
+			 * A​c​t​i​o​n
+			 */
+			display_name_table_action_col: string
+			/**
+			 * N​a​m​e
+			 */
+			attr_list_name_col: string
+			/**
+			 * T​y​p​e
+			 */
+			attr_list_type_col: string
+			/**
+			 * D​e​s​c​r​i​p​t​i​o​n
+			 */
+			attr_list_description_col: string
+			/**
+			 * A​c​t​i​o​n
+			 */
+			attr_list_action_col: string
+			/**
+			 * B​a​s​i​c
+			 */
+			edit_attr_basic_tab_title: string
+			/**
+			 * T​y​p​e
+			 */
+			edit_attr_type_tab_title: string
+			/**
+			 * N​a​m​e
+			 */
+			edit_attr_basic_name_label: string
+			/**
+			 * D​e​s​c​r​i​p​t​i​o​n
+			 */
+			edit_attr_basic_description_label: string
+			/**
+			 * D​e​f​a​u​l​t​ ​V​a​l​u​e
+			 */
+			edit_attr_constrain_default_label: string
+			/**
+			 * C​h​o​o​s​e​ ​A​t​t​r​i​b​u​t​e​ ​T​y​p​e
+			 */
+			edit_attr_choose_type_label: string
+			/**
+			 * C​u​r​r​e​n​t​ ​A​t​t​r​i​b​u​t​e​ ​T​y​p​e​:
+			 */
+			edit_attr_current_type_label: string
+			/**
+			 * C​h​a​n​g​e​ ​A​t​t​r​i​b​u​t​e​ ​T​y​p​e​ ​T​o​:
+			 */
+			edit_attr_change_to_type_label: string
+			/**
+			 * U​p​d​a​t​e​ ​D​e​f​i​n​i​t​i​o​n
+			 */
+			update_attr_def_confirm: string
+		}
+		attribute: {
+			type: {
+				/**
+				 * S​t​r​i​n​g
+				 */
+				string: string
+				/**
+				 * I​n​t​e​g​e​r
+				 */
+				int: string
+				/**
+				 * B​o​o​l​e​a​n
+				 */
+				boolean: string
+				/**
+				 * D​e​c​i​m​a​l
+				 */
+				decimal: string
+				/**
+				 * M​a​r​k​d​o​w​n
+				 */
+				markdown: string
+			}
+			constrain: {
+				/**
+				 * R​e​q​u​i​r​e​d
+				 */
+				required: string
+				/**
+				 * U​n​i​q​u​e
+				 */
+				unique: string
+				/**
+				 * M​i​n
+				 */
+				min: string
+				/**
+				 * M​a​x
+				 */
+				max: string
+			}
+		}
 		setting: {
 			/**
 			 * S​e​t​t​i​n​g
@@ -29,6 +215,24 @@ type RootTranslation = {
 			 */
 			lang: string
 		}
+	}
+	common: {
+		/**
+		 * C​o​n​f​i​r​m
+		 */
+		confirm: string
+		/**
+		 * C​a​n​c​e​l
+		 */
+		cancel: string
+		/**
+		 * A​d​d
+		 */
+		add: string
+		/**
+		 * D​e​l​e​t​e
+		 */
+		'delete': string
 	}
 	test: {
 		/**
@@ -63,10 +267,196 @@ type RootTranslation = {
 
 export type TranslationFunctions = {
 	structural: {
-		/**
-		 * Create note
-		 */
-		create_note: () => LocalizedString
+		file: {
+			/**
+			 * File
+			 */
+			title: () => LocalizedString
+			/**
+			 * Untitled
+			 */
+			untitled: () => LocalizedString
+			/**
+			 * Open
+			 */
+			open: () => LocalizedString
+			/**
+			 * Create Note
+			 */
+			create_note: () => LocalizedString
+			/**
+			 * Save
+			 */
+			save: () => LocalizedString
+			/**
+			 * Save As
+			 */
+			save_as: () => LocalizedString
+			/**
+			 * Close
+			 */
+			close: () => LocalizedString
+			/**
+			 * Export
+			 */
+			'export': () => LocalizedString
+			/**
+			 * Export to Markdown
+			 */
+			export_md: () => LocalizedString
+		}
+		section: {
+			/**
+			 * Add Text Section
+			 */
+			add_text_section: () => LocalizedString
+			/**
+			 * Add Structural Section
+			 */
+			add_struct_section: () => LocalizedString
+			/**
+			 * Add Definition
+			 */
+			add_section_definition: () => LocalizedString
+			/**
+			 * New Section
+			 */
+			new_section_default_title: () => LocalizedString
+		}
+		element: {
+			/**
+			 * Add Text Element
+			 */
+			add_text_element: () => LocalizedString
+			/**
+			 * Add Markdown Element
+			 */
+			add_markdown_element: () => LocalizedString
+			/**
+			 * Add Structural Element
+			 */
+			add_struct_element: () => LocalizedString
+		}
+		struct_def: {
+			/**
+			 * Section Definition
+			 */
+			section_def_title: () => LocalizedString
+			/**
+			 * Attributes
+			 */
+			attributes_tab_title: () => LocalizedString
+			/**
+			 * Display Name
+			 */
+			display_name_tab_title: () => LocalizedString
+			/**
+			 * Separator
+			 */
+			display_name_separator_label: () => LocalizedString
+			/**
+			 * Name
+			 */
+			display_name_table_name_col: () => LocalizedString
+			/**
+			 * Action
+			 */
+			display_name_table_action_col: () => LocalizedString
+			/**
+			 * Name
+			 */
+			attr_list_name_col: () => LocalizedString
+			/**
+			 * Type
+			 */
+			attr_list_type_col: () => LocalizedString
+			/**
+			 * Description
+			 */
+			attr_list_description_col: () => LocalizedString
+			/**
+			 * Action
+			 */
+			attr_list_action_col: () => LocalizedString
+			/**
+			 * Basic
+			 */
+			edit_attr_basic_tab_title: () => LocalizedString
+			/**
+			 * Type
+			 */
+			edit_attr_type_tab_title: () => LocalizedString
+			/**
+			 * Name
+			 */
+			edit_attr_basic_name_label: () => LocalizedString
+			/**
+			 * Description
+			 */
+			edit_attr_basic_description_label: () => LocalizedString
+			/**
+			 * Default Value
+			 */
+			edit_attr_constrain_default_label: () => LocalizedString
+			/**
+			 * Choose Attribute Type
+			 */
+			edit_attr_choose_type_label: () => LocalizedString
+			/**
+			 * Current Attribute Type:
+			 */
+			edit_attr_current_type_label: () => LocalizedString
+			/**
+			 * Change Attribute Type To:
+			 */
+			edit_attr_change_to_type_label: () => LocalizedString
+			/**
+			 * Update Definition
+			 */
+			update_attr_def_confirm: () => LocalizedString
+		}
+		attribute: {
+			type: {
+				/**
+				 * String
+				 */
+				string: () => LocalizedString
+				/**
+				 * Integer
+				 */
+				int: () => LocalizedString
+				/**
+				 * Boolean
+				 */
+				boolean: () => LocalizedString
+				/**
+				 * Decimal
+				 */
+				decimal: () => LocalizedString
+				/**
+				 * Markdown
+				 */
+				markdown: () => LocalizedString
+			}
+			constrain: {
+				/**
+				 * Required
+				 */
+				required: () => LocalizedString
+				/**
+				 * Unique
+				 */
+				unique: () => LocalizedString
+				/**
+				 * Min
+				 */
+				min: () => LocalizedString
+				/**
+				 * Max
+				 */
+				max: () => LocalizedString
+			}
+		}
 		setting: {
 			/**
 			 * Setting
@@ -77,6 +467,24 @@ export type TranslationFunctions = {
 			 */
 			lang: () => LocalizedString
 		}
+	}
+	common: {
+		/**
+		 * Confirm
+		 */
+		confirm: () => LocalizedString
+		/**
+		 * Cancel
+		 */
+		cancel: () => LocalizedString
+		/**
+		 * Add
+		 */
+		add: () => LocalizedString
+		/**
+		 * Delete
+		 */
+		'delete': () => LocalizedString
 	}
 	test: {
 		/**

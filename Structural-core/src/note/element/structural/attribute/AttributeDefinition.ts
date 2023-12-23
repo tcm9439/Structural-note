@@ -1,4 +1,4 @@
-import { Logger } from "@/common/Logger.js"
+import { AppState } from "@/view/state/AppState.js"
 import { UUID } from "@/common/CommonTypes.js"
 import { CloneUtil, Cloneable } from "@/common/Cloneable.js"
 import { ComponentBase } from "@/note/util/ComponentBase.js"
@@ -219,7 +219,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
                 if (new_attr_type.allowConstrain(constrain)) {
                     let error = new_attr_def.addConstrain(constrain)
                     if (error !== null) {
-                        Logger.get().error(`Fail to add the constrain to the new attribute definition. ${error}`)
+                        AppState.logger.error(`Fail to add the constrain to the new attribute definition. ${error}`)
                     }
                 }
             })

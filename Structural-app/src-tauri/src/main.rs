@@ -116,6 +116,8 @@ fn main() {
         .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
             println!("{}, {argv:?}, {cwd}", app.package_info().name);
         }))
+        // store (for settings)
+        .plugin(tauri_plugin_store::Builder::default().build())
         // add the app state to tauri context
         .manage(app_state)
         // register commands

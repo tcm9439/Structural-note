@@ -79,7 +79,7 @@ export function availableElementComponentGetter(section: NoteSection): Available
                     break;
             }
         } catch (error) {
-            Logger.get().error(`Error when getting available element component: ${error}`)
+            AppState.logger.error(`Error when getting available element component: ${error}`)
         }
 
         return {

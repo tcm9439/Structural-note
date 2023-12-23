@@ -2,5 +2,5 @@
 </script>
 
 <template>
-    <mt-layout-home />
+    <mt-layout-setting />
 </template>

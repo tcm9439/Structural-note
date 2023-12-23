@@ -1,9 +1,9 @@
-import { Logger } from "@/common/Logger.js"
+import { AppState } from "@/view/state/AppState.js"
 
 export class AppException extends Error {
     constructor(message: string, name?: string) {
         super(message)
         this.name = name || "AppException"
-        Logger.get().warn(`${this.name}: ${message}`)
+        AppState.logger.warn(`${this.name}: ${message}`)
     }
 }

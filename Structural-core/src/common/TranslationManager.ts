@@ -1,15 +1,20 @@
 import type { Locales } from "@/i18n/i18n-types.js"
 import L from '@/i18n/i18n-node.js'
 import _ from "lodash"
+import { locales } from "@/i18n/i18n-util.js"
 
 export class TranslationManager {
-    private _default_language_code: Locales;
+    private _default_language_code: string = "en"
    
-    constructor(default_language_code?: Locales){
-        this._default_language_code = default_language_code === undefined ? 'en' : default_language_code
+    constructor(default_language_code?: string){
+        if (default_language_code !== undefined){
+            if (default_language_code in locales){
+                this.default_language_code = default_language_code as Locales
+            }
+        }
     }
 
-    set default_language_code(language_code: Locales){
+    set default_language_code(language_code: string){
         this._default_language_code = language_code
     }
 
@@ -25,11 +30,11 @@ export class TranslationManager {
      * 2. named parameter: {name:string}
      * 3. numbered parameter {0}: array of string or number
      */
-    public translate(key: string, language_code?: Locales, param?: Array<string | number> | object | string | number): string {
+    public translate(key: string, language_code?: string, param?: Array<string | number> | object | string | number): string {
         const temp: string[] = key.split('.')
 
         language_code = language_code === undefined ? this._default_language_code : language_code
-        let localizationFunction = L[language_code] as any
+        let localizationFunction = L[language_code as Locales] as any
         for  (const a of temp){
             localizationFunction = localizationFunction[a]
         }
