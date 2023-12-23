@@ -1,5 +1,5 @@
-import type { Locales } from "@/i18n/i18n-types"
-import L from '@/i18n/i18n-node'
+import type { Locales } from "@/i18n/i18n-types.js"
+import L from '@/i18n/i18n-node.js'
 import _ from "lodash"
 
 export class TranslationManager {

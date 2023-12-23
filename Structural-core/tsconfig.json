@@ -1,8 +1,7 @@
 {
     "compilerOptions": {
         "target": "es6",
-        "module": "esnext",
-        "moduleResolution": "node",
+        "module": "nodenext",
         "strict": true,
         "sourceMap": true,
         "esModuleInterop": true,

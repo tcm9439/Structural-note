@@ -1,17 +1,4 @@
-export type LogOptions = {
-    file?: string;
-    line?: number;
-    keyValues?: Record<string, string | undefined>;
-}
-
-export type LoggerModule = {
-    error(message: string, options?: LogOptions): Promise<void>
-    warn(message: string, options?: LogOptions): Promise<void>
-    info(message: string, options?: LogOptions): Promise<void>
-    debug(message: string, options?: LogOptions): Promise<void>
-    trace(message: string, options?: LogOptions): Promise<void>
-    attachConsole(): Promise<any>
-}
+import { LogOptions, trace, debug, info, warn, error, attachConsole } from "tauri-plugin-log-api"
 
 export abstract class Logger {
     protected static instance: Logger
@@ -74,7 +61,6 @@ export class WebLogger extends Logger {
  * As I need to import that module dynamically due to error related to type: "module"
  */
 export class TauriLogger extends Logger {
-    private static module: LoggerModule
     private static detached_function: any
 
     private constructor() {
@@ -84,8 +70,7 @@ export class TauriLogger extends Logger {
     static async initLogger(){
         if (!Logger.instance) {
             Logger.instance = new TauriLogger()
-            this.module = await import("tauri-plugin-log-api")
-            this.detached_function = await this.module.attachConsole()
+            this.detached_function = await attachConsole()
         }
     }
 
@@ -94,23 +79,23 @@ export class TauriLogger extends Logger {
     }
 
     async error(message: string) {
-        await TauriLogger.module.error(message)
+        await error(message)
     }
 
     async warn(message: string) {
-        await TauriLogger.module.warn(message)
+        await warn(message)
     }
 
     async info(message: string) {
-        await TauriLogger.module.info(message)
+        await info(message)
     }
 
     async debug(message: string) {
-        await TauriLogger.module.debug(message)
+        await debug(message)
     }
 
     async trace(message: string) {
-        await TauriLogger.module.trace(message)
+        await trace(message)
     }
 
     async close(){
