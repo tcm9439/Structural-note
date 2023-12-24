@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { EditPath, Note, AttributeDefinition, AttrTypeHelper, AttrTypeNameAndInstance, AttributeType, ConstrainTypeToClassMap, ValidOperationResult, ConstrainType } from "structural-core"
 import { getAttrConstrainEditComponents, type AttrConstrainEditComponent, getGroupedAttrConstrain } from "@/composables/active-data/Constrain"
+import { tran } from "~/composables/app/translate"
 
 const props = defineProps<{
     attr_def: AttributeDefinition<any>,
@@ -127,30 +128,30 @@ const default_value = computed({
 <template>
     <Tabs v-model="active_tab">
         <!-- Tab to choose the attr basic info. -->
-        <TabPane label="Basic" name="basic">
+        <TabPane :label="tran('structural.struct_def.edit_attr_basic_tab_title')" name="basic">
             <Form label-position="top" v-if="attr_def !== null">
-                <FormItem label="Name" prop="name">
+                <FormItem :label="tran('structural.struct_def.edit_attr_basic_name_label')" prop="name">
                     <Input v-model="attr_def.name" />
                 </FormItem>
-                <FormItem label="Description" prop="description">
+                <FormItem :label="tran('structural.struct_def.edit_attr_basic_description_label')" prop="description">
                     <Input v-model="attr_def.description" />
                 </FormItem>
             </Form>
         </TabPane>
 
         <!-- Tab to choose the attr type. -->
-        <TabPane label="Type" name="type">
+        <TabPane :label="tran('structural.struct_def.edit_attr_type_tab_title')" name="type">
             <!-- prompt -->
             <!-- No existing attr type -->
             <template v-if="init_attr_type_mode">
-                Choose Attribute Type:
+                {{ tran('structural.struct_def.edit_attr_choose_type_label') }}{{ tran("symbol.colon") }}
             </template>
             <!-- Has existing attr type -->
             <template v-else>
                 <!-- Current attr type -->
                 <Row>
                     <Col flex="1">
-                        Current Attribute Type: 
+                        {{ tran('structural.struct_def.edit_attr_current_type_label') }}{{ tran("symbol.colon") }}
                     </Col>
                     <Col flex="2">
                         <mt-attribute-definition-attr-type-choice 
@@ -160,7 +161,7 @@ const default_value = computed({
                     </Col>
                 </Row>
                 <Divider />
-                Change attribute type to:
+                {{ tran('structural.struct_def.edit_attr_change_to_type_label') }}{{ tran("symbol.colon") }}
             </template>
 
             <!-- New attr types that can be set / changed to -->
@@ -178,17 +179,17 @@ const default_value = computed({
                 </Row>
             </div>
             <!-- The attr type is fixed. -->
-            <div v-else>Type cannot be change.</div>
+            <div v-else>{{ tran("structural.struct_def.edit_attr_cannot_be_change") }}</div>
         </TabPane>
 
         <!-- Tab that only show after the type is set  -->
         <template v-if="attr_has_type">
-            <TabPane label="Constrain" name="constrain">
+            <TabPane :label="tran('structural.attribute.constraint.constraint')" name="constrain">
                 <Form inline>
                     <!-- Default value editor -->
                     <FormItem prop="default_value_checkbox">
                         <Checkbox v-model="has_default_value" >
-                            Default value
+                            {{ tran('structural.struct_def.edit_attr_constrain_default_label')  }}
                         </Checkbox>
                     </FormItem>
                     <FormItem prop="default_value" 
@@ -216,7 +217,7 @@ const default_value = computed({
         </template>
         <template v-else>
             <!-- Type is not set yet -->
-            <TabPane label="Constrain" name="constrain" disabled />
+            <TabPane :label="tran('structural.attribute.constraint.constraint')" name="constrain" disabled />
         </template>
     </Tabs>
 </template>

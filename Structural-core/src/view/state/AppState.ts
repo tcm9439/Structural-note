@@ -10,7 +10,7 @@ export enum AppRuntimeEnvironment {
 
 export type NuxtRuntimeConfig = {
     public: {
-        tauriEnv: boolean
+        appEnv: string
         settingFilepath: string
     }
 }
@@ -21,15 +21,14 @@ export class AppState {
     public static translationManager: TranslationManager
     private static appSettingFilepath: string
     private static appSetting: AppSetting
-    
 
     public static initEnvironment(runtimeConfig?: NuxtRuntimeConfig){
         if (runtimeConfig !== undefined) {
             try {
                 // If running by Nuxt (& Tauri)  => runtimeConfig is given
                 // If running in unit test => runtimeConfig is not given
-                const { tauriEnv, settingFilepath } = runtimeConfig.public
-                if (tauriEnv){
+                const { appEnv, settingFilepath } = runtimeConfig.public
+                if (appEnv === "tauri"){
                     AppState.environment = AppRuntimeEnvironment.TARUI
                 }
 
@@ -57,18 +56,17 @@ export class AppState {
             const store = new Store(AppState.appSettingFilepath)
             try {
                 AppState.logger.debug("Loading appSetting from Tauri store...")
-                const appSetting = await store.get<AppSetting>("appSetting")
-                if (appSetting !== null){
-                    AppState.appSetting = appSetting
-                    return
-                }
+                let appSetting = await store.get<any>("appSetting")
+                AppState.appSetting = AppSetting.fromJson(appSetting)
+                AppState.logger.debug(`AppSetting loaded from Tauri store: ${JSON.stringify(appSetting)}`)
             } catch (error) {
                 AppState.logger.error(`Error when getting appSetting from store: ${error}`)
             }
+        } else {
+            // else, use default setting
+            AppState.appSetting = new AppSetting()
+            AppState.logger.debug("appSetting initialized")
         }
-        // else, use default setting
-        AppState.appSetting = new AppSetting()
-        AppState.logger.debug("appSetting initialized")
     }
 
     public static getAppSetting(): AppSetting {

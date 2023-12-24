@@ -1,6 +1,7 @@
 import { ArrayUtil } from "@/view/vue-helper/ArrayUtil.js"
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType.js"
 
+// TODO translation
 export class AttrTypeNameAndInstance {
     private _name: string
     private _instance: AttributeType<any>

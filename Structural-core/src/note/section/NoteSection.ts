@@ -6,6 +6,7 @@ import { InvalidJsonFormatException, InvalidDataException } from "@/exception/Co
 import { NoteElement, NoteElementJson, ElementType } from "@/note/element/NoteElement.js"
 import { TextElement } from "@/note/element/TextElement.js"
 import { MarkdownElement } from "@/note/element/MarkdownElement.js"
+import { AppState } from "@/view/state/AppState.js"
 import { z } from "zod"
 
 export enum SectionType {
@@ -35,7 +36,7 @@ export class NoteSection extends ComponentBase implements EditPathNode {
 
     constructor(title?: string){
         super()
-        this._title = title ?? ""
+        this._title = title ?? AppState.translationManager.translate("structural.section.new_section_default_title")
     }
 
     get title(): string {

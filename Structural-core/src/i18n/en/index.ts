@@ -2,16 +2,25 @@ import type { BaseTranslation } from '../i18n-types.js'
 
 const en = {
     structural: {
+        header: {
+            file_menu: "File",
+            file_open: "Open",
+            file_close: "Close",
+            file_save: "Save",
+            file_save_as: "Save As",
+            file_export_submenu: "Export",
+            file_export_md: "Export to Markdown",
+            file_export_txt: "Export to Text (TODO)",
+            setting_menu: "Setting",
+        },
         file: {
             title: "File",
-            untitled: "Untitled",
-            open: "Open",
+            note: "Note",
             create_note: "Create Note",
-            save: "Save",
-            save_as: "Save As",
-            close: "Close",
-            export: "Export",
-            export_md: "Export to Markdown",
+            open_existing_note: "Open Existing Note",
+            filename: "Filename",
+            note_name: "Note Name",
+            untitled: "Untitled",
         },
         section: {
             add_text_section: "Add Text Section",
@@ -20,6 +29,7 @@ const en = {
             new_section_default_title: "New Section",
         },
         element: {
+            add_element: "Add Element",
             add_text_element: "Add Text Element",
             add_markdown_element: "Add Markdown Element",
             add_struct_element: "Add Structural Element",
@@ -31,45 +41,113 @@ const en = {
             display_name_separator_label: "Separator",
             display_name_table_name_col: "Name",
             display_name_table_action_col: "Action",
-            attr_list_name_col: "Name",
-            attr_list_type_col: "Type",
-            attr_list_description_col: "Description",
-            attr_list_action_col: "Action",
+            attr_table_name_col: "Name",
+            attr_table_type_col: "Type",
+            attr_table_description_col: "Description",
+            attr_table_action_col: "Action",
             edit_attr_basic_tab_title: "Basic",
             edit_attr_type_tab_title: "Type",
             edit_attr_basic_name_label: "Name",
             edit_attr_basic_description_label: "Description",
             edit_attr_constrain_default_label: "Default Value",
             edit_attr_choose_type_label: "Choose Attribute Type",
-            edit_attr_current_type_label: "Current Attribute Type:",
-            edit_attr_change_to_type_label: "Change Attribute Type To:",
+            edit_attr_current_type_label: "Current Attribute Type",
+            edit_attr_change_to_type_label: "Change Attribute Type To",
+            edit_attr_cannot_be_change: "Type cannot be change.",
             update_attr_def_confirm: "Update Definition",
         },
         attribute: {
             type: {
+                type: "Type",
                 string: "String",
                 int: "Integer",
                 boolean: "Boolean",
                 decimal: "Decimal",
                 markdown: "Markdown",
             },
-            constrain: {
-                required: "Required",
+            constraint: {
+                constraint: "Constraint",
+                require: "Required",
                 unique: "Unique",
                 min: "Min",
                 max: "Max",
+                regex: "Pattern (Regex)",
             },
         },
         setting: {
             title: "Setting",
             lang: "Language",
+            save_before: {
+                content: "Save the note before updating the setting.",
+            }
         }
     },
     common: {
         confirm: "Confirm",
+        save_confirm_window: {
+            title: "Save {target:string}",
+            content: "Do you want to save the changes?",
+            save: "Save",
+            cancel: "Don't Save",
+        },
+        create: "Create",
         cancel: "Cancel",
         add: "Add",
         delete: "Delete",
+        error: "Error",
+        loading: "Loading...",
+    },
+    symbol: {
+        colon: ":",
+    },
+    error: {
+        general: {
+            title: "Error",
+            open_note: "Fail to open note.",
+            message: "Something went wrong.",
+        },
+        attribute: {
+            invalid_type_conversion: {
+                title: "Invalid Type Conversion",
+                message: "Cannot convert data from type {0} to type {1}.",
+            },
+            null_attr_type: {
+                title: "Null Attribute Type",
+                message: "Attribute Type cannot be null.",
+            },
+            incompatible_constrain: {
+                title: "Incompatible Constrain",
+                message: "New {0} constrain not compatible to existing {1} constrain.",
+            },
+            forbidden_constrain: {
+                title: "Forbidden Constrain",
+                message: "{0} constrain is not allowed for this attribute.",
+            },
+        },
+        conversion: {
+            invalid_json_format: {
+                title: "Invalid JSON Format",
+                message: "Fail to parse {0} from json.",
+            },
+            invalid_data: {
+                title: "Invalid Data",
+                message: "Fail to parse {0} due to invalid data.",
+            },
+        },
+        file: {
+            invalid_path: {
+                title: "Invalid File Path",
+                message: "The file path is invalid.",
+            },
+            already_opened: {
+                title: "File Already Opened",
+                message: "The file '{0}' is already opened in some window.",
+            },
+            io: {
+                title: "File IO Error",
+                message: "Something went wrong when accessing the file.",
+            },
+        },
     },
     test: {
 		no_parameter: "Hello!",

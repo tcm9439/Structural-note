@@ -21,7 +21,7 @@
     }
 
     .content {
-        margin: 10vh 20px 0;
+        margin: calc(max(8vh, 40px) + 20px) 20px 0;
         min-height: 100%;
     }
 </style>

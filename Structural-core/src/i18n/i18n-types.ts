@@ -15,43 +15,73 @@ export type Translations = RootTranslation
 
 type RootTranslation = {
 	structural: {
+		header: {
+			/**
+			 * F​i​l​e
+			 */
+			file_menu: string
+			/**
+			 * O​p​e​n
+			 */
+			file_open: string
+			/**
+			 * C​l​o​s​e
+			 */
+			file_close: string
+			/**
+			 * S​a​v​e
+			 */
+			file_save: string
+			/**
+			 * S​a​v​e​ ​A​s
+			 */
+			file_save_as: string
+			/**
+			 * E​x​p​o​r​t
+			 */
+			file_export_submenu: string
+			/**
+			 * E​x​p​o​r​t​ ​t​o​ ​M​a​r​k​d​o​w​n
+			 */
+			file_export_md: string
+			/**
+			 * E​x​p​o​r​t​ ​t​o​ ​T​e​x​t​ ​(​T​O​D​O​)
+			 */
+			file_export_txt: string
+			/**
+			 * S​e​t​t​i​n​g
+			 */
+			setting_menu: string
+		}
 		file: {
 			/**
 			 * F​i​l​e
 			 */
 			title: string
 			/**
-			 * U​n​t​i​t​l​e​d
+			 * N​o​t​e
 			 */
-			untitled: string
-			/**
-			 * O​p​e​n
-			 */
-			open: string
+			note: string
 			/**
 			 * C​r​e​a​t​e​ ​N​o​t​e
 			 */
 			create_note: string
 			/**
-			 * S​a​v​e
+			 * O​p​e​n​ ​E​x​i​s​t​i​n​g​ ​N​o​t​e
 			 */
-			save: string
+			open_existing_note: string
 			/**
-			 * S​a​v​e​ ​A​s
+			 * F​i​l​e​n​a​m​e
 			 */
-			save_as: string
+			filename: string
 			/**
-			 * C​l​o​s​e
+			 * N​o​t​e​ ​N​a​m​e
 			 */
-			close: string
+			note_name: string
 			/**
-			 * E​x​p​o​r​t
+			 * U​n​t​i​t​l​e​d
 			 */
-			'export': string
-			/**
-			 * E​x​p​o​r​t​ ​t​o​ ​M​a​r​k​d​o​w​n
-			 */
-			export_md: string
+			untitled: string
 		}
 		section: {
 			/**
@@ -113,19 +143,19 @@ type RootTranslation = {
 			/**
 			 * N​a​m​e
 			 */
-			attr_list_name_col: string
+			attr_table_name_col: string
 			/**
 			 * T​y​p​e
 			 */
-			attr_list_type_col: string
+			attr_table_type_col: string
 			/**
 			 * D​e​s​c​r​i​p​t​i​o​n
 			 */
-			attr_list_description_col: string
+			attr_table_description_col: string
 			/**
 			 * A​c​t​i​o​n
 			 */
-			attr_list_action_col: string
+			attr_table_action_col: string
 			/**
 			 * B​a​s​i​c
 			 */
@@ -151,11 +181,11 @@ type RootTranslation = {
 			 */
 			edit_attr_choose_type_label: string
 			/**
-			 * C​u​r​r​e​n​t​ ​A​t​t​r​i​b​u​t​e​ ​T​y​p​e​:
+			 * C​u​r​r​e​n​t​ ​A​t​t​r​i​b​u​t​e​ ​T​y​p​e
 			 */
 			edit_attr_current_type_label: string
 			/**
-			 * C​h​a​n​g​e​ ​A​t​t​r​i​b​u​t​e​ ​T​y​p​e​ ​T​o​:
+			 * C​h​a​n​g​e​ ​A​t​t​r​i​b​u​t​e​ ​T​y​p​e​ ​T​o
 			 */
 			edit_attr_change_to_type_label: string
 			/**
@@ -165,6 +195,10 @@ type RootTranslation = {
 		}
 		attribute: {
 			type: {
+				/**
+				 * T​y​p​e
+				 */
+				type: string
 				/**
 				 * S​t​r​i​n​g
 				 */
@@ -186,11 +220,15 @@ type RootTranslation = {
 				 */
 				markdown: string
 			}
-			constrain: {
+			constraint: {
+				/**
+				 * C​o​n​s​t​r​a​i​n​t
+				 */
+				constraint: string
 				/**
 				 * R​e​q​u​i​r​e​d
 				 */
-				required: string
+				require: string
 				/**
 				 * U​n​i​q​u​e
 				 */
@@ -203,6 +241,10 @@ type RootTranslation = {
 				 * M​a​x
 				 */
 				max: string
+				/**
+				 * P​a​t​t​e​r​n​ ​(​R​e​g​e​x​)
+				 */
+				regex: string
 			}
 		}
 		setting: {
@@ -214,6 +256,12 @@ type RootTranslation = {
 			 * L​a​n​g​u​a​g​e
 			 */
 			lang: string
+			save_before: {
+				/**
+				 * S​a​v​e​ ​t​h​e​ ​n​o​t​e​ ​b​e​f​o​r​e​ ​u​p​d​a​t​i​n​g​ ​t​h​e​ ​s​e​t​t​i​n​g​.
+				 */
+				content: string
+			}
 		}
 	}
 	common: {
@@ -221,6 +269,29 @@ type RootTranslation = {
 		 * C​o​n​f​i​r​m
 		 */
 		confirm: string
+		save_confirm_window: {
+			/**
+			 * S​a​v​e​ ​{​t​a​r​g​e​t​}
+			 * @param {string} target
+			 */
+			title: RequiredParams<'target'>
+			/**
+			 * D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​s​a​v​e​ ​t​h​e​ ​c​h​a​n​g​e​s​?
+			 */
+			content: string
+			/**
+			 * S​a​v​e
+			 */
+			save: string
+			/**
+			 * D​o​n​'​t​ ​S​a​v​e
+			 */
+			cancel: string
+		}
+		/**
+		 * C​r​e​a​t​e
+		 */
+		create: string
 		/**
 		 * C​a​n​c​e​l
 		 */
@@ -233,6 +304,140 @@ type RootTranslation = {
 		 * D​e​l​e​t​e
 		 */
 		'delete': string
+		/**
+		 * E​r​r​o​r
+		 */
+		error: string
+		/**
+		 * L​o​a​d​i​n​g​.​.​.
+		 */
+		loading: string
+	}
+	symbol: {
+		/**
+		 * :
+		 */
+		colon: string
+	}
+	error: {
+		general: {
+			/**
+			 * E​r​r​o​r
+			 */
+			title: string
+			/**
+			 * F​a​i​l​ ​t​o​ ​o​p​e​n​ ​n​o​t​e​.
+			 */
+			open_note: string
+			/**
+			 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​.
+			 */
+			message: string
+		}
+		attribute: {
+			invalid_type_conversion: {
+				/**
+				 * I​n​v​a​l​i​d​ ​T​y​p​e​ ​C​o​n​v​e​r​s​i​o​n
+				 */
+				title: string
+				/**
+				 * C​a​n​n​o​t​ ​c​o​n​v​e​r​t​ ​d​a​t​a​ ​f​r​o​m​ ​t​y​p​e​ ​{​0​}​ ​t​o​ ​t​y​p​e​ ​{​1​}​.
+				 * @param {unknown} 0
+				 * @param {unknown} 1
+				 */
+				message: RequiredParams<'0' | '1'>
+			}
+			null_attr_type: {
+				/**
+				 * N​u​l​l​ ​A​t​t​r​i​b​u​t​e​ ​T​y​p​e
+				 */
+				title: string
+				/**
+				 * A​t​t​r​i​b​u​t​e​ ​T​y​p​e​ ​c​a​n​n​o​t​ ​b​e​ ​n​u​l​l​.
+				 */
+				message: string
+			}
+			incompatible_constrain: {
+				/**
+				 * I​n​c​o​m​p​a​t​i​b​l​e​ ​C​o​n​s​t​r​a​i​n
+				 */
+				title: string
+				/**
+				 * N​e​w​ ​{​0​}​ ​c​o​n​s​t​r​a​i​n​ ​n​o​t​ ​c​o​m​p​a​t​i​b​l​e​ ​t​o​ ​e​x​i​s​t​i​n​g​ ​{​1​}​ ​c​o​n​s​t​r​a​i​n​.
+				 * @param {unknown} 0
+				 * @param {unknown} 1
+				 */
+				message: RequiredParams<'0' | '1'>
+			}
+			forbidden_constrain: {
+				/**
+				 * F​o​r​b​i​d​d​e​n​ ​C​o​n​s​t​r​a​i​n
+				 */
+				title: string
+				/**
+				 * {​0​}​ ​c​o​n​s​t​r​a​i​n​ ​i​s​ ​n​o​t​ ​a​l​l​o​w​e​d​ ​f​o​r​ ​t​h​i​s​ ​a​t​t​r​i​b​u​t​e​.
+				 * @param {unknown} 0
+				 */
+				message: RequiredParams<'0'>
+			}
+		}
+		conversion: {
+			invalid_json_format: {
+				/**
+				 * I​n​v​a​l​i​d​ ​J​S​O​N​ ​F​o​r​m​a​t
+				 */
+				title: string
+				/**
+				 * F​a​i​l​ ​t​o​ ​p​a​r​s​e​ ​{​0​}​ ​f​r​o​m​ ​j​s​o​n​.
+				 * @param {unknown} 0
+				 */
+				message: RequiredParams<'0'>
+			}
+			invalid_data: {
+				/**
+				 * I​n​v​a​l​i​d​ ​D​a​t​a
+				 */
+				title: string
+				/**
+				 * F​a​i​l​ ​t​o​ ​p​a​r​s​e​ ​{​0​}​ ​d​u​e​ ​t​o​ ​i​n​v​a​l​i​d​ ​d​a​t​a​.
+				 * @param {unknown} 0
+				 */
+				message: RequiredParams<'0'>
+			}
+		}
+		file: {
+			invalid_path: {
+				/**
+				 * I​n​v​a​l​i​d​ ​F​i​l​e​ ​P​a​t​h
+				 */
+				title: string
+				/**
+				 * T​h​e​ ​f​i​l​e​ ​p​a​t​h​ ​i​s​ ​i​n​v​a​l​i​d​.
+				 */
+				message: string
+			}
+			already_opened: {
+				/**
+				 * F​i​l​e​ ​A​l​r​e​a​d​y​ ​O​p​e​n​e​d
+				 */
+				title: string
+				/**
+				 * T​h​e​ ​f​i​l​e​ ​'​{​0​}​'​ ​i​s​ ​a​l​r​e​a​d​y​ ​o​p​e​n​e​d​ ​i​n​ ​s​o​m​e​ ​w​i​n​d​o​w​.
+				 * @param {unknown} 0
+				 */
+				message: RequiredParams<'0'>
+			}
+			io: {
+				/**
+				 * F​i​l​e​ ​I​O​ ​E​r​r​o​r
+				 */
+				title: string
+				/**
+				 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​ ​w​h​e​n​ ​a​c​c​e​s​s​i​n​g​ ​t​h​e​ ​f​i​l​e​.
+				 */
+				message: string
+			}
+		}
 	}
 	test: {
 		/**
@@ -267,43 +472,73 @@ type RootTranslation = {
 
 export type TranslationFunctions = {
 	structural: {
+		header: {
+			/**
+			 * File
+			 */
+			file_menu: () => LocalizedString
+			/**
+			 * Open
+			 */
+			file_open: () => LocalizedString
+			/**
+			 * Close
+			 */
+			file_close: () => LocalizedString
+			/**
+			 * Save
+			 */
+			file_save: () => LocalizedString
+			/**
+			 * Save As
+			 */
+			file_save_as: () => LocalizedString
+			/**
+			 * Export
+			 */
+			file_export_submenu: () => LocalizedString
+			/**
+			 * Export to Markdown
+			 */
+			file_export_md: () => LocalizedString
+			/**
+			 * Export to Text (TODO)
+			 */
+			file_export_txt: () => LocalizedString
+			/**
+			 * Setting
+			 */
+			setting_menu: () => LocalizedString
+		}
 		file: {
 			/**
 			 * File
 			 */
 			title: () => LocalizedString
 			/**
-			 * Untitled
+			 * Note
 			 */
-			untitled: () => LocalizedString
-			/**
-			 * Open
-			 */
-			open: () => LocalizedString
+			note: () => LocalizedString
 			/**
 			 * Create Note
 			 */
 			create_note: () => LocalizedString
 			/**
-			 * Save
+			 * Open Existing Note
 			 */
-			save: () => LocalizedString
+			open_existing_note: () => LocalizedString
 			/**
-			 * Save As
+			 * Filename
 			 */
-			save_as: () => LocalizedString
+			filename: () => LocalizedString
 			/**
-			 * Close
+			 * Note Name
 			 */
-			close: () => LocalizedString
+			note_name: () => LocalizedString
 			/**
-			 * Export
+			 * Untitled
 			 */
-			'export': () => LocalizedString
-			/**
-			 * Export to Markdown
-			 */
-			export_md: () => LocalizedString
+			untitled: () => LocalizedString
 		}
 		section: {
 			/**
@@ -365,19 +600,19 @@ export type TranslationFunctions = {
 			/**
 			 * Name
 			 */
-			attr_list_name_col: () => LocalizedString
+			attr_table_name_col: () => LocalizedString
 			/**
 			 * Type
 			 */
-			attr_list_type_col: () => LocalizedString
+			attr_table_type_col: () => LocalizedString
 			/**
 			 * Description
 			 */
-			attr_list_description_col: () => LocalizedString
+			attr_table_description_col: () => LocalizedString
 			/**
 			 * Action
 			 */
-			attr_list_action_col: () => LocalizedString
+			attr_table_action_col: () => LocalizedString
 			/**
 			 * Basic
 			 */
@@ -403,11 +638,11 @@ export type TranslationFunctions = {
 			 */
 			edit_attr_choose_type_label: () => LocalizedString
 			/**
-			 * Current Attribute Type:
+			 * Current Attribute Type
 			 */
 			edit_attr_current_type_label: () => LocalizedString
 			/**
-			 * Change Attribute Type To:
+			 * Change Attribute Type To
 			 */
 			edit_attr_change_to_type_label: () => LocalizedString
 			/**
@@ -417,6 +652,10 @@ export type TranslationFunctions = {
 		}
 		attribute: {
 			type: {
+				/**
+				 * Type
+				 */
+				type: () => LocalizedString
 				/**
 				 * String
 				 */
@@ -438,11 +677,15 @@ export type TranslationFunctions = {
 				 */
 				markdown: () => LocalizedString
 			}
-			constrain: {
+			constraint: {
+				/**
+				 * Constraint
+				 */
+				constraint: () => LocalizedString
 				/**
 				 * Required
 				 */
-				required: () => LocalizedString
+				require: () => LocalizedString
 				/**
 				 * Unique
 				 */
@@ -455,6 +698,10 @@ export type TranslationFunctions = {
 				 * Max
 				 */
 				max: () => LocalizedString
+				/**
+				 * Pattern (Regex)
+				 */
+				regex: () => LocalizedString
 			}
 		}
 		setting: {
@@ -466,6 +713,12 @@ export type TranslationFunctions = {
 			 * Language
 			 */
 			lang: () => LocalizedString
+			save_before: {
+				/**
+				 * Save the note before updating the setting.
+				 */
+				content: () => LocalizedString
+			}
 		}
 	}
 	common: {
@@ -473,6 +726,28 @@ export type TranslationFunctions = {
 		 * Confirm
 		 */
 		confirm: () => LocalizedString
+		save_confirm_window: {
+			/**
+			 * Save {target}
+			 */
+			title: (arg: { target: string }) => LocalizedString
+			/**
+			 * Do you want to save the changes?
+			 */
+			content: () => LocalizedString
+			/**
+			 * Save
+			 */
+			save: () => LocalizedString
+			/**
+			 * Don't Save
+			 */
+			cancel: () => LocalizedString
+		}
+		/**
+		 * Create
+		 */
+		create: () => LocalizedString
 		/**
 		 * Cancel
 		 */
@@ -485,6 +760,132 @@ export type TranslationFunctions = {
 		 * Delete
 		 */
 		'delete': () => LocalizedString
+		/**
+		 * Error
+		 */
+		error: () => LocalizedString
+		/**
+		 * Loading...
+		 */
+		loading: () => LocalizedString
+	}
+	symbol: {
+		/**
+		 * :
+		 */
+		colon: () => LocalizedString
+	}
+	error: {
+		general: {
+			/**
+			 * Error
+			 */
+			title: () => LocalizedString
+			/**
+			 * Fail to open note.
+			 */
+			open_note: () => LocalizedString
+			/**
+			 * Something went wrong.
+			 */
+			message: () => LocalizedString
+		}
+		attribute: {
+			invalid_type_conversion: {
+				/**
+				 * Invalid Type Conversion
+				 */
+				title: () => LocalizedString
+				/**
+				 * Cannot convert data from type {0} to type {1}.
+				 */
+				message: (arg0: unknown, arg1: unknown) => LocalizedString
+			}
+			null_attr_type: {
+				/**
+				 * Null Attribute Type
+				 */
+				title: () => LocalizedString
+				/**
+				 * Attribute Type cannot be null.
+				 */
+				message: () => LocalizedString
+			}
+			incompatible_constrain: {
+				/**
+				 * Incompatible Constrain
+				 */
+				title: () => LocalizedString
+				/**
+				 * New {0} constrain not compatible to existing {1} constrain.
+				 */
+				message: (arg0: unknown, arg1: unknown) => LocalizedString
+			}
+			forbidden_constrain: {
+				/**
+				 * Forbidden Constrain
+				 */
+				title: () => LocalizedString
+				/**
+				 * {0} constrain is not allowed for this attribute.
+				 */
+				message: (arg0: unknown) => LocalizedString
+			}
+		}
+		conversion: {
+			invalid_json_format: {
+				/**
+				 * Invalid JSON Format
+				 */
+				title: () => LocalizedString
+				/**
+				 * Fail to parse {0} from json.
+				 */
+				message: (arg0: unknown) => LocalizedString
+			}
+			invalid_data: {
+				/**
+				 * Invalid Data
+				 */
+				title: () => LocalizedString
+				/**
+				 * Fail to parse {0} due to invalid data.
+				 */
+				message: (arg0: unknown) => LocalizedString
+			}
+		}
+		file: {
+			invalid_path: {
+				/**
+				 * Invalid File Path
+				 */
+				title: () => LocalizedString
+				/**
+				 * The file path is invalid.
+				 */
+				message: () => LocalizedString
+			}
+			already_opened: {
+				/**
+				 * File Already Opened
+				 */
+				title: () => LocalizedString
+				/**
+				 * The file '{0}' is already opened in some window.
+				 */
+				message: (arg0: unknown) => LocalizedString
+			}
+			io: {
+				/**
+				 * File IO Error
+				 */
+				title: () => LocalizedString
+				/**
+				 * Something went wrong when accessing the file.
+				 */
+				message: () => LocalizedString
+			}
+		}
 	}
 	test: {
 		/**

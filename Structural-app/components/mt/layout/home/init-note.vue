@@ -6,6 +6,8 @@
 import { Icon } from "view-ui-plus"
 import { appWindow } from "@tauri-apps/api/window"
 import { NoteFileHandler } from "@/composables/file/NoteFileHandler"
+import { tran } from "@/composables/app/translate"
+import { AppState } from "structural-core"
 
 // # error prompt
 const show_error_modal = ref(false)
@@ -33,9 +35,8 @@ function toggleCreateNoteMode(value: boolean){
 
 function createNote(){
     try {
-        if (create_note_mode.value){
-            NoteFileHandler.createNote(new_note_title.value)
-        }
+        AppState.logger.debug(`Creating note: ${new_note_title.value}`)
+        NoteFileHandler.createNote(new_note_title.value)
     } catch (error) {
         error_content.value = `Fail to create note: ${error}`
         show_error_modal.value = true
@@ -51,18 +52,18 @@ function createNote(){
     >
         <div v-if="create_note_mode">
             <!-- Creating note -->
-            Filename: <Input v-model="new_note_title" />
+            {{ tran("structural.file.filename") }} <Input v-model="new_note_title" />
         </div> 
         <div v-else>
             <!-- Chose to create / open -->
             <Space direction="vertical" style="width: 100%;">
                 <Button long type="primary" 
                     @click="toggleCreateNoteMode(true)">
-                    New Note
+                    {{ tran("structural.file.create_note") }}
                 </Button>
                 <Button long type="primary"
                     @click="openNote" :loading="opening_note">
-                    Open existing note
+                    {{ tran("structural.file.open_existing_note") }}
                 </Button>
             </Space>
         </div>
@@ -76,13 +77,13 @@ function createNote(){
         >
             <template #header>
                 <Icon type="md-alert" color="red" />
-                Error
+                {{ tran("common.error") }}
             </template>
-            {{error_content}}
+            {{ error_content }}
 
             <template #footer>
                 <Button type="primary" @click="show_error_modal = false">
-                    Confirm
+                    {{ tran("common.confirm") }}
                 </Button>
             </template>
         </Modal>
@@ -91,15 +92,15 @@ function createNote(){
         <template #footer>
             <div v-if="create_note_mode">
                 <Button @click="toggleCreateNoteMode(false)">
-                    Cancel
+                    {{ tran("common.cancel") }}
                 </Button>
                 <Button @click="createNote" type="primary">
-                    Create
+                    {{ tran("common.create") }}
                 </Button>
             </div>
             <div v-else>
                 <Button @click="createNote">
-                    Cancel
+                    {{ tran("common.cancel") }}
                 </Button>
             </div>
         </template>

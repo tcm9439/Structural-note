@@ -1,11 +1,11 @@
 import { LogOptions, trace, debug, info, warn, error, attachConsole } from "tauri-plugin-log-api"
 
 export abstract class Logger {
-    abstract error(message: string, options?: LogOptions): Promise<void>
-    abstract warn(message: string, options?: LogOptions): Promise<void>
-    abstract info(message: string, options?: LogOptions): Promise<void>
-    abstract debug(message: string, options?: LogOptions): Promise<void>
-    abstract trace(message: string, options?: LogOptions): Promise<void>
+    abstract error(message: string, error_obj?: Error, options?: LogOptions): void
+    abstract warn(message: string, options?: LogOptions): void
+    abstract info(message: string, options?: LogOptions): void
+    abstract debug(message: string, options?: LogOptions): void
+    abstract trace(message: string, options?: LogOptions): void
     abstract close(): Promise<void>
 }
 
@@ -21,23 +21,24 @@ export class WebLogger extends Logger {
         return new WebLogger()
     }
 
-    async error(message: string, options?: LogOptions): Promise<void> {
-        console.error(message)
+    
+    error(message: string, error_obj?: Error, options?: LogOptions){
+        console.error(message, error_obj)
     }
 
-    async warn(message: string, options?: LogOptions): Promise<void> {
+    warn(message: string, options?: LogOptions){
         console.warn(message)
     }
 
-    async info(message: string, options?: LogOptions): Promise<void> {
+    info(message: string, options?: LogOptions){
         console.info(message)
     }
 
-    async debug(message: string, options?: LogOptions): Promise<void> {
+    debug(message: string, options?: LogOptions){
         console.debug(message)
     }
 
-    async trace(message: string, options?: LogOptions): Promise<void> {
+    trace(message: string, options?: LogOptions){
         console.trace(message)
     }
 
@@ -62,24 +63,28 @@ export class TauriLogger extends Logger {
         return new TauriLogger()
     }
 
-    async error(message: string) {
-        await error(message)
+    error(message: string, error_obj?: Error, options?: LogOptions) {
+        if (error_obj === undefined) {
+            error(message, options)
+        } else {
+            error(`${message} \n${error_obj}`, options)
+        }
     }
 
-    async warn(message: string) {
-        await warn(message)
+    warn(message: string, options?: LogOptions) {
+        warn(message, options)
     }
 
-    async info(message: string) {
-        await info(message)
+    info(message: string, options?: LogOptions) {
+        info(message, options)
     }
 
-    async debug(message: string) {
-        await debug(message)
+    debug(message: string, options?: LogOptions) {
+        debug(message, options)
     }
 
-    async trace(message: string) {
-        await trace(message)
+    trace(message: string, options?: LogOptions) {
+        trace(message, options)
     }
 
     async close(){

@@ -4,6 +4,7 @@ import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 import { elementListGetter, availableElementComponentGetter, elementComponentMapper, type AvailableElementComponent } from "@/composables/active-data/Element"
 import { Icon } from "view-ui-plus"
 import { type AvailableSection } from "@/composables/active-data/Note"
+import { tran } from "~/composables/app/translate"
 const { $emitter } = useNuxtApp()
 
 const props = defineProps<{
@@ -154,7 +155,7 @@ function moveDownSection(){
                 @on-click="addElement" 
                 trigger="click">
                 <Button shape="circle" icon="md-add" long>
-                    Add Element
+                    {{ tran("structural.element.add_element") }}
                 </Button>
                 
                 <template #list>
@@ -163,7 +164,7 @@ function moveDownSection(){
                             :name="element_type.id"
                             :disabled="element_type.disable"
                         >
-                            {{element_type.display_choice}}
+                            {{ element_type.display_choice }}
                         </DropdownItem>
                     </DropdownMenu>
                 </template>

@@ -2,10 +2,11 @@ import { ConstrainType, EditPath, AttributeDefinition, ArrayUtil } from "structu
 import MtAttributeConstrainMin from "@/components/mt/attribute/constrain/min.vue"
 import MtAttributeConstrainMax from "@/components/mt/attribute/constrain/max.vue"
 import MtAttributeConstrainRequire from "@/components/mt/attribute/constrain/require.vue"
+import { tran } from "~/composables/app/translate"
 
 export type AttrConstrainEditComponent = {
     id: string,
-    label: string,
+    label: string, // label for the form item, translated
     path: EditPath | null,
     component_type: any,
     constrain_type: ConstrainType,
@@ -17,10 +18,9 @@ export function getAttrConstrainEditComponents(attr_def_edit_path: EditPath, att
     // map each defined constrain to a components
     attr_def.constrains.forEach((constrain, constrain_id) => {
         let constrain_type = constrain.getType()
-        
         let component = {
             id: constrain_id,
-            label: constrain_type,
+            label: tran(`structural.attribute.constraint.${constrain_type}`),
             path: attr_def_edit_path.clone().append(constrain_id),
             component_type: markRaw(constrainMapper(constrain_type)),
             constrain_type: constrain_type,
@@ -34,7 +34,7 @@ export function getAttrConstrainEditComponents(attr_def_edit_path: EditPath, att
     available_constrains.forEach((constrain_type) => {
         let component = {
             id: attr_def + "_" + constrain_type,
-            label: constrain_type,
+            label: tran(`structural.attribute.constraint.${constrain_type}`),
             path: null,
             component_type: markRaw(constrainMapper(constrain_type)),
             constrain_type: constrain_type,

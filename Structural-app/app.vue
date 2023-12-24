@@ -1,14 +1,16 @@
 <script setup lang="ts">
 const { $emitter } = useNuxtApp()
+import { AppState, EventConstant } from "structural-core"
 
 const reload_key = ref(0)
 function reloadPage(){
+    AppState.logger.debug("Setting updated. Reload page.")
     reload_key.value++
 }
-$emitter.on("RELOAD_PAGE", reloadPage)
+$emitter.on(EventConstant.SETTING_UPDATED, reloadPage)
 
 onBeforeUnmount(() => {
-    $emitter.off("RELOAD_PAGE", reloadPage)
+    $emitter.off(EventConstant.SETTING_UPDATED, reloadPage)
 })
 </script>
 

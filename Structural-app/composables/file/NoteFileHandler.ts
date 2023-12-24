@@ -5,6 +5,7 @@ import { Note, EventConstant, NoteMarkdownConverter, AppState, AppException } fr
 import { WindowUtil } from "@/composables/app/window"
 import { appWindow } from "@tauri-apps/api/window"
 import { invoke } from '@tauri-apps/api/tauri'
+import { tran } from "@/composables/app/translate"
 
 const struct_note_file_extension = "structnote"
 
@@ -46,20 +47,11 @@ export class NoteFileHandler {
      * @param note The note to save.
      * @param filename The path of the file to save.
      */
-    private static saveAsFile(note: Note, filename: string): Promise<void> {
-        return new Promise<void>(async (resolve, reject) => {
-            try {
-                let content: object = note.saveAsJson()
-                let content_str = JSON.stringify(content)
-                await TauriFileSystem.instance.writeTextFile(filename, content_str, false, true)
-            } catch (error) {
-                if (error instanceof AppException){
-                    reject(error.message)
-                } else {
-                    reject(error)
-                }
-            }
-        })
+    private static async saveToFile(note: Note, filename: string){
+        AppState.logger.debug("Save to file: " + filename)
+        let content: object = note.saveAsJson()
+        let content_str = JSON.stringify(content)
+        await TauriFileSystem.instance.writeTextFile(filename, content_str, false, true)
     }
 
     private static async askSavePath(default_note_filename: string): Promise<string | null> {
@@ -95,32 +87,35 @@ export class NoteFileHandler {
      * @param save_as_mode If this is call is for a save-as operation, which 1. won't update the save-path and 2. ask for path to save.
      */
     static async saveNote(save_as_mode: boolean = false){
+        AppState.logger.debug("Start saveNote. save-as-mode: " + save_as_mode)
         try {
             const { $viewState, $Message } = useNuxtApp()
             if ($viewState.editing_note === null){
-                console.warn("No note is opened to save.")
+                AppState.logger.warn("No note is opened to save.")
                 return
             }
 
             let this_save_path = $viewState.save_path
             if (this_save_path === null || save_as_mode){
                 // there is no save path set or this is a save-as operation
+                AppState.logger.debug("No save path is set or this is a save-as operation.")
                 const default_note_filename = $viewState.editing_note.title + "." + struct_note_file_extension
                 this_save_path = await this.askSavePath(default_note_filename)
             }
             if (this_save_path === null){
-                // TODO Promise need return or not??
                 return Promise.reject("No path is chosen to save.")
             } else {
-                await NoteFileHandler.saveAsFile($viewState.editing_note, this_save_path)
+                await NoteFileHandler.saveToFile($viewState.editing_note, this_save_path)
             }
     
             if (!save_as_mode){
                 $viewState.save_path = this_save_path
             }
+            // TODO translate
             $Message.info("Saved")
+            AppState.logger.debug("Saved")
         } catch (err) {
-            console.error("Error when trying to save Note.", err);
+            AppState.logger.error("Error when trying to save Note.", err);
         }
     }
 
@@ -142,6 +137,41 @@ export class NoteFileHandler {
         } catch (err) {
             console.error(err);
         }
+    }
+
+    /**
+     * Close the note. Ask for save.
+     */
+    static async closeNote(){
+        const { $viewState, $emitter, $Modal } = useNuxtApp()
+        if ($viewState.editing_note === null){
+            console.warn("No note is opened to close.")
+            return
+        }
+
+        // display a dialog to ask for save
+        let close = () => {
+            // throw away the note instance
+            $viewState.editing_note = null
+            $viewState.save_path = null
+            $emitter.emit(EventConstant.NOTE_CLOSED)
+        }
+        $Modal.confirm({
+            title: tran("common.save_confirm_window.title", null, {
+                target: tran("structural.file.note")
+            }),
+            content: tran("common.save_confirm_window.content"),
+            okText: tran("common.save_confirm_window.save"),
+            closable: true, // if not clicking one of the button, do nothing
+            onOk: async () => {
+                await NoteFileHandler.saveNote()
+                close()
+            },
+            cancelText: tran("common.save_confirm_window.cancel"),
+            onCancel: () => {
+                close()
+            }
+        })
     }
 
     /**

@@ -1,7 +1,8 @@
-import { type ComponentVForElement, EditPath, type EditPathNode, EndOfEditPathError, Note, ElementType, NoteSection, StructuralElement, TextElement, MarkdownElement, StructuralSection, Logger } from "structural-core"
+import { type ComponentVForElement, EditPath, type EditPathNode, EndOfEditPathError, Note, ElementType, NoteSection, StructuralElement, TextElement, MarkdownElement, StructuralSection, AppState } from "structural-core"
 import MtElementText from "@/components/mt/element/text.vue"
 import MtElementMarkdown from "@/components/mt/element/markdown.vue"
 import MtElementStructural from "@/components/mt/element/structural.vue"
+import { tran } from "~/composables/app/translate"
 
 export function elementComponentMapper(child: EditPathNode){
     if (child instanceof StructuralElement){
@@ -62,10 +63,10 @@ export function availableElementComponentGetter(section: NoteSection): Available
 
             switch (element_type) {
                 case ElementType.TEXT:
-                    display_choice = "Add Text Section"
+                    display_choice = tran("structural.element.add_text_element")
                     break;
                 case ElementType.STRUCT:
-                    display_choice = "Add Struct Section"
+                    display_choice = tran("structural.element.add_struct_element")
                     let struct_section = section as StructuralSection
                     if (struct_section.definition.attributes.length() == 0){
                         // disable if no attribute is defined
@@ -73,7 +74,7 @@ export function availableElementComponentGetter(section: NoteSection): Available
                     }
                     break;
                 case ElementType.MARKDOWN:
-                    display_choice = "Add Markdown Section"
+                    display_choice = tran("structural.element.add_markdown_element")
                     break;
                 default:
                     break;

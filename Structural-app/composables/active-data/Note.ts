@@ -1,4 +1,5 @@
 import { SectionType } from "structural-core"
+import { tran } from "~/composables/app/translate"
 
 export type AvailableSection = {
     id: string,
@@ -9,11 +10,11 @@ export function getAvailableSection(): AvailableSection[]{
     return [
         {
             id: SectionType.BASE,
-            display_choice: "Add Text Section"
+            display_choice: tran("structural.section.add_text_section")
         },
         {
             id: SectionType.STRUCT,
-            display_choice: "Add Struct Section"
+            display_choice: tran("structural.section.add_struct_section")
         }
     ]
 }

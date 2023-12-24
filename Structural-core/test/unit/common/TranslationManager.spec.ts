@@ -1,7 +1,26 @@
-import { describe, it, expect, beforeEach } from "vitest"
-import { TranslationManager } from "@/common/TranslationManager.js"
+import { describe, it, expect, beforeAll } from "vitest"
+import { TranslationManager, ModuleInit } from "@/index.js"
 
 describe('TranslationManager', () => {
+    beforeAll(() => {
+        ModuleInit.init()
+    })
+
+    it('var key', () => {
+        const t = new TranslationManager()
+        // case insensitive
+        expect(t.translate('test.No_parameter')).toBe('Hello!')
+        // key as fallback
+        expect(t.translate('test.notExists')).toBe('test.notExists')
+    })
+
+    it('default_language_code', () => {
+        const t = new TranslationManager()
+        expect(t.default_language_code).toBe('en')
+        t.default_language_code = 'zh-HK'
+        expect(t.default_language_code).toBe('zh-HK')
+    })
+
     it('translate - no parameter', () => {
         const t = new TranslationManager('en')
         expect(t.translate('test.no_parameter', 'en')).toBe('Hello!')

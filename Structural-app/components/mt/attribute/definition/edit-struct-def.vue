@@ -2,6 +2,7 @@
 import { EditPath, Note, StructureDefinition, EventConstant, StructDefEditContext, StructDefEditState, StructDefEditEvent, InjectConstant, AttributeDefinition, StructuralSection } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 import { Icon } from "view-ui-plus"
+import { tran } from "~/composables/app/translate"
 const { $Message } = useNuxtApp()
 
 const props = defineProps<{
@@ -120,7 +121,7 @@ function attrTypeUpdate(attr_def: AttributeDefinition<any> | null){
 <template>
     <Modal
         :modelValue="props.edit_def_mode"
-        title="Section Definition"
+        :title="tran('structural.struct_def.section_def_title')"
         :closable="false"
         :mask-closable="false"
         width="85"
@@ -129,7 +130,7 @@ function attrTypeUpdate(attr_def: AttributeDefinition<any> | null){
         <!-- Attributes list -->
         <div v-if="edit_state === StructDefEditState.EDITING_STRUCT">
             <Tabs>
-                <TabPane label="Attributes" name="attributes">
+                <TabPane :label="tran('structural.struct_def.attributes_tab_title')" name="attributes">
                     <mt-attribute-definition-edit-defined-attrs-table
                         @create="startAddAttr" 
                         @delete="deleteAttr"
@@ -138,7 +139,7 @@ function attrTypeUpdate(attr_def: AttributeDefinition<any> | null){
                         @move-down="moveDownAttr"
                         :struct_def="editing_struct_def" />
                 </TabPane>
-                <TabPane label="Display Name" name="display_name">
+                <TabPane :label="tran('structural.struct_def.display_name_tab_title')" name="display_name">
                     <mt-attribute-definition-edit-display-key-table 
                         v-model:struct_def="editing_struct_def"
                         @update="updateDisplayKey"
@@ -162,23 +163,23 @@ function attrTypeUpdate(attr_def: AttributeDefinition<any> | null){
             <div v-show="edit_state === StructDefEditState.EDITING_STRUCT">
                 <!-- Cancel button is always show & is the only way to close this Modal -->
                 <Button @click="cancelEditStruct">
-                    Cancel
+                    {{ tran("common.cancel") }}
                 </Button>
 
                 <!-- If no change is done, don't allow user to click the confirm button. -->
                 <Button type="primary" @click="confirmStructDef" :disabled="!struct_has_change">
-                    Confirm
+                    {{ tran("common.confirm") }}
                 </Button>
             </div>
 
             <!-- The button set for the selected editing attr def -->
             <div v-show="edit_state === StructDefEditState.EDITING_ATTR">
                 <Button @click="cancelEditAttr">
-                    Cancel
+                    {{ tran("common.cancel") }}
                 </Button>
     
                 <Button type="primary" @click="confirmEditAttr">
-                    Confirm
+                    {{ tran("common.confirm") }}
                 </Button>
             </div>
         </template>
@@ -191,13 +192,13 @@ function attrTypeUpdate(attr_def: AttributeDefinition<any> | null){
         >
             <template #header>
                 <Icon type="md-alert" color="red" />
-                {{error_title}}
+                {{ error_title }}
             </template>
-            {{error_content}}
+            {{ error_content }}
 
             <template #footer>
                 <Button type="primary" @click="onErrorModalConfirm">
-                    Confirm
+                    {{ tran("common.confirm") }}
                 </Button>
             </template>
         </Modal>

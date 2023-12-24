@@ -2,20 +2,27 @@ import type { Locales } from "@/i18n/i18n-types.js"
 import L from '@/i18n/i18n-node.js'
 import _ from "lodash"
 import { locales } from "@/i18n/i18n-util.js"
+import { AppState } from "@/view/state/AppState.js"
 
 export class TranslationManager {
     private _default_language_code: string = "en"
    
     constructor(default_language_code?: string){
         if (default_language_code !== undefined){
-            if (default_language_code in locales){
-                this.default_language_code = default_language_code as Locales
-            }
+            this.default_language_code = default_language_code
         }
     }
 
+    get default_language_code(): string {
+        return this._default_language_code
+    }
+
     set default_language_code(language_code: string){
-        this._default_language_code = language_code
+        if (locales.includes(language_code as Locales)){
+            this._default_language_code = language_code as Locales
+        } else {
+            AppState.logger.warn(`Language code ${language_code} is not supported.`)
+        }
     }
 
     /**
@@ -30,21 +37,30 @@ export class TranslationManager {
      * 2. named parameter: {name:string}
      * 3. numbered parameter {0}: array of string or number
      */
-    public translate(key: string, language_code?: string, param?: Array<string | number> | object | string | number): string {
-        const temp: string[] = key.split('.')
+    public translate(key: string, language_code?: string | null, param?: Array<string | number> | object | string | number): string {
+        const temp: string[] = key.toLowerCase().split('.')
 
-        language_code = language_code === undefined ? this._default_language_code : language_code
+        language_code = language_code == null ? this._default_language_code : language_code
         let localizationFunction = L[language_code as Locales] as any
         for  (const a of temp){
             localizationFunction = localizationFunction[a]
         }
 
-        if (param !== null){
+        let translated: string
+        if (param == null){
+            translated = localizationFunction()
+        } else {
             if (Array.isArray(param)){
-                return localizationFunction(...param)
+                translated = localizationFunction(...param)
+            } else {
+                translated = localizationFunction(param)
             }
-            return localizationFunction(param)
         }
-        return localizationFunction()
+
+        // return a fallback of the translation key (easier to debug)
+        if (translated == null || translated == ""){
+            translated = key
+        }
+        return translated
     }
 }

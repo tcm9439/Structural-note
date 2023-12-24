@@ -6,30 +6,30 @@
  -->
 
 <script setup lang="ts">
-import { Note, EventConstant, AppState, AppRuntimeEnvironment } from "structural-core"
+import { Note, EventConstant, AppState } from "structural-core"
 import { NoteFileHandler } from "@/composables/file/NoteFileHandler"
 const { $emitter, $viewState, $Modal } = useNuxtApp()
 import { appWindow } from "@tauri-apps/api/window"
 import { invoke } from "@tauri-apps/api/tauri"
 import { Icon } from "view-ui-plus"
+import { exceptionHandler } from "@/composables/app/exception"
+import { tran } from "~/composables/app/translate"
 
 const editing_note = ref<Note|null>(null)
 const has_open_note = ref<boolean>(false)
 
-// # listen to the note opened event (from here or the menu)
-function noteOpenedHandler(){
-    AppState.logger.debug("Note opened event.")
+// # listen to the note open / close event (from here or the menu)
+function openedNoteChangeHandler(){
+    AppState.logger.debug("Note open / change event.")
     editing_note.value = $viewState.editing_note
-    has_open_note.value = true
-    AppState.logger.debug("Note opened.")
+    has_open_note.value = editing_note.value != null
 }
-$emitter.on(EventConstant.NOTE_OPENED, noteOpenedHandler)
+$emitter.on(EventConstant.NOTE_OPENED, openedNoteChangeHandler)
+$emitter.on(EventConstant.NOTE_CLOSED, openedNoteChangeHandler)
 
 // # init page: check if there is any opened note for this window
 const window_id = appWindow.label
 try {
-    AppState.logger.info(`App state: ${AppState.environment === AppRuntimeEnvironment.TARUI }, ${AppState["appSettingFilepath"]}`)
-    console.log(useRuntimeConfig().public)
     if ($viewState.editing_note != null){
         // already opened a note (probably from go back in this page from another page)
         editing_note.value = $viewState.editing_note
@@ -39,10 +39,7 @@ try {
         AppState.logger.debug(`Has open note: ${has_open_note.value}`)
     }
 } catch (error) {
-    $Modal.error({
-        title: "Fail to open note",
-        content: `${error}`
-    })
+    exceptionHandler(error, "error.general.open_note")
 }
 
 // # listen to the file drop event
@@ -56,31 +53,29 @@ const unlisten_drop_file = await appWindow.onFileDropEvent(async (event) => {
         AppState.logger.debug(`Selected open path: ${selected_open_path}`)
         await NoteFileHandler.openNote(window_id, !has_open_note.value, selected_open_path)
     } catch (error) {
-        $Modal.error({
-            title: "Fail to open note",
-            content: `${error}`
-        })
+        exceptionHandler(error, "error.general.open_note")
     }
 })
 
 // # listen to close window request event
 const unlisten_close_window = await appWindow.onCloseRequested(async (event) => {
     AppState.logger.info("Close window request.")
+    let success = true
     if (editing_note.value != null){
-        // TODO ask to save note
-        // const confirmed = await confirm('Are you sure?');
-        // if (!confirmed) {
-        //     // user did not confirm closing the window; let's prevent it
-        //     event.preventDefault();
-        // }
-        // await NoteFileHandler.saveNote()
+        success = await NoteFileHandler.closeNote()
     }
-    // close Logger
-    await AppState.logger.close()
+    if (success){
+        // close Logger
+        await AppState.logger.close()
+    } else {
+        // prevent closing
+        event.preventDefault()
+    }
 })
 
 onBeforeUnmount(() => {
-    $emitter.off(EventConstant.NOTE_OPENED, noteOpenedHandler)
+    $emitter.off(EventConstant.NOTE_OPENED, openedNoteChangeHandler)
+    $emitter.off(EventConstant.NOTE_CLOSED, openedNoteChangeHandler)
     unlisten_drop_file()
     unlisten_close_window()
     invoke("remove_opened_file", { windowId: window_id })
@@ -98,7 +93,7 @@ onBeforeUnmount(() => {
         <div v-if="editing_note == null" class="spin-container">
             <Spin fix>
                 <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
-                <div>Loading</div>
+                <div>{{ tran("common.loading") }}</div>
             </Spin>
         </div>
         <mt-note v-else :note="editing_note" />

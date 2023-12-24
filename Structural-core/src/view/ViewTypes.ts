@@ -2,6 +2,7 @@ import { EditPath } from "@/note/util/EditPath.js"
 
 export type IViewUITableColumn = {
     title?: string,
+    title_key?: string,
     type?: string,
     key?: string,
     slot?: string,

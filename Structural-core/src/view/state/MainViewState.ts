@@ -1,11 +1,12 @@
 import { Note } from "@/note/Note.js"
+import { AppState } from "@/view/state/AppState.js"
 
 export class MainViewState {
     private _editing_note: Note | null = null
     private _save_path: string | null = null
 
     get editing_note_name(): string {
-        return this._editing_note?.title ?? "Untitled"
+        return this._editing_note?.title ?? AppState.translationManager.translate("structural.file.untitled")
     }
 
     set editing_note(note: Note | null) {

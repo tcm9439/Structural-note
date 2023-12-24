@@ -16,7 +16,7 @@ export default defineNuxtConfig({
     runtimeConfig: {
         // https://stackoverflow.com/questions/67703133/how-to-use-env-variables-in-nuxt-2-or-3
         public: {
-            tauriEnv: process.env.TAURI_ENV,
+            appEnv: process.env.APP_ENV,
             settingFilepath: process.env.SETTING_FILEPATH,
         },
     },

@@ -6,6 +6,8 @@
 <script setup lang="ts">
 import { StructureDefinition, StructuralDefinitionHelper } from "structural-core"
 import { Icon } from "view-ui-plus"
+import { TableColumnParser } from "@/composables/active-data/TableColParser"
+import { tran } from "~/composables/app/translate"
 
 const props = defineProps<{
     struct_def: StructureDefinition,
@@ -22,6 +24,8 @@ const emit = defineEmits<{
     (event: 'move-up', id: string): void
     (event: 'move-down', id: string): void
 }>()
+
+const ATTR_TABLE_COLUMNS = TableColumnParser(StructuralDefinitionHelper.ATTR_TABLE_COLUMNS)
 
 /**
  * Create and add a new attribute to the StructureDefinition
@@ -49,9 +53,9 @@ function moveDownAttr(id: string) {
 
 <template>
     <!-- Current defined attributes inside this section. -->
-    <Table border :columns="StructuralDefinitionHelper.ATTR_TABLE_COLUMNS" :data="data">
+    <Table border :columns="ATTR_TABLE_COLUMNS" :data="data">
         <template #name="{row, index}">
-            <strong>{{row.name}}</strong>
+            <strong>{{ row.name }}</strong>
         </template>
         <template #action="{row}">
             <ButtonGroup>
@@ -76,7 +80,7 @@ function moveDownAttr(id: string) {
     <div class="add-section-button-wrapper">
         <Button @click="addAttr" long>
             <Icon type="md-add" />
-            Add
+            {{ tran("common.add") }}
         </Button>
     </div>
 </template>

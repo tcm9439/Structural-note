@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { StructureDefinition, StructuralDefinitionHelper, type IViewUITableData } from "structural-core"
 import { Divider, Icon } from "view-ui-plus"
+import { TableColumnParser } from "@/composables/active-data/TableColParser"
 
 const props = defineProps<{
     struct_def: StructureDefinition,
@@ -14,6 +15,8 @@ const emit = defineEmits<{
     (event: "update:struct_def", struct_def: StructureDefinition): void
     (event: "update"): void
 }>()
+
+const DISPLAY_KEY_TABLE_COLUMNS = TableColumnParser(StructuralDefinitionHelper.DISPLAY_KEY_TABLE_COLUMNS)
 
 function addAttr(selection: IViewUITableData[], row: IViewUITableData){
     let attr = props.struct_def.attributes.get(row.id)
@@ -75,7 +78,7 @@ function setSeparator(value: string){
 
     <!-- Current defined attributes inside this section. -->
     <Table border 
-        :columns="StructuralDefinitionHelper.DISPLAY_KEY_TABLE_COLUMNS" :data="data"
+        :columns="DISPLAY_KEY_TABLE_COLUMNS" :data="data"
         @on-select="addAttr"
         @on-select-cancel="removeAttr"
         @on-select-all="addAll"

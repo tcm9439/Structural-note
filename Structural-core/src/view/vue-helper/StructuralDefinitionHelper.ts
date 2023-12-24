@@ -4,19 +4,19 @@ import { StructureDefinition } from "@/note/element/structural/StructureDefiniti
 export class StructuralDefinitionHelper {
     static readonly ATTR_TABLE_COLUMNS: IViewUITableColumn[] = [
         {
-            title: 'Name',
+            title_key: "structural.struct_def.attr_table_name_col",
             slot: 'name',
         },
         {
-            title: 'Type',
+            title_key: "structural.struct_def.attr_table_type_col",
             key: 'type',
         },
         {
-            title: 'Description',
+            title_key: "structural.struct_def.attr_table_description_col",
             key: 'description',
         },
         {
-            title: 'Action',
+            title_key: "structural.struct_def.attr_table_action_col",
             slot: 'action',
             width: 155,
         }
@@ -29,15 +29,16 @@ export class StructuralDefinitionHelper {
             align: 'center'
         },
         {
-            title: 'Name',
+            title_key: "structural.struct_def.display_name_table_name_col",
             slot: 'name',
         },
         {
-            title: 'Action',
+            title_key: "structural.struct_def.display_name_table_action_col",
             slot: 'action',
         }
     ]
 
+    // TODO table data translation (type)
     public static getAttributesInTableFormat(struct_def: StructureDefinition): IViewUITableData {
         let data: IViewUITableData[] = []
         struct_def.attributes.ordered_components.forEach((attribute) => {

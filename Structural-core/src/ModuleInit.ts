@@ -1,5 +1,4 @@
 import { AttributeTypeInitializer } from "@/note/element/structural/attribute/type/AttributeTypeInitializer.js"
-import { Logger, TauriLogger, WebLogger } from "@/common/Logger.js"
 import { AppState, NuxtRuntimeConfig } from "@/view/state/AppState.js"
 
 /**
