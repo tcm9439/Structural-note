@@ -105,6 +105,7 @@ const en = {
         general: {
             title: "Error",
             open_note: "Fail to open note.",
+            create_note: "Fail to open note.",
             message: "Something went wrong.",
         },
         attribute: {

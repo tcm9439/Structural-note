@@ -8,6 +8,7 @@ import { appWindow } from "@tauri-apps/api/window"
 import { NoteFileHandler } from "@/composables/file/NoteFileHandler"
 import { tran } from "@/composables/app/translate"
 import { AppState } from "structural-core"
+import { exceptionHandler } from "@/composables/app/exception"
 
 // # error prompt
 const show_error_modal = ref(false)
@@ -20,8 +21,7 @@ async function openNote(){
     try {
         await NoteFileHandler.openNote(appWindow.label, true)
     } catch (error) {
-        error_content.value = `Fail to open note: ${error}`
-        show_error_modal.value = true
+        exceptionHandler(error, "error.general.open_note")
     }
     opening_note.value = false
 }
@@ -43,8 +43,7 @@ function createNote(){
             NoteFileHandler.createNote(new_note_title.value)
         }
     } catch (error) {
-        error_content.value = `Fail to create note: ${error}`
-        show_error_modal.value = true
+        exceptionHandler(error, "error.general.create_note")
     }
 }
 </script>
@@ -73,26 +72,6 @@ function createNote(){
                 </Button>
             </Space>
         </div>
-
-        <!-- Error prompt -->
-        <Modal 
-            :modelValue="show_error_modal"
-            :closable="false"
-            :mask-closable="false"
-            class-name="vertical-center-modal"
-        >
-            <template #header>
-                <Icon type="md-alert" color="red" />
-                {{ tran("common.error") }}
-            </template>
-            {{ error_content }}
-
-            <template #footer>
-                <Button type="primary" @click="show_error_modal = false">
-                    {{ tran("common.confirm") }}
-                </Button>
-            </template>
-        </Modal>
 
         <!-- Cancel / create button depending on the current state -->
         <template #footer>

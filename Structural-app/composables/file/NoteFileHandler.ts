@@ -155,6 +155,8 @@ export class NoteFileHandler {
             // throw away the note instance
             $viewState.editing_note = null
             $viewState.save_path = null
+            const window_id = appWindow.label
+            invoke("remove_opened_file", { windowId: window_id })
             $emitter.emit(EventConstant.NOTE_CLOSED)
             if (close_success_callback){
                 close_success_callback()

@@ -20,8 +20,8 @@ const useLanguage = (nuxtApp: any, lang: string) => {
 
 export default defineNuxtPlugin((nuxtApp) => {
     // https://nuxt.com/docs/api/advanced/hooks
-    nuxtApp.hook('app:mounted', (..._args) => {        
-    // nuxtApp.hook('app:created', (..._args) => {        
+    // nuxtApp.hook('app:mounted', (..._args) => {        
+    nuxtApp.hook('app:created', (..._args) => {        
         useLanguage(nuxtApp, AppState.getAppSetting().language)
         nuxtApp.provide('Modal', Modal)
         nuxtApp.provide('Message', Message)

@@ -60,13 +60,14 @@ const unlisten_drop_file = await appWindow.onFileDropEvent(async (event) => {
 // # listen to close window request event
 const unlisten_close_window = await appWindow.onCloseRequested(async (event) => {
     AppState.logger.info("Close window request.")
+    event.preventDefault()
     if (editing_note.value != null){
         await NoteFileHandler.closeNote(async () => {
             // close Logger
             await AppState.logger.close()
+            appWindow.close()
         }, () => {
             // prevent closing
-        event.preventDefault()
         })
     }
 })

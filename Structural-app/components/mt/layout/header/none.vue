@@ -14,8 +14,8 @@
 <style scoped>
 .mt-layout-title {
     color: rgba(255,255,255,.7);
-    max-height: max(6vh, 30px);
-    line-height: max(6vh, 30px);
+    max-height: 40px;
+    line-height: 40px;
     padding-left: 20px;
     /* bold */
     font-weight: 600;

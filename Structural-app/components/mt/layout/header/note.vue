@@ -139,14 +139,14 @@ onBeforeUnmount(() => {
             </Col>
         </Row>
     </mt-layout-header-base>
-    <div class="mt-layout-toolbar-padding"></div>
+    <!-- <div class="mt-layout-toolbar-padding"></div> -->
 </template>
 
 <style scoped>
 .mt-layout-note-title {
     color: rgba(255,255,255,.7);
-    max-height: max(6vh, 30px);
-    line-height: max(6vh, 30px);
+    max-height: 40px;
+    line-height: 40px;
     padding-left: 20px;
     /* bold */
     font-weight: 600;
@@ -154,7 +154,7 @@ onBeforeUnmount(() => {
 }
 
 .mt-layout-toolbar-padding {
-    height: max(6vh, 30px);
+    height: 30px;
 }
 
 .mt-layout-toolbar {
@@ -162,8 +162,8 @@ onBeforeUnmount(() => {
 }
 
 .mt-layout-toolbar .ivu-menu-horizontal {
-    height: max(6vh, 30px);
-    line-height: max(6vh, 30px);
+    height: 30px;
+    line-height: 30px;
     width: 100%;
 }
 </style>

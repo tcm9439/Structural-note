@@ -23,30 +23,22 @@ onBeforeUnmount(() => {
 
 <template>
     <div class="layout">
-        <Layout>
-            <mt-layout-header-none v-if="layout_type == 'none'" />
-            <mt-layout-header-note v-else-if="layout_type == 'note'"/>
-           
-            <Content class="content">
-                <slot />
-            </Content>
-        </Layout>
+        <mt-layout-header-none v-if="layout_type == 'none'" />
+        <mt-layout-header-note v-else-if="layout_type == 'note'"/>
+        
+        <div class="content">
+            <slot />
+        </div>
     </div>
 </template>
 
 <style scoped>
     .layout {
-        position: relative;
-        border-radius: 4px;
-        overflow: hidden;
-    }
-
-    :deep(.ivu-layout) {
-        min-height: 100vh;
+        /* height = 100% screen - header height */
+        min-height: calc(100vh - 40px);
     }
 
     .content {
-        /* margin: calc(max(8vh, 40px) + 20px) 20px 0; */
         margin: 20px 20px 0;
         min-height: 100%;
     }

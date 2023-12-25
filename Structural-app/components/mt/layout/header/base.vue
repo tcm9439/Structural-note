@@ -5,17 +5,19 @@
     <div class="mt-layout-header">
         <slot />
     </div>
-    <div class="mt-layout-header-padding"></div>
+    <!-- <div class="mt-layout-header-padding"></div> -->
 </template>
 
 <style scoped>
 .mt-layout-header-padding {
     width: 100%;
-    height: max(6vh, 30px);
+    height: 40px;
 }
 
 .mt-layout-header {
-    position: fixed;
+    position: -webkit-sticky;  /* for Safari */
+    position: sticky;
+    top: 0;
     width: 100%;
     background-color: #515A6E;
     z-index: 20;
