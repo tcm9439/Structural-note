@@ -3,16 +3,11 @@
  -->
 
 <script setup lang="ts">
-import { Icon } from "view-ui-plus"
 import { appWindow } from "@tauri-apps/api/window"
 import { NoteFileHandler } from "@/composables/file/NoteFileHandler"
 import { tran } from "@/composables/app/translate"
 import { AppState } from "structural-core"
 import { exceptionHandler } from "@/composables/app/exception"
-
-// # error prompt
-const show_error_modal = ref(false)
-const error_content = ref("")
 
 // # open note button
 const opening_note = ref(false)
