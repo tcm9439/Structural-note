@@ -102,7 +102,7 @@ onBeforeUnmount(() => {
         <Row class="mt-layout-toolbar" :key="refresh_menu">
             <Col class="mt-layout-toolbar">
                 <Menu 
-                    mode="horizontal" theme="dark" 
+                    mode="horizontal" 
                     @on-select="menuSelectHandler"
                 >
                     <Submenu name="file-operation">
@@ -139,21 +139,31 @@ onBeforeUnmount(() => {
             </Col>
         </Row>
     </mt-layout-header-base>
+    <div class="mt-layout-toolbar-padding"></div>
 </template>
 
 <style scoped>
 .mt-layout-note-title {
     color: rgba(255,255,255,.7);
-    max-height: max(4vh, 20px);
-    line-height: max(4vh, 20px);
+    max-height: max(6vh, 30px);
+    line-height: max(6vh, 30px);
     padding-left: 20px;
     /* bold */
     font-weight: 600;
     font-size: larger;
 }
 
+.mt-layout-toolbar-padding {
+    height: max(6vh, 30px);
+}
+
+.mt-layout-toolbar {
+    background-color: white;
+}
+
 .mt-layout-toolbar .ivu-menu-horizontal {
-    max-height: max(4vh, 20px);
-    line-height: max(4vh, 20px);
+    height: max(6vh, 30px);
+    line-height: max(6vh, 30px);
+    width: 100%;
 }
 </style>
