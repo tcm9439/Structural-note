@@ -1,7 +1,28 @@
+<script setup lang="ts">
+import { EventConstant, AppPage } from "structural-core"
+const { $emitter } = useNuxtApp()
+
+const layout_type = ref("note")
+function updateLayout(new_layout_type: AppPage){
+    switch (new_layout_type) {
+        case AppPage.SETTING:
+            layout_type.value = "none"
+        default:
+            layout_type.value = "note"
+    }
+}
+
+$emitter.on(EventConstant.LAYOUT_UPDATE, updateLayout)
+onBeforeUnmount(() => {
+    $emitter.off(EventConstant.LAYOUT_UPDATE, updateLayout)
+})
+</script>
+
 <template>
     <div class="layout">
         <Layout>
-            <mt-layout-header />
+            <mt-layout-header-none v-if="layout_type == 'none'" />
+            <mt-layout-header-note v-else-if="layout_type == 'note'"/>
             <Content class="content">
                 <slot />
             </Content>

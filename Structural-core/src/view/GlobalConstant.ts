@@ -1,4 +1,6 @@
 export class EventConstant {
+    public static readonly LAYOUT_UPDATE = "LAYOUT_UPDATE_EVENT"
+    
     public static readonly SETTING_UPDATED = "SETTING_UPDATED_EVENT"
     public static readonly NOTE_OPENED = "NOTE_OPENED_EVENT"
     public static readonly NOTE_CLOSED = "NOTE_CLOSED_EVENT"

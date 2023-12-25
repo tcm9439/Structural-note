@@ -1,7 +1,12 @@
-import { describe, it, expect, beforeEach } from "vitest"
+import { describe, it, expect, beforeAll } from "vitest"
 import { InvalidTypeConversionForDataException, InvalidTypeConversionException } from '@/exception/AttributeException'
+import { ModuleInit } from '@/index'
 
 describe('InvalidTypeConversionForDataException', () => {
+    beforeAll(() => {
+        ModuleInit.init()
+    })
+
 	it('constructor', () => {
         const e = new InvalidTypeConversionForDataException("TYPE-A", "TYPE-B", "DATA")
         expect(e.message).toBe("Invalid operation: Cannot convert data \"DATA\" from type TYPE-A to type TYPE-B")
@@ -10,6 +15,10 @@ describe('InvalidTypeConversionForDataException', () => {
 })
 
 describe('InvalidTypeConversionException', () => {
+    beforeAll(() => {
+        ModuleInit.init()
+    })
+
 	it('empty description', () => {
         const e = new InvalidTypeConversionException("TYPE-A", "TYPE-B")
         expect(e.message).toBe("Invalid operation: Cannot convert type TYPE-A to type TYPE-B")

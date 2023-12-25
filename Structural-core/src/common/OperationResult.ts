@@ -4,6 +4,7 @@
  */
 export type OperationResult = {
     valid: boolean;
+    // TODO change to key
     invalid_message: string;
 };
 

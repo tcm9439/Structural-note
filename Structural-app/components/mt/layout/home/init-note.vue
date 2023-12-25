@@ -28,15 +28,20 @@ async function openNote(){
 
 // # create note
 const create_note_mode = ref<boolean>(false)
-const new_note_title = ref<string>("untitled")
+const new_note_title = ref<string>(tran("structural.file.untitled"))
 function toggleCreateNoteMode(value: boolean){
     create_note_mode.value = value
 }
 
 function createNote(){
     try {
-        AppState.logger.debug(`Creating note: ${new_note_title.value}`)
-        NoteFileHandler.createNote(new_note_title.value)
+        if (new_note_title.value == ""){
+            AppState.logger.debug("Creating note using default title.")
+            NoteFileHandler.createNote(tran("structural.file.untitled"))
+        } else {
+            AppState.logger.debug(`Creating note: ${new_note_title.value}`)
+            NoteFileHandler.createNote(new_note_title.value)
+        }
     } catch (error) {
         error_content.value = `Fail to create note: ${error}`
         show_error_modal.value = true
@@ -52,7 +57,8 @@ function createNote(){
     >
         <div v-if="create_note_mode">
             <!-- Creating note -->
-            {{ tran("structural.file.filename") }} <Input v-model="new_note_title" />
+            {{ tran("structural.file.filename") }}<span style="color: red">*</span> 
+            <Input v-model="new_note_title" />
         </div> 
         <div v-else>
             <!-- Chose to create / open -->

@@ -48,9 +48,9 @@ function onExitEditStruct(has_change: boolean){
     if (has_change){
         // there is changes to the def
         $emitter.emit(EventConstant.ATTR_DEF_UPDATE, edit_context.value.edit_queue)
-        $Message.info("Update Definition")
+        $Message.info(tran("structural.struct_def.update_attr_def_confirm"))
     } else {
-        $Message.info("Cancel")
+        $Message.info(tran("common.cancel"))
     }
     // close this modal
     emit('update:edit_def_mode', false)

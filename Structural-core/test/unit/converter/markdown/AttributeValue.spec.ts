@@ -1,4 +1,5 @@
-import { describe, it, expect, beforeEach } from "vitest"
+import { describe, it, expect, beforeAll } from "vitest"
+import { ModuleInit } from "@/index.js"
 import { AttributeValueMarkdownConverter } from "@/converter/markdown/AttributeValue.js"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
@@ -9,6 +10,10 @@ import { MarkdownAttribute } from "@/note/element/structural/attribute/type/Mark
 import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain.js"
 
 describe("AttributeValueMarkdownConverter", () => {
+    beforeAll(() => {
+        ModuleInit.init()
+    })
+
     it("convert", () => {
         let attr_def: AttributeDefinition<any> = new AttributeDefinition("test", new StringAttribute())
         let value = new AttributeValue(attr_def, "test")

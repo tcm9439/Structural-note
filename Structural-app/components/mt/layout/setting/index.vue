@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { AppState, EventConstant } from "structural-core"
+import { AppState, EventConstant, AppPage, AppPageUtil } from "structural-core"
 import { tran } from "@/composables/app/translate"
-const { $emitter, $Modal } = useNuxtApp()
+const { $emitter, $Modal, $viewState } = useNuxtApp()
 
-const router = useRouter()
 const setting = AppState.getAppSetting().clone()
+$emitter.emit(EventConstant.LAYOUT_UPDATE, AppPage.SETTING)
 
 const language_list = [
     { label: "English", value: "en" },
@@ -23,8 +23,14 @@ async function confirmSetting() {
     }
 }
 
+async function backToLastPage(){
+    $emitter.emit(EventConstant.LAYOUT_UPDATE, $viewState.last_page)
+    await navigateTo(AppPageUtil.getPageRoute($viewState.last_page))
+}
+
 async function cancelSetting() {
     if (!setting.equals(AppState.getAppSetting())) {
+        AppState.logger.debug(`Setting is changed. Ask for saved.`)
         $Modal.confirm({
             title: tran("common.save_confirm_window.title", null, {
                 target: tran("structural.setting.title")
@@ -32,17 +38,18 @@ async function cancelSetting() {
             content: tran("common.save_confirm_window.content"),
             okText: tran("common.save_confirm_window.save"),
             closable: true, // if not clicking one of the button, do nothing
-            onOk: () => {
+            onOk: async () => {
                 confirmSetting()
-                router.back()
+                await backToLastPage()
             },
             cancelText: tran("common.save_confirm_window.cancel"),
-            onCancel: () => {
-                router.back()
+            onCancel: async () => {
+                await backToLastPage()
             }
         })
     } else {
-        router.back()
+        AppState.logger.debug(`Setting is unchanged. Back to last page.`)
+        await backToLastPage()
     }   
 }
 </script>

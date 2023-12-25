@@ -1,10 +1,14 @@
-import { describe, it, expect, beforeEach } from "vitest"
+import { describe, it, expect, beforeAll } from "vitest"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
-import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/exception/AttributeException.js"
+import { InvalidTypeConversionException, ModuleInit } from "@/index.js"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
 
 describe("StringAttribute", () => {
+    beforeAll(() => {
+        ModuleInit.init()
+    })
+
     it("instance", () => {
         expect(StringAttribute.instance).not.toBeNull()
     })

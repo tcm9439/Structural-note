@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, vi, afterEach } from "vitest"
-import { StructDefEditState, StructDefEditContext, StructEditQueueItem, StructEditQueue, StructEditOperation, StructDefEditEvent, AttrDefCallback, StructDefCallback, ExitCallback, StructDefEditEventElementHandler } from "@/view/state/edit/StructDefEditState.js"
+import { describe, it, expect, beforeEach, vi, afterEach, beforeAll } from "vitest"
+import { StructDefEditState, StructDefEditContext, StructEditQueueItem, StructEditQueue, StructEditOperation, StructDefEditEvent, AttrDefCallback, StructDefCallback, ExitCallback, StructDefEditEventElementHandler, ModuleInit } from "@/index.js"
 import { StructureDefinition } from "@/note/element/structural/StructureDefinition.js"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
@@ -216,6 +216,10 @@ describe("StructDefEditEvent", () => {
     let confirm_struct_callback_spy: StructDefCallback
     let confirm_attr_callback_spy: AttrDefCallback
 
+    beforeAll(() => {
+        ModuleInit.init()
+    })
+
     beforeEach(() => {
         struct_def = new StructureDefinition()
         attr_def = new AttributeDefinition("Test String Attr", StringAttribute.instance)
@@ -346,6 +350,10 @@ describe("StructDefEditEventElementHandler", () => {
     let attr_def: AttributeDefinition<any>
     let attr_def2: AttributeDefinition<string>
     let spy_handleNewAttr: any
+
+    beforeAll(() => {
+        ModuleInit.init()
+    })
 
     beforeEach(() => {
         vi.clearAllMocks()

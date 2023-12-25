@@ -2,10 +2,10 @@ import { describe, it, expect, beforeEach, beforeAll } from "vitest"
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType.js"
 import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
-import { AttributeTypeInitializer } from "@/note/element/structural/attribute/type/AttributeTypeInitializer.js"
 import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/exception/AttributeException.js"
 import { ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain.js"
 import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain.js"
+import { ModuleInit } from "@/index.js"
 
 class TestAttribute extends AttributeType<number> {
     public static readonly TYPE: string = "TEST"
@@ -15,6 +15,10 @@ class TestAttribute extends AttributeType<number> {
     constructor() {
         super(TestAttribute.TYPE)
         this.addConvertibleType(StringAttribute.TYPE, this.convertToString)
+    }
+
+    get default_value(): number {
+        throw "test-string"
     }
 
     convertToString(value: number, mode?: any): string {
@@ -34,7 +38,7 @@ class TestAttribute extends AttributeType<number> {
 
 describe('AttributeType', () => {
     beforeAll(() => {
-        AttributeTypeInitializer.initialize()
+        ModuleInit.init()
     })
 
 	it('constructor', () => {

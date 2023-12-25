@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest"
+import { ModuleInit } from "@/index.js"
 import { NoteMarkdownConverter } from "@/converter/markdown/Note.js"
 import { SectionMarkdownConverter } from "@/converter/markdown/Section.js"
 import { Note } from "@/note/Note.js"
@@ -82,6 +83,10 @@ Content in section 3
 `
 
 describe("Note", () => {
+    beforeAll(() => {
+        ModuleInit.init()
+    })
+
     it("convert", () => {
         // create a complex note
         let note = new Note("Converter Test")

@@ -5,7 +5,7 @@ import _ from "lodash"
 import { z } from "zod"
 
 export const AppSettingJson = z.object({
-    language: z.string()
+    _language: z.string()
 }).required()
 
 export class AppSetting {
@@ -40,7 +40,7 @@ export class AppSetting {
             return appSetting
         }
         const valid_json = result.data
-        appSetting.language = valid_json.language
+        appSetting.language = valid_json._language
         return appSetting
     }
 }

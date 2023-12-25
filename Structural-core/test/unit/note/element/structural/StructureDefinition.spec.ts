@@ -1,15 +1,19 @@
-import { describe, it, expect, beforeEach } from "vitest"
+import { describe, it, expect, beforeEach, beforeAll } from "vitest"
 import { StructureDefinition } from '@/note/element/structural/StructureDefinition'
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
 import { BooleanAttribute } from "@/note/element/structural/attribute/type/BooleanAttribute.js"
 import { EditPath } from "@/note/util/EditPath.js"
-import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException.js"
+import { InvalidJsonFormatException, ModuleInit } from "@/index.js"
 
 describe('StructureDefinition', () => {
 	let definition: StructureDefinition
     let str_attr: AttributeDefinition<string>
     let bool_attr: AttributeDefinition<boolean>
+
+    beforeAll(() => {
+        ModuleInit.init()
+    })
 
     beforeEach(() => {
         definition = new StructureDefinition()

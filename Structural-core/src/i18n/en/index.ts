@@ -21,6 +21,7 @@ const en = {
             filename: "Filename",
             note_name: "Note Name",
             untitled: "Untitled",
+            saved: "Saved",
         },
         section: {
             add_text_section: "Add Text Section",
@@ -54,7 +55,7 @@ const en = {
             edit_attr_current_type_label: "Current Attribute Type",
             edit_attr_change_to_type_label: "Change Attribute Type To",
             edit_attr_cannot_be_change: "Type cannot be change.",
-            update_attr_def_confirm: "Update Definition",
+            update_attr_def_confirm: "Definition Updated",
         },
         attribute: {
             type: {

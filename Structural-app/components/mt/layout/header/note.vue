@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AppSetting, AppState, EventConstant } from "structural-core"
+import { AppState, EventConstant, AppPage, AppPageUtil } from "structural-core"
 import { Icon } from "view-ui-plus"
 import { NoteFileHandler, NoteExportHandler } from "@/composables/file/NoteFileHandler"
 import { appWindow } from "@tauri-apps/api/window"
@@ -16,24 +16,27 @@ const refresh_menu = ref(0)
 
 async function saveNoteBeforeUpdateSetting(){
     const { $Modal } = useNuxtApp()
+
+    // ask to save file
+    // choice: 1. save and go to setting 2. give up operation
     await $Modal.confirm({
         title: tran("common.save_confirm_window.title", null, {
             target: tran("structural.file.note")
         }),
         content: tran("structural.setting.save_before.content"),
         okText: tran("common.save_confirm_window.save"),
-        closable: true,
         onOk: async () => {
             try {
                 await NoteFileHandler.saveNote()
-                AppState.logger.debug(`Save!`)
-                await navigateTo('/setting')
+                AppState.logger.debug(`Note saved before setting update.`)
+                let setting_page_route = AppPageUtil.getPageRoute(AppPage.SETTING)
+                AppState.logger.debug(`Navigate to setting page: ${setting_page_route}`)
+                await navigateTo(setting_page_route)
             } catch (error) {
                 exceptionHandler(error)
             }
         },
         cancelText: tran("common.cancel"),
-        // onCancel: () => {}
     })
 }
 
@@ -90,15 +93,16 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <Header>
+    <mt-layout-header-base>
         <Row>
-            <Col>
-                <span class="note-name">
-                    {{ editing_note_name }}
-                </span>
+            <Col class="mt-layout-note-title">
+                {{ editing_note_name }}
             </Col>
-            <Col>
-                <Menu mode="horizontal" theme="dark" :key="refresh_menu"
+        </Row>
+        <Row class="mt-layout-toolbar" :key="refresh_menu">
+            <Col class="mt-layout-toolbar">
+                <Menu 
+                    mode="horizontal" theme="dark" 
                     @on-select="menuSelectHandler"
                 >
                     <Submenu name="file-operation">
@@ -134,33 +138,22 @@ onBeforeUnmount(() => {
                 </Menu>
             </Col>
         </Row>
-    </Header>
+    </mt-layout-header-base>
 </template>
 
 <style scoped>
-.ivu-layout-header {
-    position: fixed;
-    width: 100%;
-    z-index: 20;
-    max-height: max(8vh, 40px);
-    line-height: max(8vh, 40px);
+.mt-layout-note-title {
+    color: rgba(255,255,255,.7);
+    max-height: max(4vh, 20px);
+    line-height: max(4vh, 20px);
+    padding-left: 20px;
+    /* bold */
+    font-weight: 600;
+    font-size: larger;
 }
 
-.ivu-menu-horizontal {
-    max-height: max(8vh, 40px);
-    line-height: max(8vh, 40px);
-}
-
-.ivu-menu-item {
-    padding: 0 10px;
-}
-
-.ivu-menu-submenu {
-    padding: 0 10px;
-}
-
-.note-name {
-    color: #fff;
-    padding-right: 10px;
+.mt-layout-toolbar .ivu-menu-horizontal {
+    max-height: max(4vh, 20px);
+    line-height: max(4vh, 20px);
 }
 </style>

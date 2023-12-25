@@ -1,20 +1,25 @@
-import { describe, it, expect, beforeEach } from "vitest"
+import { describe, it, expect, beforeEach, beforeAll } from "vitest"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
 import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
-import { EditPath, EndOfEditPathError } from "@/note/util/EditPath.js"
+import { EditPath } from "@/note/util/EditPath.js"
 import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain.js"
 import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinConstrain.js"
 import { MaxConstrain } from "@/note/element/structural/attribute/constrain/MaxConstrain.js"
 import { ForbiddenConstrain, IncompatibleConstrain } from "@/exception/AttributeException.js"
 import { ValidOperationResult } from "@/common/OperationResult.js"
 import { ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain.js"
-import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException.js"
+import { InvalidJsonFormatException } from "@/exception/ConversionException.js"
+import { ModuleInit } from "@/index.js"
 
 import _ from "lodash"
 
 describe('AttributeDefinition', () => {
 	let definition: AttributeDefinition<number>
+
+    beforeAll(() => {
+        ModuleInit.init()
+    })
 
     beforeEach(() => {
         definition = new AttributeDefinition("test", IntegerAttribute.instance, "description ABC!")  

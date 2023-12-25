@@ -111,9 +111,8 @@ export class NoteFileHandler {
             if (!save_as_mode){
                 $viewState.save_path = this_save_path
             }
-            // TODO translate
-            $Message.info("Saved")
-            AppState.logger.debug("Saved")
+            $Message.info(tran("structural.file.saved"))
+            AppState.logger.debug("File saved successfully.")
         } catch (err) {
             AppState.logger.error("Error when trying to save Note.", err);
         }
@@ -142,7 +141,9 @@ export class NoteFileHandler {
     /**
      * Close the note. Ask for save.
      */
-    static async closeNote(){
+    static async closeNote(
+            close_success_callback?: () => void, 
+            close_cancel_callback?: () => void){
         const { $viewState, $emitter, $Modal } = useNuxtApp()
         if ($viewState.editing_note === null){
             console.warn("No note is opened to close.")
@@ -155,7 +156,11 @@ export class NoteFileHandler {
             $viewState.editing_note = null
             $viewState.save_path = null
             $emitter.emit(EventConstant.NOTE_CLOSED)
+            if (close_success_callback){
+                close_success_callback()
+            }
         }
+        let click_button = false
         $Modal.confirm({
             title: tran("common.save_confirm_window.title", null, {
                 target: tran("structural.file.note")
@@ -164,12 +169,19 @@ export class NoteFileHandler {
             okText: tran("common.save_confirm_window.save"),
             closable: true, // if not clicking one of the button, do nothing
             onOk: async () => {
+                click_button = true
                 await NoteFileHandler.saveNote()
                 close()
             },
             cancelText: tran("common.save_confirm_window.cancel"),
             onCancel: () => {
+                click_button = true
                 close()
+            },
+            onOnVisibleChange: () => {
+                if (!click_button && close_cancel_callback){
+                    close_cancel_callback()
+                }
             }
         })
     }

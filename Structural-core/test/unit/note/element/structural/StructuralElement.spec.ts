@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from "vitest"
+import { describe, it, expect, beforeEach, beforeAll } from "vitest"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
 import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
@@ -10,12 +10,17 @@ import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinC
 import { EditPath } from "@/note/util/EditPath.js"
 import { MaxConstrain } from "@/note/element/structural/attribute/constrain/MaxConstrain.js"
 import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException.js"
+import { ModuleInit } from "@/index.js"
 
 describe('StructuralElement', () => {
     let element: StructuralElement
     let definition: StructureDefinition
     let str_attr: AttributeDefinition<string>
     let num_attr: AttributeDefinition<number>
+
+    beforeAll(() => {
+        ModuleInit.init()
+    })
 
     beforeEach(() => {
         definition = new StructureDefinition()

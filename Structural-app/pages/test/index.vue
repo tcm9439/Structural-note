@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, StringAttribute, StructuralElement, MarkdownElement, MarkdownAttribute } from "structural-core"
+import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, StringAttribute, StructuralElement, MarkdownElement, MarkdownAttribute, AppPage, EventConstant } from "structural-core"
+
+const { $viewState, $emitter } = useNuxtApp()
+$viewState.last_page = AppPage.TEST_EMPTY
+$emitter.emit(EventConstant.LAYOUT_UPDATE, AppPage.TEST_EMPTY)
 
 let test_note: Ref<Note> = ref(new Note("My first note")) as Ref<Note>
 

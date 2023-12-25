@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from "vitest"
+import { describe, it, expect, beforeEach, beforeAll } from "vitest"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
@@ -6,11 +6,15 @@ import { IntegerAttribute } from "@/note/element/structural/attribute/type/Numbe
 import { EditPath, EndOfEditPathError } from "@/note/util/EditPath.js"
 import { ValidOperationResult } from "@/common/OperationResult.js"
 import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain.js"
-import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException.js"
+import { ModuleInit, InvalidDataException } from "@/index.js"
 
 describe('AttributeValue', () => {
 	let attr_value: AttributeValue<any>
     let definition: AttributeDefinition<any>
+
+    beforeAll(() => {
+        ModuleInit.init()
+    })
 
     beforeEach(() => {
         definition = new AttributeDefinition("test", StringAttribute.instance)
