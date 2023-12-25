@@ -14,6 +14,7 @@ import { MaxConstrain } from "./constrain/MaxConstrain.js"
 import { MinConstrain } from "./constrain/MinConstrain.js"
 import { AttributeValue } from "./value/AttributeValue.js"
 import { z } from "zod"
+import { TranslatableText } from "@/common/Translatable.js"
 
 export const AttributeDefinitionJson = z.object({
     id: z.string(),
@@ -299,37 +300,40 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     validateDefinition(): OperationResult {
         // name not null
         if (this.name.trim() === "") {
-            return {
-                valid: false,
-                invalid_message: "Attribute name cannot be empty."
-            }
+            return OperationResult.invalid("structural.attribute.error.empty_attr_name")
         }
 
         // attribute type not null
         if (this.attribute_type === null) {
-            return {
-                valid: false,
-                invalid_message: `Attribute type cannot be empty for attribute "${this.name}"`
-            }
+            return OperationResult.invalid("structural.attribute.error.empty_attr_type", {
+                name: this.name
+            })
         }
 
         // constrains valid
-        for (const [id, constrain] of this.constrains) {
-            const result = constrain.validate_constrain_result
+        for (const [id, constraint] of this.constrains) {
+            const result = constraint.validate_constrain_result
             if (!result.valid) {
-                result.invalid_message = `Constrain ${constrain.getType()} for attribute "${this.name}" is invalid: ${result.invalid_message}`
-                return result
+                console.log(result)
+                return OperationResult.invalidText(
+                    TranslatableText.new("structural.attribute.error.invalid_constraint_for_attr", {
+                        attr_name: this.name,
+                        constraint: TranslatableText.new(constraint.getTypeTranslationKey())
+                    }).addElement(result.getRawInvalidMessage() as TranslatableText)
+                )
             }
         }
 
         // constrain is compatible to each other
-        for (const [id, constrain] of this.constrains) {
-            for (const [id2, constrain2] of this.constrains) {
-                if (id !== id2 && !constrain.isCompatibleTo(constrain2)) {
-                    return {
-                        valid: false,
-                        invalid_message: `Constrain ${constrain.getType()} is not compatible to constrain ${constrain2.getType()} for attribute "${this.name}"`
-                    }
+        for (const [id, constraint] of this.constrains) {
+            for (const [id2, constraint2] of this.constrains) {
+                if (id !== id2 && !constraint.isCompatibleTo(constraint2)) {
+                    return OperationResult.invalidText(
+                        TranslatableText.new("structural.attribute.error.incompatible_constraint_for_attr", {
+                            attr_name: this.name,
+                            constraint_a: TranslatableText.new(constraint.getTypeTranslationKey()),
+                            constraint_b: TranslatableText.new(constraint2.getTypeTranslationKey()),
+                        }))
                 }
             }
         }
@@ -338,8 +342,11 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         if (this.explicit_default_value !== null) {
             const result = this.validate(this.explicit_default_value)
             if (!result.valid) {
-                result.invalid_message = `Default value for attribute "${this.name}" is invalid: ${result.invalid_message}`
-                return result
+                return OperationResult.invalidText(
+                    TranslatableText.new("structural.attribute.error.invalid_default_value_for_attr", {
+                        attr_name: this.name
+                    }).addElement(result.getRawInvalidMessage() as TranslatableText)
+                )
             }
         }
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { AppState, EventConstant, AppPage, AppPageUtil } from "structural-core"
 import { tran } from "@/composables/app/translate"
-const { $emitter, $Modal, $viewState } = useNuxtApp()
+const { $emitter, $Modal, $viewState, $Message } = useNuxtApp()
 
 const setting = AppState.getAppSetting().clone()
 $emitter.emit(EventConstant.LAYOUT_UPDATE, AppPage.SETTING)
@@ -20,10 +20,12 @@ async function confirmSetting() {
         // setting is changed
         AppState.setAppSetting(setting)
         $emitter.emit(EventConstant.SETTING_UPDATED)
+        $Message.info(tran("common.saved"))
     }
 }
 
 async function backToLastPage(){
+    AppState.logger.debug(`Back to last page: ${$viewState.last_page}`)
     $emitter.emit(EventConstant.LAYOUT_UPDATE, $viewState.last_page)
     await navigateTo(AppPageUtil.getPageRoute($viewState.last_page))
 }
@@ -58,7 +60,6 @@ async function cancelSetting() {
     <Card :title="tran('structural.setting.title')" class="mt-setting-card" dis-hover>
         <Form inline label-position="top">
             <FormItem :label="tran('structural.setting.lang')" prop="lang" >
-                <!-- TODO default selected value? -->
                 <Select v-model="setting.language" style="width:200px">
                     <Option v-for="lang in language_list" :value="lang.value" :key="lang.value">
                         {{ lang.label }}

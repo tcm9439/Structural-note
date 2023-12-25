@@ -24,6 +24,8 @@ const en = {
             saved: "Saved",
         },
         section: {
+            section: "Section",
+            add_section: "Add Section",
             add_text_section: "Add Text Section",
             add_struct_section: "Add Structural Section",
             add_section_definition: "Add Definition",
@@ -54,10 +56,11 @@ const en = {
             edit_attr_choose_type_label: "Choose Attribute Type",
             edit_attr_current_type_label: "Current Attribute Type",
             edit_attr_change_to_type_label: "Change Attribute Type To",
-            edit_attr_cannot_be_change: "Type cannot be change.",
+            edit_attr_cannot_be_change: "This attribute type cannot be changed.",
             update_attr_def_confirm: "Definition Updated",
         },
         attribute: {
+            attribute: "Attribute",
             type: {
                 type: "Type",
                 string: "String",
@@ -70,9 +73,29 @@ const en = {
                 constraint: "Constraint",
                 require: "Required",
                 unique: "Unique",
-                min: "Min",
-                max: "Max",
+                min: "Minimum",
+                max: "Maximum",
                 regex: "Pattern (Regex)",
+                error: {
+                    min_val_is_null: "The minimum value is not set.",
+                    max_val_is_null: "The maximum value is not set.",
+                    val_less_than_min: "Value < minimum",
+                    val_larger_than_max: "Value > maximum",
+                    attr_is_required: "This attribute is required",
+                }
+            },
+            value: {
+                double_click_to_edit: "Double click to edit",
+            },
+            error: {
+                no_attr: "There must be at least one attribute definition.",
+                empty_attr_name: "Attribute name cannot be empty.",
+                empty_attr_type: "Attribute type cannot be empty for attribute '{name: string}'.",
+                attr_name_duplicated: "The attribute name '{name:string}' is not unique.",
+                invalid_value_for_attr: "Invalid value for attribute '{attr_name:string}':",
+                invalid_default_value_for_attr: "Invalid default value for attribute '{attr_name:string}':",
+                invalid_constraint_for_attr: "Constraint '{constraint:string}' for attribute '{attr_name:string}' is invalid:",
+                incompatible_constraint_for_attr: "Constraint '{constraint_a:string}' is not compatible to constrain {constraint_b:string} for attribute '{attr_name:string}'",
             },
         },
         setting: {
@@ -93,6 +116,8 @@ const en = {
         },
         create: "Create",
         cancel: "Cancel",
+        success: "Success",
+        saved: "Saved",
         add: "Add",
         delete: "Delete",
         error: "Error",

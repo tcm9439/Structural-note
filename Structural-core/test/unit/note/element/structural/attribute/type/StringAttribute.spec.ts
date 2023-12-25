@@ -5,8 +5,8 @@ import { InvalidTypeConversionException, ModuleInit } from "@/index.js"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
 
 describe("StringAttribute", () => {
-    beforeAll(() => {
-        ModuleInit.init()
+    beforeAll(async () => {
+        await ModuleInit.init()
     })
 
     it("instance", () => {

@@ -1,4 +1,4 @@
-import { ConstrainType, EditPath, AttributeDefinition, ArrayUtil } from "structural-core"
+import { ConstrainType, EditPath, AttributeDefinition, ArrayUtil, Constrain } from "structural-core"
 import MtAttributeConstrainMin from "@/components/mt/attribute/constrain/min.vue"
 import MtAttributeConstrainMax from "@/components/mt/attribute/constrain/max.vue"
 import MtAttributeConstrainRequire from "@/components/mt/attribute/constrain/require.vue"
@@ -16,30 +16,30 @@ export function getAttrConstrainEditComponents(attr_def_edit_path: EditPath, att
     let attr_constrain_edit_components: Map<ConstrainType, AttrConstrainEditComponent> = new Map()
     
     // map each defined constrain to a components
-    attr_def.constrains.forEach((constrain, constrain_id) => {
-        let constrain_type = constrain.getType()
+    attr_def.constrains.forEach((constraint, constraint_id) => {
+        let constraint_type = constraint.getType()
         let component = {
-            id: constrain_id,
-            label: tran(`structural.attribute.constraint.${constrain_type}`),
-            path: attr_def_edit_path.clone().append(constrain_id),
-            component_type: markRaw(constrainMapper(constrain_type)),
-            constrain_type: constrain_type,
+            id: constraint_id,
+            label: tran(constraint.getTypeTranslationKey()),
+            path: attr_def_edit_path.clone().append(constraint_id),
+            component_type: markRaw(constrainMapper(constraint_type)),
+            constrain_type: constraint_type,
         }
         
-        attr_constrain_edit_components.set(constrain_type, component)
+        attr_constrain_edit_components.set(constraint_type, component)
     })
     
     // add the available constrains that are not yet added to the attribute definition
     let available_constrains = attr_def.getAvailableConstrains()
-    available_constrains.forEach((constrain_type) => {
+    available_constrains.forEach((constraint_type) => {
         let component = {
-            id: attr_def + "_" + constrain_type,
-            label: tran(`structural.attribute.constraint.${constrain_type}`),
+            id: attr_def + "_" + constraint_type,
+            label: tran(Constrain.getTypeTranslationKeyForType(constraint_type)),
             path: null,
-            component_type: markRaw(constrainMapper(constrain_type)),
-            constrain_type: constrain_type,
+            component_type: markRaw(constrainMapper(constraint_type)),
+            constrain_type: constraint_type,
         }
-        attr_constrain_edit_components.set(constrain_type, component)
+        attr_constrain_edit_components.set(constraint_type, component)
     })
     return attr_constrain_edit_components
 }

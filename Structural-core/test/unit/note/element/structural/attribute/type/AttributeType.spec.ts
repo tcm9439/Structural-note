@@ -37,8 +37,8 @@ class TestAttribute extends AttributeType<number> {
 }
 
 describe('AttributeType', () => {
-    beforeAll(() => {
-        ModuleInit.init()
+    beforeAll(async () => {
+        await ModuleInit.init()
     })
 
 	it('constructor', () => {

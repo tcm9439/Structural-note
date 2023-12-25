@@ -18,8 +18,8 @@ describe('StructuralElement', () => {
     let str_attr: AttributeDefinition<string>
     let num_attr: AttributeDefinition<number>
 
-    beforeAll(() => {
-        ModuleInit.init()
+    beforeAll(async () => {
+        await ModuleInit.init()
     })
 
     beforeEach(() => {
@@ -68,7 +68,7 @@ describe('StructuralElement', () => {
 
         let result = element.validate()
         expect(result.valid).toBe(false)
-        expect(result.invalid_message).toBe(`Invalid value for attribute "num": The value is smaller than the minimum`)
+        expect(result.invalid_message).toBe(`Invalid value for attribute 'num': Value < minimum`)
     })
 
     it("validate: only passing some of the constrains", () => {
@@ -79,7 +79,7 @@ describe('StructuralElement', () => {
         
         let result = element.validate()
         expect(result.valid).toBe(false)
-        expect(result.invalid_message).toBe(`Invalid value for attribute "num": The value is larger than the maximum`)
+        expect(result.invalid_message).toBe(`Invalid value for attribute 'num': Value > maximum`)
     })
 
     it("getNextEditPathNode", () => {

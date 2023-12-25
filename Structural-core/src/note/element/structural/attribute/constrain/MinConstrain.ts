@@ -29,10 +29,7 @@ export class MinConstrain<T> extends Constrain {
 
     constrainIsValid(): OperationResult {
         if (this.min == null) {
-            this._validate_constrain_result = {
-                valid: false,
-                invalid_message: "The minimum value is not set"
-            }
+            this._validate_constrain_result = OperationResult.invalid("structural.attribute.constraint.error.min_val_is_null")
         } else {
             this._validate_constrain_result = ValidOperationResult
         }
@@ -67,10 +64,7 @@ export class MinConstrain<T> extends Constrain {
 
     public validate(value: T): OperationResult {
         if (this.min != null && value < this.min) {
-            return {
-                valid: false,
-                invalid_message: "The value is smaller than the minimum"
-            }
+            return OperationResult.invalid("structural.attribute.constraint.error.val_less_than_min")
         }
         return ValidOperationResult
     }

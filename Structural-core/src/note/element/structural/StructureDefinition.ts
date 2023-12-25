@@ -132,10 +132,7 @@ export class StructureDefinition extends ComponentBase implements EditPathNode, 
     validateDefinition(): OperationResult {
         // at least one attribute
         if (this.attributes.ordered_components.length === 0) {
-            return {
-                valid: false,
-                invalid_message: "There must be at least one attribute definition."
-            }
+            return OperationResult.invalid("structural.attribute.error.no_attr")
         }
 
         // check if the attribute definition is valid
@@ -150,10 +147,7 @@ export class StructureDefinition extends ComponentBase implements EditPathNode, 
         let name_set = new Set<string>()
         for (let attr_def of this.attributes.ordered_components) {
             if (name_set.has(attr_def.name)) {
-                return {
-                    valid: false,
-                    invalid_message: `The attribute name "${attr_def.name}" is not unique.`
-                }
+                return OperationResult.invalid("structural.attribute.error.attr_name_duplicated", {name: attr_def.name})
             }
             name_set.add(attr_def.name)
         }

@@ -11,8 +11,8 @@ describe('StructureDefinition', () => {
     let str_attr: AttributeDefinition<string>
     let bool_attr: AttributeDefinition<boolean>
 
-    beforeAll(() => {
-        ModuleInit.init()
+    beforeAll(async () => {
+        await ModuleInit.init()
     })
 
     beforeEach(() => {
@@ -228,6 +228,6 @@ describe('StructureDefinition', () => {
         definition.attributes.add(invalid_attr)
         validate_result = definition.validateDefinition()
         expect(validate_result.valid).toBe(false)
-        expect(validate_result.invalid_message).toBe(`The attribute name "Str Attr" is not unique.`)
+        expect(validate_result.invalid_message).toBe(`The attribute name 'Str Attr' is not unique.`)
     })
 })

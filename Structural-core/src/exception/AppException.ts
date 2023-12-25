@@ -1,8 +1,8 @@
 import { AppState } from "@/view/state/AppState.js"
 
 export class AppException extends Error {
-    private title_key: string = "error.general.title"
-    private message_key: string = "error.general.message"
+    public title_key: string = "error.general.title"
+    public message_key: string = "error.general.message"
     
     constructor(log_message: string, name?: string, title_key?: string, message_key?: string) {
         super(log_message)

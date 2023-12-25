@@ -3,8 +3,8 @@ import { InvalidTypeConversionForDataException, InvalidTypeConversionException }
 import { ModuleInit } from '@/index'
 
 describe('InvalidTypeConversionForDataException', () => {
-    beforeAll(() => {
-        ModuleInit.init()
+    beforeAll(async () => {
+        await ModuleInit.init()
     })
 
 	it('constructor', () => {
@@ -15,8 +15,8 @@ describe('InvalidTypeConversionForDataException', () => {
 })
 
 describe('InvalidTypeConversionException', () => {
-    beforeAll(() => {
-        ModuleInit.init()
+    beforeAll(async () => {
+        await ModuleInit.init()
     })
 
 	it('empty description', () => {

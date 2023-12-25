@@ -4,7 +4,13 @@ import _ from "lodash"
 import { locales } from "@/i18n/i18n-util.js"
 import { AppState } from "@/view/state/AppState.js"
 
-export class TranslationManager {
+export type TranslationParameter = Array<string | number> | object | string | number;
+
+export interface ITranslationManager {
+    translate(key: string, language_code?: string | null, param?: TranslationParameter): string
+}
+
+export class TranslationManager implements ITranslationManager{
     private _default_language_code: string = "en"
    
     constructor(default_language_code?: string){
@@ -37,7 +43,7 @@ export class TranslationManager {
      * 2. named parameter: {name:string}
      * 3. numbered parameter {0}: array of string or number
      */
-    public translate(key: string, language_code?: string | null, param?: Array<string | number> | object | string | number): string {
+    public translate(key: string, language_code?: string | null, param?: TranslationParameter): string {
         const temp: string[] = key.toLowerCase().split('.')
 
         language_code = language_code == null ? this._default_language_code : language_code

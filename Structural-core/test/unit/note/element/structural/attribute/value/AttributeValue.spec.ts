@@ -12,8 +12,8 @@ describe('AttributeValue', () => {
 	let attr_value: AttributeValue<any>
     let definition: AttributeDefinition<any>
 
-    beforeAll(() => {
-        ModuleInit.init()
+    beforeAll(async () => {
+        await ModuleInit.init()
     })
 
     beforeEach(() => {
@@ -151,7 +151,9 @@ describe('AttributeValue', () => {
             valid: false,
             invalid_message: "This attribute is required"
         }
-        expect(attr_value.validate()).toEqual(expected_result)
-        expect(attr_value.validate_result).toEqual(expected_result)
+        let validate_result = attr_value.validate()
+        expect(validate_result).toEqual(attr_value.validate_result)
+        expect(attr_value.validate_result.valid).toEqual(false)
+        expect(attr_value.validate_result.invalid_message).toEqual('This attribute is required')
     })
 })

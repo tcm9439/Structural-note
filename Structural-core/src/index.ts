@@ -6,6 +6,7 @@ export * from "./common/Cloneable.js"
 export * from "./common/OperationResult.js"
 export * from "./common/Logger.js"
 export * from "./common/TranslationManager.js"
+export * from "./common/Translatable.js"
 
 export * from "./exception/AppException.js"
 export * from "./exception/ConversionException.js"

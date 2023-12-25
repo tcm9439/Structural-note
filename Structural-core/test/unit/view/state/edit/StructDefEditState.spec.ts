@@ -216,8 +216,8 @@ describe("StructDefEditEvent", () => {
     let confirm_struct_callback_spy: StructDefCallback
     let confirm_attr_callback_spy: AttrDefCallback
 
-    beforeAll(() => {
-        ModuleInit.init()
+    beforeAll(async () => {
+        await ModuleInit.init()
     })
 
     beforeEach(() => {
@@ -351,8 +351,8 @@ describe("StructDefEditEventElementHandler", () => {
     let attr_def2: AttributeDefinition<string>
     let spy_handleNewAttr: any
 
-    beforeAll(() => {
-        ModuleInit.init()
+    beforeAll(async () => {
+        await ModuleInit.init()
     })
 
     beforeEach(() => {

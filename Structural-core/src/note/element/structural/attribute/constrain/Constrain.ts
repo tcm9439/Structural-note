@@ -22,6 +22,14 @@ export abstract class Constrain extends ComponentBase implements EditPathNode {
 
     abstract getType(): ConstrainType
 
+    getTypeTranslationKey(): string {
+        return `structural.attribute.constraint.${this.getType()}`
+    }
+
+    static getTypeTranslationKeyForType(type: ConstrainType): string {
+        return `structural.attribute.constraint.${type}`
+    }
+
     get validate_constrain_result(): OperationResult {
         return this._validate_constrain_result
     }

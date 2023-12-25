@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Note, AppPage, EventConstant } from "structural-core"
 const { $viewState, $emitter } = useNuxtApp()
-$viewState.last_page = AppPage.TEST
-$emitter.emit(EventConstant.LAYOUT_UPDATE, AppPage.TEST)
+$viewState.last_page = AppPage.TEST_EMPTY
+$emitter.emit(EventConstant.LAYOUT_UPDATE, AppPage.TEST_EMPTY)
 
 let test_note: Ref<Note> = ref(new Note("My empty note")) as Ref<Note>
 </script>

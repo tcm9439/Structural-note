@@ -2,8 +2,8 @@ import { describe, it, expect, beforeEach, beforeAll } from "vitest"
 import { AppState, ModuleInit, AppSetting } from "@/index.js"
 
 describe("AppSetting", () => {
-    beforeAll(() => {
-        ModuleInit.init()
+    beforeAll(async () => {
+        await ModuleInit.init()
     })
 
     it("set lang", () => {

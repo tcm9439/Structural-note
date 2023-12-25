@@ -10,15 +10,15 @@ import { ForbiddenConstrain, IncompatibleConstrain } from "@/exception/Attribute
 import { ValidOperationResult } from "@/common/OperationResult.js"
 import { ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain.js"
 import { InvalidJsonFormatException } from "@/exception/ConversionException.js"
-import { ModuleInit } from "@/index.js"
+import { AppState, ModuleInit } from "@/index.js"
 
 import _ from "lodash"
 
 describe('AttributeDefinition', () => {
 	let definition: AttributeDefinition<number>
 
-    beforeAll(() => {
-        ModuleInit.init()
+    beforeAll(async () => {
+        await ModuleInit.init()
     })
 
     beforeEach(() => {
@@ -202,6 +202,7 @@ describe('AttributeDefinition', () => {
         definition.name = ""
         let validate_result = definition.validateDefinition()
         expect(validate_result.valid).toBe(false)
+        AppState.translationManager.default_language_code = "en"
         expect(validate_result.invalid_message).toBe("Attribute name cannot be empty.")
     })
 
@@ -209,7 +210,10 @@ describe('AttributeDefinition', () => {
         let no_type_attr_def = new AttributeDefinition("no type")
         let validate_result = no_type_attr_def.validateDefinition()
         expect(validate_result.valid).toBe(false)
-        expect(validate_result.invalid_message).toBe(`Attribute type cannot be empty for attribute "no type"`)
+        AppState.translationManager.default_language_code = "zh-HK"
+        expect(validate_result.invalid_message).toBe("欄目「no type」缺少類型。")
+        AppState.translationManager.default_language_code = "en"
+        expect(validate_result.invalid_message).toBe("Attribute type cannot be empty for attribute 'no type'.")
     })
 
     it("validateDefinition: invalid constrain", () => {
@@ -219,7 +223,7 @@ describe('AttributeDefinition', () => {
         min_constrain.min = null
         let validate_result = num_attr_def.validateDefinition()
         expect(validate_result.valid).toBe(false)
-        expect(validate_result.invalid_message).toBe(`Constrain MIN for attribute "test" is invalid: The minimum value is not set`)
+        expect(validate_result.invalid_message).toBe(`Constraint 'Minimum' for attribute 'test' is invalid: The minimum value is not set.`)
     })
 
     it("validateDefinition: invalid default value", () => {

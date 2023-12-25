@@ -1,5 +1,6 @@
 import { UUID } from "@/common/CommonTypes.js"
 import { ValidOperationResult, OperationResult } from "@/common/OperationResult.js"
+import { TranslatableText } from "@/common/Translatable.js"
 import { OrderedComponents } from "@/note/util/OrderedComponents.js"
 import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException.js"
 import { NoteElement, NoteElementJson } from "@/note/element/NoteElement.js"
@@ -68,8 +69,10 @@ export class StructuralElement extends NoteElement {
         for (let [id, value] of this.values) {
             let value_result = value.validate_result
             if (!value_result.valid) {
-                value_result.invalid_message = `Invalid value for attribute "${value.definition.name}": ${value_result.invalid_message}`
-                return value_result
+                return OperationResult.invalidText(
+                    TranslatableText.new("structural.attribute.error.invalid_value_for_attr", 
+                        {attr_name: value.definition.name})
+                    .addElement(value_result.getRawInvalidMessage() as TranslatableText))
             }
         }
         return ValidOperationResult

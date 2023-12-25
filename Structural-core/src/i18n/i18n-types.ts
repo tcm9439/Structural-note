@@ -82,8 +82,16 @@ type RootTranslation = {
 			 * U​n​t​i​t​l​e​d
 			 */
 			untitled: string
+			/**
+			 * S​a​v​e​d
+			 */
+			saved: string
 		}
 		section: {
+			/**
+			 * A​d​d​ ​S​e​c​t​i​o​n
+			 */
+			add_section: string
 			/**
 			 * A​d​d​ ​T​e​x​t​ ​S​e​c​t​i​o​n
 			 */
@@ -102,6 +110,10 @@ type RootTranslation = {
 			new_section_default_title: string
 		}
 		element: {
+			/**
+			 * A​d​d​ ​E​l​e​m​e​n​t
+			 */
+			add_element: string
 			/**
 			 * A​d​d​ ​T​e​x​t​ ​E​l​e​m​e​n​t
 			 */
@@ -189,7 +201,11 @@ type RootTranslation = {
 			 */
 			edit_attr_change_to_type_label: string
 			/**
-			 * U​p​d​a​t​e​ ​D​e​f​i​n​i​t​i​o​n
+			 * T​h​i​s​ ​a​t​t​r​i​b​u​t​e​ ​t​y​p​e​ ​c​a​n​n​o​t​ ​b​e​ ​c​h​a​n​g​e​d​.
+			 */
+			edit_attr_cannot_be_change: string
+			/**
+			 * D​e​f​i​n​i​t​i​o​n​ ​U​p​d​a​t​e​d
 			 */
 			update_attr_def_confirm: string
 		}
@@ -234,17 +250,88 @@ type RootTranslation = {
 				 */
 				unique: string
 				/**
-				 * M​i​n
+				 * M​i​n​i​m​u​m
 				 */
 				min: string
 				/**
-				 * M​a​x
+				 * M​a​x​i​m​u​m
 				 */
 				max: string
 				/**
 				 * P​a​t​t​e​r​n​ ​(​R​e​g​e​x​)
 				 */
 				regex: string
+				error: {
+					/**
+					 * T​h​e​ ​m​i​n​i​m​u​m​ ​v​a​l​u​e​ ​i​s​ ​n​o​t​ ​s​e​t​.
+					 */
+					min_val_is_null: string
+					/**
+					 * V​a​l​u​e​ ​i​s​ ​l​e​s​s​ ​t​h​a​n​ ​t​h​e​ ​m​i​n​i​m​u​m​.
+					 */
+					val_less_than_min: string
+					/**
+					 * T​h​e​ ​m​a​x​i​m​u​m​ ​v​a​l​u​e​ ​i​s​ ​n​o​t​ ​s​e​t​.
+					 */
+					max_val_is_null: string
+					/**
+					 * V​a​l​u​e​ ​i​s​ ​l​e​s​s​ ​t​h​a​n​ ​t​h​e​ ​m​i​n​i​m​u​m​.
+					 */
+					val_larger_than_max: string
+					/**
+					 * T​h​i​s​ ​a​t​t​r​i​b​u​t​e​ ​i​s​ ​r​e​q​u​i​r​e​d​.
+					 */
+					attr_is_required: string
+				}
+			}
+			value: {
+				/**
+				 * D​o​u​b​l​e​ ​c​l​i​c​k​ ​t​o​ ​e​d​i​t
+				 */
+				double_click_to_edit: string
+			}
+			error: {
+				/**
+				 * T​h​e​r​e​ ​m​u​s​t​ ​b​e​ ​a​t​ ​l​e​a​s​t​ ​o​n​e​ ​a​t​t​r​i​b​u​t​e​ ​d​e​f​i​n​i​t​i​o​n​.
+				 */
+				no_attr: string
+				/**
+				 * A​t​t​r​i​b​u​t​e​ ​n​a​m​e​ ​c​a​n​n​o​t​ ​b​e​ ​e​m​p​t​y​.
+				 */
+				empty_attr_name: string
+				/**
+				 * A​t​t​r​i​b​u​t​e​ ​t​y​p​e​ ​c​a​n​n​o​t​ ​b​e​ ​e​m​p​t​y​ ​f​o​r​ ​a​t​t​r​i​b​u​t​e​ ​'​{​n​a​m​e​}​'​.
+				 * @param {string} name
+				 */
+				empty_attr_type: RequiredParams<'name'>
+				/**
+				 * T​h​e​ ​a​t​t​r​i​b​u​t​e​ ​n​a​m​e​ ​'​{​n​a​m​e​}​'​ ​i​s​ ​n​o​t​ ​u​n​i​q​u​e​.
+				 * @param {string} name
+				 */
+				attr_name_duplicated: RequiredParams<'name'>
+				/**
+				 * I​n​v​a​l​i​d​ ​v​a​l​u​e​ ​f​o​r​ ​a​t​t​r​i​b​u​t​e​ ​'​{​a​t​t​r​_​n​a​m​e​}​'​:
+				 * @param {string} attr_name
+				 */
+				invalid_value_for_attr: RequiredParams<'attr_name'>
+				/**
+				 * I​n​v​a​l​i​d​ ​d​e​f​a​u​l​t​ ​v​a​l​u​e​ ​f​o​r​ ​a​t​t​r​i​b​u​t​e​ ​'​{​a​t​t​r​_​n​a​m​e​}​'​:
+				 * @param {string} attr_name
+				 */
+				invalid_default_value_for_attr: RequiredParams<'attr_name'>
+				/**
+				 * C​o​n​s​t​r​a​i​n​t​ ​'​{​c​o​n​s​t​r​a​i​n​t​}​'​ ​f​o​r​ ​a​t​t​r​i​b​u​t​e​ ​'​{​a​t​t​r​_​n​a​m​e​}​'​ ​i​s​ ​i​n​v​a​l​i​d​:
+				 * @param {string} attr_name
+				 * @param {string} constraint
+				 */
+				invalid_constraint_for_attr: RequiredParams<'attr_name' | 'constraint'>
+				/**
+				 * C​o​n​s​t​r​a​i​n​t​ ​'​{​c​o​n​s​t​r​a​i​n​t​_​a​}​'​ ​i​s​ ​n​o​t​ ​c​o​m​p​a​t​i​b​l​e​ ​t​o​ ​c​o​n​s​t​r​a​i​n​ ​{​c​o​n​s​t​r​a​i​n​t​_​b​}​ ​f​o​r​ ​a​t​t​r​i​b​u​t​e​ ​'​{​a​t​t​r​_​n​a​m​e​}​'
+				 * @param {string} attr_name
+				 * @param {string} constraint_a
+				 * @param {string} constraint_b
+				 */
+				incompatible_constraint_for_attr: RequiredParams<'attr_name' | 'constraint_a' | 'constraint_b'>
 			}
 		}
 		setting: {
@@ -297,6 +384,14 @@ type RootTranslation = {
 		 */
 		cancel: string
 		/**
+		 * S​u​c​c​e​s​s
+		 */
+		success: string
+		/**
+		 * S​a​v​e​d
+		 */
+		saved: string
+		/**
 		 * A​d​d
 		 */
 		add: string
@@ -329,6 +424,10 @@ type RootTranslation = {
 			 * F​a​i​l​ ​t​o​ ​o​p​e​n​ ​n​o​t​e​.
 			 */
 			open_note: string
+			/**
+			 * F​a​i​l​ ​t​o​ ​o​p​e​n​ ​n​o​t​e​.
+			 */
+			create_note: string
 			/**
 			 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​.
 			 */
@@ -539,8 +638,16 @@ export type TranslationFunctions = {
 			 * Untitled
 			 */
 			untitled: () => LocalizedString
+			/**
+			 * Saved
+			 */
+			saved: () => LocalizedString
 		}
 		section: {
+			/**
+			 * Add Section
+			 */
+			add_section: () => LocalizedString
 			/**
 			 * Add Text Section
 			 */
@@ -559,6 +666,10 @@ export type TranslationFunctions = {
 			new_section_default_title: () => LocalizedString
 		}
 		element: {
+			/**
+			 * Add Element
+			 */
+			add_element: () => LocalizedString
 			/**
 			 * Add Text Element
 			 */
@@ -646,7 +757,11 @@ export type TranslationFunctions = {
 			 */
 			edit_attr_change_to_type_label: () => LocalizedString
 			/**
-			 * Update Definition
+			 * This attribute type cannot be changed.
+			 */
+			edit_attr_cannot_be_change: () => LocalizedString
+			/**
+			 * Definition Updated
 			 */
 			update_attr_def_confirm: () => LocalizedString
 		}
@@ -691,17 +806,79 @@ export type TranslationFunctions = {
 				 */
 				unique: () => LocalizedString
 				/**
-				 * Min
+				 * Minimum
 				 */
 				min: () => LocalizedString
 				/**
-				 * Max
+				 * Maximum
 				 */
 				max: () => LocalizedString
 				/**
 				 * Pattern (Regex)
 				 */
 				regex: () => LocalizedString
+				error: {
+					/**
+					 * The minimum value is not set.
+					 */
+					min_val_is_null: () => LocalizedString
+					/**
+					 * Value is less than the minimum.
+					 */
+					val_less_than_min: () => LocalizedString
+					/**
+					 * The maximum value is not set.
+					 */
+					max_val_is_null: () => LocalizedString
+					/**
+					 * Value is less than the minimum.
+					 */
+					val_larger_than_max: () => LocalizedString
+					/**
+					 * This attribute is required.
+					 */
+					attr_is_required: () => LocalizedString
+				}
+			}
+			value: {
+				/**
+				 * Double click to edit
+				 */
+				double_click_to_edit: () => LocalizedString
+			}
+			error: {
+				/**
+				 * There must be at least one attribute definition.
+				 */
+				no_attr: () => LocalizedString
+				/**
+				 * Attribute name cannot be empty.
+				 */
+				empty_attr_name: () => LocalizedString
+				/**
+				 * Attribute type cannot be empty for attribute '{name}'.
+				 */
+				empty_attr_type: (arg: { name: string }) => LocalizedString
+				/**
+				 * The attribute name '{name}' is not unique.
+				 */
+				attr_name_duplicated: (arg: { name: string }) => LocalizedString
+				/**
+				 * Invalid value for attribute '{attr_name}':
+				 */
+				invalid_value_for_attr: (arg: { attr_name: string }) => LocalizedString
+				/**
+				 * Invalid default value for attribute '{attr_name}':
+				 */
+				invalid_default_value_for_attr: (arg: { attr_name: string }) => LocalizedString
+				/**
+				 * Constraint '{constraint}' for attribute '{attr_name}' is invalid:
+				 */
+				invalid_constraint_for_attr: (arg: { attr_name: string, constraint: string }) => LocalizedString
+				/**
+				 * Constraint '{constraint_a}' is not compatible to constrain {constraint_b} for attribute '{attr_name}'
+				 */
+				incompatible_constraint_for_attr: (arg: { attr_name: string, constraint_a: string, constraint_b: string }) => LocalizedString
 			}
 		}
 		setting: {
@@ -753,6 +930,14 @@ export type TranslationFunctions = {
 		 */
 		cancel: () => LocalizedString
 		/**
+		 * Success
+		 */
+		success: () => LocalizedString
+		/**
+		 * Saved
+		 */
+		saved: () => LocalizedString
+		/**
 		 * Add
 		 */
 		add: () => LocalizedString
@@ -785,6 +970,10 @@ export type TranslationFunctions = {
 			 * Fail to open note.
 			 */
 			open_note: () => LocalizedString
+			/**
+			 * Fail to open note.
+			 */
+			create_note: () => LocalizedString
 			/**
 			 * Something went wrong.
 			 */

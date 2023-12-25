@@ -3,6 +3,7 @@ import { EditPath, Note, InjectConstant, type ComponentVForElement, EventConstan
 import { elementListGetter } from "@/composables/active-data/Element"
 import { sectionComponentMapper } from "@/composables/active-data/Section"
 import { getAvailableSection } from "@/composables/active-data/Note"
+import { tran } from "~/composables/app/translate"
 const { $emitter } = useNuxtApp()
 
 const props = defineProps<{
@@ -77,13 +78,13 @@ onBeforeUnmount(() => {
             @on-click="addSection" 
             trigger="click">
             <Button type="primary" shape="circle" icon="md-add" long>
-                Add section
+                {{ tran("structural.section.add_section") }}
             </Button>
             
             <template #list>
                 <DropdownMenu>
                     <DropdownItem v-for="section_type in available_section_types" :name="section_type.id">
-                        {{section_type.display_choice}}
+                        {{ section_type.display_choice }}
                     </DropdownItem>
                 </DropdownMenu>
             </template>

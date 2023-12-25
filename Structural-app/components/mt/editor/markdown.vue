@@ -2,6 +2,7 @@
 import { MdEditor, MdPreview, type ToolbarNames } from "md-editor-v3"
 import "md-editor-v3/lib/preview.css"
 import "md-editor-v3/lib/style.css"
+import { tran } from "~/composables/app/translate"
 import { v4 as uuidv4 } from "uuid"
 
 const props = defineProps<{
@@ -59,7 +60,7 @@ function getEditorId(){
 
         <!-- Empty preview -->
         <div v-else-if="empty_content" class="empty-content">
-            Double click to add content.
+            {{ tran("structural.attribute.value.double_click_to_edit") }}
         </div>
 
         <!-- Preview with content -->

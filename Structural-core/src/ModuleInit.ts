@@ -1,3 +1,4 @@
+import { TranslatableText } from "@/common/Translatable"
 import { AttributeTypeInitializer } from "@/note/element/structural/attribute/type/AttributeTypeInitializer.js"
 import { AppState, NuxtRuntimeConfig } from "@/view/state/AppState.js"
 
@@ -14,6 +15,7 @@ export class ModuleInit {
         // init attribute type
         AttributeTypeInitializer.initialize()
         AppState.initTranslationManager()
+        TranslatableText.translationManager = AppState.translationManager
     }
 
     static async close() {

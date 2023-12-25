@@ -2,8 +2,8 @@
 import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, StringAttribute, StructuralElement, MarkdownElement, MarkdownAttribute, AppPage, EventConstant } from "structural-core"
 
 const { $viewState, $emitter } = useNuxtApp()
-$viewState.last_page = AppPage.TEST_EMPTY
-$emitter.emit(EventConstant.LAYOUT_UPDATE, AppPage.TEST_EMPTY)
+$viewState.last_page = AppPage.TEST
+$emitter.emit(EventConstant.LAYOUT_UPDATE, AppPage.TEST)
 
 let test_note: Ref<Note> = ref(new Note("My first note")) as Ref<Note>
 
@@ -18,7 +18,7 @@ test_note.value.sections.add(section1)
 
 let section2 = new StructuralSection("Section struct")
 
-let attr_definition = new AttributeDefinition("test string attr", StringAttribute.instance)
+let attr_definition = new AttributeDefinition("test string attr", StringAttribute.instance, "description 1")
 let attr_definition2 = new AttributeDefinition("test string attr2", StringAttribute.instance)
 attr_definition2.require_constrain.required = true
 let md_attr_definition = new AttributeDefinition("test markdown attr", MarkdownAttribute.instance)

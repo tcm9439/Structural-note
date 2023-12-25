@@ -10,8 +10,8 @@ import { MarkdownAttribute } from "@/note/element/structural/attribute/type/Mark
 import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain.js"
 
 describe("AttributeValueMarkdownConverter", () => {
-    beforeAll(() => {
-        ModuleInit.init()
+    beforeAll(async () => {
+        await ModuleInit.init()
     })
 
     it("convert", () => {

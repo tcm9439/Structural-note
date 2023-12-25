@@ -21,14 +21,17 @@ const zh_HK = {
             filename: "檔案名稱",
             note_name: "筆記名稱",
             untitled: "未命名",
+            saved: "已儲存",
         },
         section: {
+            add_section: "新增段落",
             add_text_section: "新增文字段落",
             add_struct_section: "新增結構段落",
             add_section_definition: "新增結構定義",
             new_section_default_title: "新段落",
         },
         element: {
+            add_element: "新增單元",
             add_text_element: "新增文字單元",
             add_markdown_element: "新增 Markdown 單元",
             add_struct_element: "新增結構單元",
@@ -51,8 +54,9 @@ const zh_HK = {
             edit_attr_constrain_default_label: "預設值",
             edit_attr_choose_type_label: "選擇欄目類型",
             edit_attr_current_type_label: "目前欄目類型",
-            edit_attr_change_to_type_label: "變更欄目類型為",
-            update_attr_def_confirm: "更新定義",
+            edit_attr_change_to_type_label: "更改欄目類型為",
+            edit_attr_cannot_be_change: "此欄目類型無法更改。",
+            update_attr_def_confirm: "定義已更新",
         },
         attribute: {
             type: {
@@ -70,6 +74,26 @@ const zh_HK = {
                 min: "最小值",
                 max: "最大值",
                 regex: "格式（正則表達）",
+                error: {
+                    min_val_is_null: "最小值尚未設定。",
+                    max_val_is_null: "最大值尚未設定。",
+                    val_less_than_min: "低於最少值",
+                    val_larger_than_max: "大於最大值",
+                    attr_is_required: "此欄目必須填寫",
+                },
+            },
+            value: {
+                double_click_to_edit: "雙擊以編輯",
+            },
+            error: {
+                no_attr: "結構定義至少要有一個欄目。",
+                empty_attr_name: "欄目名稱不能留空。",
+                empty_attr_type: "欄目「{name}」缺少類型。",
+                attr_name_duplicated: "欄目名稱「{name}」與其他欄目重覆。",
+                invalid_value_for_attr: "欄目「{attr_name}」的資料無效：",
+                invalid_default_value_for_attr: "欄目「{attr_name}」的預設值無效：",
+                invalid_constraint_for_attr: "欄目「{attr_name}」的「{constraint}」限制無效：",
+                incompatible_constraint_for_attr: "欄目「{attr_name}」的「{constraint_a}」限制與「{constraint_b}」限制不相容。",
             },
         },
         setting: {
@@ -90,6 +114,8 @@ const zh_HK = {
         },
         create: "新增",
         cancel: "取消",
+        success: "成功",
+        saved: "已儲存",
         add: "新增",
         delete: "刪除",
         error: "錯誤",
@@ -102,6 +128,7 @@ const zh_HK = {
         general: {
             title: "發生錯誤",
             open_note: "開啟筆記失敗。",
+            create_note: "新增筆記失敗。",
             message: "發生錯誤，請檢查程式記錄檔。",
         },
         attribute: {
@@ -111,7 +138,7 @@ const zh_HK = {
             },
             null_attr_type: {
                 title: "無效的欄目類型",
-                message: "欄目類型不可為空。"
+                message: "欄目類型不可留空。"
             },
             incompatible_constrain: {
                 title: "不相容的限制",
@@ -124,12 +151,12 @@ const zh_HK = {
         },
         conversion: {
             invalid_json_format: {
-                title: "Invalid JSON Format",
-                message: "Fail to parse {0} from json.",
+                title: "JSON 資料格式錯誤",
+                message: "未能從 JSON 資料獲取{0}。",
             },
             invalid_data: {
-                title: "Invalid Data",
-                message: "Fail to parse {0} due to invalid data.",
+                title: "資料錯誤",
+                message: "由於資料錯誤，未能獲取{0}。",
             },
         },
         file: {

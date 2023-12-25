@@ -54,10 +54,7 @@ export class RequireConstrain extends Constrain {
         }
 
         if (isEmpty) {
-            return {
-                valid: false,
-                invalid_message: "This attribute is required"
-            }
+            return OperationResult.invalid("structural.attribute.constraint.error.attr_is_required")
         }
 
         return ValidOperationResult;

@@ -34,9 +34,9 @@ function setAttrToEdit(id: string){
     attr_def.value = edit_context.value.editing_attr_def.editing
 }
 
-function showInvalidDefinitionMessage(def_type: string, error_msg: string){
+function showInvalidDefinitionMessage(def_type_key: string, error_msg: string){
     show_error_modal.value = true
-    error_title.value = `Invalid ${def_type} Definition`
+    error_title.value = `Invalid ${tran(def_type_key)} Definition`
     error_content.value = error_msg
 }
 
@@ -81,7 +81,7 @@ function moveDownAttr(id: string) {
 function confirmEditAttr() {
     let result = StructDefEditEvent.confirmEditAttr(edit_context.value)
     if (result?.valid === false){
-        showInvalidDefinitionMessage("Attribute", result.invalid_message)
+        showInvalidDefinitionMessage("structural.attribute.attribute", result.invalid_message)
     }
 }
 
@@ -96,7 +96,7 @@ function updateDisplayKey(){
 function confirmStructDef(){
     let result = StructDefEditEvent.confirmEditStruct(edit_context.value)
     if (result?.valid === false){
-        showInvalidDefinitionMessage("Section", result.invalid_message)
+        showInvalidDefinitionMessage("structural.section.section", result.invalid_message)
     }
 }
 

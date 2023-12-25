@@ -4,7 +4,7 @@ const { $emitter } = useNuxtApp()
 
 const layout_type = ref("note")
 function updateLayout(new_layout_type: AppPage){
-    AppState.logger.trace("Update header layout - " + new_layout_type + AppPage.SETTING)
+    AppState.logger.trace("Update header layout to " + new_layout_type)
     switch (new_layout_type) {
         case AppPage.SETTING:
             layout_type.value = "none"

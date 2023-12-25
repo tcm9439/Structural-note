@@ -83,8 +83,8 @@ Content in section 3
 `
 
 describe("Note", () => {
-    beforeAll(() => {
-        ModuleInit.init()
+    beforeAll(async () => {
+        await ModuleInit.init()
     })
 
     it("convert", () => {

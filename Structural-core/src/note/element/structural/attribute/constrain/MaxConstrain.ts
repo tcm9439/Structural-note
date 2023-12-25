@@ -29,10 +29,7 @@ export class MaxConstrain<T> extends Constrain {
 
     constrainIsValid(): OperationResult {
         if (this.max == null) {
-            this._validate_constrain_result = {
-                valid: false,
-                invalid_message: "The maximum value is not set"
-            }
+            this._validate_constrain_result = OperationResult.invalid("structural.attribute.constraint.error.max_val_is_null")
         } else {
             this._validate_constrain_result = ValidOperationResult
         }
@@ -66,10 +63,7 @@ export class MaxConstrain<T> extends Constrain {
     
     public validate(value: T): OperationResult {
         if (this.max != null && value > this.max) {
-            return {
-                valid: false,
-                invalid_message: "The value is larger than the maximum"
-            }
+            return OperationResult.invalid("structural.attribute.constraint.error.val_larger_than_max")
         }
         return ValidOperationResult
     }

@@ -17,6 +17,8 @@ export class AppPageUtil {
                 return "/"
             case AppPage.TEST:
                 return "/test"
+            case AppPage.TEST_EMPTY:
+                return "/test/empty"
             case AppPage.SETTING:
                 return "/setting"
             default:

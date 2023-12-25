@@ -2,8 +2,8 @@ import { describe, it, expect, beforeAll } from "vitest"
 import { TranslationManager, ModuleInit } from "@/index.js"
 
 describe('TranslationManager', () => {
-    beforeAll(() => {
-        ModuleInit.init()
+    beforeAll(async () => {
+        await ModuleInit.init()
     })
 
     it('var key', () => {
