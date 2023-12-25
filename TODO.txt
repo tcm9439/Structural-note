@@ -1,0 +1,23 @@
+## KNOWN BUG
+
+## Pending Features
+[ ] update typo constrain => constraint
+[ ] check what if i write some invalid value & save
+[ ] trigger the iviewui form item error prompt immediately (not wait until user edit)
+[ ] undo delete section / element
+[ ] edit markdown when export to md 
+[ ] create note from template (also as tutorial)
+[ ] attr constrains
+    [ ] regex
+    [ ] UNIQUE
+    [ ] min max inclusive/exclusive
+[ ] value.vue
+    [ ] enum (dropdown list)
+[ ] struct element key attr as panel name & breadcrumb
+[ ] breadcrumb & Anchor
+[ ] help page
+
+## Features that I want to have but it more difficult 
+[ ] search function
+[ ] multi attr constrain
+    [ ] UNIQUE (e.g. attrA join attrB is UNIQUE among the section)    
