@@ -34,8 +34,8 @@ onBeforeUnmount(() => {
 
 <style scoped>
     .layout {
-        /* height = 100% screen - header height */
-        min-height: calc(100vh - 40px);
+        min-height: 100vh;
+        background-color: #f8f8f9;
     }
 
     .content {

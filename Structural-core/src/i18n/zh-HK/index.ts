@@ -24,6 +24,7 @@ const zh_HK = {
             saved: "已儲存",
         },
         section: {
+            section: "段落",
             add_section: "新增段落",
             add_text_section: "新增文字段落",
             add_struct_section: "新增結構段落",
@@ -31,6 +32,7 @@ const zh_HK = {
             new_section_default_title: "新段落",
         },
         element: {
+            element: "單元",
             add_element: "新增單元",
             add_text_element: "新增文字單元",
             add_markdown_element: "新增 Markdown 單元",
@@ -59,6 +61,7 @@ const zh_HK = {
             update_attr_def_confirm: "定義已更新",
         },
         attribute: {
+            attribute: "欄目",
             type: {
                 type: "類型",
                 string: "文字",

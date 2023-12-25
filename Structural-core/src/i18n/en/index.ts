@@ -32,6 +32,7 @@ const en = {
             new_section_default_title: "New Section",
         },
         element: {
+            element: "Element",
             add_element: "Add Element",
             add_text_element: "Add Text Element",
             add_markdown_element: "Add Markdown Element",

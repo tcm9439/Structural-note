@@ -1,5 +1,6 @@
 import { IViewUITableColumn, IViewUITableData } from "@/view/ViewTypes.js"
 import { StructureDefinition } from "@/note/element/structural/StructureDefinition.js"
+import { AppState } from "@/view/state/AppState.js"
 
 export class StructuralDefinitionHelper {
     static readonly ATTR_TABLE_COLUMNS: IViewUITableColumn[] = [
@@ -38,14 +39,13 @@ export class StructuralDefinitionHelper {
         }
     ]
 
-    // TODO table data translation (type)
     public static getAttributesInTableFormat(struct_def: StructureDefinition): IViewUITableData {
         let data: IViewUITableData[] = []
         struct_def.attributes.ordered_components.forEach((attribute) => {
             data.push({
                 id: attribute.id,
                 name: attribute.name,
-                type: attribute.attribute_type?.type,
+                type: AppState.translationManager.translate(attribute.attribute_type?.getTypeTranslationKey() as string),
                 description: attribute.description,
             })
         })

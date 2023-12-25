@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, AttributeDefinition, AttrTypeHelper, AttrTypeNameAndInstance, AttributeType, ConstrainTypeToClassMap, ValidOperationResult } from "structural-core"
+import { EditPath, AttributeDefinition, AttrTypeHelper, AttributeType, ConstrainTypeToClassMap, ValidOperationResult } from "structural-core"
 import { getAttrConstrainEditComponents, type AttrConstrainEditComponent, getGroupedAttrConstrain } from "@/composables/active-data/Constrain"
 import { tran } from "~/composables/app/translate"
 
@@ -60,15 +60,15 @@ function getAllTypes(){
 }
 
 // when user select a type, update the attr_def & push a update type operation in the queue
-function selectedType(attr_type: AttrTypeNameAndInstance){
-    current_attr_type_name.value = attr_type.name
+function selectedType(attr_type: AttributeType<any>){
+    current_attr_type_name.value = attr_type.type
     if (attr_def.attribute_type !== null){
         // has old type
-        let new_attr_def = AttributeDefinition.convertToType(attr_def, attr_type.instance)
+        let new_attr_def = AttributeDefinition.convertToType(attr_def, attr_type)
         emit('attrTypeUpdate', new_attr_def)   
     } else {
         // init attr type
-        attr_def.attribute_type = attr_type.instance
+        attr_def.attribute_type = attr_type
         init_attr_type_mode.value = false
         emit('attrTypeUpdate', null)
     }
@@ -155,7 +155,7 @@ const default_value = computed({
                     </Col>
                     <Col flex="2">
                         <mt-attribute-definition-attr-type-choice 
-                        :attr_name="current_attr_type_name"
+                        :attr="attr_def.attribute_type"
                         :readonly_mode="true"
                         />
                     </Col>
@@ -173,7 +173,8 @@ const default_value = computed({
                     <Col flex="1" v-for="attr_type in type_group">
                         <mt-attribute-definition-attr-type-choice 
                             @select="selectedType"
-                            :attr_type="attr_type"
+                            :readonly_mode="false"
+                            :attr="attr_type"
                         />
                     </Col>
                 </Row>

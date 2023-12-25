@@ -56,6 +56,14 @@ export abstract class AttributeType<T> implements Cloneable<AttributeType<T>> {
         return this._type
     }
 
+    getTypeTranslationKey(): string {
+        return AttributeType.getAttrTypeByTranslationKey(this.type)
+    }
+
+    static getAttrTypeByTranslationKey(type: string): string {
+        return `structural.attribute.type.${type}`
+    }
+
     addAvailableConstraint(constrain_type: ConstrainType): void {
         this._available_constraints.push(constrain_type)
     }

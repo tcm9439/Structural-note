@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, beforeAll } from "vitest"
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType.js"
-import { AttrTypeHelper, AttrTypeNameAndInstance } from "@/view/vue-helper/AttrTypeHelper.js"
+import { AttrTypeHelper } from "@/view/vue-helper/AttrTypeHelper.js"
 import { AttributeTypeInitializer } from "@/note/element/structural/attribute/type/AttributeTypeInitializer.js"
 import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
@@ -16,15 +16,14 @@ describe("AttrTypeHelper", () => {
         let found_string = false
 
         for (let type of types) {
-            expect(type.name).toBeTypeOf("string")
-            expect(type.instance).toBeInstanceOf(AttributeType)
+            expect(type).toBeInstanceOf(AttributeType)
             
-            if (type.name === "INT") {
+            if (type.type === "INT") {
                 found_number = true
-                expect(type.instance).toBe(IntegerAttribute.instance)
-            } else if (type.name === "STRING") {
+                expect(type).toBe(IntegerAttribute.instance)
+            } else if (type.type === "STRING") {
                 found_string = true
-                expect(type.instance).toBe(StringAttribute.instance)
+                expect(type).toBe(StringAttribute.instance)
             }
         }
 
@@ -56,7 +55,6 @@ describe("AttrTypeHelper", () => {
         let type_groups = AttrTypeHelper.getGroupedConvertibleTypes(type, 2)
         expect(type_groups.length).toBe(1)
         expect(type_groups[0].length).toBe(1)
-        expect(type_groups[0][0].name).toBe("STRING")
-        expect(type_groups[0][0].instance).toBe(StringAttribute.instance)
+        expect(type_groups[0][0]).toBe(StringAttribute.instance)
     })
 })

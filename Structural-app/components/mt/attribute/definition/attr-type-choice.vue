@@ -2,27 +2,31 @@
 /**
  * A component that represent an attribute type and can be selected.
  */
-import { AttrTypeNameAndInstance, IntegerAttribute, DecimalAttribute, StringAttribute, BooleanAttribute, MarkdownAttribute } from "structural-core"
+import { IntegerAttribute, DecimalAttribute, StringAttribute, BooleanAttribute, MarkdownAttribute, AttributeType } from "structural-core"
+import { tran } from "~/composables/app/translate"
 
-const props = defineProps({
-    readonly_mode: { type: Boolean, default: false },
-    attr_type: { type: AttrTypeNameAndInstance, required: false },
-    attr_name: { type: String, required: false }
+const props = defineProps<{
+    // if this is a button for user to choose a type
+    readonly_mode: boolean,
+    // provided if readonly_mode is true
+    attr: AttributeType<any>, 
+}>()
+
+const attr_name = computed(() => {
+    return props.attr.getTypeTranslationKey()
 })
 
-const attr_name = computed(() => props.readonly_mode? props.attr_name : props.attr_type?.name)
-
 const emit = defineEmits<{
-    (event: 'select', attr_type: AttrTypeNameAndInstance): void
+    (event: 'select', attr_type: AttributeType<any>): void
 }>()
 
 function typeChosen(){
     if (props.readonly_mode) return // do nothing if readonly
-    emit('select', props.attr_type as AttrTypeNameAndInstance)
+    emit('select', props.attr)
 }
 
 function getIcon(){
-    switch(attr_name.value){
+    switch(props.attr.type){
         case StringAttribute.TYPE:
             return "mdi:format-text"
         case IntegerAttribute.TYPE:
@@ -41,12 +45,12 @@ function getIcon(){
 </script>
 
 <template>
-    <div v-if="attr_type !== null" @click="typeChosen" class="choice-container">
+    <div v-if="props.attr.type !== null" @click="typeChosen" class="choice-container">
         <div class="icon-box">
             <!-- Nuxt-Icon -->
             <Icon :name="getIcon()" color="black"/>
         </div>
-        <div class="choice-name">{{attr_name}}</div>
+        <div class="choice-name">{{ tran(attr_name) }}</div>
     </div>
 </template>
 

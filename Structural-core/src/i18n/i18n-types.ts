@@ -89,6 +89,10 @@ type RootTranslation = {
 		}
 		section: {
 			/**
+			 * S​e​c​t​i​o​n
+			 */
+			section: string
+			/**
 			 * A​d​d​ ​S​e​c​t​i​o​n
 			 */
 			add_section: string
@@ -110,6 +114,10 @@ type RootTranslation = {
 			new_section_default_title: string
 		}
 		element: {
+			/**
+			 * E​l​e​m​e​n​t
+			 */
+			element: string
 			/**
 			 * A​d​d​ ​E​l​e​m​e​n​t
 			 */
@@ -210,6 +218,10 @@ type RootTranslation = {
 			update_attr_def_confirm: string
 		}
 		attribute: {
+			/**
+			 * A​t​t​r​i​b​u​t​e
+			 */
+			attribute: string
 			type: {
 				/**
 				 * T​y​p​e
@@ -267,19 +279,19 @@ type RootTranslation = {
 					 */
 					min_val_is_null: string
 					/**
-					 * V​a​l​u​e​ ​i​s​ ​l​e​s​s​ ​t​h​a​n​ ​t​h​e​ ​m​i​n​i​m​u​m​.
-					 */
-					val_less_than_min: string
-					/**
 					 * T​h​e​ ​m​a​x​i​m​u​m​ ​v​a​l​u​e​ ​i​s​ ​n​o​t​ ​s​e​t​.
 					 */
 					max_val_is_null: string
 					/**
-					 * V​a​l​u​e​ ​i​s​ ​l​e​s​s​ ​t​h​a​n​ ​t​h​e​ ​m​i​n​i​m​u​m​.
+					 * V​a​l​u​e​ ​<​ ​m​i​n​i​m​u​m
+					 */
+					val_less_than_min: string
+					/**
+					 * V​a​l​u​e​ ​>​ ​m​a​x​i​m​u​m
 					 */
 					val_larger_than_max: string
 					/**
-					 * T​h​i​s​ ​a​t​t​r​i​b​u​t​e​ ​i​s​ ​r​e​q​u​i​r​e​d​.
+					 * T​h​i​s​ ​a​t​t​r​i​b​u​t​e​ ​i​s​ ​r​e​q​u​i​r​e​d
 					 */
 					attr_is_required: string
 				}
@@ -645,6 +657,10 @@ export type TranslationFunctions = {
 		}
 		section: {
 			/**
+			 * Section
+			 */
+			section: () => LocalizedString
+			/**
 			 * Add Section
 			 */
 			add_section: () => LocalizedString
@@ -666,6 +682,10 @@ export type TranslationFunctions = {
 			new_section_default_title: () => LocalizedString
 		}
 		element: {
+			/**
+			 * Element
+			 */
+			element: () => LocalizedString
 			/**
 			 * Add Element
 			 */
@@ -766,6 +786,10 @@ export type TranslationFunctions = {
 			update_attr_def_confirm: () => LocalizedString
 		}
 		attribute: {
+			/**
+			 * Attribute
+			 */
+			attribute: () => LocalizedString
 			type: {
 				/**
 				 * Type
@@ -823,19 +847,19 @@ export type TranslationFunctions = {
 					 */
 					min_val_is_null: () => LocalizedString
 					/**
-					 * Value is less than the minimum.
-					 */
-					val_less_than_min: () => LocalizedString
-					/**
 					 * The maximum value is not set.
 					 */
 					max_val_is_null: () => LocalizedString
 					/**
-					 * Value is less than the minimum.
+					 * Value < minimum
+					 */
+					val_less_than_min: () => LocalizedString
+					/**
+					 * Value > maximum
 					 */
 					val_larger_than_max: () => LocalizedString
 					/**
-					 * This attribute is required.
+					 * This attribute is required
 					 */
 					attr_is_required: () => LocalizedString
 				}
