@@ -45,7 +45,7 @@ function getIcon(){
 </script>
 
 <template>
-    <div v-if="props.attr.type !== null" @click="typeChosen" class="choice-container">
+    <div v-if="props.attr !== null" @click="typeChosen" class="choice-container">
         <div class="icon-box">
             <!-- Nuxt-Icon -->
             <Icon :name="getIcon()" color="black"/>
