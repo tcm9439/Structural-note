@@ -6,6 +6,7 @@ import { WindowUtil } from "@/composables/app/window"
 import { appWindow } from "@tauri-apps/api/window"
 import { invoke } from '@tauri-apps/api/tauri'
 import { tran } from "@/composables/app/translate"
+import { Button } from "view-ui-plus"
 
 const struct_note_file_extension = "structnote"
 
@@ -91,7 +92,7 @@ export class NoteFileHandler {
         try {
             const { $viewState, $Message } = useNuxtApp()
             if ($viewState.editing_note === null){
-                AppState.logger.warn("No note is opened to save.")
+                AppState.logger.info("No note is opened to save.")
                 return
             }
 
@@ -100,7 +101,7 @@ export class NoteFileHandler {
                 // there is no save path set or this is a save-as operation
                 AppState.logger.debug("No save path is set or this is a save-as operation.")
                 const default_note_filename = $viewState.editing_note.title + "." + struct_note_file_extension
-                this_save_path = await this.askSavePath(default_note_filename)
+                this_save_path = await NoteFileHandler.askSavePath(default_note_filename)
             }
             if (this_save_path === null){
                 return Promise.reject("No path is chosen to save.")
@@ -162,28 +163,40 @@ export class NoteFileHandler {
                 close_success_callback()
             }
         }
-        let click_button = false
         $Modal.confirm({
             title: tran("common.save_confirm_window.title", null, {
                 target: tran("structural.file.note")
             }),
-            content: tran("common.save_confirm_window.content"),
             okText: tran("common.save_confirm_window.save"),
-            closable: true, // if not clicking one of the button, do nothing
             onOk: async () => {
-                click_button = true
                 await NoteFileHandler.saveNote()
                 close()
             },
-            cancelText: tran("common.save_confirm_window.cancel"),
+            cancelText: tran("common.cancel"),
             onCancel: () => {
-                click_button = true
-                close()
-            },
-            onOnVisibleChange: () => {
-                if (!click_button && close_cancel_callback){
+                if (close_cancel_callback){
                     close_cancel_callback()
                 }
+            },
+            render: (h: any) => {
+                return h('div', [
+                        h('div', tran("common.save_confirm_window.content")),
+                        h('div', [
+                            h(Button, {
+                                class: 'ivu-fr',
+                                style: {
+                                    "margin-top": "20px",
+                                    "margin-left": "10px",
+                                },
+                                type: 'error',
+                                onclick: () => {
+                                    close()
+                                }
+                            }, { 
+                                default: () => h('span', tran("common.save_confirm_window.cancel"))
+                            })
+                        ])
+                    ])
             }
         })
     }
