@@ -3,7 +3,7 @@ import { EditPath, MinConstraint, AttributeDefinition } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 
 const props = defineProps<{
-    edit_path: EditPath, // edit_path to the Constrain
+    edit_path: EditPath | null, // edit_path to the Constrain
     attr_def: AttributeDefinition<any>,
     enable: boolean,
 }>()

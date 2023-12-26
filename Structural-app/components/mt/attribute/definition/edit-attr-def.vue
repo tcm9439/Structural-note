@@ -186,6 +186,7 @@ const default_value = computed({
         <!-- Tab that only show after the type is set  -->
         <template v-if="attr_has_type">
             <TabPane :label="tran('structural.attribute.constraint.constraint')" name="constraint">
+                {{ attr_def.constraints }}
                 <Form inline>
                     <!-- Default value editor -->
                     <FormItem prop="default_value_checkbox">

@@ -242,6 +242,7 @@ export class StructDefEditEvent {
     static startAddAttr(state_context: StructDefEditContext, confirm_callback?: AttrDefCallback): UUID {
         // init the attr & add the attr to the struct_def
         let attr = new AttributeDefinition()
+        attr.setGetAllRelatedValuesFunc(state_context.editing_struct_def.editing.getGetAllRelatedValuesFunc())
         state_context.editing_struct_def.editing.attributes.add(attr)
 
         state_context.startEditAttr(attr.id, confirm_callback)

@@ -1,5 +1,5 @@
 import { Constraint, ConstraintType, ConstraintJson } from "./Constraint.js"
-import { OperationResult, ValidOperationResult } from "@/common/OperationResult.js"
+import { OperationResult } from "@/common/OperationResult.js"
 import { InvalidJsonFormatException } from "@/exception/ConversionException.js"
 import { z } from "zod"
 import _ from "lodash"
@@ -31,7 +31,7 @@ export class MinConstraint<T> extends Constraint {
         if (this.min == null) {
             this._validate_constraint_result = OperationResult.invalid("structural.attribute.constraint.error.min_val_is_null")
         } else {
-            this._validate_constraint_result = ValidOperationResult
+            this._validate_constraint_result = OperationResult.valid()
         }
 
         return this.validate_constraint_result
@@ -62,11 +62,11 @@ export class MinConstraint<T> extends Constraint {
         return MinConstraint.type
     }
 
-    public validate(value: T): OperationResult {
+    validate(value: T): OperationResult {
         if (this.min != null && value < this.min) {
             return OperationResult.invalid("structural.attribute.constraint.error.val_less_than_min")
         }
-        return ValidOperationResult
+        return OperationResult.valid()
     }
     
     saveAsJson(): z.infer<typeof MinConstraintJson> {

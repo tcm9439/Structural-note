@@ -10,6 +10,7 @@ import { NoteSection, NoteSectionJson } from "./NoteSection.js"
 import _ from "lodash"
 import { z } from "zod"
 
+export type getAllRelatedValuesFunc = (attr_id: UUID) => any[]
 
 export const StructuralSectionJson = NoteSectionJson.extend({
     type: z.literal("StructuralSection"),
@@ -25,7 +26,7 @@ export class StructuralSection extends NoteSection {
     public static readonly DEFINITION_FILTER_MODE: number = 0
     public static readonly ELEMENT_FILTER_MODE: number = 1
 
-    private _definition : StructureDefinition = new StructureDefinition()
+    private _definition : StructureDefinition = new StructureDefinition(this.getValuesOfAttr.bind(this))
 
     constructor(title?: string){
         super(title)
@@ -50,6 +51,19 @@ export class StructuralSection extends NoteSection {
     getNextEditPathNode(index: UUID): EditPathNode | undefined {
         if (index === this._definition.id) return this._definition
         return this.elements.get(index)
+    }
+
+    getValuesOfAttr(attr_id: UUID): any[] {
+        const values: any[] = []
+        this.elements.components.forEach((element) => {
+            if (element instanceof StructuralElement) {
+                const value = element.values.get(attr_id)
+                if (value && value.value) {
+                    values.push(value.value)
+                }
+            }
+        })
+        return values
     }
 
     stepInEachChildren(edit_path: EditPath, filter_mode?: number): EditPath[] {
@@ -81,7 +95,7 @@ export class StructuralSection extends NoteSection {
         const section = new StructuralSection(valid_json.title)
         section.id = valid_json.id
 
-        const def = StructureDefinition.loadFromJson(valid_json.definition)
+        const def = StructureDefinition.loadFromJson(valid_json.definition, section.getValuesOfAttr.bind(section))
         section.definition = def
 
         valid_json.elements.forEach((element_json) => {

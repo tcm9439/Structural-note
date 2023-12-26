@@ -10,7 +10,8 @@ import { ForbiddenConstraint, IncompatibleConstraint } from "@/exception/Attribu
 import { ValidOperationResult } from "@/common/OperationResult.js"
 import { ConstraintType } from "@/note/element/structural/attribute/constraint/Constraint.js"
 import { InvalidJsonFormatException } from "@/exception/ConversionException.js"
-import { AppState, ModuleInit } from "@/index.js"
+import { AppState, ModuleInit, UniqueConstraint } from "@/index.js"
+import { assertEqualExceptLambda } from "@test/util/TestUtil"
 
 import _ from "lodash"
 
@@ -32,17 +33,19 @@ describe('AttributeDefinition', () => {
     })
 
     it("getNextEditPathNode", () => {
-        const constraint = definition.require_constraint
+        const constraint = new RequireConstraint()
+        definition.addConstraint(constraint)
         expect(definition.getNextEditPathNode("")).toBeUndefined()
         expect(definition.getNextEditPathNode(constraint.id)).toBe(constraint)
     })
 
     it("stepInEachChildren", () => {
+        definition.addConstraint(new RequireConstraint())
         const constraint = definition.require_constraint
         let edit_path = (new EditPath()).append(definition.id)
         let children = definition.stepInEachChildren(edit_path)
         expect(children.length).toEqual(1)
-        expect(children[0].getLastStep()).toEqual(constraint.id)
+        expect(children[0].getLastStep()).toEqual(constraint?.id)
     })
 
     it("clone", () => {
@@ -73,6 +76,7 @@ describe('AttributeDefinition', () => {
         expect(clone.name).toEqual(definition.name)
         expect(clone.description).toEqual(definition.description)
         expect(clone.attribute_type).toEqual(definition.attribute_type)
+        expect(clone["_num_constraints_related_to_other_values"]).toEqual(definition["_num_constraints_related_to_other_values"])
 
         clone.name = "clone"
         expect(clone.name).not.toEqual(definition.name)
@@ -86,50 +90,55 @@ describe('AttributeDefinition', () => {
             description: "description ABC!",
             attribute_type: "INT",
             default_value: null,
-            constraints: [
-                {
-                    id: definition.require_constraint.id,
-                    type: "RequireConstraint",
-                    required: false
-                }
-            ]
+            constraints: []
         })
     })
 
     it("loadFromJson", () => {
         let json = definition.saveAsJson()
-        let new_definition = AttributeDefinition.loadFromJson(json)
-        expect(new_definition).toEqual(definition)
+        let new_definition = AttributeDefinition.loadFromJson(json, definition.getGetAllRelatedValuesFunc())
+        assertEqualExceptLambda(new_definition, definition)
     })
 
     it("loadFromJson with null attribute type", () => {
         let json = definition.saveAsJson()
         _.set(json, "attribute_type", null)
-        expect(() => AttributeDefinition.loadFromJson(json)).toThrow(InvalidJsonFormatException)
+        expect(() => AttributeDefinition.loadFromJson(json, (id) => [])).toThrow(InvalidJsonFormatException)
     })
 
-    it("addConstraint", () => {
+    it("addConstraint & removeConstraint", () => {
         // valid constraint
         definition.addConstraint(new MinConstraint(10))
-        expect(definition.constraints.size).toBe(2) // require constraint is added by default
+        expect(definition.constraints.size).toBe(1)
 
         // incompatible constraint
+        definition.addConstraint(new RequireConstraint())
         expect(definition.addConstraint(new RequireConstraint())).toBeInstanceOf(IncompatibleConstraint)
 
         // forbidden constraint
         let str_def = new AttributeDefinition("test", StringAttribute.instance)
         expect(str_def.addConstraint(new MinConstraint(10))).toBeInstanceOf(ForbiddenConstraint)
+
+        // group constraint
+        expect(definition['_num_constraints_related_to_other_values']).toBe(0)
+        let unique_constraint = new UniqueConstraint()
+        definition.addConstraint(unique_constraint)
+        expect(definition['_num_constraints_related_to_other_values']).toBe(1)
+        definition.removeConstraint(unique_constraint.id)
+        expect(definition['_num_constraints_related_to_other_values']).toBe(0)
     })
 
     it("getAvailableConstraints", () => {
         // def has attribute type, no existing constraint to be incompatible with others
         expect(definition.getAvailableConstraints()).toEqual([
+            ConstraintType.REQUIRE,
             ConstraintType.MIN,
             ConstraintType.MAX,
             ConstraintType.UNIQUE,
         ])
 
         definition.addConstraint(new MinConstraint(34))
+        definition.addConstraint(new RequireConstraint())
         expect(definition.getAvailableConstraints()).toEqual([
             ConstraintType.MAX,
             ConstraintType.UNIQUE,
@@ -143,22 +152,22 @@ describe('AttributeDefinition', () => {
 
     it("isOptionalAttr", () => {
         // default optional
-        expect(definition.require_constraint).not.toBeNull()
+        expect(definition.require_constraint).toBeNull()
         expect(definition.isOptionalAttr()).toBeTruthy()
         // change to required
-        definition.require_constraint.required = true
+        definition.addConstraint(new RequireConstraint())
         expect(definition.isOptionalAttr()).toBeFalsy()
     })
 
     it("validate: one constraint", () => {
-        expect(definition.constraints.size).toBe(1) // require constraint is added by default
+        expect(definition.constraints.size).toBe(0)
         expect(definition.validate(22).valid).toBeTruthy()
-        definition.require_constraint.required = true
+        definition.addConstraint(new RequireConstraint())
         expect(definition.validate(null).valid).toBeFalsy()
     })
 
     it("validate: multiple constraints", () => {
-        definition.require_constraint.required = true
+        definition.addConstraint(new RequireConstraint())
         definition.addConstraint(new MinConstraint(10))
         definition.addConstraint(new MaxConstraint(1000))
         expect(definition.validate(100).valid).toBeTruthy()
@@ -171,7 +180,7 @@ describe('AttributeDefinition', () => {
         let new_attr_def = AttributeDefinition.convertToType(no_type_attr_def, StringAttribute.instance)
         expect(new_attr_def).not.toBeNull()
         expect(new_attr_def?.attribute_type).toBe(StringAttribute.instance)
-        expect(new_attr_def?.constraints.size).toBe(1)
+        expect(new_attr_def?.constraints.size).toBe(0)
         expect(new_attr_def?.id).toBe(no_type_attr_def.id)
         expect(new_attr_def?.name).toBe(no_type_attr_def.name)
         expect(new_attr_def?.description).toBe(no_type_attr_def.description)
@@ -187,8 +196,8 @@ describe('AttributeDefinition', () => {
         let new_attr_def = AttributeDefinition.convertToType(num_attr_def, StringAttribute.instance)
         expect(new_attr_def).not.toBeNull()
         expect(new_attr_def?.attribute_type).toBe(StringAttribute.instance)
-        expect(new_attr_def?.constraints.size).toBe(1)
-        expect(new_attr_def?.require_constraint).toBeInstanceOf(RequireConstraint)
+        expect(new_attr_def?.constraints.size).toBe(0)
+        expect(new_attr_def?.require_constraint).toBeNull()
         expect(new_attr_def?.id).toBe(num_attr_def.id)
         expect(new_attr_def?.name).toBe(num_attr_def.name)
         expect(new_attr_def?.description).toBe(num_attr_def.description)
@@ -231,5 +240,17 @@ describe('AttributeDefinition', () => {
         definition.setDefaultValue(1)
         let validate_result = definition.validateDefinition()
         expect(validate_result.valid).toBeFalsy()
+    })
+
+    it("getIsRelatedToOtherValues", () => {
+        expect(definition.getIsRelatedToOtherValues()).toBeFalsy()
+        definition.addConstraint(new UniqueConstraint())
+        expect(definition.getIsRelatedToOtherValues()).toBeTruthy()
+    })
+
+    it("validateValueGroup", () => {
+        definition.addConstraint(new UniqueConstraint())
+        expect(definition.validateValueGroup([1, 2, 3])).toEqual(ValidOperationResult)
+        expect(definition.validateValueGroup([1, 2, 2]).valid).toBeFalsy()
     })
 })

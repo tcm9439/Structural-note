@@ -5,6 +5,8 @@ import { StringAttribute } from "@/note/element/structural/attribute/type/String
 import { BooleanAttribute } from "@/note/element/structural/attribute/type/BooleanAttribute.js"
 import { EditPath } from "@/note/util/EditPath.js"
 import { InvalidJsonFormatException, ModuleInit } from "@/index.js"
+import _ from "lodash"
+import { assertEqualExceptLambda } from "@test/util/TestUtil"
 
 describe('StructureDefinition', () => {
 	let definition: StructureDefinition
@@ -16,7 +18,7 @@ describe('StructureDefinition', () => {
     })
 
     beforeEach(() => {
-        definition = new StructureDefinition()
+        definition = new StructureDefinition((id) => [])
         str_attr = new AttributeDefinition("Str Attr", StringAttribute.instance)
         definition.attributes.add(str_attr)
         bool_attr = new AttributeDefinition("Bool Attr", BooleanAttribute.instance)
@@ -108,7 +110,7 @@ describe('StructureDefinition', () => {
     })
 
     it("cloneFrom", () => {
-        let clone = new StructureDefinition()
+        let clone = new StructureDefinition((id) => [])
         clone.cloneFrom(definition)
         expect(clone).not.toBeNull()
         // diff id
@@ -138,13 +140,7 @@ describe('StructureDefinition', () => {
                     description: str_attr.description,
                     attribute_type: str_attr.attribute_type?.type,
                     default_value: null,
-                    constraints: [
-                        {
-                            id: str_attr.require_constraint.id,
-                            type: "RequireConstraint",
-                            required: false
-                        }
-                    ]
+                    constraints: []
                 },
                 {
                     id: bool_attr.id,
@@ -152,13 +148,7 @@ describe('StructureDefinition', () => {
                     description: bool_attr.description,
                     attribute_type: bool_attr.attribute_type?.type,
                     default_value: true,
-                    constraints: [
-                        {
-                            id: bool_attr.require_constraint.id,
-                            type: "RequireConstraint",
-                            required: false
-                        }
-                    ]
+                    constraints: []
                 }
             ]
         })
@@ -166,8 +156,8 @@ describe('StructureDefinition', () => {
 
     it("loadFromJson", () => {
         let json = definition.saveAsJson()
-        let new_definition = StructureDefinition.loadFromJson(json)
-        expect(new_definition).toEqual(definition)
+        let new_definition = StructureDefinition.loadFromJson(json, definition.getGetAllRelatedValuesFunc())
+        assertEqualExceptLambda(new_definition, definition)
     })
 
     it("loadFromJson: invalid json, order and attr def unmatch", () => {
@@ -184,7 +174,7 @@ describe('StructureDefinition', () => {
             ]
         }
         expect(()=>{
-            StructureDefinition.loadFromJson(json)
+            StructureDefinition.loadFromJson(json, definition.getGetAllRelatedValuesFunc())
         }).toThrowError(InvalidJsonFormatException)
     })
 
@@ -195,7 +185,7 @@ describe('StructureDefinition', () => {
             attributes: []
         }
         expect(()=>{
-            StructureDefinition.loadFromJson(json)
+            StructureDefinition.loadFromJson(json, definition.getGetAllRelatedValuesFunc())
         }).toThrowError(InvalidJsonFormatException)
     })
 

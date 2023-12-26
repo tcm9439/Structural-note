@@ -10,6 +10,7 @@ import { TextElement } from "@/note/element/TextElement.js"
 import { StructuralElement } from "@/note/element/structural/StructuralElement.js"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
 import fs from "fs"
+import { assertEqualExceptLambda } from "@test/util/TestUtil"
 
 describe('Note', () => {
     let note: Note 
@@ -110,7 +111,7 @@ describe("Save & load Note", () => {
     it("save and load", () => {
         let json = note.saveAsJson()
         let loaded_note = Note.loadFromJson(note.title, json)
-        expect(loaded_note).toEqual(note)
+        assertEqualExceptLambda(loaded_note, note)
     })
 })
 

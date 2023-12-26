@@ -33,6 +33,7 @@ export * from "./note/element/structural/attribute/constraint/ConstraintMap.js"
 export * from "./note/element/structural/attribute/constraint/MinConstraint.js"
 export * from "./note/element/structural/attribute/constraint/MaxConstraint.js"
 export * from "./note/element/structural/attribute/constraint/RequireConstraint.js"
+export * from "./note/element/structural/attribute/constraint/UniqueConstraint.js"
 
 export * from "./note/element/structural/attribute/value/AttributeValue.js"
 export * from "./note/element/structural/attribute/type/NumberAttribute.js"

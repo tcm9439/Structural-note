@@ -30,7 +30,7 @@ const error_title = ref("")
 const error_content = ref("")
 
 let attr_def: Ref<AttributeDefinition<any> | null> = ref(null)
-function setAttrToEdit(id: string){
+function setAttrToEdit(){
     attr_def.value = edit_context.value.editing_attr_def.editing
 }
 
@@ -57,13 +57,13 @@ function onExitEditStruct(has_change: boolean){
 }
 
 function startAddAttr() {
-    let new_id = StructDefEditEvent.startAddAttr(edit_context.value)
-    setAttrToEdit(new_id)
+    StructDefEditEvent.startAddAttr(edit_context.value)
+    setAttrToEdit()
 }
 
 function startEditAttr(id: string) {
     StructDefEditEvent.startEditAttr(edit_context.value, id)
-    setAttrToEdit(id)
+    setAttrToEdit()
 }
 
 function deleteAttr(id: string) {

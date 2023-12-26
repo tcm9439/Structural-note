@@ -9,11 +9,11 @@ const props = defineProps<{
     // if this is a button for user to choose a type
     readonly_mode: boolean,
     // provided if readonly_mode is true
-    attr: AttributeType<any>, 
+    attr?: AttributeType<any> | null, 
 }>()
 
 const attr_name = computed(() => {
-    return props.attr.getTypeTranslationKey()
+    return props.attr?.getTypeTranslationKey() || ""
 })
 
 const emit = defineEmits<{
@@ -22,11 +22,11 @@ const emit = defineEmits<{
 
 function typeChosen(){
     if (props.readonly_mode) return // do nothing if readonly
-    emit('select', props.attr)
+    emit('select', props.attr as AttributeType<any>)
 }
 
 function getIcon(){
-    switch(props.attr.type){
+    switch(props.attr?.type){
         case StringAttribute.TYPE:
             return "mdi:format-text"
         case IntegerAttribute.TYPE:
@@ -45,7 +45,7 @@ function getIcon(){
 </script>
 
 <template>
-    <div v-if="props.attr !== null" @click="typeChosen" class="choice-container">
+    <div v-if="props.attr != null" @click="typeChosen" class="choice-container">
         <div class="icon-box">
             <!-- Nuxt-Icon -->
             <Icon :name="getIcon()" color="black"/>

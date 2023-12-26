@@ -1,5 +1,5 @@
 import { UUID } from "@/common/CommonTypes.js"
-import { ValidOperationResult, OperationResult } from "@/common/OperationResult.js"
+import { OperationResult } from "@/common/OperationResult.js"
 import { TranslatableText } from "@/common/Translatable.js"
 import { OrderedComponents } from "@/note/util/OrderedComponents.js"
 import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException.js"
@@ -8,6 +8,7 @@ import { EditPath, EditPathNode } from "@/note/util/EditPath.js"
 import { AttributeDefinition } from "./attribute/AttributeDefinition.js"
 import { AttributeValue, AttributeValueJson } from "./attribute/value/AttributeValue.js"
 import { StructureDefinition } from "./StructureDefinition.js"
+import { getAllRelatedValuesFunc } from "@/note/section/StructuralSection.js"
 
 import { z } from "zod"
 
@@ -61,8 +62,7 @@ export class StructuralElement extends NoteElement {
     /**
      * Validate the element according to the definition
      * the element is valid if
-     * - all value are valid
-     * // - and all required attribute are present (now moved to RequireConstraint)
+     * - all value are valid (which is checked when setting the value)
      * @returns true if the element is valid
      */
     validate(): OperationResult {
@@ -75,7 +75,7 @@ export class StructuralElement extends NoteElement {
                     .addElement(value_result.getRawInvalidMessage() as TranslatableText))
             }
         }
-        return ValidOperationResult
+        return OperationResult.valid()
     }
 
     getNextEditPathNode(index: UUID): EditPathNode | undefined {

@@ -4,6 +4,8 @@ import { EditPath } from "@/note/util/EditPath.js"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
 import { TextElement } from "@/note/element/TextElement.js"
+import { assertEqualExceptLambda } from "@test/util/TestUtil"
+import { AttributeValue, StructuralElement } from "@/index"
 
 describe('StructuralSection', () => {
     let section : StructuralSection
@@ -53,6 +55,24 @@ describe('StructuralSection', () => {
         expect(edit_path[0].getLastStep()).toBe(txt_element.id)
     })
 
+    it("getValuesOfAttr", () => {
+        expect(section.getValuesOfAttr(attr_definition.id)).toEqual([])
+        // create a few StructuralElement with values of attr_definition
+        let element_1 = new StructuralElement(section.definition)
+        let element_2 = new StructuralElement(section.definition)
+        let element_3 = new StructuralElement(section.definition)
+        // add the elements to section
+        section.elements.add(element_1)
+        section.elements.add(element_2)
+        section.elements.add(element_3)
+        // set values
+        element_1.values.set(attr_definition.id, new AttributeValue(attr_definition, "abc"))
+        element_2.values.set(attr_definition.id, new AttributeValue(attr_definition, "def"))
+        element_3.values.set(attr_definition.id, new AttributeValue(attr_definition, "ghi"))
+        // check
+        expect(section.getValuesOfAttr(attr_definition.id)).toEqual(["abc", "def", "ghi"])
+    })
+
     it("saveAsJson", () => {
         let json = section.saveAsJson()
         expect(json.id).toBe(section.id)
@@ -65,6 +85,6 @@ describe('StructuralSection', () => {
     it("loadFromJson", () => {
         let json = section.saveAsJson()
         let section_2 = StructuralSection.loadFromJson(json)
-        expect(section_2).toEqual(section)
+        assertEqualExceptLambda(section_2, section)
     })
 })

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { Constraint, ConstraintType } from "@/note/element/structural/attribute/constraint/Constraint.js"
+import { ConstraintType } from "@/note/element/structural/attribute/constraint/Constraint.js"
 import { MinConstraint } from "@/note/element/structural/attribute/constraint/MinConstraint.js"
 import { MaxConstraint } from "@/note/element/structural/attribute/constraint/MaxConstraint.js"
 import { EditPath, EndOfEditPathError } from "@/note/util/EditPath.js"

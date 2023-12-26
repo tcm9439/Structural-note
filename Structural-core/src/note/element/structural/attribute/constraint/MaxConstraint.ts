@@ -1,5 +1,5 @@
 import { Constraint, ConstraintType, ConstraintJson } from "./Constraint.js"
-import { OperationResult, ValidOperationResult } from "@/common/OperationResult.js"
+import { OperationResult } from "@/common/OperationResult.js"
 import { InvalidJsonFormatException } from "@/exception/ConversionException.js"
 import { z } from "zod"
 import _ from "lodash"
@@ -31,7 +31,7 @@ export class MaxConstraint<T> extends Constraint {
         if (this.max == null) {
             this._validate_constraint_result = OperationResult.invalid("structural.attribute.constraint.error.max_val_is_null")
         } else {
-            this._validate_constraint_result = ValidOperationResult
+            this._validate_constraint_result = OperationResult.valid()
         }
 
         return this.validate_constraint_result
@@ -61,11 +61,11 @@ export class MaxConstraint<T> extends Constraint {
         return MaxConstraint.type
     }
     
-    public validate(value: T): OperationResult {
+    validate(value: T): OperationResult {
         if (this.max != null && value > this.max) {
             return OperationResult.invalid("structural.attribute.constraint.error.val_larger_than_max")
         }
-        return ValidOperationResult
+        return OperationResult.valid()
     }
     
     saveAsJson(): z.infer<typeof MaxConstraintJson> {

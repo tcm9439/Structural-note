@@ -6,6 +6,7 @@ import { OperationResult, ValidOperationResult } from "@/common/OperationResult.
 import { AttributeDefinition, AttributeDefinitionJson } from "./attribute/AttributeDefinition.js"
 import { DisplayKey } from "./attribute/DisplayKey.js"
 import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException.js"
+import { getAllRelatedValuesFunc } from "@/note/section/StructuralSection.js"
 
 import { z } from "zod"
 
@@ -21,6 +22,12 @@ export const StructureDefinitionJson = z.object({
 export class StructureDefinition extends ComponentBase implements EditPathNode, Cloneable<StructureDefinition> {
     private _attributes: OrderedComponents<AttributeDefinition<any>> = new OrderedComponents()
     private _display_key: DisplayKey = new DisplayKey()
+    private _get_all_related_values_func: getAllRelatedValuesFunc
+
+    constructor(get_all_related_values_func: getAllRelatedValuesFunc) {
+        super()
+        this._get_all_related_values_func = get_all_related_values_func
+    }
     
     get attributes(): OrderedComponents<AttributeDefinition<any>> {
         return this._attributes
@@ -28,6 +35,10 @@ export class StructureDefinition extends ComponentBase implements EditPathNode, 
 
     get display_key(): DisplayKey {
         return this._display_key
+    }
+
+    getGetAllRelatedValuesFunc(): getAllRelatedValuesFunc {
+        return this._get_all_related_values_func
     }
 
     getNextEditPathNode(index: string): EditPathNode | undefined {
@@ -96,19 +107,19 @@ export class StructureDefinition extends ComponentBase implements EditPathNode, 
         }
     }
 
-    static loadFromJson(json: object): StructureDefinition {
+    static loadFromJson(json: object, get_all_related_values_func: getAllRelatedValuesFunc): StructureDefinition {
         const result = StructureDefinitionJson.safeParse(json)
         if (!result.success) {
             throw new InvalidJsonFormatException("StructureDefinition", result.error.toString())
         }
         const valid_json = result.data
-        let definition = new StructureDefinition()
+        let definition = new StructureDefinition(get_all_related_values_func)
         definition.id = valid_json.id
 
         // load the attribute definitions (in unknown order, just load them first)
         let loaded_attr = new Map<string, AttributeDefinition<any>>()
         valid_json.attributes.forEach((attr_json: object) => {
-            let attr_def = AttributeDefinition.loadFromJson(attr_json)
+            let attr_def = AttributeDefinition.loadFromJson(attr_json, definition.getGetAllRelatedValuesFunc())
             loaded_attr.set(attr_def.id, attr_def)
         })
 

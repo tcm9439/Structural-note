@@ -29,7 +29,6 @@ describe("AttributeValueMarkdownConverter", () => {
 
         // null value
         attr_def = new AttributeDefinition("test", new IntegerAttribute())
-        attr_def.addConstraint(new RequireConstraint(false))
         value = new AttributeValue(attr_def)
         expect(AttributeValueMarkdownConverter.convert(attr_def, value)).toBe("")
 

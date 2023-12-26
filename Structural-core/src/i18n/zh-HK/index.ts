@@ -83,6 +83,7 @@ const zh_HK = {
                     val_less_than_min: "低於最少值",
                     val_larger_than_max: "大於最大值",
                     attr_is_required: "此欄目必須填寫",
+                    val_not_unique: "資料重覆",
                 },
             },
             value: {

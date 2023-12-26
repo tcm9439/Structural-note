@@ -100,13 +100,10 @@ describe("Note", () => {
         // definition
         let definition = section2.definition
         let str_attr = new AttributeDefinition("Str Attr", StringAttribute.instance)
-        str_attr.addConstraint(new RequireConstraint(false))
         definition.attributes.add(str_attr)
         let bool_attr = new AttributeDefinition("Bool Attr", BooleanAttribute.instance)
-        bool_attr.addConstraint(new RequireConstraint(false))
         definition.attributes.add(bool_attr)
         let md_attr = new AttributeDefinition("Markdown Attr", MarkdownAttribute.instance)
-        md_attr.addConstraint(new RequireConstraint(false))
         definition.attributes.add(md_attr)
 
         // section 1

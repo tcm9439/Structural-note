@@ -41,7 +41,7 @@ onBeforeUnmount(() => {
 <template>
     <Collapse v-model="collapse_open_panel">
         <Panel :name="struct_element.id">
-            {{element_display_key}}
+            {{ element_display_key }}
             <template #content>
                 <!-- One form per element so that form-item can use attr id as prop (key) -->
                 <Form inline label-position="top">

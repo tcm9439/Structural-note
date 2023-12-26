@@ -22,6 +22,10 @@ export class OperationResult {
         return new OperationResult(false, invalid_message)
     }
 
+    static valid(): OperationResult {
+        return ValidOperationResult
+    }
+
     get valid(): boolean {
         return this._valid
     }

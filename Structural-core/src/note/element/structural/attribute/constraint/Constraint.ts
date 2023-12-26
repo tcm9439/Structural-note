@@ -1,6 +1,6 @@
 import { ComponentBase } from "@/note/util/ComponentBase.js"
 import { EditPath, EditPathNode, EndOfEditPathError } from "@/note/util/EditPath.js"
-import { OperationResult, ValidOperationResult } from "@/common/OperationResult.js"
+import { OperationResult } from "@/common/OperationResult.js"
 import { z } from "zod"
 
 export enum ConstraintType {
@@ -18,7 +18,7 @@ export const ConstraintJson = z.object({
 
 export abstract class Constraint extends ComponentBase implements EditPathNode {
     // if this constraint is valid
-    protected _validate_constraint_result : OperationResult = ValidOperationResult
+    protected _validate_constraint_result = OperationResult.valid()
 
     abstract getType(): ConstraintType
 
@@ -38,12 +38,32 @@ export abstract class Constraint extends ComponentBase implements EditPathNode {
      * Check if the given value is valid regarding to this constraint
      * @param value the value to validate
      */
-    abstract validate(value: any): OperationResult
+    validate(value: any): OperationResult {
+        return OperationResult.valid()
+    }
+
+    /**
+     * Check if the given values are valid regarding to this constraint.
+     * If this constraint is related to one value only, this function always return ValidOperationResult.
+     * @param values the list of value to validate
+     */
+    validateValueGroup(values: any[]): OperationResult {
+        return OperationResult.valid()
+    }
+
+    /**
+     * Check if this constraint is related to other values that should be validated together by validateValueGroup
+     */
+    isRelatedToOtherValues(): boolean {
+        return false
+    }
 
     /**
      * Check if this constraint is valid
      */
-    abstract constraintIsValid(): OperationResult
+    constraintIsValid(): OperationResult {
+        return OperationResult.valid()
+    }
 
     /**
      * Check if this constraint is compatible to the given constraint

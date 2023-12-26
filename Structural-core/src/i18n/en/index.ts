@@ -82,6 +82,7 @@ const en = {
                     max_val_is_null: "The maximum value is not set.",
                     val_less_than_min: "Value < minimum",
                     val_larger_than_max: "Value > maximum",
+                    val_not_unique: "Value is duplicated",
                     attr_is_required: "This attribute is required",
                 }
             },

@@ -291,6 +291,10 @@ type RootTranslation = {
 					 */
 					val_larger_than_max: string
 					/**
+					 * V​a​l​u​e​ ​i​s​ ​d​u​p​l​i​c​a​t​e​d
+					 */
+					val_not_unique: string
+					/**
 					 * T​h​i​s​ ​a​t​t​r​i​b​u​t​e​ ​i​s​ ​r​e​q​u​i​r​e​d
 					 */
 					attr_is_required: string
@@ -858,6 +862,10 @@ export type TranslationFunctions = {
 					 * Value > maximum
 					 */
 					val_larger_than_max: () => LocalizedString
+					/**
+					 * Value is duplicated
+					 */
+					val_not_unique: () => LocalizedString
 					/**
 					 * This attribute is required
 					 */

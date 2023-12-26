@@ -1,11 +1,11 @@
 import { AppState } from "@/view/state/AppState.js"
 import { UUID, ID } from "@/common/CommonTypes.js"
+import { OperationResult } from "@/common/OperationResult.js"
 import { ComponentBase } from "@/note/util/ComponentBase.js"
 import { AttributeDefinition } from "../AttributeDefinition.js"
 import { EditPath, EditPathNode, EndOfEditPathError } from "@/note/util/EditPath.js"
 import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException.js"
 import { InvalidTypeConversionForDataException, NullAttrTypeException } from "@/exception/AttributeException.js"
-import { OperationResult, ValidOperationResult } from "@/common/OperationResult.js"
 import { z } from "zod"
 
 export const AttributeValueJson = z.object({
@@ -20,7 +20,7 @@ export const AttributeValueJson = z.object({
 export class AttributeValue<T> extends ComponentBase implements EditPathNode {
     private _definition: AttributeDefinition<T>
     private _value: T | null = null
-    private _validate_result: OperationResult = ValidOperationResult
+    private _validate_result: OperationResult = OperationResult.valid()
     private _is_set: boolean = true
 
     constructor(definition: AttributeDefinition<T>, value: T | null = null) {
@@ -82,6 +82,12 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
 
     validate(): OperationResult {
         this._validate_result = this.definition.validate(this.value)
+        if (this._validate_result.valid){
+            // basic validation passed, check if the value is valid w.r.t. the related values
+            if (this.definition.getIsRelatedToOtherValues()){
+                this._validate_result = this.definition.validateValueGroup()
+            }
+        }
         return this._validate_result
     }
 

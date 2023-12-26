@@ -1,7 +1,7 @@
 import { ConstraintType, EditPath, AttributeDefinition, ArrayUtil, Constraint } from "structural-core"
 import MtAttributeConstraintMin from "@/components/mt/attribute/constraint/min.vue"
 import MtAttributeConstraintMax from "@/components/mt/attribute/constraint/max.vue"
-import MtAttributeConstraintRequire from "@/components/mt/attribute/constraint/require.vue"
+import MtAttributeConstraintNoParam from "@/components/mt/attribute/constraint/no-param.vue"
 import { tran } from "~/composables/app/translate"
 
 export type AttrConstraintEditComponent = {
@@ -10,7 +10,13 @@ export type AttrConstraintEditComponent = {
     path: EditPath | null,
     component_type: any,
     constraint_type: ConstraintType,
+    no_param: boolean,
 }
+
+const NO_PARAM_CONSTRAINT = [
+    ConstraintType.REQUIRE,
+    ConstraintType.UNIQUE,
+]
 
 export function getAttrConstraintEditComponents(attr_def_edit_path: EditPath, attr_def: AttributeDefinition<any>): Map<ConstraintType, AttrConstraintEditComponent> {
     let attr_constraint_edit_components: Map<ConstraintType, AttrConstraintEditComponent> = new Map()
@@ -24,6 +30,7 @@ export function getAttrConstraintEditComponents(attr_def_edit_path: EditPath, at
             path: attr_def_edit_path.clone().append(constraint_id),
             component_type: markRaw(constraintMapper(constraint_type)),
             constraint_type: constraint_type,
+            no_param: isNoParamConstraint(constraint_type),
         }
         
         attr_constraint_edit_components.set(constraint_type, component)
@@ -38,6 +45,7 @@ export function getAttrConstraintEditComponents(attr_def_edit_path: EditPath, at
             path: null,
             component_type: markRaw(constraintMapper(constraint_type)),
             constraint_type: constraint_type,
+            no_param: isNoParamConstraint(constraint_type),
         }
         attr_constraint_edit_components.set(constraint_type, component)
     })
@@ -46,16 +54,21 @@ export function getAttrConstraintEditComponents(attr_def_edit_path: EditPath, at
 
 function constraintMapper(type: ConstraintType){
     switch (type){
-        case ConstraintType.REQUIRE:
-        case ConstraintType.REGEX:
-        case ConstraintType.UNIQUE:
-            return MtAttributeConstraintRequire
         case ConstraintType.MIN:
             return MtAttributeConstraintMin
         case ConstraintType.MAX:
             return MtAttributeConstraintMax
+        case ConstraintType.REQUIRE:
+        case ConstraintType.UNIQUE:
+            return MtAttributeConstraintNoParam
+        case ConstraintType.REGEX:
+            return MtAttributeConstraintMax
     }
     throw new Error("ConstraintType not defined: " + type)
+}
+
+function isNoParamConstraint(type: ConstraintType){
+    return NO_PARAM_CONSTRAINT.includes(type)
 }
 
 const ungrouped_type_order = [

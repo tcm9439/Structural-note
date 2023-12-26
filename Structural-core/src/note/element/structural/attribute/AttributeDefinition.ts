@@ -3,18 +3,18 @@ import { UUID } from "@/common/CommonTypes.js"
 import { CloneUtil, Cloneable } from "@/common/Cloneable.js"
 import { ComponentBase } from "@/note/util/ComponentBase.js"
 import { EditPath, EditPathNode } from "@/note/util/EditPath.js"
-import { OperationResult, ValidOperationResult } from "@/common/OperationResult.js"
+import { OperationResult } from "@/common/OperationResult.js"
 import { InvalidJsonFormatException } from "@/exception/ConversionException.js"
 import { ForbiddenConstraint, IncompatibleConstraint } from "@/exception/AttributeException.js"
-
 import { Constraint, ConstraintType, ConstraintJson } from "./constraint/Constraint.js"
 import { AttributeType } from "./type/AttributeType.js"
 import { RequireConstraint } from "./constraint/RequireConstraint.js"
 import { MaxConstraint } from "./constraint/MaxConstraint.js"
 import { MinConstraint } from "./constraint/MinConstraint.js"
 import { AttributeValue } from "./value/AttributeValue.js"
-import { z } from "zod"
+import { getAllRelatedValuesFunc } from "@/note/section/StructuralSection.js"
 import { TranslatableText } from "@/common/Translatable.js"
+import { z } from "zod"
 
 export const AttributeDefinitionJson = z.object({
     id: z.string(),
@@ -25,7 +25,11 @@ export const AttributeDefinitionJson = z.object({
     constraints: z.array(ConstraintJson.passthrough())
 }).required()
 
-
+/**
+ * Definition of an attribute inside a structural definition.
+ * 
+ * When adding properties, remember to update the cloneFrom method.
+ */
 export class AttributeDefinition<T> extends ComponentBase implements EditPathNode, Cloneable<AttributeDefinition<T>> {
     private _name: string
     private _description: string
@@ -33,23 +37,29 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     private _default_value: T | null = null
 
     private _constraints: Map<UUID, Constraint> = new Map()
-    private _require_constraint: UUID
-
+    private _num_constraints_related_to_other_values: number = 0
+    private _require_constraint: UUID | null = null
+    private _get_all_related_values_func: getAllRelatedValuesFunc
+    
     /**
      * An attribute default to be 
      * - optional
      * - no description
      */
-    constructor(name?: string, attribute_type?: AttributeType<T>, description?: string) {
+    constructor(name?: string, attribute_type?: AttributeType<T>, description?: string, get_all_related_values_func?: getAllRelatedValuesFunc) {
         super()
         this._name = name || ""
         this._attribute_type = attribute_type || null
         this._description = description || ""
+        this._get_all_related_values_func = get_all_related_values_func || ((id) => [])
+    }
 
-        // create a default require constraint
-        let default_require_constraint = new RequireConstraint(false)
-        this.addConstraint(default_require_constraint)
-        this._require_constraint = default_require_constraint.id
+    setGetAllRelatedValuesFunc(value: getAllRelatedValuesFunc) {
+        this._get_all_related_values_func = value
+    }
+
+    getGetAllRelatedValuesFunc(): getAllRelatedValuesFunc {
+        return this._get_all_related_values_func
     }
 
     /**
@@ -75,14 +85,15 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
      * Which is defined as an attribute with a require_constraint = true
      */
     isOptionalAttr(): boolean {
-        return !this.require_constraint.required
+        return this._require_constraint === null
     }
 
     setDefaultValue(value: T | null): OperationResult {
         this._default_value = value
         if (value === null){
-            return ValidOperationResult
+            return OperationResult.valid()
         }
+        // not need to validated with related values (e.g. for unique constraint)
         return this.validate(value)
     }
 
@@ -94,7 +105,10 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         return this._constraints
     }
 
-    get require_constraint(): RequireConstraint {
+    get require_constraint(): RequireConstraint | null {
+        if (this._require_constraint === null) {
+            return null
+        }
         return this.constraints.get(this._require_constraint) as RequireConstraint
     }
 
@@ -163,6 +177,11 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         if (constraint instanceof RequireConstraint) {
             this._require_constraint = constraint.id
         }
+
+        if (constraint.isRelatedToOtherValues()) {
+            this._num_constraints_related_to_other_values += 1
+        }
+
         this._constraints.set(constraint.id, constraint)
         return null
     }
@@ -170,10 +189,24 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     removeConstraint(constraint_id: UUID): void {
         // if constraint is requiredConstraint, set the required to default (false)
         if (this._require_constraint === constraint_id) {
-            this.require_constraint.required = false
-        } else {
-            this._constraints.delete(constraint_id)
+            this._require_constraint = null
+        } 
+
+        if (this.constraints.get(constraint_id)?.isRelatedToOtherValues()) {
+            this._num_constraints_related_to_other_values -= 1
         }
+        this._constraints.delete(constraint_id)
+    }
+
+    getIsRelatedToOtherValues(): boolean {
+        return this._num_constraints_related_to_other_values > 0
+    }
+
+    getAllRelatedValues(): any[] {
+        if (this._get_all_related_values_func) {
+            return this._get_all_related_values_func(this.id)
+        }
+        return []
     }
 
     getAvailableConstraints(): ConstraintType[] {
@@ -201,12 +234,29 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
                 return result
             }
         }
-        return ValidOperationResult
+        return OperationResult.valid()
+    }
+
+    validateValueGroup(values?: any[]): OperationResult {
+        if (this.getIsRelatedToOtherValues()){
+            if (values === undefined) {
+                values = this.getAllRelatedValues()
+            }
+            for (const [id, constraint] of this.constraints) {
+                const result = constraint.validateValueGroup(values)
+                if (!result.valid) {
+                    return result
+                }
+            }
+        }
+        // not related to other values, return valid
+        return OperationResult.valid()
     }
 
 
     static convertToType<O,N>(old_attr_def: AttributeDefinition<O>, new_attr_type: AttributeType<N>): AttributeDefinition<N> {
         const new_attr_def = new AttributeDefinition<N>()
+        new_attr_def.setGetAllRelatedValuesFunc(old_attr_def.getGetAllRelatedValuesFunc())
 
         // copy the properties
         new_attr_def.id = old_attr_def.id
@@ -242,6 +292,8 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         this._attribute_type = CloneUtil.cloneDeepWithCloneable(other._attribute_type)
         this._default_value = CloneUtil.cloneDeepWithCloneable(other._default_value)
         this._constraints = CloneUtil.cloneDeepWithCloneable(other._constraints)
+        this.setGetAllRelatedValuesFunc(other.getGetAllRelatedValuesFunc())
+        this._num_constraints_related_to_other_values = other._num_constraints_related_to_other_values
     }
 
     cloneDeepWithCustomizer(): AttributeDefinition<T> | undefined {
@@ -264,14 +316,14 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         }
     }
 
-    static loadFromJson(json: object): AttributeDefinition<any> {
+    static loadFromJson(json: object, get_all_related_values_func: getAllRelatedValuesFunc): AttributeDefinition<any> {
         const result = AttributeDefinitionJson.safeParse(json)
         if (!result.success) {
             throw new InvalidJsonFormatException("AttributeDefinition", result.error.toString())
         }
         const valid_json = result.data
         const attribute_type = AttributeType.getAttrType(valid_json.attribute_type)
-        const def = new AttributeDefinition(valid_json.name, attribute_type, valid_json.description)
+        const def = new AttributeDefinition(valid_json.name, attribute_type, valid_json.description, get_all_related_values_func)
         def.id = valid_json.id
         def.constraints.clear() // remove the default require_constraint
         def.setDefaultValue(valid_json.default_value)
@@ -339,6 +391,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         }
 
         // default value valid
+        // not need to validated with related values (e.g. for unique constraint)
         if (this.explicit_default_value !== null) {
             const result = this.validate(this.explicit_default_value)
             if (!result.valid) {
@@ -350,6 +403,6 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
             }
         }
 
-        return ValidOperationResult
+        return OperationResult.valid()
     }
 }
