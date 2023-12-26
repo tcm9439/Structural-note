@@ -7,6 +7,7 @@ export class EventConstant {
 
     public static readonly ATTR_DEF_UPDATE = "ATTR_DEF_UPDATE_EVENT"
     public static readonly SECTION_UPDATE = "SECTION_UPDATE_EVENT"
+    public static readonly ATTR_VALUE_UPDATE = "ATTR_VALUE_UPDATE_EVENT"
 
     public static readonly ADD_SECTION = "ADD_SECTION_EVENT"
     public static readonly REMOVE_SECTION = "ADD_SECTION_EVENT"

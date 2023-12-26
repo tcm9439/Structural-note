@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { EditPath, Note, AttributeValue, InjectConstant } from "structural-core"
+import { EditPath, Note, AttributeValue, InjectConstant, EventConstant } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
+const { $emitter } = useNuxtApp()
 
 const props = defineProps<{
     edit_path: EditPath,
@@ -19,6 +20,15 @@ const is_required_attr = computed(() => {
     return !attr_value.definition.isOptionalAttr()
 })
 
+function validateValueExplicitly(updated_attr_id: string = attr_value.definition.id){
+    if (updated_attr_id === attr_id){
+        attr_value.validate()
+    }
+}
+
+// init the value validation
+validateValueExplicitly()
+
 const container_div_class = computed(() => {
     let class_var = "attr-wrapper"
     if (full_width_form_item.value){
@@ -31,7 +41,16 @@ watch(() => props.render, () => {
     attr_value = activeDataGetter(editing_note, props.edit_path) as AttributeValue<any>
     attr_name.value = attr_value.definition.name
     attr_description.value = attr_value.definition.description
-    console.log("description changed in base", attr_description.value)
+})
+
+// update all value validation when related value is updated (e.g. for checking unique value)
+$emitter.on(EventConstant.ATTR_VALUE_UPDATE, validateValueExplicitly)
+watch(() => attr_value.value, () => {
+    $emitter.emit(EventConstant.ATTR_VALUE_UPDATE, attr_id)
+})
+
+onBeforeUnmount(() => {
+    $emitter.off(EventConstant.ATTR_VALUE_UPDATE, validateValueExplicitly)
 })
 </script>
 

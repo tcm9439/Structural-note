@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, StringAttribute, StructuralElement, MarkdownElement, MarkdownAttribute, AppPage, EventConstant, RequireConstraint } from "structural-core"
+import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, StringAttribute, StructuralElement, MarkdownElement, MarkdownAttribute, AppPage, EventConstant, RequireConstraint, UniqueConstraint } from "structural-core"
 
 const { $viewState, $emitter } = useNuxtApp()
 $viewState.last_page = AppPage.TEST
@@ -20,6 +20,7 @@ let section2 = new StructuralSection("Section struct")
 
 let attr_definition = new AttributeDefinition("test string attr", StringAttribute.instance, "description 1")
 attr_definition.setGetAllRelatedValuesFunc(section2.getValuesOfAttr.bind(section2))
+attr_definition.addConstraint(new UniqueConstraint())
 
 let attr_definition2 = new AttributeDefinition("test string attr2", StringAttribute.instance)
 attr_definition2.setGetAllRelatedValuesFunc(section2.getValuesOfAttr.bind(section2))
@@ -46,7 +47,7 @@ let ele3 = new TextElement("ABCDEFG")
 section2.elements.add(ele3)
 
 ele_struct = new StructuralElement(section2.definition)
-value = new AttributeValue(attr_definition, "Second!")
+value = new AttributeValue(attr_definition, "Random value")
 ele_struct.values.set(attr_definition.id, value)
 section2.elements.add(ele_struct)
 

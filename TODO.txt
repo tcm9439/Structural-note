@@ -2,7 +2,6 @@
 
 ## Pending Features
 [ ] check what if i write some invalid value & save
-[ ] trigger the iviewui form item error prompt immediately (not wait until user edit)
 [ ] undo delete section / element
 [ ] edit markdown when export to md 
 [ ] create note from template (also as tutorial)
