@@ -53,7 +53,7 @@ const zh_HK = {
             edit_attr_type_tab_title: "類型",
             edit_attr_basic_name_label: "欄目名稱",
             edit_attr_basic_description_label: "描述",
-            edit_attr_constrain_default_label: "預設值",
+            edit_attr_constraint_default_label: "預設值",
             edit_attr_choose_type_label: "選擇欄目類型",
             edit_attr_current_type_label: "目前欄目類型",
             edit_attr_change_to_type_label: "更改欄目類型為",
@@ -143,11 +143,11 @@ const zh_HK = {
                 title: "無效的欄目類型",
                 message: "欄目類型不可留空。"
             },
-            incompatible_constrain: {
+            incompatible_constraint: {
                 title: "不相容的限制",
                 message: "新限制「{0}」與現有限制「{1}」不相容。"
             },
-            forbidden_constrain: {
+            forbidden_constraint: {
                 title: "不允許的限制",
                 message: "欄目不允許使用限制「{0}」。"
             },

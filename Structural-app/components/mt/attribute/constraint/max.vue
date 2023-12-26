@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, AttributeDefinition, MaxConstrain } from "structural-core"
+import { EditPath, AttributeDefinition, MaxConstraint } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 
 const props = defineProps<{
@@ -8,12 +8,12 @@ const props = defineProps<{
     enable: boolean,
 }>()
 
-const constrain = activeDataGetter(props.attr_def, props.edit_path) as MaxConstrain<any>
-const constrain_type = props.attr_def.attribute_type?.type || ""
+const constraint = activeDataGetter(props.attr_def, props.edit_path) as MaxConstraint<any>
+const constraint_type = props.attr_def.attribute_type?.type || ""
 </script>
 
 <template>
     <FormItem prop="max">
-        <mt-attribute-value-editor :type="constrain_type" v-model:value="constrain.max" />
+        <mt-attribute-value-editor :type="constraint_type" v-model:value="constraint.max" />
     </FormItem>
 </template>

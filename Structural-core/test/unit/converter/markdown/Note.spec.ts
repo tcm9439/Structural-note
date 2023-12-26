@@ -13,7 +13,7 @@ import { StringAttribute } from "@/note/element/structural/attribute/type/String
 import { BooleanAttribute } from "@/note/element/structural/attribute/type/BooleanAttribute.js"
 import { MarkdownAttribute } from "@/note/element/structural/attribute/type/MarkdownAttribute.js"
 import { MarkdownElement } from "@/note/element/MarkdownElement.js"
-import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain.js"
+import { RequireConstraint } from "@/note/element/structural/attribute/constraint/RequireConstraint.js"
 
 const section1_converter_expected_result = `## Section 1
 
@@ -100,13 +100,13 @@ describe("Note", () => {
         // definition
         let definition = section2.definition
         let str_attr = new AttributeDefinition("Str Attr", StringAttribute.instance)
-        str_attr.addConstrain(new RequireConstrain(false))
+        str_attr.addConstraint(new RequireConstraint(false))
         definition.attributes.add(str_attr)
         let bool_attr = new AttributeDefinition("Bool Attr", BooleanAttribute.instance)
-        bool_attr.addConstrain(new RequireConstrain(false))
+        bool_attr.addConstraint(new RequireConstraint(false))
         definition.attributes.add(bool_attr)
         let md_attr = new AttributeDefinition("Markdown Attr", MarkdownAttribute.instance)
-        md_attr.addConstrain(new RequireConstrain(false))
+        md_attr.addConstraint(new RequireConstraint(false))
         definition.attributes.add(md_attr)
 
         // section 1

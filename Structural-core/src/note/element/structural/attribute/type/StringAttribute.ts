@@ -1,6 +1,6 @@
 import { InvalidTypeConversionException } from '@/exception/AttributeException.js'
 import { AttributeType, AttributeTypeEnum } from "./AttributeType.js"
-import { ConstrainType } from "../constrain/Constrain.js"
+import { ConstraintType } from "../constraint/Constraint.js"
 
 export class StringAttribute extends AttributeType<string> {    
     public static readonly TYPE: string = AttributeTypeEnum.STRING
@@ -15,8 +15,8 @@ export class StringAttribute extends AttributeType<string> {
         super(StringAttribute.TYPE)
         this.addConvertibleType(AttributeTypeEnum.INT, StringAttribute.convertToInteger.bind(this))
         this.addConvertibleType(AttributeTypeEnum.DECIMAL, StringAttribute.convertToDecimal.bind(this))
-        this.addAvailableConstraint(ConstrainType.REGEX)
-        this.addAvailableConstraint(ConstrainType.UNIQUE)
+        this.addAvailableConstraint(ConstraintType.REGEX)
+        this.addAvailableConstraint(ConstraintType.UNIQUE)
     }
 
     get default_value(): string {

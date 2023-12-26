@@ -53,7 +53,7 @@ const en = {
             edit_attr_type_tab_title: "Type",
             edit_attr_basic_name_label: "Name",
             edit_attr_basic_description_label: "Description",
-            edit_attr_constrain_default_label: "Default Value",
+            edit_attr_constraint_default_label: "Default Value",
             edit_attr_choose_type_label: "Choose Attribute Type",
             edit_attr_current_type_label: "Current Attribute Type",
             edit_attr_change_to_type_label: "Change Attribute Type To",
@@ -96,7 +96,7 @@ const en = {
                 invalid_value_for_attr: "Invalid value for attribute '{attr_name:string}':",
                 invalid_default_value_for_attr: "Invalid default value for attribute '{attr_name:string}':",
                 invalid_constraint_for_attr: "Constraint '{constraint:string}' for attribute '{attr_name:string}' is invalid:",
-                incompatible_constraint_for_attr: "Constraint '{constraint_a:string}' is not compatible to constrain {constraint_b:string} for attribute '{attr_name:string}'",
+                incompatible_constraint_for_attr: "Constraint '{constraint_a:string}' is not compatible to constraint {constraint_b:string} for attribute '{attr_name:string}'",
             },
         },
         setting: {
@@ -143,13 +143,13 @@ const en = {
                 title: "Null Attribute Type",
                 message: "Attribute Type cannot be null.",
             },
-            incompatible_constrain: {
-                title: "Incompatible Constrain",
-                message: "New {0} constrain not compatible to existing {1} constrain.",
+            incompatible_constraint: {
+                title: "Incompatible Constraint",
+                message: "New {0} constraint not compatible to existing {1} constraint.",
             },
-            forbidden_constrain: {
-                title: "Forbidden Constrain",
-                message: "{0} constrain is not allowed for this attribute.",
+            forbidden_constraint: {
+                title: "Forbidden Constraint",
+                message: "{0} constraint is not allowed for this attribute.",
             },
         },
         conversion: {

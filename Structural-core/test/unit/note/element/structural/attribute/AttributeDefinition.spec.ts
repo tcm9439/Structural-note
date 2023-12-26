@@ -3,12 +3,12 @@ import { AttributeDefinition } from "@/note/element/structural/attribute/Attribu
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
 import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
 import { EditPath } from "@/note/util/EditPath.js"
-import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain.js"
-import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinConstrain.js"
-import { MaxConstrain } from "@/note/element/structural/attribute/constrain/MaxConstrain.js"
-import { ForbiddenConstrain, IncompatibleConstrain } from "@/exception/AttributeException.js"
+import { RequireConstraint } from "@/note/element/structural/attribute/constraint/RequireConstraint.js"
+import { MinConstraint } from "@/note/element/structural/attribute/constraint/MinConstraint.js"
+import { MaxConstraint } from "@/note/element/structural/attribute/constraint/MaxConstraint.js"
+import { ForbiddenConstraint, IncompatibleConstraint } from "@/exception/AttributeException.js"
 import { ValidOperationResult } from "@/common/OperationResult.js"
-import { ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain.js"
+import { ConstraintType } from "@/note/element/structural/attribute/constraint/Constraint.js"
 import { InvalidJsonFormatException } from "@/exception/ConversionException.js"
 import { AppState, ModuleInit } from "@/index.js"
 
@@ -32,17 +32,17 @@ describe('AttributeDefinition', () => {
     })
 
     it("getNextEditPathNode", () => {
-        const constrain = definition.require_constrain
+        const constraint = definition.require_constraint
         expect(definition.getNextEditPathNode("")).toBeUndefined()
-        expect(definition.getNextEditPathNode(constrain.id)).toBe(constrain)
+        expect(definition.getNextEditPathNode(constraint.id)).toBe(constraint)
     })
 
     it("stepInEachChildren", () => {
-        const constrain = definition.require_constrain
+        const constraint = definition.require_constraint
         let edit_path = (new EditPath()).append(definition.id)
         let children = definition.stepInEachChildren(edit_path)
         expect(children.length).toEqual(1)
-        expect(children[0].getLastStep()).toEqual(constrain.id)
+        expect(children[0].getLastStep()).toEqual(constraint.id)
     })
 
     it("clone", () => {
@@ -86,10 +86,10 @@ describe('AttributeDefinition', () => {
             description: "description ABC!",
             attribute_type: "INT",
             default_value: null,
-            constrains: [
+            constraints: [
                 {
-                    id: definition.require_constrain.id,
-                    type: "RequireConstrain",
+                    id: definition.require_constraint.id,
+                    type: "RequireConstraint",
                     required: false
                 }
             ]
@@ -108,59 +108,59 @@ describe('AttributeDefinition', () => {
         expect(() => AttributeDefinition.loadFromJson(json)).toThrow(InvalidJsonFormatException)
     })
 
-    it("addConstrain", () => {
-        // valid constrain
-        definition.addConstrain(new MinConstrain(10))
-        expect(definition.constrains.size).toBe(2) // require constrain is added by default
+    it("addConstraint", () => {
+        // valid constraint
+        definition.addConstraint(new MinConstraint(10))
+        expect(definition.constraints.size).toBe(2) // require constraint is added by default
 
-        // incompatible constrain
-        expect(definition.addConstrain(new RequireConstrain())).toBeInstanceOf(IncompatibleConstrain)
+        // incompatible constraint
+        expect(definition.addConstraint(new RequireConstraint())).toBeInstanceOf(IncompatibleConstraint)
 
-        // forbidden constrain
+        // forbidden constraint
         let str_def = new AttributeDefinition("test", StringAttribute.instance)
-        expect(str_def.addConstrain(new MinConstrain(10))).toBeInstanceOf(ForbiddenConstrain)
+        expect(str_def.addConstraint(new MinConstraint(10))).toBeInstanceOf(ForbiddenConstraint)
     })
 
-    it("getAvailableConstrains", () => {
-        // def has attribute type, no existing constrain to be incompatible with others
-        expect(definition.getAvailableConstrains()).toEqual([
-            ConstrainType.MIN,
-            ConstrainType.MAX,
-            ConstrainType.UNIQUE,
+    it("getAvailableConstraints", () => {
+        // def has attribute type, no existing constraint to be incompatible with others
+        expect(definition.getAvailableConstraints()).toEqual([
+            ConstraintType.MIN,
+            ConstraintType.MAX,
+            ConstraintType.UNIQUE,
         ])
 
-        definition.addConstrain(new MinConstrain(34))
-        expect(definition.getAvailableConstrains()).toEqual([
-            ConstrainType.MAX,
-            ConstrainType.UNIQUE,
+        definition.addConstraint(new MinConstraint(34))
+        expect(definition.getAvailableConstraints()).toEqual([
+            ConstraintType.MAX,
+            ConstraintType.UNIQUE,
             // no MIN because it is already added
         ])
 
-        // def has no attribute type => no available constrain
+        // def has no attribute type => no available constraint
         let new_attr_def = new AttributeDefinition("test")
-        expect(new_attr_def.getAvailableConstrains()).toEqual([])
+        expect(new_attr_def.getAvailableConstraints()).toEqual([])
     })
 
     it("isOptionalAttr", () => {
         // default optional
-        expect(definition.require_constrain).not.toBeNull()
+        expect(definition.require_constraint).not.toBeNull()
         expect(definition.isOptionalAttr()).toBeTruthy()
         // change to required
-        definition.require_constrain.required = true
+        definition.require_constraint.required = true
         expect(definition.isOptionalAttr()).toBeFalsy()
     })
 
-    it("validate: one constrain", () => {
-        expect(definition.constrains.size).toBe(1) // require constrain is added by default
+    it("validate: one constraint", () => {
+        expect(definition.constraints.size).toBe(1) // require constraint is added by default
         expect(definition.validate(22).valid).toBeTruthy()
-        definition.require_constrain.required = true
+        definition.require_constraint.required = true
         expect(definition.validate(null).valid).toBeFalsy()
     })
 
-    it("validate: multiple constrains", () => {
-        definition.require_constrain.required = true
-        definition.addConstrain(new MinConstrain(10))
-        definition.addConstrain(new MaxConstrain(1000))
+    it("validate: multiple constraints", () => {
+        definition.require_constraint.required = true
+        definition.addConstraint(new MinConstraint(10))
+        definition.addConstraint(new MaxConstraint(1000))
         expect(definition.validate(100).valid).toBeTruthy()
         expect(definition.validate(1).valid).toBeFalsy()
         expect(definition.validate(null).valid).toBeFalsy()
@@ -171,24 +171,24 @@ describe('AttributeDefinition', () => {
         let new_attr_def = AttributeDefinition.convertToType(no_type_attr_def, StringAttribute.instance)
         expect(new_attr_def).not.toBeNull()
         expect(new_attr_def?.attribute_type).toBe(StringAttribute.instance)
-        expect(new_attr_def?.constrains.size).toBe(1)
+        expect(new_attr_def?.constraints.size).toBe(1)
         expect(new_attr_def?.id).toBe(no_type_attr_def.id)
         expect(new_attr_def?.name).toBe(no_type_attr_def.name)
         expect(new_attr_def?.description).toBe(no_type_attr_def.description)
     })
 
-    it("convertToType: incompatible constrain", () => {
+    it("convertToType: incompatible constraint", () => {
         // convert from int to string
-        // min and max constrain are incompatible with string attribute
+        // min and max constraint are incompatible with string attribute
         let num_attr_def = new AttributeDefinition("test", IntegerAttribute.instance, "description ABC!")
-        num_attr_def.addConstrain(new MinConstrain(10))
-        num_attr_def.addConstrain(new MaxConstrain(1000))
+        num_attr_def.addConstraint(new MinConstraint(10))
+        num_attr_def.addConstraint(new MaxConstraint(1000))
 
         let new_attr_def = AttributeDefinition.convertToType(num_attr_def, StringAttribute.instance)
         expect(new_attr_def).not.toBeNull()
         expect(new_attr_def?.attribute_type).toBe(StringAttribute.instance)
-        expect(new_attr_def?.constrains.size).toBe(1)
-        expect(new_attr_def?.require_constrain).toBeInstanceOf(RequireConstrain)
+        expect(new_attr_def?.constraints.size).toBe(1)
+        expect(new_attr_def?.require_constraint).toBeInstanceOf(RequireConstraint)
         expect(new_attr_def?.id).toBe(num_attr_def.id)
         expect(new_attr_def?.name).toBe(num_attr_def.name)
         expect(new_attr_def?.description).toBe(num_attr_def.description)
@@ -216,18 +216,18 @@ describe('AttributeDefinition', () => {
         expect(validate_result.invalid_message).toBe("Attribute type cannot be empty for attribute 'no type'.")
     })
 
-    it("validateDefinition: invalid constrain", () => {
+    it("validateDefinition: invalid constraint", () => {
         let num_attr_def = new AttributeDefinition("test", IntegerAttribute.instance, "description ABC!")
-        let min_constrain = new MinConstrain()
-        num_attr_def.addConstrain(min_constrain)
-        min_constrain.min = null
+        let min_constraint = new MinConstraint()
+        num_attr_def.addConstraint(min_constraint)
+        min_constraint.min = null
         let validate_result = num_attr_def.validateDefinition()
         expect(validate_result.valid).toBe(false)
         expect(validate_result.invalid_message).toBe(`Constraint 'Minimum' for attribute 'test' is invalid: The minimum value is not set.`)
     })
 
     it("validateDefinition: invalid default value", () => {
-        definition.addConstrain(new MinConstrain(8))
+        definition.addConstraint(new MinConstraint(8))
         definition.setDefaultValue(1)
         let validate_result = definition.validateDefinition()
         expect(validate_result.valid).toBeFalsy()

@@ -1,75 +1,75 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinConstrain.js"
-import { MaxConstrain } from "@/note/element/structural/attribute/constrain/MaxConstrain.js"
+import { MinConstraint } from "@/note/element/structural/attribute/constraint/MinConstraint.js"
+import { MaxConstraint } from "@/note/element/structural/attribute/constraint/MaxConstraint.js"
 import { ValidOperationResult } from "@/common/OperationResult.js"
 
-describe("MinConstrain", () => {
-    let min_constrain: MinConstrain<number>
+describe("MinConstraint", () => {
+    let min_constraint: MinConstraint<number>
 
     beforeEach(() => {
-        min_constrain = new MinConstrain<number>(0)
+        min_constraint = new MinConstraint<number>(0)
     })
 
 	it("constructor", () => {
-        expect(min_constrain.min).toBe(0)
-        expect(min_constrain.validate_constrain_result.valid).toBe(true)
+        expect(min_constraint.min).toBe(0)
+        expect(min_constraint.validate_constraint_result.valid).toBe(true)
 	})
 
 	it("empty constructor", () => {
-        min_constrain = new MinConstrain<number>()
-        expect(min_constrain.min).toBeNull()
-        expect(min_constrain.validate_constrain_result.valid).toBe(false)
+        min_constraint = new MinConstraint<number>()
+        expect(min_constraint.min).toBeNull()
+        expect(min_constraint.validate_constraint_result.valid).toBe(false)
 	})
 
     it("get set min", () => {
-        min_constrain.min = 1
-        expect(min_constrain.min).toBe(1)
-        expect(min_constrain.validate_constrain_result.valid).toBe(true)
+        min_constraint.min = 1
+        expect(min_constraint.min).toBe(1)
+        expect(min_constraint.validate_constraint_result.valid).toBe(true)
 
-        min_constrain.min = null
-        expect(min_constrain.min).toBeNull()
-        expect(min_constrain.validate_constrain_result.valid).toBe(false)
+        min_constraint.min = null
+        expect(min_constraint.min).toBeNull()
+        expect(min_constraint.validate_constraint_result.valid).toBe(false)
     })
 
-    it("constrainIsValid", () => {
-        expect(min_constrain.validate_constrain_result.valid).toBe(true)
+    it("constraintIsValid", () => {
+        expect(min_constraint.validate_constraint_result.valid).toBe(true)
 
-        min_constrain.min = null
-        expect(min_constrain.validate_constrain_result.valid).toBe(false)
+        min_constraint.min = null
+        expect(min_constraint.validate_constraint_result.valid).toBe(false)
     })
 
     it("isCompatibleTo", () => {
-        // compatible to MinConstrain?
-        let new_min_constrain = new MinConstrain<number>(1)
-        expect(min_constrain.isCompatibleTo(new_min_constrain)).toBe(false)
+        // compatible to MinConstraint?
+        let new_min_constraint = new MinConstraint<number>(1)
+        expect(min_constraint.isCompatibleTo(new_min_constraint)).toBe(false)
         
-        // compatible to MaxConstrain?
+        // compatible to MaxConstraint?
         // - max value smaller than min value
-        let max_constrain = new MaxConstrain<number>(-1)
-        expect(min_constrain.isCompatibleTo(max_constrain)).toBe(false)
+        let max_constraint = new MaxConstraint<number>(-1)
+        expect(min_constraint.isCompatibleTo(max_constraint)).toBe(false)
 
         // - max value greater than min value
-        max_constrain.max = 1
-        expect(min_constrain.isCompatibleTo(max_constrain)).toBe(true)
+        max_constraint.max = 1
+        expect(min_constraint.isCompatibleTo(max_constraint)).toBe(true)
     })
 
     it("validate", () => {
-        expect(min_constrain.validate(0)).toBe(ValidOperationResult)
-        expect(min_constrain.validate(199)).toBe(ValidOperationResult)
-        expect(min_constrain.validate(-9).valid).toBe(false)
+        expect(min_constraint.validate(0)).toBe(ValidOperationResult)
+        expect(min_constraint.validate(199)).toBe(ValidOperationResult)
+        expect(min_constraint.validate(-9).valid).toBe(false)
     })
 
     it("json", () => {
-        let saved_json = min_constrain.saveAsJson()
-        let loaded_min_constrain = MinConstrain.loadFromJson(saved_json)
-        expect(loaded_min_constrain).toEqual(min_constrain)
+        let saved_json = min_constraint.saveAsJson()
+        let loaded_min_constraint = MinConstraint.loadFromJson(saved_json)
+        expect(loaded_min_constraint).toEqual(min_constraint)
     })
 
     it("different type", () => {
         // date
-        let date_min_constrain = new MinConstrain<Date>(new Date(2020, 1, 1))
-        expect(date_min_constrain.validate(new Date(2020, 1, 1))).toBe(ValidOperationResult)
-        expect(date_min_constrain.validate(new Date(2020, 1, 2))).toBe(ValidOperationResult)
-        expect(date_min_constrain.validate(new Date(2019, 12, 31)).valid).toBe(false)
+        let date_min_constraint = new MinConstraint<Date>(new Date(2020, 1, 1))
+        expect(date_min_constraint.validate(new Date(2020, 1, 1))).toBe(ValidOperationResult)
+        expect(date_min_constraint.validate(new Date(2020, 1, 2))).toBe(ValidOperationResult)
+        expect(date_min_constraint.validate(new Date(2019, 12, 31)).valid).toBe(false)
     })
 })

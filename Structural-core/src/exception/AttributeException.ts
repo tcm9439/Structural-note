@@ -36,20 +36,20 @@ export class NullAttrTypeException extends AppException {
 }
 
 
-export class IncompatibleConstrain extends AppException {
-    constructor(new_constrain_type: string, existing_constrain_type: string) {
-        super(`Constrain ${new_constrain_type} not compatible to ${existing_constrain_type}`, 
-            "IncompatibleConstrain",
-            AppState.translationManager.translate("error.attribute.incompatible_constrain.title"),
-            AppState.translationManager.translate("error.attribute.incompatible_constrain.message", null, [new_constrain_type, existing_constrain_type]))
+export class IncompatibleConstraint extends AppException {
+    constructor(new_constraint_type: string, existing_constraint_type: string) {
+        super(`Constraint ${new_constraint_type} not compatible to ${existing_constraint_type}`, 
+            "IncompatibleConstraint",
+            AppState.translationManager.translate("error.attribute.incompatible_constraint.title"),
+            AppState.translationManager.translate("error.attribute.incompatible_constraint.message", null, [new_constraint_type, existing_constraint_type]))
     }
 }
 
-export class ForbiddenConstrain extends AppException {
-    constructor(constrain_type: string) {
-        super(`Constrain ${constrain_type} is not allowed for this attribute.`, 
-            "ForbiddenConstrain",
-            AppState.translationManager.translate("error.attribute.forbidden_constrain.title"),
-            AppState.translationManager.translate("error.attribute.forbidden_constrain.message", null, [constrain_type]))
+export class ForbiddenConstraint extends AppException {
+    constructor(constraint_type: string) {
+        super(`Constraint ${constraint_type} is not allowed for this attribute.`, 
+            "ForbiddenConstraint",
+            AppState.translationManager.translate("error.attribute.forbidden_constraint.title"),
+            AppState.translationManager.translate("error.attribute.forbidden_constraint.message", null, [constraint_type]))
     }
 }

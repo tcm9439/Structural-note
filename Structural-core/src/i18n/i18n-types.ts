@@ -195,7 +195,7 @@ type RootTranslation = {
 			/**
 			 * D​e​f​a​u​l​t​ ​V​a​l​u​e
 			 */
-			edit_attr_constrain_default_label: string
+			edit_attr_constraint_default_label: string
 			/**
 			 * C​h​o​o​s​e​ ​A​t​t​r​i​b​u​t​e​ ​T​y​p​e
 			 */
@@ -338,7 +338,7 @@ type RootTranslation = {
 				 */
 				invalid_constraint_for_attr: RequiredParams<'attr_name' | 'constraint'>
 				/**
-				 * C​o​n​s​t​r​a​i​n​t​ ​'​{​c​o​n​s​t​r​a​i​n​t​_​a​}​'​ ​i​s​ ​n​o​t​ ​c​o​m​p​a​t​i​b​l​e​ ​t​o​ ​c​o​n​s​t​r​a​i​n​ ​{​c​o​n​s​t​r​a​i​n​t​_​b​}​ ​f​o​r​ ​a​t​t​r​i​b​u​t​e​ ​'​{​a​t​t​r​_​n​a​m​e​}​'
+				 * C​o​n​s​t​r​a​i​n​t​ ​'​{​c​o​n​s​t​r​a​i​n​t​_​a​}​'​ ​i​s​ ​n​o​t​ ​c​o​m​p​a​t​i​b​l​e​ ​t​o​ ​c​o​n​s​t​r​a​i​n​t​ ​{​c​o​n​s​t​r​a​i​n​t​_​b​}​ ​f​o​r​ ​a​t​t​r​i​b​u​t​e​ ​'​{​a​t​t​r​_​n​a​m​e​}​'
 				 * @param {string} attr_name
 				 * @param {string} constraint_a
 				 * @param {string} constraint_b
@@ -468,25 +468,25 @@ type RootTranslation = {
 				 */
 				message: string
 			}
-			incompatible_constrain: {
+			incompatible_constraint: {
 				/**
-				 * I​n​c​o​m​p​a​t​i​b​l​e​ ​C​o​n​s​t​r​a​i​n
+				 * I​n​c​o​m​p​a​t​i​b​l​e​ ​C​o​n​s​t​r​a​i​n​t
 				 */
 				title: string
 				/**
-				 * N​e​w​ ​{​0​}​ ​c​o​n​s​t​r​a​i​n​ ​n​o​t​ ​c​o​m​p​a​t​i​b​l​e​ ​t​o​ ​e​x​i​s​t​i​n​g​ ​{​1​}​ ​c​o​n​s​t​r​a​i​n​.
+				 * N​e​w​ ​{​0​}​ ​c​o​n​s​t​r​a​i​n​t​ ​n​o​t​ ​c​o​m​p​a​t​i​b​l​e​ ​t​o​ ​e​x​i​s​t​i​n​g​ ​{​1​}​ ​c​o​n​s​t​r​a​i​n​t​.
 				 * @param {unknown} 0
 				 * @param {unknown} 1
 				 */
 				message: RequiredParams<'0' | '1'>
 			}
-			forbidden_constrain: {
+			forbidden_constraint: {
 				/**
-				 * F​o​r​b​i​d​d​e​n​ ​C​o​n​s​t​r​a​i​n
+				 * F​o​r​b​i​d​d​e​n​ ​C​o​n​s​t​r​a​i​n​t
 				 */
 				title: string
 				/**
-				 * {​0​}​ ​c​o​n​s​t​r​a​i​n​ ​i​s​ ​n​o​t​ ​a​l​l​o​w​e​d​ ​f​o​r​ ​t​h​i​s​ ​a​t​t​r​i​b​u​t​e​.
+				 * {​0​}​ ​c​o​n​s​t​r​a​i​n​t​ ​i​s​ ​n​o​t​ ​a​l​l​o​w​e​d​ ​f​o​r​ ​t​h​i​s​ ​a​t​t​r​i​b​u​t​e​.
 				 * @param {unknown} 0
 				 */
 				message: RequiredParams<'0'>
@@ -763,7 +763,7 @@ export type TranslationFunctions = {
 			/**
 			 * Default Value
 			 */
-			edit_attr_constrain_default_label: () => LocalizedString
+			edit_attr_constraint_default_label: () => LocalizedString
 			/**
 			 * Choose Attribute Type
 			 */
@@ -900,7 +900,7 @@ export type TranslationFunctions = {
 				 */
 				invalid_constraint_for_attr: (arg: { attr_name: string, constraint: string }) => LocalizedString
 				/**
-				 * Constraint '{constraint_a}' is not compatible to constrain {constraint_b} for attribute '{attr_name}'
+				 * Constraint '{constraint_a}' is not compatible to constraint {constraint_b} for attribute '{attr_name}'
 				 */
 				incompatible_constraint_for_attr: (arg: { attr_name: string, constraint_a: string, constraint_b: string }) => LocalizedString
 			}
@@ -1024,23 +1024,23 @@ export type TranslationFunctions = {
 				 */
 				message: () => LocalizedString
 			}
-			incompatible_constrain: {
+			incompatible_constraint: {
 				/**
-				 * Incompatible Constrain
+				 * Incompatible Constraint
 				 */
 				title: () => LocalizedString
 				/**
-				 * New {0} constrain not compatible to existing {1} constrain.
+				 * New {0} constraint not compatible to existing {1} constraint.
 				 */
 				message: (arg0: unknown, arg1: unknown) => LocalizedString
 			}
-			forbidden_constrain: {
+			forbidden_constraint: {
 				/**
-				 * Forbidden Constrain
+				 * Forbidden Constraint
 				 */
 				title: () => LocalizedString
 				/**
-				 * {0} constrain is not allowed for this attribute.
+				 * {0} constraint is not allowed for this attribute.
 				 */
 				message: (arg0: unknown) => LocalizedString
 			}

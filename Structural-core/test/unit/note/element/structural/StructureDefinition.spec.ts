@@ -138,10 +138,10 @@ describe('StructureDefinition', () => {
                     description: str_attr.description,
                     attribute_type: str_attr.attribute_type?.type,
                     default_value: null,
-                    constrains: [
+                    constraints: [
                         {
-                            id: str_attr.require_constrain.id,
-                            type: "RequireConstrain",
+                            id: str_attr.require_constraint.id,
+                            type: "RequireConstraint",
                             required: false
                         }
                     ]
@@ -152,10 +152,10 @@ describe('StructureDefinition', () => {
                     description: bool_attr.description,
                     attribute_type: bool_attr.attribute_type?.type,
                     default_value: true,
-                    constrains: [
+                    constraints: [
                         {
-                            id: bool_attr.require_constrain.id,
-                            type: "RequireConstrain",
+                            id: bool_attr.require_constraint.id,
+                            type: "RequireConstraint",
                             required: false
                         }
                     ]

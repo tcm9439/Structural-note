@@ -62,7 +62,7 @@ export class StructuralElement extends NoteElement {
      * Validate the element according to the definition
      * the element is valid if
      * - all value are valid
-     * // - and all required attribute are present (now moved to RequireConstrain)
+     * // - and all required attribute are present (now moved to RequireConstraint)
      * @returns true if the element is valid
      */
     validate(): OperationResult {

@@ -5,13 +5,13 @@ import { ComponentBase } from "@/note/util/ComponentBase.js"
 import { EditPath, EditPathNode } from "@/note/util/EditPath.js"
 import { OperationResult, ValidOperationResult } from "@/common/OperationResult.js"
 import { InvalidJsonFormatException } from "@/exception/ConversionException.js"
-import { ForbiddenConstrain, IncompatibleConstrain } from "@/exception/AttributeException.js"
+import { ForbiddenConstraint, IncompatibleConstraint } from "@/exception/AttributeException.js"
 
-import { Constrain, ConstrainType, ConstrainJson } from "./constrain/Constrain.js"
+import { Constraint, ConstraintType, ConstraintJson } from "./constraint/Constraint.js"
 import { AttributeType } from "./type/AttributeType.js"
-import { RequireConstrain } from "./constrain/RequireConstrain.js"
-import { MaxConstrain } from "./constrain/MaxConstrain.js"
-import { MinConstrain } from "./constrain/MinConstrain.js"
+import { RequireConstraint } from "./constraint/RequireConstraint.js"
+import { MaxConstraint } from "./constraint/MaxConstraint.js"
+import { MinConstraint } from "./constraint/MinConstraint.js"
 import { AttributeValue } from "./value/AttributeValue.js"
 import { z } from "zod"
 import { TranslatableText } from "@/common/Translatable.js"
@@ -22,7 +22,7 @@ export const AttributeDefinitionJson = z.object({
     description: z.string(),
     attribute_type: z.string(),
     default_value: z.any().optional(),
-    constrains: z.array(ConstrainJson.passthrough())
+    constraints: z.array(ConstraintJson.passthrough())
 }).required()
 
 
@@ -32,8 +32,8 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     private _attribute_type: AttributeType<T> | null
     private _default_value: T | null = null
 
-    private _constrains: Map<UUID, Constrain> = new Map()
-    private _require_constrain: UUID
+    private _constraints: Map<UUID, Constraint> = new Map()
+    private _require_constraint: UUID
 
     /**
      * An attribute default to be 
@@ -46,10 +46,10 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         this._attribute_type = attribute_type || null
         this._description = description || ""
 
-        // create a default require constrain
-        let default_require_constrain = new RequireConstrain(false)
-        this.addConstrain(default_require_constrain)
-        this._require_constrain = default_require_constrain.id
+        // create a default require constraint
+        let default_require_constraint = new RequireConstraint(false)
+        this.addConstraint(default_require_constraint)
+        this._require_constraint = default_require_constraint.id
     }
 
     /**
@@ -72,10 +72,10 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
 
     /**
      * Check if this is an optional attribute.
-     * Which is defined as an attribute with a require_constrain = true
+     * Which is defined as an attribute with a require_constraint = true
      */
     isOptionalAttr(): boolean {
-        return !this.require_constrain.required
+        return !this.require_constraint.required
     }
 
     setDefaultValue(value: T | null): OperationResult {
@@ -90,12 +90,12 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         return this._attribute_type
     }
 
-    get constrains(): Map<UUID, Constrain> {
-        return this._constrains
+    get constraints(): Map<UUID, Constraint> {
+        return this._constraints
     }
 
-    get require_constrain(): RequireConstrain {
-        return this.constrains.get(this._require_constrain) as RequireConstrain
+    get require_constraint(): RequireConstraint {
+        return this.constraints.get(this._require_constraint) as RequireConstraint
     }
 
     set attribute_type(value: AttributeType<T> ) {
@@ -119,14 +119,14 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     }
 
     getNextEditPathNode(index: string): EditPathNode | undefined {
-        return this.constrains.get(index)
+        return this.constraints.get(index)
     }
 
-    // step in each constrain
+    // step in each constraint
     stepInEachChildren(edit_path: EditPath, filter_mode?: number): EditPath[] {
         let result: EditPath[] = []
-        this.constrains.forEach((constrain) => {
-            result.push(edit_path.clone().append(constrain.id))
+        this.constraints.forEach((constraint) => {
+            result.push(edit_path.clone().append(constraint.id))
         })
         return result
     }
@@ -136,67 +136,67 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     }
 
     /**
-     * Add a constrain to the attribute definition.
-     * @param constrain 
-     * @returns Error if the constrain is not allowed or incompatible with the existing constrains. Null if the constrain is added successfully.
+     * Add a constraint to the attribute definition.
+     * @param constraint 
+     * @returns Error if the constraint is not allowed or incompatible with the existing constraints. Null if the constraint is added successfully.
      */
-    addConstrain(constrain: Constrain): Error | null {
-        if (this._constrains.has(constrain.id)) {
-            // constrain already exists
+    addConstraint(constraint: Constraint): Error | null {
+        if (this._constraints.has(constraint.id)) {
+            // constraint already exists
             return null
         }
 
-        // check if the constrain is allowed by the attribute type
-        if (this._attribute_type !== null && !this._attribute_type.allowConstrain(constrain)) {
-            return new ForbiddenConstrain(constrain.getType())
+        // check if the constraint is allowed by the attribute type
+        if (this._attribute_type !== null && !this._attribute_type.allowConstraint(constraint)) {
+            return new ForbiddenConstraint(constraint.getType())
         }
 
-        // check if the constrain is compatible with the existing constrains
-        for (const [id, existing_constrain] of this.constrains) {
-            if (!existing_constrain.isCompatibleTo(constrain)) {
-                return new IncompatibleConstrain(constrain.getType(), existing_constrain.getType())
+        // check if the constraint is compatible with the existing constraints
+        for (const [id, existing_constraint] of this.constraints) {
+            if (!existing_constraint.isCompatibleTo(constraint)) {
+                return new IncompatibleConstraint(constraint.getType(), existing_constraint.getType())
             }
         }
 
-        // pass all the checks, add the constrain
-        // if constrain is requiredConstrain, check if it is required
-        if (constrain instanceof RequireConstrain) {
-            this._require_constrain = constrain.id
+        // pass all the checks, add the constraint
+        // if constraint is requiredConstraint, check if it is required
+        if (constraint instanceof RequireConstraint) {
+            this._require_constraint = constraint.id
         }
-        this._constrains.set(constrain.id, constrain)
+        this._constraints.set(constraint.id, constraint)
         return null
     }
 
-    removeConstrain(constrain_id: UUID): void {
-        // if constrain is requiredConstrain, set the required to default (false)
-        if (this._require_constrain === constrain_id) {
-            this.require_constrain.required = false
+    removeConstraint(constraint_id: UUID): void {
+        // if constraint is requiredConstraint, set the required to default (false)
+        if (this._require_constraint === constraint_id) {
+            this.require_constraint.required = false
         } else {
-            this._constrains.delete(constrain_id)
+            this._constraints.delete(constraint_id)
         }
     }
 
-    getAvailableConstrains(): ConstrainType[] {
+    getAvailableConstraints(): ConstraintType[] {
         if (this._attribute_type === null) {
             return []
         }
         let available_constraints = this._attribute_type.available_constraints
 
-        // filter out the incompatible constrains w.r.t. the existing constrains
-        for (const [id, constrain] of this.constrains) {
-            available_constraints = available_constraints.filter((constrain_type) => {
-                return constrain.isCompatibleToType(constrain_type)
+        // filter out the incompatible constraints w.r.t. the existing constraints
+        for (const [id, constraint] of this.constraints) {
+            available_constraints = available_constraints.filter((constraint_type) => {
+                return constraint.isCompatibleToType(constraint_type)
             })
         }
         return available_constraints
     }
 
     /**
-     * Check if the value pass all the constrains
+     * Check if the value pass all the constraints
      */
     validate(value: any): OperationResult {
-        for (const [id, constrain] of this.constrains) {
-            const result = constrain.validate(value)
+        for (const [id, constraint] of this.constraints) {
+            const result = constraint.validate(value)
             if (!result.valid) {
                 return result
             }
@@ -215,12 +215,12 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         new_attr_def.attribute_type = new_attr_type
 
         if (old_attr_def.attribute_type !== null) {
-            // add the constrain to the new definition if it is allowed
-            old_attr_def.constrains.forEach((constrain) => {
-                if (new_attr_type.allowConstrain(constrain)) {
-                    let error = new_attr_def.addConstrain(constrain)
+            // add the constraint to the new definition if it is allowed
+            old_attr_def.constraints.forEach((constraint) => {
+                if (new_attr_type.allowConstraint(constraint)) {
+                    let error = new_attr_def.addConstraint(constraint)
                     if (error !== null) {
-                        AppState.logger.error(`Fail to add the constrain to the new attribute definition. ${error}`)
+                        AppState.logger.error(`Fail to add the constraint to the new attribute definition. ${error}`)
                     }
                 }
             })
@@ -241,7 +241,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         this._description = CloneUtil.cloneDeepWithCloneable(other._description)
         this._attribute_type = CloneUtil.cloneDeepWithCloneable(other._attribute_type)
         this._default_value = CloneUtil.cloneDeepWithCloneable(other._default_value)
-        this._constrains = CloneUtil.cloneDeepWithCloneable(other._constrains)
+        this._constraints = CloneUtil.cloneDeepWithCloneable(other._constraints)
     }
 
     cloneDeepWithCustomizer(): AttributeDefinition<T> | undefined {
@@ -258,8 +258,8 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
             description: this.description,
             attribute_type: this.attribute_type.type,
             default_value: this.explicit_default_value,
-            constrains: Array.from(this.constrains.values()).map((constrain) => {
-                return constrain.saveAsJson()
+            constraints: Array.from(this.constraints.values()).map((constraint) => {
+                return constraint.saveAsJson()
             })
         }
     }
@@ -273,22 +273,22 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         const attribute_type = AttributeType.getAttrType(valid_json.attribute_type)
         const def = new AttributeDefinition(valid_json.name, attribute_type, valid_json.description)
         def.id = valid_json.id
-        def.constrains.clear() // remove the default require_constrain
+        def.constraints.clear() // remove the default require_constraint
         def.setDefaultValue(valid_json.default_value)
 
-        // load constrains
-        valid_json.constrains.forEach((constrain_json) => {
-            let constrain: Constrain
-            if (constrain_json.type === "RequireConstrain") {
-                constrain = RequireConstrain.loadFromJson(constrain_json)
-            } else if (constrain_json.type === "MinConstrain") {
-                constrain = MinConstrain.loadFromJson(constrain_json)
-            } else if (constrain_json.type === "MaxConstrain") {
-                constrain = MaxConstrain.loadFromJson(constrain_json)
+        // load constraints
+        valid_json.constraints.forEach((constraint_json) => {
+            let constraint: Constraint
+            if (constraint_json.type === "RequireConstraint") {
+                constraint = RequireConstraint.loadFromJson(constraint_json)
+            } else if (constraint_json.type === "MinConstraint") {
+                constraint = MinConstraint.loadFromJson(constraint_json)
+            } else if (constraint_json.type === "MaxConstraint") {
+                constraint = MaxConstraint.loadFromJson(constraint_json)
             } else {
-                throw new InvalidJsonFormatException("AttributeDefinition", `Unknown constrain type: ${constrain_json.type}`)
+                throw new InvalidJsonFormatException("AttributeDefinition", `Unknown constraint type: ${constraint_json.type}`)
             }
-            def.addConstrain(constrain)
+            def.addConstraint(constraint)
         })
 
         return def
@@ -310,9 +310,9 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
             })
         }
 
-        // constrains valid
-        for (const [id, constraint] of this.constrains) {
-            const result = constraint.validate_constrain_result
+        // constraints valid
+        for (const [id, constraint] of this.constraints) {
+            const result = constraint.validate_constraint_result
             if (!result.valid) {
                 console.log(result)
                 return OperationResult.invalidText(
@@ -324,9 +324,9 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
             }
         }
 
-        // constrain is compatible to each other
-        for (const [id, constraint] of this.constrains) {
-            for (const [id2, constraint2] of this.constrains) {
+        // constraint is compatible to each other
+        for (const [id, constraint] of this.constraints) {
+            for (const [id2, constraint2] of this.constraints) {
                 if (id !== id2 && !constraint.isCompatibleTo(constraint2)) {
                     return OperationResult.invalidText(
                         TranslatableText.new("structural.attribute.error.incompatible_constraint_for_attr", {

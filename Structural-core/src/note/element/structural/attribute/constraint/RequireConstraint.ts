@@ -1,15 +1,15 @@
-import { Constrain, ConstrainJson, ConstrainType } from "./Constrain.js"
+import { Constraint, ConstraintJson, ConstraintType } from "./Constraint.js"
 import { OperationResult, ValidOperationResult } from "@/common/OperationResult.js"
 import { InvalidJsonFormatException } from "@/exception/ConversionException.js"
 import { z } from "zod"
 
-export const RequireConstrainJson = ConstrainJson.extend({
-    type: z.literal("RequireConstrain"),
+export const RequireConstraintJson = ConstraintJson.extend({
+    type: z.literal("RequireConstraint"),
     required: z.boolean()
 }).required()
 
-export class RequireConstrain extends Constrain {
-    static readonly type: ConstrainType = ConstrainType.REQUIRE
+export class RequireConstraint extends Constraint {
+    static readonly type: ConstraintType = ConstraintType.REQUIRE
     private _required: boolean
 
     constructor(required: boolean = true) {
@@ -25,12 +25,12 @@ export class RequireConstrain extends Constrain {
         this._required = required
     }
 
-    getType(): ConstrainType {
-        return RequireConstrain.type
+    getType(): ConstraintType {
+        return RequireConstraint.type
     }
     
-    constrainIsValid(): OperationResult {
-        // This constrain is always valid
+    constraintIsValid(): OperationResult {
+        // This constraint is always valid
         return ValidOperationResult
     }
 
@@ -60,24 +60,24 @@ export class RequireConstrain extends Constrain {
         return ValidOperationResult;
     }
 
-    saveAsJson(): z.infer<typeof RequireConstrainJson> {
+    saveAsJson(): z.infer<typeof RequireConstraintJson> {
         return {
             id: this.id,
-            type: "RequireConstrain",
+            type: "RequireConstraint",
             required: this._required
         }
     }
 
-    static loadFromJson(json: object): RequireConstrain {
+    static loadFromJson(json: object): RequireConstraint {
         // check if the json_data match the schema
-        const result = RequireConstrainJson.safeParse(json)
+        const result = RequireConstraintJson.safeParse(json)
         if (!result.success) {
-            throw new InvalidJsonFormatException("RequireConstrain", result.error.toString())
+            throw new InvalidJsonFormatException("RequireConstraint", result.error.toString())
         }
         const valid_json = result.data
 
-        let loaded_constrain = new RequireConstrain(valid_json.required)
-        loaded_constrain.id = valid_json.id
-        return loaded_constrain
+        let loaded_constraint = new RequireConstraint(valid_json.required)
+        loaded_constraint.id = valid_json.id
+        return loaded_constraint
     }
 }

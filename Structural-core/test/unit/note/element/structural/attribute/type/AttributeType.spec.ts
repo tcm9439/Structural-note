@@ -3,8 +3,8 @@ import { AttributeType } from "@/note/element/structural/attribute/type/Attribut
 import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
 import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
 import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/exception/AttributeException.js"
-import { ConstrainType } from "@/note/element/structural/attribute/constrain/Constrain.js"
-import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain.js"
+import { ConstraintType } from "@/note/element/structural/attribute/constraint/Constraint.js"
+import { RequireConstraint } from "@/note/element/structural/attribute/constraint/RequireConstraint.js"
 import { ModuleInit } from "@/index.js"
 
 class TestAttribute extends AttributeType<number> {
@@ -128,13 +128,13 @@ describe('AttributeType', () => {
         expect(clone).toBe(TestAttribute.instance)
     })
 
-    it("Constrain", () => {
+    it("Constraint", () => {
         let available_constraints = TestAttribute.instance.available_constraints
         expect(available_constraints).toHaveLength(1)
-        expect(available_constraints[0]).toBe(ConstrainType.REQUIRE)
+        expect(available_constraints[0]).toBe(ConstraintType.REQUIRE)
     })
 
-    it("AllowConstrain", () => {
-        expect(TestAttribute.instance.allowConstrain(new RequireConstrain())).toBeTruthy()
+    it("AllowConstraint", () => {
+        expect(TestAttribute.instance.allowConstraint(new RequireConstraint())).toBeTruthy()
     })
 })

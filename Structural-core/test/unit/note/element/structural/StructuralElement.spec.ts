@@ -6,9 +6,9 @@ import { StructuralElement } from "@/note/element/structural/StructuralElement.j
 import { StructureDefinition } from "@/note/element/structural/StructureDefinition.js"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
 import { ValidOperationResult } from "@/common/OperationResult.js"
-import { MinConstrain } from "@/note/element/structural/attribute/constrain/MinConstrain.js"
+import { MinConstraint } from "@/note/element/structural/attribute/constraint/MinConstraint.js"
 import { EditPath } from "@/note/util/EditPath.js"
-import { MaxConstrain } from "@/note/element/structural/attribute/constrain/MaxConstrain.js"
+import { MaxConstraint } from "@/note/element/structural/attribute/constraint/MaxConstraint.js"
 import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException.js"
 import { ModuleInit } from "@/index.js"
 
@@ -53,7 +53,7 @@ describe('StructuralElement', () => {
     })
 
     it("validate: valid", () => {
-        num_attr.addConstrain(new MinConstrain(10))
+        num_attr.addConstraint(new MinConstraint(10))
         const num_value = new AttributeValue(num_attr, 20)
         element.setValue(num_attr, num_value)
 
@@ -61,8 +61,8 @@ describe('StructuralElement', () => {
         expect(result).toBe(ValidOperationResult)
     })
 
-    it("validate: not passing the constrain", () => {
-        num_attr.addConstrain(new MinConstrain(100))
+    it("validate: not passing the constraint", () => {
+        num_attr.addConstraint(new MinConstraint(100))
         const num_value = new AttributeValue(num_attr, 1)
         element.setValue(num_attr, num_value)
 
@@ -71,9 +71,9 @@ describe('StructuralElement', () => {
         expect(result.invalid_message).toBe(`Invalid value for attribute 'num': Value < minimum`)
     })
 
-    it("validate: only passing some of the constrains", () => {
-        num_attr.addConstrain(new MinConstrain(100))
-        num_attr.addConstrain(new MaxConstrain(110))
+    it("validate: only passing some of the constraints", () => {
+        num_attr.addConstraint(new MinConstraint(100))
+        num_attr.addConstraint(new MaxConstraint(110))
         const num_value = new AttributeValue(num_attr, 200)
         element.setValue(num_attr, num_value)
         

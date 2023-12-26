@@ -20,7 +20,7 @@ let section2 = new StructuralSection("Section struct")
 
 let attr_definition = new AttributeDefinition("test string attr", StringAttribute.instance, "description 1")
 let attr_definition2 = new AttributeDefinition("test string attr2", StringAttribute.instance)
-attr_definition2.require_constrain.required = true
+attr_definition2.require_constraint.required = true
 let md_attr_definition = new AttributeDefinition("test markdown attr", MarkdownAttribute.instance)
 section2.definition.display_key.addKey(attr_definition)
 section2.definition.attributes.add(attr_definition)

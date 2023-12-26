@@ -7,7 +7,7 @@ import { StringAttribute } from "@/note/element/structural/attribute/type/String
 import { BooleanAttribute } from "@/note/element/structural/attribute/type/BooleanAttribute.js"
 import { IntegerAttribute, DecimalAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
 import { MarkdownAttribute } from "@/note/element/structural/attribute/type/MarkdownAttribute.js"
-import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain.js"
+import { RequireConstraint } from "@/note/element/structural/attribute/constraint/RequireConstraint.js"
 
 describe("AttributeValueMarkdownConverter", () => {
     beforeAll(async () => {
@@ -29,7 +29,7 @@ describe("AttributeValueMarkdownConverter", () => {
 
         // null value
         attr_def = new AttributeDefinition("test", new IntegerAttribute())
-        attr_def.addConstrain(new RequireConstrain(false))
+        attr_def.addConstraint(new RequireConstraint(false))
         value = new AttributeValue(attr_def)
         expect(AttributeValueMarkdownConverter.convert(attr_def, value)).toBe("")
 

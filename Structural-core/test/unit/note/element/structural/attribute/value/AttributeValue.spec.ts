@@ -5,7 +5,7 @@ import { StringAttribute } from "@/note/element/structural/attribute/type/String
 import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
 import { EditPath, EndOfEditPathError } from "@/note/util/EditPath.js"
 import { ValidOperationResult } from "@/common/OperationResult.js"
-import { RequireConstrain } from "@/note/element/structural/attribute/constrain/RequireConstrain.js"
+import { RequireConstraint } from "@/note/element/structural/attribute/constraint/RequireConstraint.js"
 import { ModuleInit, InvalidDataException } from "@/index.js"
 
 describe('AttributeValue', () => {
@@ -36,7 +36,7 @@ describe('AttributeValue', () => {
         attr_value.value = "Foo Bar"
         expect(attr_value.value).toBe("Foo Bar")
 
-        attr_value.definition.require_constrain.required = true
+        attr_value.definition.require_constraint.required = true
         expect(attr_value.validate_result.valid).toBeTruthy()
         attr_value.value = null
         expect(attr_value.validate_result.valid).toBeFalsy()
@@ -50,15 +50,15 @@ describe('AttributeValue', () => {
         expect(attr_value.value).toBe("Foo Bar")
         
         expect(attr_value.validate_result.valid).toBeTruthy()
-        attr_value.definition.require_constrain.required = true
+        attr_value.definition.require_constraint.required = true
         attr_value.value = null
         expect(attr_value.is_set).toBeFalsy()
         expect(attr_value.validate_result.valid).toBeFalsy()
     })
 
-    it("is_set: has require constrain = true", () => {
+    it("is_set: has require constraint = true", () => {
         // => set to attr default
-        attr_value.definition.require_constrain.required = true
+        attr_value.definition.require_constraint.required = true
 
         let attr_value_null = new AttributeValue(definition)
         expect(attr_value_null.is_set).toBeTruthy()
@@ -69,9 +69,9 @@ describe('AttributeValue', () => {
         expect(attr_value_set.value).toBe("Hello World")
     })
 
-    it("is_set: has require constrain = false", () => {
+    it("is_set: has require constraint = false", () => {
         // => not set
-        definition.addConstrain(new RequireConstrain(false))
+        definition.addConstraint(new RequireConstraint(false))
 
         let attr_value_null = new AttributeValue(definition)
         expect(attr_value_null.is_set).toBeFalsy()
@@ -119,7 +119,7 @@ describe('AttributeValue', () => {
     })
 
     it("loadFromJson with null value", () => {
-        definition.require_constrain.required = true
+        definition.require_constraint.required = true
         let json = { 
             id: "ABC1199", 
             definition_id: definition.id,
@@ -141,8 +141,8 @@ describe('AttributeValue', () => {
     })
 
     it("validate", () => {
-        // add a require constrain
-        definition.require_constrain.required = true
+        // add a require constraint
+        definition.require_constraint.required = true
         expect(attr_value.validate()).toEqual(ValidOperationResult)
         expect(attr_value.validate_result).toEqual(ValidOperationResult)
 

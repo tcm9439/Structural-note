@@ -1,7 +1,7 @@
 import { ID } from "@/common/CommonTypes.js"
 import { Cloneable } from "@/common/Cloneable.js"
 import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/exception/AttributeException.js"
-import { ConstrainType, Constrain } from "../constrain/Constrain.js"
+import { ConstraintType, Constraint } from "../constraint/Constraint.js"
 
 export enum AttributeTypeEnum {
     STRING = "STRING",
@@ -29,8 +29,8 @@ export abstract class AttributeType<T> implements Cloneable<AttributeType<T>> {
      * Map of AttrType => { Map of ModeID => Converter }
      */
     private _converters: Map<string, Map<ID, AttributeValueConverter<T, any>>> = new Map()
-    private _available_constraints: ConstrainType[] = [
-        ConstrainType.REQUIRE
+    private _available_constraints: ConstraintType[] = [
+        ConstraintType.REQUIRE
     ]
 
     constructor(type: string) {
@@ -64,19 +64,19 @@ export abstract class AttributeType<T> implements Cloneable<AttributeType<T>> {
         return `structural.attribute.type.${type}`
     }
 
-    addAvailableConstraint(constrain_type: ConstrainType): void {
-        this._available_constraints.push(constrain_type)
+    addAvailableConstraint(constraint_type: ConstraintType): void {
+        this._available_constraints.push(constraint_type)
     }
 
-    get available_constraints(): ConstrainType[] {
+    get available_constraints(): ConstraintType[] {
         return this._available_constraints
     }
 
-    allowConstrain(constrain: Constrain | ConstrainType): boolean {
-        if (constrain instanceof Constrain) {
-            return this.available_constraints.includes(constrain.getType())
+    allowConstraint(constraint: Constraint | ConstraintType): boolean {
+        if (constraint instanceof Constraint) {
+            return this.available_constraints.includes(constraint.getType())
         }
-        return this.available_constraints.includes(constrain)
+        return this.available_constraints.includes(constraint)
     }
 
     private get converters(): Map<string, Map<ID, AttributeValueConverter<T, any>>> {

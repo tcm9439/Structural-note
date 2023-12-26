@@ -1,13 +1,13 @@
-import { ConstrainType } from "../constrain/Constrain.js"
+import { ConstraintType } from "../constraint/Constraint.js"
 import { AttributeType, AttributeTypeEnum } from "./AttributeType.js"
 import { StringAttribute } from "./StringAttribute.js"
 
 export class NumberAttribute extends AttributeType<number> {
     constructor(type: string) {
         super(type) 
-        this.addAvailableConstraint(ConstrainType.MIN)
-        this.addAvailableConstraint(ConstrainType.MAX)
-        this.addAvailableConstraint(ConstrainType.UNIQUE)
+        this.addAvailableConstraint(ConstraintType.MIN)
+        this.addAvailableConstraint(ConstraintType.MAX)
+        this.addAvailableConstraint(ConstraintType.UNIQUE)
     }
 
     get default_value(): number {
