@@ -71,4 +71,21 @@ describe("OrderedList", () => {
         ordered_list.addAfter(7, 5)
         expect(ordered_list.order).toStrictEqual([1, 6, 2, 4, 3, 5, 7])
     })
+
+    it("getPosition", () => {
+        expect(ordered_list.getPosition(2)).toBe(1)
+        expect(ordered_list.getPosition(4)).toBe(-1)
+    })
+
+    it("addAtPosition", () => {
+        ordered_list.addAtPosition(1, 4)
+        expect(ordered_list.order).toStrictEqual([1, 4, 2, 3])
+        ordered_list.addAtPosition(0, 5)
+        expect(ordered_list.order).toStrictEqual([5, 1, 4, 2, 3])
+
+        let position = ordered_list.getPosition(2)
+        ordered_list.remove(2)
+        ordered_list.addAtPosition(position, 2)
+        expect(ordered_list.order).toStrictEqual([5, 1, 4, 2, 3])
+    })
 })

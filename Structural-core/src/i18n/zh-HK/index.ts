@@ -12,6 +12,9 @@ const zh_HK = {
             file_export_md: "匯出成 Markdown",
             file_export_txt: "匯出成純文字",
             setting_menu: "設定",
+            edit: "編輯",
+            edit_undo: "復原",
+            edit_redo: "重做",
         },
         file: {
             title: "檔案",

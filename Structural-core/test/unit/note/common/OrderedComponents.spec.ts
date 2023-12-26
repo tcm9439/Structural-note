@@ -3,6 +3,7 @@ import { OrderedList } from "@/common/OrderedList.js"
 import { OrderedComponents } from '@/note/util/OrderedComponents'
 import { Note } from "@/note/Note.js"
 import { UUID } from "@/common/CommonTypes.js"
+import { AddComponentsCommand, RemoveComponentsCommand } from "@/index.js"
 import _ from "lodash"
 
 function compareComponentsOrder(components: OrderedComponents<Note>, note_ids: Note[], expected_order_index: number[]): void {
@@ -152,5 +153,97 @@ describe('OrderedComponents', () => {
 
     it("get order", () => {
         expect(components.order).toBeInstanceOf(OrderedList)
+    })
+})
+
+describe("EditComponentListCommands", () => {
+    let components: OrderedComponents<Note>
+    let notes: Note[]
+
+    beforeEach(() => {
+        components = new OrderedComponents()
+        notes = []
+        let note: Note = new Note("Title 1")
+        components.add(note)
+        notes.push(note)
+
+        note = new Note("Title 2")
+        components.add(note)
+        notes.push(note)
+
+        note = new Note("Title 3")
+        components.add(note)
+        notes.push(note)
+    })
+
+    it("AddComponentsCommand", () => {
+        const note = new Note("Title 4")
+        notes.push(note)
+        const add_command = new AddComponentsCommand(note, components, () => {
+            components.add(note)
+        })
+        add_command.execute()
+        expect(components.length()).toBe(4)
+        expect(components.get(note.id)).toBe(note)
+        compareComponentsOrder(components, notes, [0, 1, 2, 3])
+        add_command.undo()
+        expect(components.length()).toBe(3)
+        expect(components.get(note.id)).toBeUndefined()
+        compareComponentsOrder(components, notes, [0, 1, 2])
+    })
+
+    it("AddComponentsCommand 2", () => {
+        const note = new Note("Title 4")
+        notes.push(note)
+        const add_command = new AddComponentsCommand(note, components, () => {
+            components.addAtPosition(1, note)
+        })
+        add_command.execute()
+        expect(components.length()).toBe(4)
+        expect(components.get(note.id)).toBe(note)
+        compareComponentsOrder(components, notes, [0, 3, 1, 2])
+        add_command.undo()
+        expect(components.length()).toBe(3)
+        expect(components.get(note.id)).toBeUndefined()
+        compareComponentsOrder(components, notes, [0, 1, 2])
+    })
+
+    it("RemoveComponentsCommand", () => {
+        const remove_command = new RemoveComponentsCommand(notes[1], components)
+        remove_command.execute()
+        expect(components.length()).toBe(2)
+        expect(components.get(notes[1].id)).toBeUndefined()
+        compareComponentsOrder(components, notes, [0, 2])
+        remove_command.undo()
+        expect(components.length()).toBe(3)
+        expect(components.get(notes[1].id)).toBe(notes[1])
+        compareComponentsOrder(components, notes, [0, 1, 2])
+    })
+
+    it("test gc", () => {
+        let components = new OrderedComponents()
+        let note: Note | null = new Note("Title 1")
+        let id = note.id
+        components.add(note)
+        const remove_command = new RemoveComponentsCommand(note, components)
+        note = null
+        remove_command.execute()
+        expect(components.length()).toBe(0)
+        remove_command.undo()
+        expect(components.length()).toBe(1)
+        expect(components.get(id)).not.toBeNull()
+    })
+
+    it("test capture", () => {
+        let components = new OrderedComponents()
+        let note: Note = new Note("Title 1")
+        const add_command = new AddComponentsCommand(note, components, () => {
+            components.addAtPosition(1, note)
+        })
+        add_command.execute()
+        note.title = "Title 2"
+        add_command.undo()
+        add_command.execute()
+        expect(components.get(note.id)?.title).toBe("Title 2")
     })
 })

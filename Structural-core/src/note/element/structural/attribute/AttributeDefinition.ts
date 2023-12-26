@@ -1,6 +1,7 @@
-import { AppState } from "@/view/state/AppState.js"
 import { UUID } from "@/common/CommonTypes.js"
 import { CloneUtil, Cloneable } from "@/common/Cloneable.js"
+import { TranslatableText } from "@/common/Translatable.js"
+import { LoggerManager } from "@/common/Logger.js"
 import { ComponentBase } from "@/note/util/ComponentBase.js"
 import { EditPath, EditPathNode } from "@/note/util/EditPath.js"
 import { OperationResult } from "@/common/OperationResult.js"
@@ -13,7 +14,6 @@ import { MaxConstraint } from "./constraint/MaxConstraint.js"
 import { MinConstraint } from "./constraint/MinConstraint.js"
 import { AttributeValue } from "./value/AttributeValue.js"
 import { getAllRelatedValuesFunc } from "@/note/section/StructuralSection.js"
-import { TranslatableText } from "@/common/Translatable.js"
 import { z } from "zod"
 
 export const AttributeDefinitionJson = z.object({
@@ -270,7 +270,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
                 if (new_attr_type.allowConstraint(constraint)) {
                     let error = new_attr_def.addConstraint(constraint)
                     if (error !== null) {
-                        AppState.logger.error(`Fail to add the constraint to the new attribute definition. ${error}`)
+                        LoggerManager.logger.error(`Fail to add the constraint to the new attribute definition. ${error}`)
                     }
                 }
             })

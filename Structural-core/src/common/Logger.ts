@@ -17,11 +17,10 @@ export class WebLogger extends Logger {
         super()
     }
 
-    static async initLogger(): Promise<WebLogger>{
+    static initLogger(): WebLogger{
         return new WebLogger()
     }
 
-    
     error(message: string, error_obj?: Error, options?: LogOptions){
         console.error(message, error_obj)
     }
@@ -90,4 +89,8 @@ export class TauriLogger extends Logger {
     async close(){
         await TauriLogger.detached_function()
     }
+}
+
+export class LoggerManager {
+    public static logger: Logger = WebLogger.initLogger()
 }

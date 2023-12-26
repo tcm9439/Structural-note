@@ -319,3 +319,17 @@ export class NoteExportHandler {
         }
     }
 }
+
+export class EditHistoryHandler {
+    static undo(){
+        const { $viewState } = useNuxtApp()
+        AppState.logger.debug("Undo")
+        $viewState.history.undo()
+    }
+
+    static redo(){
+        const { $viewState } = useNuxtApp()
+        AppState.logger.debug("Redo")
+        $viewState.history.redo()
+    }
+}

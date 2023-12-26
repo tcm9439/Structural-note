@@ -41,6 +41,13 @@ export class OrderedComponents<T extends ComponentBase> {
     }
 
     /**
+     * Return the position of the component in the list.
+     */
+    getPosition(id: UUID): number {
+        return this._order.getPosition(id)
+    }
+
+    /**
      * Add a component to the end of the list.
      * If the component is already in the list, raise error.
      */
@@ -51,6 +58,15 @@ export class OrderedComponents<T extends ComponentBase> {
         }
         this._components.set(id, component)
         this._order.add(id)
+    }
+
+    addAtPosition(position: number, component: T): void {
+        const id = component.id
+        if (this._components.has(id)) {
+            throw new Error(`Component ${id} already exists`)
+        }
+        this._components.set(id, component)
+        this._order.addAtPosition(position, id)
     }
 
     addBefore(component: T, before?: UUID): void {

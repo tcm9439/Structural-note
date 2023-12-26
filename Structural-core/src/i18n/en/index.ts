@@ -12,6 +12,9 @@ const en = {
             file_export_md: "Export to Markdown",
             file_export_txt: "Export to Text (TODO)",
             setting_menu: "Setting",
+            edit: "Edit",
+            edit_undo: "Undo",
+            edit_redo: "Redo",
         },
         file: {
             title: "File",

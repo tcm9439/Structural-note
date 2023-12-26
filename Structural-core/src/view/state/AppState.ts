@@ -1,5 +1,5 @@
 import { AppSetting } from "./AppSetting.js"
-import { Logger, TauriLogger, WebLogger } from "@/common/Logger.js"
+import { Logger, TauriLogger, WebLogger, LoggerManager } from "@/common/Logger.js"
 import { TranslationManager } from "@/common/TranslationManager.js"
 import { Store } from "tauri-plugin-store-api"
 
@@ -44,9 +44,10 @@ export class AppState {
         if (AppState.environment === AppRuntimeEnvironment.TARUI){
             AppState.logger = await TauriLogger.initLogger()
         } else {
-            AppState.logger = await WebLogger.initLogger()
+            AppState.logger = WebLogger.initLogger()
         }
         AppState.logger.debug("Logger initialized")
+        LoggerManager.logger = AppState.logger
     }
 
     public static async initAppSetting(){

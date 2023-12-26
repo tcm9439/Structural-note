@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { NoteSection, EditPath, Note, InjectConstant, type ComponentVForElement, TextElement, ElementType, EventConstant, MarkdownElement } from "structural-core"
+import { NoteSection, EditPath, Note, NoteElement, InjectConstant, type ComponentVForElement, TextElement, ElementType, EventConstant, MarkdownElement, RemoveComponentsCommand, AddComponentsCommand } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 import { elementListGetter, availableElementComponentGetter, elementComponentMapper, type AvailableElementComponent } from "@/composables/active-data/Element"
 import { Icon } from "view-ui-plus"
 import { type AvailableSection } from "@/composables/active-data/Note"
 import { tran } from "~/composables/app/translate"
-const { $emitter } = useNuxtApp()
+const { $emitter, $viewState } = useNuxtApp()
 
 const props = defineProps<{
     edit_path: EditPath,
@@ -36,7 +36,7 @@ watch(() => props.render_available_element, () => {
 function addElement(element_type: string, last_element_id?: string){
     // if element_type is available in NoteSection, add it directly
     // else, emit event to the extended section component
-    let new_element
+    let new_element: NoteElement
     switch(element_type as ElementType){
         case ElementType.TEXT:
             new_element = new TextElement()
@@ -48,11 +48,15 @@ function addElement(element_type: string, last_element_id?: string){
             emit("addElement", element_type as ElementType, last_element_id)
             return
     }
-    section.elements.addAfter(new_element, last_element_id)
+    // section.elements.addAfter(new_element, last_element_id)
+    $viewState.history.push(new AddComponentsCommand(new_element, section.elements, () => {
+        section.elements.addAfter(new_element, last_element_id)
+    }))
 }
 
 function removeElement(element_id: string){
-    section.elements.remove(element_id)
+    // section.elements.remove(element_id)
+    $viewState.history.push(RemoveComponentsCommand.newById(element_id, section.elements))
 }
 
 function moveUpElement(element_id: string){

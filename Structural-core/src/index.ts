@@ -8,6 +8,9 @@ export * from "./common/Logger.js"
 export * from "./common/TranslationManager.js"
 export * from "./common/Translatable.js"
 
+export * from "./command/ICommand.js"
+export * from "./command/EditComponentList.js"
+
 export * from "./exception/AppException.js"
 export * from "./exception/ConversionException.js"
 export * from "./exception/AttributeException.js"

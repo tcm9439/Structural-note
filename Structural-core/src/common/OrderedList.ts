@@ -23,6 +23,14 @@ export class OrderedList<T>{
         this._order = []
     }
 
+    getPosition(item: T): number {
+        return this._order.indexOf(item)
+    }
+
+    addAtPosition(position: number, item: T): void {
+        this._order.splice(position, 0, item)
+    }
+
     /**
      * Add an item before another item.
      * If the before item is not in the list, add the item to the end of the list.

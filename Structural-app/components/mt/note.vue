@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, Note, InjectConstant, type ComponentVForElement, EventConstant, SectionTypeMapper, SectionType } from "structural-core"
+import { EditPath, Note, InjectConstant, type ComponentVForElement, EventConstant, SectionTypeMapper, SectionType, RemoveComponentsCommand, AddComponentsCommand } from "structural-core"
 import { elementListGetter } from "@/composables/active-data/Element"
 import { sectionComponentMapper } from "@/composables/active-data/Section"
 import { getAvailableSection } from "@/composables/active-data/Note"
@@ -31,11 +31,15 @@ function addSection(section_type: string, last_section_id?: string){
     let section_class = SectionTypeMapper.get(section_type as SectionType)
     if (section_class != null){
         let new_section = new section_class()
-        props.note.sections.addAfter(new_section, last_section_id)
+        // props.note.sections.addAfter(new_section, last_section_id)
+        $viewState.history.push(AddComponentsCommand.newById(new_section, props.note.sections, () => {
+            props.note.sections.addAfter(new_section, last_section_id)
+        }))
     }
 }
 function removeSection(section_id: string){
-    props.note.sections.remove(section_id)
+    // props.note.sections.remove(section_id)
+    $viewState.history.push(RemoveComponentsCommand.newById(section_id, props.note.sections))
     rerender_section.value += 1
 }
 

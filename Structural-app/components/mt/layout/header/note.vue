@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { AppState, EventConstant, AppPage, AppPageUtil } from "structural-core"
 import { Icon } from "view-ui-plus"
-import { NoteFileHandler, NoteExportHandler } from "@/composables/file/NoteFileHandler"
+import { NoteFileHandler, NoteExportHandler, EditHistoryHandler } from "@/composables/file/NoteFileHandler"
 import { appWindow } from "@tauri-apps/api/window"
 import { tran } from "@/composables/app/translate"
 import { exceptionHandler } from "@/composables/app/exception"
@@ -72,6 +72,12 @@ async function menuSelectHandler(menu_item: string){
                     await saveNoteBeforeUpdateSetting()
                 }
                 break
+            case "undo":
+                EditHistoryHandler.undo()
+                break
+            case "redo":
+                EditHistoryHandler.redo()
+                break
         }
     } catch (error) {
         exceptionHandler(error)
@@ -107,7 +113,7 @@ onBeforeUnmount(() => {
                 >
                     <Submenu name="file-operation">
                         <template #title>
-                            <Icon type="md-folder" />
+                            <!-- <Icon type="md-folder" /> -->
                             {{ tran("structural.header.file_menu") }}
                         </template>
                         <MenuItem name="open-file">
@@ -131,8 +137,20 @@ onBeforeUnmount(() => {
                             </MenuItem>
                         </MenuGroup>
                     </Submenu>
+                    <Submenu name="edit-operation">
+                        <template #title>
+                            <!-- <Icon type="md-create" /> -->
+                            {{ tran("structural.header.edit") }}
+                        </template>
+                        <MenuItem name="undo">
+                            {{ tran("structural.header.edit_undo") }}
+                        </MenuItem>
+                        <MenuItem name="redo">
+                            {{ tran("structural.header.edit_redo") }}
+                        </MenuItem>
+                    </Submenu>
                     <MenuItem name="setting">
-                        <Icon type="md-settings" />
+                        <!-- <Icon type="md-settings" /> -->
                         {{ tran("structural.header.setting_menu") }}
                     </MenuItem>
                 </Menu>

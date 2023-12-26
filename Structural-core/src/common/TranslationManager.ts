@@ -2,7 +2,7 @@ import type { Locales } from "@/i18n/i18n-types.js"
 import L from '@/i18n/i18n-node.js'
 import _ from "lodash"
 import { locales } from "@/i18n/i18n-util.js"
-import { AppState } from "@/view/state/AppState.js"
+import { LoggerManager } from "./Logger.js"
 
 export type TranslationParameter = Array<string | number> | object | string | number;
 
@@ -27,7 +27,7 @@ export class TranslationManager implements ITranslationManager{
         if (locales.includes(language_code as Locales)){
             this._default_language_code = language_code as Locales
         } else {
-            AppState.logger.warn(`Language code ${language_code} is not supported.`)
+            LoggerManager.logger.warn(`Language code ${language_code} is not supported.`)
         }
     }
 

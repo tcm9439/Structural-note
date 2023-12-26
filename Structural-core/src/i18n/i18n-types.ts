@@ -52,6 +52,18 @@ type RootTranslation = {
 			 * S​e​t​t​i​n​g
 			 */
 			setting_menu: string
+			/**
+			 * E​d​i​t
+			 */
+			edit: string
+			/**
+			 * U​n​d​o
+			 */
+			edit_undo: string
+			/**
+			 * R​e​d​o
+			 */
+			edit_redo: string
 		}
 		file: {
 			/**
@@ -624,6 +636,18 @@ export type TranslationFunctions = {
 			 * Setting
 			 */
 			setting_menu: () => LocalizedString
+			/**
+			 * Edit
+			 */
+			edit: () => LocalizedString
+			/**
+			 * Undo
+			 */
+			edit_undo: () => LocalizedString
+			/**
+			 * Redo
+			 */
+			edit_redo: () => LocalizedString
 		}
 		file: {
 			/**

@@ -11,3 +11,5 @@ export type NullableBoolean = boolean | null
 export type NullableInteger = Integer | null
 export type NullableFloat = Float | null
 export type NullableTimestamp = Timestamp | null
+
+export type Consumer = () => void

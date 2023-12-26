@@ -1,4 +1,4 @@
-import { AppState } from "@/view/state/AppState.js"
+import { LoggerManager } from "@/common/Logger"
 
 export class AppException extends Error {
     public title_key: string = "error.general.title"
@@ -7,7 +7,7 @@ export class AppException extends Error {
     constructor(log_message: string, name?: string, title_key?: string, message_key?: string) {
         super(log_message)
         this.name = name || "AppException"
-        AppState.logger.warn(`${this.name}: ${log_message}`)
+        LoggerManager.logger.warn(`${this.name}: ${log_message}`)
         this.title_key = title_key || this.title_key
         this.message_key = message_key || this.message_key
     }
