@@ -77,10 +77,12 @@ describe('Note', () => {
 
 describe("Save & load Note", () => {
     let note: Note
+    let note_section_1: NoteSection
     beforeAll(() => {
         // create a complex note
         note = new Note("Save and Load Test")
         let section1 = new NoteSection("Section 1")
+        note_section_1 = section1
         note.sections.add(section1)
         let section2 = new StructuralSection("Section 2 - Structural")
         note.sections.add(section2)
@@ -112,6 +114,19 @@ describe("Save & load Note", () => {
         let json = note.saveAsJson()
         let loaded_note = Note.loadFromJson(note.title, json)
         assertEqualExceptLambda(loaded_note, note)
+    })
+
+    it("equals & clone", () => {
+        let note2 = note.clone()
+        expect(note.equals(note2)).toBeTruthy()
+
+        note2.title = "New title 2!"
+        expect(note.equals(note2)).toBeFalsy()
+
+        let note3 = note.clone()
+        let section_1_in_note_3 = note3.sections.get(note_section_1.id) as NoteSection
+        section_1_in_note_3.title = "[New Section title 3]"
+        expect(note.equals(note3)).toBeFalsy()
     })
 })
 

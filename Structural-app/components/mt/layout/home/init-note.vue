@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { appWindow } from "@tauri-apps/api/window"
-import { NoteFileHandler } from "@/composables/file/NoteFileHandler"
+import { NoteFileHandler } from "@/composables/handler/NoteFileHandler"
 import { tran } from "@/composables/app/translate"
 import { AppState } from "structural-core"
 import { exceptionHandler } from "@/composables/app/exception"
@@ -85,4 +85,4 @@ function createNote(){
             </div>
         </template>
     </Modal>
-</template>
+</template>~/composables/handler/NoteFileHandler

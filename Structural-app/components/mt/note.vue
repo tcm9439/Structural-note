@@ -17,7 +17,7 @@ provide(InjectConstant.EDITING_NOTE, props.note)
 const edit_path = new EditPath()
 
 const { $viewState } = useNuxtApp()
-$viewState.editing_note = props.note
+$viewState.setOpenNote(props.note)
 
 const rerender_section = ref(0)
 const sections = ref(null) as Ref<ComponentVForElement[] | null>
@@ -32,7 +32,7 @@ function addSection(section_type: string, last_section_id?: string){
     if (section_class != null){
         let new_section = new section_class()
         // props.note.sections.addAfter(new_section, last_section_id)
-        $viewState.history.push(AddComponentsCommand.newById(new_section, props.note.sections, () => {
+        $viewState.history.push(new AddComponentsCommand(new_section, props.note.sections, () => {
             props.note.sections.addAfter(new_section, last_section_id)
         }))
     }

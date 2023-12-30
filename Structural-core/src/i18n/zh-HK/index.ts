@@ -117,7 +117,7 @@ const zh_HK = {
             title: "儲存{target}",
             content: "是否儲存變動？",
             save: "儲存",
-            cancel: "不儲存",
+            do_not_save: "不儲存",
         },
         create: "新增",
         cancel: "取消",

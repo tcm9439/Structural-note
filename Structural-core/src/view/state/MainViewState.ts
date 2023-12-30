@@ -32,6 +32,7 @@ export class AppPageUtil {
 const COMMAND_HISTORY_SIZE = 5
 
 export class MainViewState {
+    private _last_saved_note: Note | null = null
     private _editing_note: Note | null = null
     private _save_path: string | null = null
     private _last_page: AppPage = AppPage.HOME
@@ -41,11 +42,34 @@ export class MainViewState {
         return this._editing_note?.title ?? AppState.translationManager.translate("structural.file.untitled")
     }
 
-    set editing_note(note: Note | null) {
+    setOpenNote(note: Note){
+        LoggerManager.logger.trace("Open note.")
         this._editing_note = note
-        // reset command history
-        LoggerManager.logger.debug("Reset command history.")
+        this._last_saved_note = note.clone()
+        this._save_path = null
+        LoggerManager.logger.trace("Reset command history.")
         this._command_history = new CommandHistory(COMMAND_HISTORY_SIZE)
+    }
+
+    setSaveNote(){
+        this._last_saved_note = this._editing_note?.clone() ?? null
+    }
+
+    closeNote(){
+        LoggerManager.logger.trace("Close note.")
+        this._last_saved_note = null
+        this._editing_note = null
+        this._save_path = null
+        LoggerManager.logger.trace("Reset command history.")
+        this._command_history = new CommandHistory(COMMAND_HISTORY_SIZE)
+    }
+
+    isNoteChange(): boolean {
+        if (this._editing_note && this._last_saved_note){
+            return this._editing_note.equals(this._last_saved_note)
+        }
+        // no open note
+        return false
     }
 
     get editing_note(): Note | null {
@@ -56,7 +80,7 @@ export class MainViewState {
         return this._save_path
     }
 
-    set save_path(path: string | null) {
+    set save_path(path: string) {
         this._save_path = path
     }
 

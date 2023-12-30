@@ -117,7 +117,7 @@ const en = {
             title: "Save {target:string}",
             content: "Do you want to save the changes?",
             save: "Save",
-            cancel: "Don't Save",
+            do_not_save: "Don't Save",
         },
         create: "Create",
         cancel: "Cancel",

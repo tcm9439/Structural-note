@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import { Note, EventConstant, AppState, AppPage } from "structural-core"
-import { NoteFileHandler } from "@/composables/file/NoteFileHandler"
+import { NoteFileHandler } from "@/composables/handler/NoteFileHandler"
 const { $emitter, $viewState, $Modal } = useNuxtApp()
 import { appWindow } from "@tauri-apps/api/window"
 import { invoke } from "@tauri-apps/api/tauri"

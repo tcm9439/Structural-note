@@ -1,20 +1,32 @@
 ## KNOWN BUG
+[ ] Close note > don’t save > cancel on note init window > save note window not disappear 
+[ ] Current type change - name not update bug
+[ ] Current type change - default value editor not update bug
+[ ] Close window prompt - close window title
+[ ] Default value after change value type
+[ ] move up / down section -> every thing are gone
+[ ] file already open error message
 
 ## Pending Features
 [ ] check what if i write some invalid value & save
 [ ] edit markdown when export to md 
 [ ] create note from template (also as tutorial)
+[ ] Decimal to int
+[ ] New file header menu item
+[ ] Export to csv
 [ ] attr constrains
     [ ] regex
     [ ] min max inclusive/exclusive
 [ ] value.vue
     [ ] enum (dropdown list)
+    [ ] Long text short text
     [ ] date
     [ ] time
     [ ] date-time
 [ ] struct element key attr as panel name & breadcrumb
 [ ] breadcrumb & Anchor
 [ ] help page
+[ ] Right click menu
 
 ## Features that I want to have but it more difficult 
 [ ] search function

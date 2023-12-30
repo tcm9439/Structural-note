@@ -72,7 +72,7 @@ export class NoteFileHandler {
 
         // check if the selected open path is a String[]
         if (Array.isArray(selected_files)){
-            AppState.logger.warn("The selected open path is an array, which is not expected. Use the first file.")
+            AppState.logger.warn("The selected open path is an array. Use the first file.")
             if (selected_files.length === 0){
                 return null
             }
@@ -96,6 +96,12 @@ export class NoteFileHandler {
                 return
             }
 
+            if (!$viewState.isNoteChange() && !save_as_mode){
+                // no change to the note, not need to save
+                return
+            }
+
+            // get the save path
             let this_save_path = $viewState.save_path
             if (this_save_path === null || save_as_mode){
                 // there is no save path set or this is a save-as operation
@@ -103,19 +109,21 @@ export class NoteFileHandler {
                 const default_note_filename = $viewState.editing_note.title + "." + struct_note_file_extension
                 this_save_path = await NoteFileHandler.askSavePath(default_note_filename)
             }
+
             if (this_save_path === null){
                 return Promise.reject("No path is chosen to save.")
-            } else {
-                await NoteFileHandler.saveToFile($viewState.editing_note, this_save_path)
             }
+            
+            await NoteFileHandler.saveToFile($viewState.editing_note, this_save_path)
     
+            // if this is not save-as operation & update the save path
             if (!save_as_mode){
                 $viewState.save_path = this_save_path
             }
             $Message.info(tran("structural.file.saved"))
             AppState.logger.debug("File saved successfully.")
         } catch (err) {
-            AppState.logger.error("Error when trying to save Note.", err);
+            AppState.logger.error("Error when trying to save Note.", err)
         }
     }
 
@@ -130,12 +138,12 @@ export class NoteFileHandler {
             let new_note = new Note(title)
             console.log("Created note with title", title)
             console.log("viewState", $viewState)
-            $viewState.editing_note = new_note
+            $viewState.setOpenNote(new_note)
 
             appWindow.setTitle(new_note.title)
             $emitter.emit(EventConstant.NOTE_OPENED)
         } catch (err) {
-            console.error(err);
+            AppState.logger.error("Error when trying to create Note.", err)
         }
     }
 
@@ -154,8 +162,7 @@ export class NoteFileHandler {
         // display a dialog to ask for save
         let close = () => {
             // throw away the note instance
-            $viewState.editing_note = null
-            $viewState.save_path = null
+            $viewState.closeNote()
             const window_id = appWindow.label
             invoke("remove_opened_file", { windowId: window_id })
             $emitter.emit(EventConstant.NOTE_CLOSED)
@@ -193,7 +200,7 @@ export class NoteFileHandler {
                                     close()
                                 }
                             }, { 
-                                default: () => h('span', tran("common.save_confirm_window.cancel"))
+                                default: () => h('span', tran("common.save_confirm_window.do_not_save"))
                             })
                         ])
                     ])
@@ -230,7 +237,7 @@ export class NoteFileHandler {
      * If this window already has a note opened, open it in another window.
      */
     static async openNote(this_window_id: string, open_in_this_window: boolean, filepath?: string | null, init_mode: boolean = false){
-        const { $viewState, $emitter } = useNuxtApp()
+        const { $viewState, $emitter, $Message } = useNuxtApp()
 
         try {
             // get the filepath from argument or dialog
@@ -248,7 +255,9 @@ export class NoteFileHandler {
                 })
                 selected_open_path = this.getPathFromSelectedFiles(selected_open_path)
                 if (selected_open_path === null){
-                    return Promise.reject("Invalid path.")
+                    // cancel operation
+                    $Message.info(tran("common.cancel"))
+                    return
                 }
             }
 
@@ -263,8 +272,7 @@ export class NoteFileHandler {
             let window_id = this_window_id
             if (open_in_this_window){
                 // selected_open_path === String
-                $viewState.editing_note = await NoteFileHandler.loadFile(selected_open_path)
-                AppState.logger.trace("note:", $viewState.editing_note)
+                $viewState.setOpenNote(await NoteFileHandler.loadFile(selected_open_path))
                 // set default save path as the open path
                 $viewState.save_path = selected_open_path
                 // emit the open note event

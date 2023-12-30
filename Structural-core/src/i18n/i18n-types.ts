@@ -401,7 +401,7 @@ type RootTranslation = {
 			/**
 			 * D​o​n​'​t​ ​S​a​v​e
 			 */
-			cancel: string
+			do_not_save: string
 		}
 		/**
 		 * C​r​e​a​t​e
@@ -975,7 +975,7 @@ export type TranslationFunctions = {
 			/**
 			 * Don't Save
 			 */
-			cancel: () => LocalizedString
+			do_not_save: () => LocalizedString
 		}
 		/**
 		 * Create

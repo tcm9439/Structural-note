@@ -2,8 +2,6 @@ import { AppSetting } from "./AppSetting.js"
 import { Logger, TauriLogger, WebLogger, LoggerManager } from "@/common/Logger.js"
 import { TranslationManager } from "@/common/TranslationManager.js"
 import { Store } from "tauri-plugin-store-api"
-import { register, isRegistered } from '@tauri-apps/api/globalShortcut'
-import { Consumer } from "@/common/CommonTypes.js"
 
 export enum AppRuntimeEnvironment {
     TARUI = "tauri",
@@ -89,29 +87,5 @@ export class AppState {
         AppState.logger.debug("Initializing translationManager...")
         AppState.translationManager = new TranslationManager(AppState.appSetting.language)
         AppState.logger.debug("translationManager initialized")
-    }
-
-    static tryRegisterKeybinding(key: string, callback?: Consumer){
-        if (callback){
-            isRegistered('CommandOrControl+P').then((is_registered) => {
-                if (!is_registered){
-                    register(key, callback)
-                }
-            })
-        }
-    }
-
-    public static initKeybinding(
-        save_callback?: Consumer,
-        undo_callback?: Consumer,
-        redo_callback?: Consumer,
-    ){
-        AppState.logger.debug("Initializing keybinding...")
-        if (AppState.environment === AppRuntimeEnvironment.TARUI){
-            AppState.tryRegisterKeybinding('CommandOrControl+S', save_callback)
-            AppState.tryRegisterKeybinding('CommandOrControl+Z', undo_callback)
-            AppState.tryRegisterKeybinding('CommandOrControl+shift+Z', redo_callback)
-        }
-        AppState.logger.debug("keybinding initialized")
     }
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { AppState, EventConstant, AppPage, AppPageUtil } from "structural-core"
-import { Icon } from "view-ui-plus"
-import { NoteFileHandler, NoteExportHandler, EditHistoryHandler } from "@/composables/file/NoteFileHandler"
+// import { Icon } from "view-ui-plus"
+import { NoteFileHandler, NoteExportHandler, EditHistoryHandler } from "@/composables/handler/NoteFileHandler"
 import { appWindow } from "@tauri-apps/api/window"
 import { tran } from "@/composables/app/translate"
 import { exceptionHandler } from "@/composables/app/exception"
@@ -157,7 +157,6 @@ onBeforeUnmount(() => {
             </Col>
         </Row>
     </mt-layout-header-base>
-    <!-- <div class="mt-layout-toolbar-padding"></div> -->
 </template>
 
 <style scoped>
@@ -184,4 +183,4 @@ onBeforeUnmount(() => {
     line-height: 30px;
     width: 100%;
 }
-</style>
+</style>~/composables/handler/NoteFileHandler

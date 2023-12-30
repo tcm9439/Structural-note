@@ -17,6 +17,12 @@ export class EventConstant {
     public static readonly APP_ERROR = "APP_ERROR_EVENT"
 }
 
+export class ShortcutKeyPressEvent {
+    public static readonly SAVE = "SAVE_SHORTCUT_PRESS_EVENT"
+    public static readonly UNDO = "UNDO_SHORTCUT_PRESS_EVENT"
+    public static readonly REDO = "REDO_SHORTCUT_PRESS_EVENT"
+}
+
 export class InjectConstant {
     public static readonly EDITING_NOTE = "EDITING_NOTE"
 }

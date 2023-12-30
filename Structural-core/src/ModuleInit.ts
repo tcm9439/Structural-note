@@ -1,17 +1,15 @@
 import { TranslatableText } from "@/common/Translatable"
 import { AttributeTypeInitializer } from "@/note/element/structural/attribute/type/AttributeTypeInitializer.js"
-import { AppState, NuxtRuntimeConfig } from "@/view/state/AppState.js"
+import { AppState, NuxtRuntimeConfig, AppRuntimeEnvironment } from "@/view/state/AppState.js"
 import { Consumer } from "@/common/CommonTypes.js"
+
+import { register, isRegistered, unregister } from '@tauri-apps/api/globalShortcut'
 
 /**
  * Initialize the module (structural-core).
  */
 export class ModuleInit {
-    static async init(
-            runtimeConfig?: NuxtRuntimeConfig,
-            save_callback?: Consumer,
-            undo_callback?: Consumer,
-            redo_callback?: Consumer,) {
+    static async init(runtimeConfig?: NuxtRuntimeConfig, shortcut_list?: {key: string, callback: Consumer}[]) {
         AppState.initEnvironment(runtimeConfig)
         await AppState.initLogger()
         await AppState.initAppSetting()
@@ -20,8 +18,29 @@ export class ModuleInit {
         // init attribute type
         AttributeTypeInitializer.initialize()
         AppState.initTranslationManager()
+        if (shortcut_list){ ModuleInit.initKeybinding(shortcut_list) }
         TranslatableText.translationManager = AppState.translationManager
-        AppState.initKeybinding(save_callback, undo_callback, redo_callback)
+    }
+
+    private static async tryRegisterKeybinding(key: string, callback?: Consumer){
+        if (callback){
+            // Some hotkey may already been registered by the web view 
+            const is_registered = await isRegistered(key)
+            if (is_registered){
+                await unregister(key)
+            }
+            register(key, callback)
+        }
+    }
+
+    private static initKeybinding(shortcut_list: {key: string, callback: Consumer}[]){
+        AppState.logger.debug("Initializing keybinding...")
+        if (AppState.environment === AppRuntimeEnvironment.TARUI){
+            shortcut_list.forEach(shortcut => {
+                ModuleInit.tryRegisterKeybinding(shortcut.key, shortcut.callback)
+            })
+        }
+        AppState.logger.debug("keybinding initialized")
     }
 
     static async close() {

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const { $emitter } = useNuxtApp()
 import { AppState, EventConstant } from "structural-core"
+import { ShortcutHandler } from "~/composables/handler/ShortcutHandler"
 
 const reload_key = ref(0)
 function reloadPage(){
@@ -8,8 +9,12 @@ function reloadPage(){
     reload_key.value++
 }
 $emitter.on(EventConstant.SETTING_UPDATED, reloadPage)
+const unlisten_functions = await ShortcutHandler.registerAllHandler()
 
 onBeforeUnmount(() => {
+    unlisten_functions.forEach((unlisten_function) => {
+        unlisten_function()
+    })
     $emitter.off(EventConstant.SETTING_UPDATED, reloadPage)
 })
 </script>
