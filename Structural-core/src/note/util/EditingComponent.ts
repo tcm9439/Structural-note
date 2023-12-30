@@ -16,6 +16,10 @@ export class EditingComponent<T extends ICloneable> {
         this._rollback_callback = rollback_callback || null
     }
 
+    set editing(component: T) {
+        this._editing_component = component
+    }
+
     get editing(): T {
         return this._editing_component
     }

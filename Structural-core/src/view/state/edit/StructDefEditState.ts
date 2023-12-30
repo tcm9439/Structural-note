@@ -322,6 +322,7 @@ export class StructDefEditEvent {
 
         // set the new attr def in the struct_def
         state_context.editing_struct_def.editing.attributes.override(new_attr_def)
+        state_context.editing_attr_def.editing = new_attr_def
     }
 }
 

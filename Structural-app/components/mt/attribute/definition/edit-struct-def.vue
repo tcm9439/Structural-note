@@ -105,10 +105,11 @@ function cancelEditStruct() {
 }
 
 const render_attr_def = ref(0)
-function attrTypeUpdate(attr_def: AttributeDefinition<any> | null){
-    if (attr_def !== null){
+function attrTypeUpdate(new_attr_def: AttributeDefinition<any> | null){
+    if (new_attr_def !== null){
         // change the ori attr type
-        StructDefEditEvent.attrTypeUpdate(edit_context.value, attr_def)
+        StructDefEditEvent.attrTypeUpdate(edit_context.value, new_attr_def)
+        attr_def.value = edit_context.value.editing_attr_def.editing
     }
     // else a init attr type is set
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, AttributeDefinition, AttrTypeHelper, AttributeType, ConstraintTypeToClassMap, ValidOperationResult } from "structural-core"
+import { EditPath, AttributeDefinition, AttrTypeHelper, AttributeType, ConstraintTypeToClassMap, ValidOperationResult, AppState } from "structural-core"
 import { getAttrConstraintEditComponents, type AttrConstraintEditComponent, getGroupedAttrConstraint } from "@/composables/active-data/Constraint"
 import { tran } from "~/composables/app/translate"
 
@@ -14,8 +14,6 @@ const emit = defineEmits<{
 
 // # view
 const active_tab = ref("basic")
-watch(active_tab, () => {
-})
 
 // # base
 let attr_def = props.attr_def
@@ -24,28 +22,27 @@ let attr_def = props.attr_def
 const reload_done = ref(0)
 watch(() => props.render, () => {
     attr_types_that_can_be_set.value = getAllTypes()
-    current_attr_type_name.value = attr_def.attribute_type?.type || ""
-    // default_value.value = attr_def.default_value_for_attr
+    attr_def = props.attr_def
     reload_done.value += 1
 })
 
 // # attr type
-const init_attr_type_mode = ref(attr_def.attribute_type === null? true : false)
 const constraint_changed_count = ref(0)
-const current_attr_type_name: Ref<string> = ref(attr_def.attribute_type?.type || "")
+const current_attr_type = computed(() => props.attr_def.attribute_type) // AttributeType<any> | null
+const init_attr_type_mode = computed(() => current_attr_type.value === null)
 const attr_type_can_be_changed = ref(true)
 const attr_types_that_can_be_set = shallowRef(getAllTypes())
 
 // for determining if the attr has type => show advance option tabs
 const attr_has_type = computed(() => {
-    return current_attr_type_name.value !== ""
+    return current_attr_type.value !== null
 })
 
 // Get all the attribute types that this attribute definition can be changed to.
 function getAllTypes(){
     if (!init_attr_type_mode.value){
         // existing attr, type can only be changed to convertible types
-        let ori_attr_type = AttributeType.getAttrType(current_attr_type_name.value)
+        let ori_attr_type = AttributeType.getAttrType(current_attr_type.value?.type ?? "")
         if (ori_attr_type !== undefined){ 
             let types = AttrTypeHelper.getGroupedConvertibleTypes(ori_attr_type, 2, null)
             if (types.length === 0){
@@ -61,7 +58,8 @@ function getAllTypes(){
 
 // when user select a type, update the attr_def & push a update type operation in the queue
 function selectedType(attr_type: AttributeType<any>){
-    current_attr_type_name.value = attr_type.type
+    // current_attr_type.value = attr_type
+    AppState.logger.debug(`User select attr type ${attr_type.type}`)
     if (attr_def.attribute_type !== null){
         // has old type
         let new_attr_def = AttributeDefinition.convertToType(attr_def, attr_type)
@@ -69,7 +67,6 @@ function selectedType(attr_type: AttributeType<any>){
     } else {
         // init attr type
         attr_def.attribute_type = attr_type
-        init_attr_type_mode.value = false
         emit('attrTypeUpdate', null)
     }
     constraint_changed_count.value += 1
@@ -155,7 +152,7 @@ const default_value = computed({
                     </Col>
                     <Col flex="2">
                         <mt-attribute-definition-attr-type-choice 
-                        :attr="attr_def.attribute_type"
+                        :attr="current_attr_type"
                         :readonly_mode="true"
                         />
                     </Col>
@@ -186,7 +183,6 @@ const default_value = computed({
         <!-- Tab that only show after the type is set  -->
         <template v-if="attr_has_type">
             <TabPane :label="tran('structural.attribute.constraint.constraint')" name="constraint">
-                {{ attr_def.constraints }}
                 <Form inline>
                     <!-- Default value editor -->
                     <FormItem prop="default_value_checkbox">
@@ -198,7 +194,7 @@ const default_value = computed({
                         v-show="has_default_value"
                         :error="default_value_validate_result.invalid_message" >
                         <mt-attribute-value-editor 
-                            :type="current_attr_type_name" 
+                            :type="current_attr_type?.type ?? ''" 
                             v-model:value="default_value" />
                     </FormItem>
 
