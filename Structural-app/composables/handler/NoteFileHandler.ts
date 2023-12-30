@@ -136,8 +136,8 @@ export class NoteFileHandler {
 
             // create a new note
             let new_note = new Note(title)
-            console.log("Created note with title", title)
-            console.log("viewState", $viewState)
+            AppState.logger.log("Created note with title", title)
+            AppState.logger.log("viewState", $viewState)
             $viewState.setOpenNote(new_note)
 
             appWindow.setTitle(new_note.title)
@@ -155,7 +155,7 @@ export class NoteFileHandler {
             close_cancel_callback?: () => void){
         const { $viewState, $emitter, $Modal } = useNuxtApp()
         if ($viewState.editing_note === null){
-            console.warn("No note is opened to close.")
+            AppState.logger.warn("No note is opened to close.")
             return
         }
 
@@ -320,14 +320,14 @@ export class NoteExportHandler {
             const { $viewState, $emitter } = useNuxtApp();
 
             if ($viewState.editing_note === null){
-                console.warn("No note is opened to save.")
+                AppState.logger.warn("No note is opened to save.")
                 return
             }
 
             const selected_export_path = await this.askForSavePath("md", $viewState.editing_note.title)
             
             if (selected_export_path === null){
-                console.warn("No path is chosen to open.")
+                AppState.logger.warn("No path is chosen to open.")
                 return
             } 
     
@@ -336,7 +336,7 @@ export class NoteExportHandler {
             const converted_content = converter.convert($viewState.editing_note)
             await TauriFileSystem.instance.writeTextFile(selected_export_path, converted_content, false, true)
         } catch (err) {
-            console.error(err);
+            AppState.logger.error(err);
         }
     }
 }

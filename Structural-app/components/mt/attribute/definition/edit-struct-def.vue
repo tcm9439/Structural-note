@@ -18,6 +18,7 @@ const { $emitter } = useNuxtApp()
 
 const editing_note = inject(InjectConstant.EDITING_NOTE) as Note
 const struct_def = activeDataGetter(editing_note, props.edit_path) as StructureDefinition
+const ori_struct_def = struct_def.clone()
 
 const edit_context = ref(new StructDefEditContext(struct_def, onExitEditStruct)) as Ref<StructDefEditContext>
 const editing_struct_def = edit_context.value.editing_struct_def.editing
@@ -36,7 +37,7 @@ function setAttrToEdit(){
 
 function showInvalidDefinitionMessage(def_type_key: string, error_msg: string){
     show_error_modal.value = true
-    error_title.value = `Invalid ${tran(def_type_key)} Definition`
+    error_title.value = tran("structural.struct_def.invalid_definition", null, { target: tran(def_type_key) })
     error_content.value = error_msg
 }
 
@@ -47,7 +48,7 @@ function onErrorModalConfirm(){
 function onExitEditStruct(has_change: boolean){
     if (has_change){
         // there is changes to the def
-        $emitter.emit(EventConstant.ATTR_DEF_UPDATE, edit_context.value.edit_queue)
+        $emitter.emit(EventConstant.ATTR_DEF_UPDATE, ori_struct_def, edit_context.value.edit_queue)
         $Message.info(tran("structural.struct_def.update_attr_def_confirm"))
     } else {
         $Message.info(tran("common.cancel"))

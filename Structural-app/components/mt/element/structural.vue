@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, StructuralElement, StructEditQueue, EventConstant,StructDefEditEventElementHandler, InjectConstant, Note } from "structural-core"
+import { EditPath, StructureDefinition, StructuralElement, StructEditQueue, EventConstant, StructDefEditEventElementHandler, InjectConstant, Note } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 import { elementListGetter } from "@/composables/active-data/Element"
 import { attrValueComponentMapper } from "@/composables/active-data/AttrValue"
@@ -22,9 +22,9 @@ const element_display_key = computed(() => struct_element.definition.display_key
 
 // on structural section definition change
 const render_value_components = ref(0)
-function attributeDefinitionUpdateHandler(edit_queue: StructEditQueue){
+function attributeDefinitionUpdateHandler(ori_struct_def: StructureDefinition, edit_queue: StructEditQueue){
     // All elements' attributeDefinitionUpdateHandler share the same edit_queue so it must be clone() before consume
-    StructDefEditEventElementHandler.editQueueConsumer(struct_element, edit_queue.clone())
+    StructDefEditEventElementHandler.editQueueConsumer(struct_element, ori_struct_def, edit_queue.clone())
     // reload the elements & DOM
     elements_values.value = getElementsValues()
     render_value_components.value++

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, StructuralSection, Note, InjectConstant, ElementType, StructuralElement } from "structural-core"
+import { EditPath, StructuralSection, Note, InjectConstant, ElementType, StructuralElement, AppState } from "structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 import { type AvailableSection } from "@/composables/active-data/Note"
 import { Icon } from "view-ui-plus"
@@ -19,7 +19,7 @@ let def_path: EditPath
 try {
     def_path = section.stepInEachChildren(props.edit_path, StructuralSection.DEFINITION_FILTER_MODE)[0]
 } catch (error) {
-    console.error("Cannot get the definition path.", error)
+    AppState.logger.error("Cannot get the definition path.", error)
 }
 
 const edit_def_mode = ref(false)

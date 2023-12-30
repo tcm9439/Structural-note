@@ -327,7 +327,7 @@ export class StructDefEditEvent {
 }
 
 export class StructDefEditEventElementHandler {
-    static editQueueConsumer(element: StructuralElement, edit_queue: StructEditQueue){
+    static editQueueConsumer(element: StructuralElement, ori_struct_def: StructureDefinition, edit_queue: StructEditQueue){
         while (edit_queue.hasConfirmedItem()){
             let edit_queue_item = edit_queue.consume()
             if (edit_queue_item == null){
@@ -342,16 +342,17 @@ export class StructDefEditEventElementHandler {
                     StructDefEditEventElementHandler.handleDeleteAttr(element, edit_queue_item.attr_id)
                     break
                 case StructEditOperation.CHANGE_ATTR_TYPE:
-                    StructDefEditEventElementHandler.handleAttrTypeChange(element, edit_queue_item.attr_id)
+                    StructDefEditEventElementHandler.handleAttrTypeChange(element, ori_struct_def, edit_queue_item.attr_id)
                     break
                 case StructEditOperation.CHANGE_ATTR:
-                    StructDefEditEventElementHandler.handleAttrChange(element, edit_queue_item.attr_id)
+                    StructDefEditEventElementHandler.handleAttrChange(element, ori_struct_def, edit_queue_item.attr_id)
                     break
             }
         }
     }
 
     static handleNewAttr(element: StructuralElement, attr_id: UUID){
+        LoggerManager.logger.debug(`Handle new attr ${attr_id}`)
         // get the definition
         const attr_def = element.definition.attributes.get(attr_id)
         if (attr_def == null){
@@ -363,29 +364,33 @@ export class StructDefEditEventElementHandler {
     }
 
     static handleDeleteAttr(element: StructuralElement, attr_id: UUID){
+        LoggerManager.logger.debug(`Handle delete attr ${attr_id}`)
         // delete the value from the element
         element.values.delete(attr_id)
     }
 
-    static handleAttrTypeChange(element: StructuralElement, attr_id: UUID){
-        // get the new definition
-        const attr_def = element.definition.attributes.get(attr_id)
-        if (attr_def == null){
+    static handleAttrTypeChange(element: StructuralElement, ori_struct_def: StructureDefinition, attr_id: UUID){
+        LoggerManager.logger.debug(`Handle attr type change ${attr_id}`)
+        const new_attr_def = element.definition.attributes.get(attr_id)
+        const ori_attr_def = ori_struct_def.attributes.get(attr_id)
+        if (new_attr_def == null || ori_attr_def == null){
             throw new Error(`Attribute with id ${attr_id} not found`)
         }
-        const attr_value = element.values.get(attr_id)
 
+        const attr_value = element.values.get(attr_id)
         if (attr_value == null){
             throw new Error(`Attribute value with id ${attr_id} not found`)
         }
         
         // convert the value to the new type
-        let new_attr_value: AttributeValue<any>
-        new_attr_value = attr_value.convertTo(attr_def)
-        element.values.set(attr_id, new_attr_value)
+        let new_attr_value = AttributeValue.convertValueForNewAttrDef(attr_value.value, ori_attr_def, new_attr_def)
+        let new_attr = new AttributeValue(new_attr_def, new_attr_value)
+        LoggerManager.logger.trace(`New attr value = '${new_attr.value}'`)
+        element.values.set(attr_id, new_attr)
     }
 
-    static handleAttrChange(element: StructuralElement, attr_id: UUID){
+    static handleAttrChange(element: StructuralElement, ori_struct_def: StructureDefinition, attr_id: UUID){
+        LoggerManager.logger.debug(`Handle attr change ${attr_id}`)
         const attr_def = element.definition.attributes.get(attr_id)
         if (attr_def == null){
             throw new Error(`Attribute with id ${attr_id} not found`)

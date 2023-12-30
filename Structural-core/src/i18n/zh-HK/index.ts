@@ -62,6 +62,7 @@ const zh_HK = {
             edit_attr_change_to_type_label: "更改欄目類型為",
             edit_attr_cannot_be_change: "此欄目類型無法更改。",
             update_attr_def_confirm: "定義已更新",
+            invalid_definition: "錯誤的{target}定義",
         },
         attribute: {
             attribute: "欄目",

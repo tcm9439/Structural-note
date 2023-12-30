@@ -350,6 +350,7 @@ describe("StructDefEditEventElementHandler", () => {
     let attr_def: AttributeDefinition<any>
     let attr_def2: AttributeDefinition<string>
     let spy_handleNewAttr: any
+    let ori_def: StructureDefinition
 
     beforeAll(async () => {
         await ModuleInit.init()
@@ -357,13 +358,14 @@ describe("StructDefEditEventElementHandler", () => {
 
     beforeEach(() => {
         vi.clearAllMocks()
-
-        element = new StructuralElement(new StructureDefinition())
+        const definition = new StructureDefinition((id) => [])
+        element = new StructuralElement(definition)
         edit_queue = new StructEditQueue()
         attr_def = new AttributeDefinition("Test String Attr", StringAttribute.instance)
         attr_def2 = new AttributeDefinition("Test String Attr 2", StringAttribute.instance)
         element.definition.attributes.add(attr_def)
         element.definition.attributes.add(attr_def2)
+        ori_def = definition.clone()
 
         edit_queue.push(new StructEditQueueItem(attr_def.id, StructEditOperation.ADD_ATTR))
         edit_queue.push(new StructEditQueueItem(attr_def2.id, StructEditOperation.ADD_ATTR))
@@ -371,7 +373,7 @@ describe("StructDefEditEventElementHandler", () => {
         expect(edit_queue.hasConfirmedItem()).toBeTruthy()
 
         spy_handleNewAttr = vi.spyOn(StructDefEditEventElementHandler, 'handleNewAttr')
-        StructDefEditEventElementHandler.editQueueConsumer(element, edit_queue)
+        StructDefEditEventElementHandler.editQueueConsumer(element, ori_def, edit_queue)
     })
 
     it("editQueueConsumer", () => {
@@ -404,7 +406,7 @@ describe("StructDefEditEventElementHandler", () => {
         expect(element.values.get(attr_def2.id)).toBeDefined()
     })
 
-    it("handleAttrTypeChange", () => {
+    it("handleAttrTypeChange - valid", () => {
         // set the attr value
         let value = element.values.get(attr_def.id)
         if (value != null){
@@ -414,11 +416,30 @@ describe("StructDefEditEventElementHandler", () => {
         // set the attr type to number
         let new_attr_def = AttributeDefinition.convertToType(attr_def, IntegerAttribute.instance)
         element.definition.attributes.override(new_attr_def)
-        StructDefEditEventElementHandler.handleAttrTypeChange(element, attr_def.id)
+        StructDefEditEventElementHandler.handleAttrTypeChange(element, ori_def, attr_def.id)
 
         // check if the attr is updated
         let converted_value = element.values.get(attr_def.id)
         expect(converted_value).toBeDefined()
         expect(converted_value?.value).toBe(1234)
+    })
+
+    it("handleAttrTypeChange - invalid", () => {
+        // set the attr value
+        let value = element.values.get(attr_def.id)
+        if (value != null){
+            value.value = "invalid"
+        }
+
+        // set the attr type to number
+        let new_attr_def = AttributeDefinition.convertToType(attr_def, IntegerAttribute.instance)
+        element.definition.attributes.override(new_attr_def)
+        StructDefEditEventElementHandler.handleAttrTypeChange(element, ori_def, attr_def.id)
+
+        // check if the attr is updated
+        let converted_value = element.values.get(attr_def.id)
+        expect(converted_value).toBeDefined()
+        // as the value is invalid, it should be set to default value
+        expect(converted_value?.value).toBe(IntegerAttribute.instance.default_value)
     })
 })

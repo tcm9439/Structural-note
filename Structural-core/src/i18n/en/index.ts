@@ -62,6 +62,7 @@ const en = {
             edit_attr_change_to_type_label: "Change Attribute Type To",
             edit_attr_cannot_be_change: "This attribute type cannot be changed.",
             update_attr_def_confirm: "Definition Updated",
+            invalid_definition: "Invalid {target:string} Definition",
         },
         attribute: {
             attribute: "Attribute",

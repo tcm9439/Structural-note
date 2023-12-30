@@ -15,14 +15,10 @@ const emit = defineEmits<{
 // # view
 const active_tab = ref("basic")
 
-// # base
-let attr_def = props.attr_def
-
 // # reload (after attr type changed)
 const reload_done = ref(0)
 watch(() => props.render, () => {
     attr_types_that_can_be_set.value = getAllTypes()
-    attr_def = props.attr_def
     reload_done.value += 1
 })
 
@@ -60,13 +56,13 @@ function getAllTypes(){
 function selectedType(attr_type: AttributeType<any>){
     // current_attr_type.value = attr_type
     AppState.logger.debug(`User select attr type ${attr_type.type}`)
-    if (attr_def.attribute_type !== null){
+    if (props.attr_def.attribute_type !== null){
         // has old type
-        let new_attr_def = AttributeDefinition.convertToType(attr_def, attr_type)
+        let new_attr_def = AttributeDefinition.convertToType(props.attr_def, attr_type)
         emit('attrTypeUpdate', new_attr_def)   
     } else {
         // init attr type
-        attr_def.attribute_type = attr_type
+        props.attr_def.attribute_type = attr_type
         emit('attrTypeUpdate', null)
     }
     constraint_changed_count.value += 1
@@ -77,23 +73,23 @@ function selectedType(attr_type: AttributeType<any>){
 const available_constraints: Ref<AttrConstraintEditComponent[][]> = ref([])
 watch([reload_done, constraint_changed_count], () => {
     // get the available constraints from the attr_def
-    let constraints = getAttrConstraintEditComponents(new EditPath(), attr_def)
+    let constraints = getAttrConstraintEditComponents(new EditPath(), props.attr_def)
     available_constraints.value = getGroupedAttrConstraint(constraints)
 }, { immediate: true })
 
 function onConstraintStatusChange(is_set: boolean, params: AttrConstraintEditComponent){
     if (is_set){
-        if (!attr_def.constraints.has(params.id)){
+        if (!props.attr_def.constraints.has(params.id)){
             // add constrain
             let constraint = ConstraintTypeToClassMap.get(params.constraint_type)
             if (constraint !== undefined){
                 let new_constraint = new constraint()
-                attr_def.addConstraint(new_constraint)                
+                props.attr_def.addConstraint(new_constraint)                
             }
         }
     } else {
         // remove constrain
-        attr_def.removeConstraint(params.id)
+        props.attr_def.removeConstraint(params.id)
     }
     constraint_changed_count.value += 1
 }
@@ -101,11 +97,11 @@ function onConstraintStatusChange(is_set: boolean, params: AttrConstraintEditCom
 // # default value
 const has_default_value = computed({
     get: () => {
-        return attr_def.explicit_default_value !== null
+        return props.attr_def.explicit_default_value !== null
     },
     set: (has_default_value) => {
         if (has_default_value){
-            default_value.value = attr_def.default_value_for_attr
+            default_value.value = props.attr_def.default_value_for_attr
         } else {
             default_value.value = null
         }
@@ -113,11 +109,8 @@ const has_default_value = computed({
 })
 const default_value_validate_result = ref(ValidOperationResult)
 const default_value = computed({
-    get: () => attr_def.default_value_for_attr,
-    set: (v) => { 
-        default_value_validate_result.value = attr_def.setDefaultValue(v)
-        console.log("setDefaultValue", attr_def.explicit_default_value)
-    }
+    get: () => props.attr_def.default_value_for_attr,
+    set: (v) => default_value_validate_result.value = props.attr_def.setDefaultValue(v)
 })
 
 </script>

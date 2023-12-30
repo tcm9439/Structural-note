@@ -99,7 +99,11 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
         this._validate_result = value
     }
 
-    static convertValueForNewAttrDef<O,N>(value: O, old_attr_def: AttributeDefinition<O>, new_attr_def: AttributeDefinition<N>, mode: ID = 0): N | null {
+    static convertValueForNewAttrDef<O,N>(value: O | null, old_attr_def: AttributeDefinition<O>, new_attr_def: AttributeDefinition<N>, mode: ID = 0): N | null {
+        if (value === null){
+            return null
+        }
+
         if (old_attr_def.attribute_type === null || new_attr_def.attribute_type === null){
             throw new NullAttrTypeException()
         }
@@ -115,9 +119,6 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
     }
 
     convertTo<N>(new_attr_def: AttributeDefinition<N>, mode: ID = 0): AttributeValue<N> {
-        if (this.value === null){
-            return new AttributeValue(new_attr_def)
-        }
         const conversion_result = AttributeValue.convertValueForNewAttrDef<T, N>(this.value, this.definition, new_attr_def, mode)
         return new AttributeValue(new_attr_def, conversion_result)
     }

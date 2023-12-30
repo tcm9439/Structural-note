@@ -1,8 +1,6 @@
 ## KNOWN BUG
 [ ] Close note > don’t save > cancel on note init window > save note window not disappear 
-[ ] Current type change - default value editor not update bug
 [ ] Close window prompt - close window title
-[ ] Default value after change value type
 [ ] move up / down section -> every thing are gone
 [ ] file already open error message
 

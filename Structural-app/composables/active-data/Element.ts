@@ -27,7 +27,7 @@ export function elementListGetter(editing_note: Note | undefined, parent_node: E
             child = child_path.getNodeByPath(editing_note as EditPathNode)
         } catch (error) {
             if (error instanceof EndOfEditPathError){
-                console.log("End of edit path error")
+                AppState.logger.log("End of edit path error")
             }
         }
         if (child !== null) {

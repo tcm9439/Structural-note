@@ -271,14 +271,14 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
                 if (new_attr_type.allowConstraint(constraint)) {
                     let error = new_attr_def.addConstraint(constraint)
                     if (error !== null) {
-                        LoggerManager.logger.error(`Fail to add the constraint to the new attribute definition. ${error}`)
+                        LoggerManager.logger.warn(`Fail to add the constraint to the new attribute definition. ${error}`)
                     }
                 }
             })
 
             // convert the default value
-            if (old_attr_def.default_value_for_attr !== null) {
-                let conversion_result = AttributeValue.convertValueForNewAttrDef(old_attr_def.default_value_for_attr, old_attr_def, new_attr_def)
+            if (old_attr_def.explicit_default_value !== null) {
+                let conversion_result = AttributeValue.convertValueForNewAttrDef(old_attr_def.explicit_default_value, old_attr_def, new_attr_def)
                 new_attr_def.setDefaultValue(conversion_result)
             }
         }
@@ -369,7 +369,6 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         for (const [id, constraint] of this.constraints) {
             const result = constraint.validate_constraint_result
             if (!result.valid) {
-                console.log(result)
                 return OperationResult.invalidText(
                     TranslatableText.new("structural.attribute.error.invalid_constraint_for_attr", {
                         attr_name: this.name,

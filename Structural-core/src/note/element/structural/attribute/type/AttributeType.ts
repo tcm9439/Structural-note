@@ -2,6 +2,7 @@ import { ID } from "@/common/CommonTypes.js"
 import { Cloneable } from "@/common/Cloneable.js"
 import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/exception/AttributeException.js"
 import { ConstraintType, Constraint } from "../constraint/Constraint.js"
+import { LoggerManager } from "@/common/Logger.js"
 
 export enum AttributeTypeEnum {
     STRING = "STRING",
@@ -101,6 +102,7 @@ export abstract class AttributeType<T> implements Cloneable<AttributeType<T>> {
     }
 
     convertTo<N>(new_attr_type: AttributeType<N>, value: T, mode: ID = 0): N {
+        LoggerManager.logger.trace(`Converting "${value}" from ${this.type} to ${new_attr_type.type}`)
         const new_type_str: string = new_attr_type.type
 
         // return the ori value if they are in the same type
@@ -112,7 +114,9 @@ export abstract class AttributeType<T> implements Cloneable<AttributeType<T>> {
             const converter = this.converters.get(new_type_str)?.get(mode)
             if (converter){
                 try {
-                    return converter(value, mode)
+                    let new_value = converter(value, mode)
+                    LoggerManager.logger.trace(`Converted new_value: "${new_value}"`)
+                    return new_value
                 } catch (e) {
                     throw new InvalidTypeConversionForDataException(this._type, new_type_str, value)
                 }   

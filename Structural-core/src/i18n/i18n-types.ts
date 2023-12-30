@@ -228,6 +228,11 @@ type RootTranslation = {
 			 * D​e​f​i​n​i​t​i​o​n​ ​U​p​d​a​t​e​d
 			 */
 			update_attr_def_confirm: string
+			/**
+			 * I​n​v​a​l​i​d​ ​{​t​a​r​g​e​t​}​ ​D​e​f​i​n​i​t​i​o​n
+			 * @param {string} target
+			 */
+			invalid_definition: RequiredParams<'target'>
 		}
 		attribute: {
 			/**
@@ -812,6 +817,10 @@ export type TranslationFunctions = {
 			 * Definition Updated
 			 */
 			update_attr_def_confirm: () => LocalizedString
+			/**
+			 * Invalid {target} Definition
+			 */
+			invalid_definition: (arg: { target: string }) => LocalizedString
 		}
 		attribute: {
 			/**
