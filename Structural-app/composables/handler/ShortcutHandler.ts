@@ -1,14 +1,19 @@
-import { AppState, ShortcutKeyPressEvent } from "structural-core"
+import { AppRuntimeEnvironment, AppState, ShortcutKeyPressEvent } from "structural-core"
 import { EditHistoryHandler, NoteFileHandler } from "./NoteFileHandler"
 import { appWindow } from "@tauri-apps/api/window"
 import { listen } from '@tauri-apps/api/event'
 
 export class ShortcutHandler {
     static async registerAllHandler(){
-        const unlisten_save = await listen(ShortcutKeyPressEvent.SAVE, ShortcutHandler.saveHandler)
-        const unlisten_undo = await listen(ShortcutKeyPressEvent.UNDO, ShortcutHandler.undoHandler)
-        const unlisten_redo = await listen(ShortcutKeyPressEvent.REDO, ShortcutHandler.redoHandler)
-        return [unlisten_save, unlisten_undo, unlisten_redo]
+        if (AppState.environment === AppRuntimeEnvironment.TARUI){
+            return [
+                await listen(ShortcutKeyPressEvent.SAVE, ShortcutHandler.saveHandler),
+                await listen(ShortcutKeyPressEvent.UNDO, ShortcutHandler.undoHandler),
+                await listen(ShortcutKeyPressEvent.REDO, ShortcutHandler.redoHandler),
+            ]
+        }
+
+        return []
     }
     
     static async saveHandler(event: any){

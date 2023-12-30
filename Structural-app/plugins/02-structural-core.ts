@@ -5,6 +5,7 @@ import { emit } from '@tauri-apps/api/event'
 export default defineNuxtPlugin(async (nuxtApp) => {
     await ModuleInit.init(useRuntimeConfig(), [{
         key: "CommandOrControl+S",
+        // cannot use $emitter here as only one window will register the shortcut & emit the event
         callback: () => emit(ShortcutKeyPressEvent.SAVE),
     }, {
         // not use "ctrl + Z" as it will conflict with iviewUI form item undo

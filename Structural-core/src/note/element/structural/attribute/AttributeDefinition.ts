@@ -10,6 +10,7 @@ import { ForbiddenConstraint, IncompatibleConstraint } from "@/exception/Attribu
 import { Constraint, ConstraintType, ConstraintJson } from "./constraint/Constraint.js"
 import { AttributeType } from "./type/AttributeType.js"
 import { RequireConstraint } from "./constraint/RequireConstraint.js"
+import { UniqueConstraint } from "./constraint/UniqueConstraint.js"
 import { MaxConstraint } from "./constraint/MaxConstraint.js"
 import { MinConstraint } from "./constraint/MinConstraint.js"
 import { AttributeValue } from "./value/AttributeValue.js"
@@ -337,6 +338,8 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
                 constraint = MinConstraint.loadFromJson(constraint_json)
             } else if (constraint_json.type === "MaxConstraint") {
                 constraint = MaxConstraint.loadFromJson(constraint_json)
+            } else if (constraint_json.type === "UniqueConstraint") {
+                constraint = UniqueConstraint.loadFromJson(constraint_json)
             } else {
                 throw new InvalidJsonFormatException("AttributeDefinition", `Unknown constraint type: ${constraint_json.type}`)
             }
