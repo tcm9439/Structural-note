@@ -1,5 +1,4 @@
 ## KNOWN BUG
-[ ] Close note > don’t save > cancel on note init window > save note window not disappear 
 
 ## Pending Features
 [ ] check what if i write some invalid value & save
@@ -10,7 +9,6 @@
 [ ] Export to csv
 [ ] attr constrains
     [ ] regex
-    [ ] min max inclusive/exclusive
 [ ] value.vue
     [ ] enum (dropdown list)
     [ ] Long text short text

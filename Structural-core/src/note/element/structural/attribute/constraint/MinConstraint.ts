@@ -7,15 +7,18 @@ import _ from "lodash"
 export const MinConstraintJson = ConstraintJson.extend({
     type: z.literal("MinConstraint"),
     min: z.any(),
+    inclusive: z.boolean(),
 }).required()
 
 export class MinConstraint<T> extends Constraint {
     static readonly type: ConstraintType = ConstraintType.MIN
     private _min: T | null = null
+    private _inclusive: boolean = true
 
-    constructor(min: T | null = null) {
+    constructor(min: T | null = null, inclusive: boolean = true) {
         super()
         this.min = min
+        this._inclusive = inclusive
     }
 
     set min(min: T | null) {
@@ -25,6 +28,14 @@ export class MinConstraint<T> extends Constraint {
 
     get min(): T | null {
         return this._min
+    }
+
+    get inclusive(): boolean {
+        return this._inclusive
+    }
+
+    set inclusive(inclusive: boolean) {
+        this._inclusive = inclusive
     }
 
     constraintIsValid(): OperationResult {
@@ -63,7 +74,8 @@ export class MinConstraint<T> extends Constraint {
     }
 
     validate(value: T): OperationResult {
-        if (this.min != null && value < this.min) {
+        let compare_func = this.inclusive ? _.lt : _.lte
+        if (this.min != null && compare_func(value, this.min)) {
             return OperationResult.invalid("structural.attribute.constraint.error.val_less_than_min")
         }
         return OperationResult.valid()
@@ -74,6 +86,7 @@ export class MinConstraint<T> extends Constraint {
             id: this.id,
             type: "MinConstraint",
             min: this.min,
+            inclusive: this.inclusive,
         }
     }
 
@@ -85,7 +98,7 @@ export class MinConstraint<T> extends Constraint {
         }
         const valid_json = result.data
 
-        const constraint = new MinConstraint<any>(valid_json.min)
+        const constraint = new MinConstraint<any>(valid_json.min, valid_json.inclusive)
         constraint.id = valid_json.id
         return constraint
     }

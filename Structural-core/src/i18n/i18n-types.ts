@@ -290,6 +290,12 @@ type RootTranslation = {
 				 * P​a​t​t​e​r​n​ ​(​R​e​g​e​x​)
 				 */
 				regex: string
+				param: {
+					/**
+					 * (​i​n​c​l​u​s​i​v​e​)
+					 */
+					inclusive_label: string
+				}
 				error: {
 					/**
 					 * T​h​e​ ​m​i​n​i​m​u​m​ ​v​a​l​u​e​ ​i​s​ ​n​o​t​ ​s​e​t​.
@@ -878,6 +884,12 @@ export type TranslationFunctions = {
 				 * Pattern (Regex)
 				 */
 				regex: () => LocalizedString
+				param: {
+					/**
+					 * (inclusive)
+					 */
+					inclusive_label: () => LocalizedString
+				}
 				error: {
 					/**
 					 * The minimum value is not set.

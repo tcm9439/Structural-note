@@ -81,6 +81,9 @@ const zh_HK = {
                 min: "最小值",
                 max: "最大值",
                 regex: "格式（正則表達）",
+                param: {
+                    inclusive_label: "（包括在內）",
+                },
                 error: {
                     min_val_is_null: "最小值尚未設定。",
                     max_val_is_null: "最大值尚未設定。",

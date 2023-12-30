@@ -2,6 +2,7 @@
 import { StructureDefinition, StructuralDefinitionHelper, type IViewUITableData } from "structural-core"
 import { Divider, Icon } from "view-ui-plus"
 import { TableColumnParser } from "@/composables/active-data/TableColParser"
+import { tran } from "~/composables/app/translate"
 
 const props = defineProps<{
     struct_def: StructureDefinition,
@@ -67,7 +68,7 @@ function setSeparator(value: string){
 </script>
 
 <template>
-    Separator:
+    {{ tran("structural.struct_def.display_name_separator_label") }}{{ tran("symbol.colon") }}
     <RadioGroup :modelValue="separator" @on-change="setSeparator">
         <Radio label="~" border>~</Radio>
         <Radio label="-" border>-</Radio>

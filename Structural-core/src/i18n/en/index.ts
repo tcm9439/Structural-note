@@ -81,6 +81,9 @@ const en = {
                 min: "Minimum",
                 max: "Maximum",
                 regex: "Pattern (Regex)",
+                param: {
+                    inclusive_label: "(inclusive)",
+                },
                 error: {
                     min_val_is_null: "The minimum value is not set.",
                     max_val_is_null: "The maximum value is not set.",

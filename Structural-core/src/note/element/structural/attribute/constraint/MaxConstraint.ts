@@ -7,15 +7,18 @@ import _ from "lodash"
 export const MaxConstraintJson = ConstraintJson.extend({
     type: z.literal("MaxConstraint"),
     max: z.any(),
+    inclusive: z.boolean(),
 }).required()
 
 export class MaxConstraint<T> extends Constraint {
     static readonly type: ConstraintType = ConstraintType.MAX
     private _max: T | null = null
+    private _inclusive: boolean = true
 
-    constructor(max: T | null = null) {
+    constructor(max: T | null = null, inclusive: boolean = true) {
         super()
         this.max = max
+        this._inclusive = inclusive
     }
 
     set max(max: T | null) {
@@ -25,6 +28,14 @@ export class MaxConstraint<T> extends Constraint {
 
     get max(): T | null {
         return this._max
+    }
+
+    get inclusive(): boolean {
+        return this._inclusive
+    }
+
+    set inclusive(inclusive: boolean) {
+        this._inclusive = inclusive
     }
 
     constraintIsValid(): OperationResult {
@@ -62,7 +73,8 @@ export class MaxConstraint<T> extends Constraint {
     }
     
     validate(value: T): OperationResult {
-        if (this.max != null && value > this.max) {
+        let compare_func = this.inclusive ? _.gt : _.gte
+        if (this.max != null && compare_func(value, this.max)){
             return OperationResult.invalid("structural.attribute.constraint.error.val_larger_than_max")
         }
         return OperationResult.valid()
@@ -73,6 +85,7 @@ export class MaxConstraint<T> extends Constraint {
             id: this.id,
             type: "MaxConstraint",
             max: this.max,
+            inclusive: this.inclusive,
         }
     }
 
@@ -84,7 +97,7 @@ export class MaxConstraint<T> extends Constraint {
         }
         const valid_json = result.data
 
-        let max_constraint = new MaxConstraint<any>(valid_json.max)
+        let max_constraint = new MaxConstraint<any>(valid_json.max, valid_json.inclusive)
         max_constraint.id = valid_json.id
         return max_constraint
     }

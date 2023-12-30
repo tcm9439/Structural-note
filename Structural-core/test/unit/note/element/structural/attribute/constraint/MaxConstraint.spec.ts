@@ -31,6 +31,12 @@ describe("MaxConstraint", () => {
         expect(max_constraint.validate_constraint_result.valid).toBe(false)
     })
 
+    it("get set inclusive", () => {
+        expect(max_constraint.inclusive).toBe(true)
+        max_constraint.inclusive = false
+        expect(max_constraint.inclusive).toBe(false)
+    })
+
     it("constraintIsValid", () => {
         expect(max_constraint.validate_constraint_result.valid).toBe(true)
 
@@ -53,9 +59,17 @@ describe("MaxConstraint", () => {
         expect(max_constraint.isCompatibleTo(min_constraint)).toBe(true)
     })
 
-    it("validate", () => {
+    it("validate - inclusive (default)", () => {
+        max_constraint.inclusive = true
         expect(max_constraint.validate(-9)).toBe(ValidOperationResult)
         expect(max_constraint.validate(100)).toBe(ValidOperationResult)
+        expect(max_constraint.validate(999).valid).toBe(false)
+    })
+
+    it("validate - not inclusive", () => {
+        max_constraint.inclusive = false
+        expect(max_constraint.validate(-9)).toBe(ValidOperationResult)
+        expect(max_constraint.validate(100).valid).toBe(false)
         expect(max_constraint.validate(999).valid).toBe(false)
     })
 
