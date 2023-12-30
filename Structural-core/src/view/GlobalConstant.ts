@@ -10,9 +10,9 @@ export class EventConstant {
     public static readonly ATTR_VALUE_UPDATE = "ATTR_VALUE_UPDATE_EVENT"
 
     public static readonly ADD_SECTION = "ADD_SECTION_EVENT"
-    public static readonly REMOVE_SECTION = "ADD_SECTION_EVENT"
-    public static readonly MV_UP_SECTION = "ADD_SECTION_EVENT"
-    public static readonly MV_DOWN_SECTION = "ADD_SECTION_EVENT"
+    public static readonly REMOVE_SECTION = "REMOVE_SECTION_EVENT"
+    public static readonly MV_UP_SECTION = "MV_UP_SECTION_EVENT"
+    public static readonly MV_DOWN_SECTION = "MV_DOWN_SECTION_EVENT"
 
     public static readonly APP_ERROR = "APP_ERROR_EVENT"
 }

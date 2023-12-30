@@ -1,7 +1,7 @@
 import { TauriFileSystem } from "tauri-fs-util"
 import { open, save } from "@tauri-apps/api/dialog"
 import { basename } from "@tauri-apps/api/path"
-import { Note, EventConstant, NoteMarkdownConverter, AppState, AppException } from "structural-core"
+import { Note, EventConstant, NoteMarkdownConverter, AppState, AppException, FileAlreadyOpened } from "structural-core"
 import { WindowUtil } from "@/composables/app/window"
 import { appWindow } from "@tauri-apps/api/window"
 import { invoke } from '@tauri-apps/api/tauri'
@@ -24,23 +24,17 @@ export class NoteFileHandler {
      * Load a note from a file.
      * @param filename The path of the file to load.
      */
-    private static loadFile(filename: string): Promise<Note> {
-        return new Promise<Note>(async (resolve, reject) => {
-            try {
-                let title: string = await NoteFileHandler.getTitle(filename)
-                let content: string = await TauriFileSystem.instance.readTextFile(filename)
-                let content_json = JSON.parse(content)
-                let loaded_note = Note.loadFromJson(title, content_json)
-                
-                resolve(loaded_note)
-            } catch (error) {
-                if (error instanceof AppException){
-                    reject(error.message)
-                } else {
-                    reject(error)
-                }
-            }
-        })
+    private static async loadFile(filename: string): Promise<Note> {
+        try {
+            let title: string = await NoteFileHandler.getTitle(filename)
+            let content: string = await TauriFileSystem.instance.readTextFile(filename)
+            let content_json = JSON.parse(content)
+            let loaded_note = Note.loadFromJson(title, content_json)
+            
+            return Promise.resolve(loaded_note)
+        } catch (error) {
+            return Promise.reject(error)
+        }
     }
 
     /**
@@ -136,8 +130,7 @@ export class NoteFileHandler {
 
             // create a new note
             let new_note = new Note(title)
-            AppState.logger.log("Created note with title", title)
-            AppState.logger.log("viewState", $viewState)
+            AppState.logger.info(`Created note with title ${title}`)
             $viewState.setOpenNote(new_note)
 
             appWindow.setTitle(new_note.title)
@@ -265,14 +258,15 @@ export class NoteFileHandler {
             if (!init_mode){
                 let already_opened: boolean = await invoke("is_file_already_open", { filepath: selected_open_path })
                 if (already_opened){
-                    return Promise.reject("File is already opened in another window.")
+                    return Promise.reject(new FileAlreadyOpened(selected_open_path))
                 }
             }
 
             let window_id = this_window_id
             if (open_in_this_window){
                 // selected_open_path === String
-                $viewState.setOpenNote(await NoteFileHandler.loadFile(selected_open_path))
+                const loaded_note = await NoteFileHandler.loadFile(selected_open_path)
+                $viewState.setOpenNote(loaded_note)
                 // set default save path as the open path
                 $viewState.save_path = selected_open_path
                 // emit the open note event
@@ -293,7 +287,8 @@ export class NoteFileHandler {
             AppState.logger.trace("init_file")
             await invoke("init_file", { windowId: window_id })
         } catch (error) {
-            Promise.reject(error)
+            AppState.logger.error("Error when trying to open Note.", error)
+            return Promise.reject(error)
         }
     }
 }

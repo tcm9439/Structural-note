@@ -1,8 +1,5 @@
 ## KNOWN BUG
 [ ] Close note > don’t save > cancel on note init window > save note window not disappear 
-[ ] Close window prompt - close window title
-[ ] move up / down section -> every thing are gone
-[ ] file already open error message
 
 ## Pending Features
 [ ] check what if i write some invalid value & save
