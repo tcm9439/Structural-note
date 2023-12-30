@@ -6,6 +6,7 @@ $viewState.last_page = AppPage.TEST
 $emitter.emit(EventConstant.LAYOUT_UPDATE, AppPage.TEST)
 
 let test_note: Ref<Note> = ref(new Note("My first note")) as Ref<Note>
+$viewState.setOpenNote(test_note.value)
 
 let section1 = new NoteSection("Section 1")
 let ele1 = new TextElement("Hello world.")

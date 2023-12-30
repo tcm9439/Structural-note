@@ -1,7 +1,7 @@
 import { TauriFileSystem } from "tauri-fs-util"
 import { open, save } from "@tauri-apps/api/dialog"
 import { basename } from "@tauri-apps/api/path"
-import { Note, EventConstant, NoteMarkdownConverter, AppState, AppException, FileAlreadyOpened } from "structural-core"
+import { Note, EventConstant, NoteMarkdownConverter, AppState, FileAlreadyOpened } from "structural-core"
 import { WindowUtil } from "@/composables/app/window"
 import { appWindow } from "@tauri-apps/api/window"
 import { invoke } from '@tauri-apps/api/tauri'
@@ -152,33 +152,39 @@ export class NoteFileHandler {
             return
         }
 
-        // display a dialog to ask for save
-        let close = () => {
+        
+        let closeNoteCallback = () => {
             // throw away the note instance
             $viewState.closeNote()
             const window_id = appWindow.label
             invoke("remove_opened_file", { windowId: window_id })
+            appWindow.setTitle("New Window")
             $emitter.emit(EventConstant.NOTE_CLOSED)
             if (close_success_callback){
                 close_success_callback()
             }
         }
+
+    // display a dialog to ask for save
         $Modal.confirm({
             title: tran("common.save_confirm_window.title", null, {
                 target: tran("structural.file.note")
             }),
             okText: tran("common.save_confirm_window.save"),
             onOk: async () => {
+                // button for closing with saving
                 await NoteFileHandler.saveNote()
-                close()
+                closeNoteCallback()
             },
             cancelText: tran("common.cancel"),
             onCancel: () => {
+                // button for canceling the close operation
                 if (close_cancel_callback){
                     close_cancel_callback()
                 }
             },
             render: (h: any) => {
+                // button for closing without saving
                 return h('div', [
                         h('div', tran("common.save_confirm_window.content")),
                         h('div', [
@@ -190,7 +196,8 @@ export class NoteFileHandler {
                                 },
                                 type: 'error',
                                 onclick: () => {
-                                    close()
+                                    $Modal.remove() // close the modal
+                                    closeNoteCallback()
                                 }
                             }, { 
                                 default: () => h('span', tran("common.save_confirm_window.do_not_save"))

@@ -4,7 +4,7 @@ import { elementListGetter } from "@/composables/active-data/Element"
 import { sectionComponentMapper } from "@/composables/active-data/Section"
 import { getAvailableSection } from "@/composables/active-data/Note"
 import { tran } from "~/composables/app/translate"
-const { $emitter } = useNuxtApp()
+const { $emitter, $viewState } = useNuxtApp()
 
 const props = defineProps<{
     note: Note,
@@ -15,9 +15,6 @@ const props = defineProps<{
 provide(InjectConstant.EDITING_NOTE, props.note)
 // The children will use this path to get the node from the editing note
 const edit_path = new EditPath()
-
-const { $viewState } = useNuxtApp()
-$viewState.setOpenNote(props.note)
 
 const rerender_section = ref(0)
 const sections = ref(null) as Ref<ComponentVForElement[] | null>
