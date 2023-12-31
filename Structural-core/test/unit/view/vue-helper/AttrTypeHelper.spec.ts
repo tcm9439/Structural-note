@@ -3,7 +3,7 @@ import { AttributeType } from "@/note/element/structural/attribute/type/Attribut
 import { AttrTypeHelper } from "@/view/vue-helper/AttrTypeHelper.js"
 import { AttributeTypeInitializer } from "@/note/element/structural/attribute/type/AttributeTypeInitializer.js"
 import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
-import { ShortStringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
+import { AttributeTypeEnum, ShortStringAttribute } from "@/index.js"
 
 describe("AttrTypeHelper", () => {
     beforeAll(() => {
@@ -33,7 +33,7 @@ describe("AttrTypeHelper", () => {
 
     it("getGroupedTypes grouped_to_length=n", () => {
         for (let n = 2; n <= 5; n++){
-            let type_groups = AttrTypeHelper.getGroupedTypes(n)
+            let type_groups = AttrTypeHelper.getGroupedTypes(null, n)
             for (let i = 0; i < type_groups.length; i++) {
                 const group = type_groups[i]
                 if (i < type_groups.length - 1) {
@@ -52,9 +52,33 @@ describe("AttrTypeHelper", () => {
 
     it("getGroupedConvertibleTypes", () => {
         let type = IntegerAttribute.instance
-        let type_groups = AttrTypeHelper.getGroupedConvertibleTypes(type, 2)
+        let type_groups = AttrTypeHelper.getGroupedConvertibleTypes(type, null, 2)
         expect(type_groups.length).toBe(1)
-        expect(type_groups[0].length).toBe(1)
-        expect(type_groups[0][0]).toBe(ShortStringAttribute.instance)
+        expect(type_groups[0].length).toBe(2)
+        type_groups[0].forEach(type => {
+            expect(type.chosen).toBe(false)
+        })
+    })
+
+    it("getGroupedConvertibleTypes", () => {
+        let type = IntegerAttribute.instance
+        let type_groups = AttrTypeHelper.getGroupedConvertibleTypes(type, AttributeTypeEnum.STRING, 2)
+        expect(type_groups.length).toBe(1)
+        expect(type_groups[0].length).toBe(2)
+
+        let found_count = 0
+        type_groups[0].forEach(type => {
+            if (type.type.type === AttributeTypeEnum.STRING) {
+                expect(type.type).toBe(ShortStringAttribute.instance)
+                expect(type.chosen).toBe(true)
+                found_count += 1
+            } else if (type.type.type === AttributeTypeEnum.INT) {
+                expect(type.type).toBe(IntegerAttribute.instance)
+                expect(type.chosen).toBe(false)
+                found_count += 1
+            }
+        })
+
+        expect(found_count).toBe(2)
     })
 })

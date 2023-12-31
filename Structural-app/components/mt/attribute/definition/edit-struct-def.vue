@@ -45,6 +45,10 @@ function onErrorModalConfirm(){
     show_error_modal.value = false
 }
 
+function getOriAttrDefOfEditingAttr(){
+    return ori_struct_def.attributes.get(edit_context.value.editing_attr_def.editing.id) ?? null
+}
+
 function onExitEditStruct(has_change: boolean){
     if (has_change){
         // there is changes to the def
@@ -126,9 +130,10 @@ function attrTypeUpdate(new_attr_def: AttributeDefinition<any> | null){
         :title="tran('structural.struct_def.section_def_title')"
         :closable="false"
         :mask-closable="false"
+        scrollable
         width="85"
     >
-
+        <div class="mt-section-def-edit-modal">
         <!-- Attributes list -->
         <div v-if="edit_state === StructDefEditState.EDITING_STRUCT">
             <Tabs>
@@ -155,8 +160,10 @@ function attrTypeUpdate(new_attr_def: AttributeDefinition<any> | null){
             <mt-attribute-definition-edit-attr-def 
                 @attrTypeUpdate="attrTypeUpdate"
                 :attr_def="attr_def"
+                :ori_attr_def="getOriAttrDefOfEditingAttr()"
                 :render="render_attr_def"
             />
+        </div>
         </div>
 
         <!-- Confirm / Cancel Button -->
@@ -206,3 +213,9 @@ function attrTypeUpdate(new_attr_def: AttributeDefinition<any> | null){
         </Modal>
     </Modal>
 </template>
+
+<style scoped>
+.mt-section-def-edit-modal {
+    min-height: 50vh;
+}
+</style>

@@ -61,12 +61,21 @@ export class StructEditQueue {
     }
 
     private pushToConfirmed(item: StructEditQueueItem) {
-        // if operation == delete/change => remove all previous operations for the same attr
-        if (item.operation == StructEditOperation.DELETE_ATTR || item.operation == StructEditOperation.CHANGE_ATTR) {
+        if (item.operation == StructEditOperation.DELETE_ATTR) {
+            // if operation == delete => remove all previous operations for the same attr
             this._confirmed_items = this.removeAllOperationForAttr(this._confirmed_items, item.attr_id)
+        } else if (item.operation == StructEditOperation.CHANGE_ATTR) {
+            if (this.uncommittedItemsInclude(item.attr_id, StructEditOperation.ADD_ATTR)) {
+                // if the attr is newly added, skip this change operation
+                return
+            } 
+            this._confirmed_items = this.removeAllGivenOperationForAttr(this._confirmed_items, 
+                item.attr_id, StructEditOperation.CHANGE_ATTR)
+        } else if (item.operation == StructEditOperation.CHANGE_ATTR_TYPE) {
+            // keep the previous operations for the same attr except the type change
+            this._confirmed_items = this.removeAllGivenOperationForAttr(this._confirmed_items, 
+                item.attr_id, StructEditOperation.CHANGE_ATTR_TYPE)
         }
-        // if operation == add => there should be no previous operations for the same attr
-        // if operation == type change => keep the previous operations for the same attr
 
         this._confirmed_items.push(item)
     }
@@ -102,6 +111,10 @@ export class StructEditQueue {
      */
     private removeAllOperationForAttr(list: StructEditQueueItem[], attr_id: UUID){
         return list.filter(item => item.attr_id != attr_id)
+    }
+
+    private removeAllGivenOperationForAttr(list: StructEditQueueItem[], attr_id: UUID, operation: StructEditOperation){
+        return list.filter(item => item.attr_id != attr_id || item.operation != operation)
     }
 
     uncommittedItemsInclude(attr_id: UUID, operation: StructEditOperation): boolean {
@@ -373,8 +386,12 @@ export class StructDefEditEventElementHandler {
         LoggerManager.logger.debug(`Handle attr type change ${attr_id}`)
         const new_attr_def = element.definition.attributes.get(attr_id)
         const ori_attr_def = ori_struct_def.attributes.get(attr_id)
-        if (new_attr_def == null || ori_attr_def == null){
+        if (new_attr_def == null){
             throw new Error(`Attribute with id ${attr_id} not found`)
+        }
+        if (ori_attr_def == null){
+            // no ori attr def => the attr is newly added => no need to convert the value
+            return
         }
 
         const attr_value = element.values.get(attr_id)

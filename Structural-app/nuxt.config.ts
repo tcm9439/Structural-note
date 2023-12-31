@@ -15,7 +15,7 @@ export default defineNuxtConfig({
         css: {
             preprocessorOptions: {
                 less: {
-                    additionalData: '@import "./assets/less/mt-theme.less";',
+                    additionalData: '@import "./assets/less/mt-variable.less";',
                     javascriptEnabled: true,
                 },
             },

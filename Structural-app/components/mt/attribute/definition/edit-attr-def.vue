@@ -4,7 +4,8 @@ import { getAttrConstraintEditComponents, type AttrConstraintEditComponent, getG
 import { tran } from "~/composables/app/translate"
 
 const props = defineProps<{
-    attr_def: AttributeDefinition<any>,
+    ori_attr_def: AttributeDefinition<any> | null,  // the attr def when the edit-struct-def modal is opened
+    attr_def: AttributeDefinition<any>,             // the current attr def (may be changed when last edit this attr)
     render: number
 }>()
 
@@ -18,44 +19,46 @@ const active_tab = ref("basic")
 // # reload (after attr type changed)
 const reload_done = ref(0)
 watch(() => props.render, () => {
-    // attr_types_that_can_be_set.value = getAllTypes()
+    attr_types_that_can_be_set.value = getAvailableType()
     reload_done.value += 1
 })
 
 // # attr type
 const constraint_changed_count = ref(0)
 const current_attr_type = computed(() => props.attr_def.attribute_type) // AttributeType<any> | null
-const init_attr_type_mode = computed(() => current_attr_type.value === null)
-const attr_type_can_be_changed = ref(true)
-const attr_types_that_can_be_set = shallowRef(getAllTypes())
+const ori_attr_type = getOriAttrType() // AttributeType<any> | null, unchange after init
+const attr_types_that_can_be_set = shallowRef(getAvailableType())
 
 // for determining if the attr has type => show advance option tabs
 const attr_has_type = computed(() => {
     return current_attr_type.value !== null
 })
 
-// Get all the attribute types that this attribute definition can be changed to.
-function getAllTypes(){
-    if (!init_attr_type_mode.value){
-        // existing attr, type can only be changed to convertible types
-        let ori_attr_type = AttributeType.getAttrType(current_attr_type.value?.type ?? "")
-        if (ori_attr_type !== undefined){ 
-            let types = AttrTypeHelper.getGroupedConvertibleTypes(ori_attr_type, 2, null)
-            if (types.length === 0){
-                attr_type_can_be_changed.value = false
-            }
-            return types
-        }
+function getOriAttrType(){
+    if (props.ori_attr_def === null){
+        // new attr => return current type
+        return current_attr_type.value
     } else {
-        // new attr
-        return AttrTypeHelper.getGroupedTypes(2, null)
+        return props.ori_attr_def.attribute_type
+    }
+}
+
+// Get all the attribute types that this attribute definition can be changed to.
+function getAvailableType(){
+    let current_choice: string | null = current_attr_type.value?.type ?? null
+    if (ori_attr_type === null){
+        // new attr, can choose any types
+        return AttrTypeHelper.getGroupedTypes(current_choice, 2)
+    } else {
+        // type can only be changed to convertible types
+        let types = AttrTypeHelper.getGroupedConvertibleTypes(ori_attr_type, current_choice, 2, null)
+        return types
     }
 }
 
 // when user select a type, update the attr_def & push a update type operation in the queue
 function selectedType(attr_type: AttributeType<any>){
-    // current_attr_type.value = attr_type
-    AppState.logger.debug(`User select attr type ${attr_type.type}`)
+    AppState.logger.trace(`User select attr type ${attr_type.type}`)
     if (props.attr_def.attribute_type !== null){
         // has old type
         let new_attr_def = AttributeDefinition.convertToType(props.attr_def, attr_type)
@@ -132,45 +135,23 @@ const default_value = computed({
         <!-- Tab to choose the attr type. -->
         <TabPane :label="tran('structural.struct_def.edit_attr_type_tab_title')" name="type">
             <!-- prompt -->
-            <!-- No existing attr type -->
-            <template v-if="init_attr_type_mode">
+            <div class="mt-label">
                 {{ tran('structural.struct_def.edit_attr_choose_type_label') }}{{ tran("symbol.colon") }}
-            </template>
-            <!-- Has existing attr type -->
-            <template v-else>
-                <!-- Current attr type -->
-                <Row>
-                    <Col flex="1">
-                        {{ tran('structural.struct_def.edit_attr_current_type_label') }}{{ tran("symbol.colon") }}
-                    </Col>
-                    <Col flex="2">
-                        <mt-attribute-definition-attr-type-choice 
-                        :attr="current_attr_type"
-                        :readonly_mode="true"
-                        />
-                    </Col>
-                </Row>
-                <Divider />
-                {{ tran('structural.struct_def.edit_attr_change_to_type_label') }}{{ tran("symbol.colon") }}
-            </template>
+            </div>
 
             <!-- New attr types that can be set / changed to -->
-            <div 
-                v-if="attr_type_can_be_changed"
-                style="width: 100%" 
-            >
+            <div class="mt-attr-type-choice-list" >
                 <Row v-for="type_group in attr_types_that_can_be_set">
                     <Col flex="1" v-for="attr_type in type_group">
                         <mt-attribute-definition-attr-type-choice 
+                            v-if="attr_type !== null"
                             @select="selectedType"
-                            :readonly_mode="false"
-                            :attr="attr_type"
+                            :attr="attr_type.type"
+                            :chosen="attr_type.chosen"
                         />
                     </Col>
                 </Row>
             </div>
-            <!-- The attr type is fixed. -->
-            <div v-else>{{ tran("structural.struct_def.edit_attr_cannot_be_change") }}</div>
         </TabPane>
 
         <!-- Tab that only show after the type is set  -->
@@ -217,5 +198,14 @@ const default_value = computed({
 .delete-constraint-button{
     /* align to right */
     float: right;
+}
+
+.mt-label {
+    line-height: 30px;
+    height: 30px;
+}
+
+.mt-attr-type-choice-list {
+    width: 100%;
 }
 </style>

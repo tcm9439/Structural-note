@@ -5,15 +5,34 @@
 import { IntegerAttribute, DecimalAttribute, ShortStringAttribute, LongStringAttribute, BooleanAttribute, MarkdownAttribute, AttributeType } from "structural-core"
 import { tran } from "~/composables/app/translate"
 
-const props = defineProps<{
-    // if this is a button for user to choose a type
-    readonly_mode: boolean,
-    // provided if readonly_mode is true
-    attr?: AttributeType<any> | null, 
-}>()
+const props = defineProps({
+    readonly_mode: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
+    attr: {
+        type: Object as PropType<AttributeType<any> | null>,
+        required: false,
+        default: null,
+    },
+    chosen: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
+})
 
 const attr_name = computed(() => {
     return props.attr?.getTypeTranslationKey() || ""
+})
+
+const choice_class = computed(() => {
+    let class_names = "mt-choice-container"
+    if (props.chosen){
+        class_names += " mt-chosen"
+    }
+    return class_names
 })
 
 const emit = defineEmits<{
@@ -47,21 +66,28 @@ function getIcon(){
 </script>
 
 <template>
-    <div v-if="props.attr != null" @click="typeChosen" class="choice-container">
+    <div v-if="props.attr != null" @click="typeChosen" :class="choice_class">
         <div class="icon-box">
             <!-- Nuxt-Icon -->
-            <Icon :name="getIcon()" color="black"/>
+            <Icon v-if="props.chosen" :name="getIcon()" color="white"/>
+            <Icon v-else :name="getIcon()" color="black"/>
         </div>
         <div class="choice-name">{{ tran(attr_name) }}</div>
     </div>
 </template>
 
-<style scoped>
-.choice-container {
-    width: 100%;
+<style lang="less" scoped>
+.mt-choice-container {
+    width: calc(100%-4px);
     height: 30px;
     border: 1px solid #d9d9d9;
-    border-radius: 2px;
+    border-radius: 3px;
+    margin: 2px;
+}
+
+.mt-choice-container.mt-chosen {
+    border-color: @primary-color;
+    color: @primary-color;
 }
 
 .choice-name {
@@ -70,7 +96,7 @@ function getIcon(){
     display: inline-block;
 }
 
-.icon-box{
+.icon-box {
     display: inline-block;
     margin-right: 10px;
     width: 60px;
@@ -78,5 +104,9 @@ function getIcon(){
     line-height: 30px;
     text-align: center;
     background-color: #f0f0f0;
+}
+
+.mt-chosen > .icon-box {
+    background-color: @primary-color;
 }
 </style>
