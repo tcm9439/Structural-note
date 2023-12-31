@@ -8,6 +8,19 @@ if (process.env.MT_APP_ENV === "test") {
 
 export default defineNuxtConfig({
     devtools: { enabled: false },
+    // css: [
+    //     "~/assets/less/mt-theme.less",
+    // ],
+    vite: {
+        css: {
+            preprocessorOptions: {
+                less: {
+                    additionalData: '@import "./assets/less/mt-theme.less";',
+                    javascriptEnabled: true,
+                },
+            },
+        }
+    },
     ssr: false,
     modules: [
         "nuxt-icon",

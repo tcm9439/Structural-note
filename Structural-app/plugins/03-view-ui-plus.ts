@@ -1,4 +1,5 @@
-import 'view-ui-plus/dist/styles/viewuiplus.css';
+import 'view-ui-plus/dist/styles/viewuiplus.css'
+import "./assets/less/mt-theme.less"
 import ViewUIPlus from 'view-ui-plus'
 import EN_US from 'view-ui-plus/dist/locale/en-US'
 import ZH_TW from 'view-ui-plus/dist/locale/zh-TW'
