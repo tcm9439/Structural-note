@@ -8,6 +8,6 @@ fi
 
 PACKAGE_PATH=$(realpath ../../ts-util/tauri-fs-util)
 PACKAGE_NAME=tauri-fs-util
-PROJECT_PATH=../Structural-core
+PROJECT_PATH=../Structural-app
 
 ./reinstall-package.sh $PACKAGE_PATH $PACKAGE_NAME $REBUILD $PROJECT_PATH TS
