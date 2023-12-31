@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { ValidOperationResult, StructuralSection, AttributeDefinition, StringAttribute, UniqueConstraint, StructuralElement, AttributeValue } from "@/index"
+import { ValidOperationResult, StructuralSection, AttributeDefinition, StringAttribute, UniqueConstraint, StructuralElement, AttributeValue, ShortStringAttribute } from "@/index"
 
 
 class TempClass {
@@ -64,7 +64,7 @@ describe("UniqueConstraint", () => {
     it("integration test", () => {
         // create a structure section
         let section = new StructuralSection("test section")
-        let attr_definition = new AttributeDefinition("attr1", StringAttribute.instance, "attr1 desc", section.getValuesOfAttr.bind(section))
+        let attr_definition = new AttributeDefinition("attr1", ShortStringAttribute.instance, "attr1 desc", section.getValuesOfAttr.bind(section))
         section.definition.attributes.add(attr_definition)
         attr_definition.addConstraint(new UniqueConstraint())
         let element_1 = new StructuralElement(section.definition)

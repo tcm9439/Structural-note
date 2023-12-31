@@ -69,10 +69,11 @@ const zh_HK = {
             type: {
                 type: "類型",
                 string: "文字",
+                long_string: "長文字",
                 int: "整數",
                 boolean: "是非值",
                 decimal: "小數",
-                markdown: "「Markdown」",
+                markdown: "Markdown",
             },
             constraint: {
                 constraint: "限制",

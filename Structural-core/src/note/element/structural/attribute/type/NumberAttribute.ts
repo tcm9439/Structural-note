@@ -1,6 +1,6 @@
 import { ConstraintType } from "../constraint/Constraint.js"
 import { AttributeType, AttributeTypeEnum } from "./AttributeType.js"
-import { StringAttribute } from "./StringAttribute.js"
+import { ShortStringAttribute } from "./StringAttribute.js"
 
 export class NumberAttribute extends AttributeType<number> {
     constructor(type: string) {
@@ -35,7 +35,7 @@ export class IntegerAttribute extends NumberAttribute {
 
     constructor() {
         super(IntegerAttribute.TYPE)
-        this.addConvertibleType(StringAttribute.TYPE, NumberAttribute.convertToString)
+        this.addConvertibleType(ShortStringAttribute.TYPE, NumberAttribute.convertToString)
     }
 
     static get instance(): IntegerAttribute {
@@ -57,7 +57,7 @@ export class DecimalAttribute extends NumberAttribute {
 
     constructor() {
         super(DecimalAttribute.TYPE)
-        this.addConvertibleType(StringAttribute.TYPE, () => NumberAttribute.convertToString(-1))
+        this.addConvertibleType(ShortStringAttribute.TYPE, () => NumberAttribute.convertToString(-1))
     }
 
     static get instance(): DecimalAttribute {

@@ -6,6 +6,7 @@ export class MarkdownAttribute extends AttributeType<string> {
 
     constructor() {
         super(MarkdownAttribute.TYPE)
+        this.addConvertibleType(AttributeTypeEnum.LONG_STRING, (value: string) => value)
     }
 
     get default_value(): string {

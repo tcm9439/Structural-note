@@ -32,7 +32,7 @@ validateValueExplicitly()
 const container_div_class = computed(() => {
     let class_var = "attr-wrapper"
     if (full_width_form_item.value){
-        class_var += " full-width-attr"
+        class_var += " mt-full-width-attr"
     }
     return class_var
 })
@@ -73,22 +73,22 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-    textarea {
-        resize: none;
-    }
+:deep(textarea) {
+    resize: none;
+}
 
-    .attr-wrapper {
-        display: inline-block;
-        margin: 5px;
-        padding-right: 10px;
-    }
+.attr-wrapper {
+    display: inline-block;
+    margin: 5px;
+    padding-right: 10px;
+}
 
-    .attr-wrapper.full-width-attr{
-        width: 100%;
-    }
+.attr-wrapper.mt-full-width-attr{
+    width: 100%;
+}
 
-    .ivu-form-item {
-        margin-bottom: 12px;
-        width: 100%;
-    }
+.ivu-form-item {
+    margin-bottom: 12px;
+    width: 100%;
+}
 </style>

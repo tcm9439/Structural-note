@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from "vitest"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
 import { BooleanAttribute } from "@/note/element/structural/attribute/type/BooleanAttribute.js"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
+import { ShortStringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
 
 describe('BooleanAttribute', () => {
     let definition: AttributeDefinition<boolean>
@@ -23,7 +23,7 @@ describe('BooleanAttribute', () => {
     })
 
     it("convert to string", () => {
-        let str_def = new AttributeDefinition("test", StringAttribute.instance)
+        let str_def = new AttributeDefinition("test", ShortStringAttribute.instance)
         let value = new AttributeValue(definition, false)
         expect(value.convertTo(str_def).value).toBe("false")
 

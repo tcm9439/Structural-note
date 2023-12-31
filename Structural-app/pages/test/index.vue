@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, StringAttribute, StructuralElement, MarkdownElement, MarkdownAttribute, AppPage, EventConstant, RequireConstraint, UniqueConstraint } from "structural-core"
+import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, ShortStringAttribute, StructuralElement, MarkdownElement, MarkdownAttribute, AppPage, EventConstant, RequireConstraint, UniqueConstraint } from "structural-core"
 
 const { $viewState, $emitter } = useNuxtApp()
 $viewState.last_page = AppPage.TEST
@@ -19,11 +19,11 @@ test_note.value.sections.add(section1)
 
 let section2 = new StructuralSection("Section struct")
 
-let attr_definition = new AttributeDefinition("test string attr", StringAttribute.instance, "description 1")
+let attr_definition = new AttributeDefinition("test string attr", ShortStringAttribute.instance, "description 1")
 attr_definition.setGetAllRelatedValuesFunc(section2.getValuesOfAttr.bind(section2))
 attr_definition.addConstraint(new UniqueConstraint())
 
-let attr_definition2 = new AttributeDefinition("test string attr2", StringAttribute.instance)
+let attr_definition2 = new AttributeDefinition("test string attr2", ShortStringAttribute.instance)
 attr_definition2.setGetAllRelatedValuesFunc(section2.getValuesOfAttr.bind(section2))
 attr_definition2.addConstraint(new RequireConstraint())
 

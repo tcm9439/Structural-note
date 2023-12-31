@@ -245,9 +245,13 @@ type RootTranslation = {
 				 */
 				type: string
 				/**
-				 * S​t​r​i​n​g
+				 * T​e​x​t
 				 */
 				string: string
+				/**
+				 * L​o​n​g​ ​T​e​x​t
+				 */
+				long_string: string
 				/**
 				 * I​n​t​e​g​e​r
 				 */
@@ -839,9 +843,13 @@ export type TranslationFunctions = {
 				 */
 				type: () => LocalizedString
 				/**
-				 * String
+				 * Text
 				 */
 				string: () => LocalizedString
+				/**
+				 * Long Text
+				 */
+				long_string: () => LocalizedString
 				/**
 				 * Integer
 				 */

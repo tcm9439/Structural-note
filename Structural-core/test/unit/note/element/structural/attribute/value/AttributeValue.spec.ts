@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, beforeAll } from "vitest"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
+import { ShortStringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
 import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
 import { EditPath, EndOfEditPathError } from "@/note/util/EditPath.js"
 import { ValidOperationResult } from "@/common/OperationResult.js"
@@ -22,7 +22,7 @@ describe('AttributeValue', () => {
     })
 
     beforeEach(() => {
-        definition = new AttributeDefinition("test", StringAttribute.instance, "test desc", getValues.bind(this))
+        definition = new AttributeDefinition("test", ShortStringAttribute.instance, "test desc", getValues.bind(this))
         attr_value = new AttributeValue(definition, "Hello World")
     })
 

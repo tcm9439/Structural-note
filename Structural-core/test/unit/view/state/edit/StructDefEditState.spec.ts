@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi, afterEach, beforeAll } from "vite
 import { StructDefEditState, StructDefEditContext, StructEditQueueItem, StructEditQueue, StructEditOperation, StructDefEditEvent, AttrDefCallback, StructDefCallback, ExitCallback, StructDefEditEventElementHandler, ModuleInit } from "@/index.js"
 import { StructureDefinition } from "@/note/element/structural/StructureDefinition.js"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
+import { ShortStringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
 import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
 import { StructuralElement } from "@/index.js"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
@@ -105,7 +105,7 @@ describe("StructDefEditContext", () => {
 
     beforeEach(() => {
         struct_def = new StructureDefinition()
-        attr_def = new AttributeDefinition("Test String Attr", StringAttribute.instance)
+        attr_def = new AttributeDefinition("Test String Attr", ShortStringAttribute.instance)
         struct_def.attributes.add(attr_def)
 
         exit_callback_spy = vi.fn()
@@ -138,7 +138,7 @@ describe("StructDefEditContext", () => {
     })
 
     it("startEditAttr", () => {
-        let new_attr = new AttributeDefinition("New Attr", StringAttribute.instance)
+        let new_attr = new AttributeDefinition("New Attr", ShortStringAttribute.instance)
         expect(() => {
             context.startEditAttr(new_attr.id, confirm_attr_callback_spy)
         }).toThrow(/Attribute with id .* not found/)
@@ -222,7 +222,7 @@ describe("StructDefEditEvent", () => {
 
     beforeEach(() => {
         struct_def = new StructureDefinition()
-        attr_def = new AttributeDefinition("Test String Attr", StringAttribute.instance)
+        attr_def = new AttributeDefinition("Test String Attr", ShortStringAttribute.instance)
         struct_def.attributes.add(attr_def)
 
         exit_callback_spy = vi.fn()
@@ -361,8 +361,8 @@ describe("StructDefEditEventElementHandler", () => {
         const definition = new StructureDefinition((id) => [])
         element = new StructuralElement(definition)
         edit_queue = new StructEditQueue()
-        attr_def = new AttributeDefinition("Test String Attr", StringAttribute.instance)
-        attr_def2 = new AttributeDefinition("Test String Attr 2", StringAttribute.instance)
+        attr_def = new AttributeDefinition("Test String Attr", ShortStringAttribute.instance)
+        attr_def2 = new AttributeDefinition("Test String Attr 2", ShortStringAttribute.instance)
         element.definition.attributes.add(attr_def)
         element.definition.attributes.add(attr_def2)
         ori_def = definition.clone()

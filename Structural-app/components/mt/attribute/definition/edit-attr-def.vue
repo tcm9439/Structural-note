@@ -18,7 +18,7 @@ const active_tab = ref("basic")
 // # reload (after attr type changed)
 const reload_done = ref(0)
 watch(() => props.render, () => {
-    attr_types_that_can_be_set.value = getAllTypes()
+    // attr_types_that_can_be_set.value = getAllTypes()
     reload_done.value += 1
 })
 

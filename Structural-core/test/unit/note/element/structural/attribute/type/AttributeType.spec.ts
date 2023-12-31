@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, beforeAll } from "vitest"
 import { AttributeType } from "@/note/element/structural/attribute/type/AttributeType.js"
 import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
+import { ShortStringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
 import { InvalidTypeConversionException, InvalidTypeConversionForDataException } from "@/exception/AttributeException.js"
 import { ConstraintType } from "@/note/element/structural/attribute/constraint/Constraint.js"
 import { RequireConstraint } from "@/note/element/structural/attribute/constraint/RequireConstraint.js"
@@ -14,7 +14,7 @@ class TestAttribute extends AttributeType<number> {
 
     constructor() {
         super(TestAttribute.TYPE)
-        this.addConvertibleType(StringAttribute.TYPE, this.convertToString)
+        this.addConvertibleType(ShortStringAttribute.TYPE, this.convertToString)
     }
 
     get default_value(): number {
@@ -23,7 +23,7 @@ class TestAttribute extends AttributeType<number> {
 
     convertToString(value: number, mode?: any): string {
         if (value === TestAttribute.INVALID_VALUE) {
-            throw new InvalidTypeConversionForDataException(this.type, StringAttribute.TYPE, value)
+            throw new InvalidTypeConversionForDataException(this.type, ShortStringAttribute.TYPE, value)
         }
         return String(value)
     }
@@ -55,7 +55,7 @@ describe('AttributeType', () => {
             
             if (type instanceof IntegerAttribute) {
                 found_number = true
-            } else if (type instanceof StringAttribute) {
+            } else if (type instanceof ShortStringAttribute) {
                 found_string = true
             }
         }
@@ -73,13 +73,13 @@ describe('AttributeType', () => {
     })
 
 	it('get convertibleTo', () => {
-        expect(Array.from(TestAttribute.instance.convertibleTo)).toEqual([StringAttribute.TYPE])
+        expect(Array.from(TestAttribute.instance.convertibleTo)).toEqual([ShortStringAttribute.TYPE])
     })
 
     it('isConvertibleTo', () => {
         expect(TestAttribute.instance.isConvertibleTo("TEST")).toBe(false)
         expect(TestAttribute.instance.isConvertibleTo(IntegerAttribute.TYPE)).toBe(false)
-        expect(TestAttribute.instance.isConvertibleTo(StringAttribute.TYPE)).toBe(true)
+        expect(TestAttribute.instance.isConvertibleTo(ShortStringAttribute.TYPE)).toBe(true)
     })
 
     it('addConvertibleType', () => {
@@ -93,7 +93,7 @@ describe('AttributeType', () => {
     })
 
     it('convertTo', () => {
-        const attr_val = TestAttribute.instance.convertTo(StringAttribute.instance, 111)
+        const attr_val = TestAttribute.instance.convertTo(ShortStringAttribute.instance, 111)
         expect(attr_val).toBe("111")
     })
 
@@ -108,7 +108,7 @@ describe('AttributeType', () => {
 
     it('convertTo - invalid value', () => {
         expect(() => 
-            TestAttribute.instance.convertTo(StringAttribute.instance, TestAttribute.INVALID_VALUE))
+            TestAttribute.instance.convertTo(ShortStringAttribute.instance, TestAttribute.INVALID_VALUE))
             .toThrow(InvalidTypeConversionForDataException)
     })
 

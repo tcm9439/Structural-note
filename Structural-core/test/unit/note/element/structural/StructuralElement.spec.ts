@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, beforeAll } from "vitest"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
 import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
+import { ShortStringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
 import { StructuralElement } from "@/note/element/structural/StructuralElement.js"
 import { StructureDefinition } from "@/note/element/structural/StructureDefinition.js"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
@@ -24,7 +24,7 @@ describe('StructuralElement', () => {
 
     beforeEach(() => {
         definition = new StructureDefinition()
-        str_attr = new AttributeDefinition("str", StringAttribute.instance)
+        str_attr = new AttributeDefinition("str", ShortStringAttribute.instance)
         definition.attributes.add(str_attr)
         num_attr = new AttributeDefinition("num", IntegerAttribute.instance)
         definition.attributes.add(num_attr)

@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from "vitest"
 import { StructuralSection } from '@/note/section/StructuralSection'
 import { EditPath } from "@/note/util/EditPath.js"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
+import { ShortStringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
 import { TextElement } from "@/note/element/TextElement.js"
 import { assertEqualExceptLambda } from "@test/util/TestUtil"
 import { AttributeValue, StructuralElement } from "@/index"
@@ -16,7 +16,7 @@ describe('StructuralSection', () => {
         section = new StructuralSection('title')
 
         // add definition
-        attr_definition = new AttributeDefinition("Str Attr", StringAttribute.instance)
+        attr_definition = new AttributeDefinition("Str Attr", ShortStringAttribute.instance)
         section.definition.attributes.add(attr_definition)
 
         // add element

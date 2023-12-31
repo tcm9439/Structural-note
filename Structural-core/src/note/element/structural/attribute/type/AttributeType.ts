@@ -6,6 +6,7 @@ import { LoggerManager } from "@/common/Logger.js"
 
 export enum AttributeTypeEnum {
     STRING = "STRING",
+    LONG_STRING = "LONG_STRING",
     BOOLEAN = "BOOLEAN",
     MARKDOWN = "MARKDOWN",
     INT = "INT",

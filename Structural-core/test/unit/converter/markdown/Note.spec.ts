@@ -9,11 +9,10 @@ import { AttributeDefinition } from "@/note/element/structural/attribute/Attribu
 import { TextElement } from "@/note/element/TextElement.js"
 import { StructuralElement } from "@/note/element/structural/StructuralElement.js"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
+import { ShortStringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
 import { BooleanAttribute } from "@/note/element/structural/attribute/type/BooleanAttribute.js"
 import { MarkdownAttribute } from "@/note/element/structural/attribute/type/MarkdownAttribute.js"
 import { MarkdownElement } from "@/note/element/MarkdownElement.js"
-import { RequireConstraint } from "@/note/element/structural/attribute/constraint/RequireConstraint.js"
 
 const section1_converter_expected_result = `## Section 1
 
@@ -99,7 +98,7 @@ describe("Note", () => {
 
         // definition
         let definition = section2.definition
-        let str_attr = new AttributeDefinition("Str Attr", StringAttribute.instance)
+        let str_attr = new AttributeDefinition("Str Attr", ShortStringAttribute.instance)
         definition.attributes.add(str_attr)
         let bool_attr = new AttributeDefinition("Bool Attr", BooleanAttribute.instance)
         definition.attributes.add(bool_attr)

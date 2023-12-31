@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, beforeAll } from "vitest"
 import { StructureDefinition } from '@/note/element/structural/StructureDefinition'
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
+import { ShortStringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
 import { BooleanAttribute } from "@/note/element/structural/attribute/type/BooleanAttribute.js"
 import { EditPath } from "@/note/util/EditPath.js"
 import { InvalidJsonFormatException, ModuleInit } from "@/index.js"
@@ -19,7 +19,7 @@ describe('StructureDefinition', () => {
 
     beforeEach(() => {
         definition = new StructureDefinition((id) => [])
-        str_attr = new AttributeDefinition("Str Attr", StringAttribute.instance)
+        str_attr = new AttributeDefinition("Str Attr", ShortStringAttribute.instance)
         definition.attributes.add(str_attr)
         bool_attr = new AttributeDefinition("Bool Attr", BooleanAttribute.instance)
         definition.attributes.add(bool_attr)
@@ -35,7 +35,7 @@ describe('StructureDefinition', () => {
     })
 
     it("getNextEditPathNode", () => {
-        let new_attr_def = new AttributeDefinition("attr-definition", StringAttribute.instance)
+        let new_attr_def = new AttributeDefinition("attr-definition", ShortStringAttribute.instance)
         expect(definition.getNextEditPathNode(new_attr_def.id)).toBeUndefined()
         
         definition.attributes.add(new_attr_def)
@@ -202,7 +202,7 @@ describe('StructureDefinition', () => {
     })
 
     it("validateDefinition: invalid attribute", () => {
-        let invalid_attr = new AttributeDefinition("invalid", StringAttribute.instance)
+        let invalid_attr = new AttributeDefinition("invalid", ShortStringAttribute.instance)
         invalid_attr.name = ""
         definition.attributes.add(invalid_attr)
         let validate_result = definition.validateDefinition()
@@ -214,7 +214,7 @@ describe('StructureDefinition', () => {
         let validate_result = definition.validateDefinition()
         expect(validate_result.valid).toBe(true)
 
-        let invalid_attr = new AttributeDefinition("Str Attr", StringAttribute.instance)
+        let invalid_attr = new AttributeDefinition("Str Attr", ShortStringAttribute.instance)
         definition.attributes.add(invalid_attr)
         validate_result = definition.validateDefinition()
         expect(validate_result.valid).toBe(false)

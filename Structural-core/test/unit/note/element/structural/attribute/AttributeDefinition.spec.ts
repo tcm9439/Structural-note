@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, beforeAll } from "vitest"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
+import { ShortStringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
 import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
 import { EditPath } from "@/note/util/EditPath.js"
 import { RequireConstraint } from "@/note/element/structural/attribute/constraint/RequireConstraint.js"
@@ -116,7 +116,7 @@ describe('AttributeDefinition', () => {
         expect(definition.addConstraint(new RequireConstraint())).toBeInstanceOf(IncompatibleConstraint)
 
         // forbidden constraint
-        let str_def = new AttributeDefinition("test", StringAttribute.instance)
+        let str_def = new AttributeDefinition("test", ShortStringAttribute.instance)
         expect(str_def.addConstraint(new MinConstraint(10))).toBeInstanceOf(ForbiddenConstraint)
 
         // group constraint
@@ -177,9 +177,9 @@ describe('AttributeDefinition', () => {
 
     it("convertToType: no type", () => {
         let no_type_attr_def = new AttributeDefinition("no type")
-        let new_attr_def = AttributeDefinition.convertToType(no_type_attr_def, StringAttribute.instance)
+        let new_attr_def = AttributeDefinition.convertToType(no_type_attr_def, ShortStringAttribute.instance)
         expect(new_attr_def).not.toBeNull()
-        expect(new_attr_def?.attribute_type).toBe(StringAttribute.instance)
+        expect(new_attr_def?.attribute_type).toBe(ShortStringAttribute.instance)
         expect(new_attr_def?.constraints.size).toBe(0)
         expect(new_attr_def?.id).toBe(no_type_attr_def.id)
         expect(new_attr_def?.name).toBe(no_type_attr_def.name)
@@ -193,9 +193,9 @@ describe('AttributeDefinition', () => {
         num_attr_def.addConstraint(new MinConstraint(10))
         num_attr_def.addConstraint(new MaxConstraint(1000))
 
-        let new_attr_def = AttributeDefinition.convertToType(num_attr_def, StringAttribute.instance)
+        let new_attr_def = AttributeDefinition.convertToType(num_attr_def, ShortStringAttribute.instance)
         expect(new_attr_def).not.toBeNull()
-        expect(new_attr_def?.attribute_type).toBe(StringAttribute.instance)
+        expect(new_attr_def?.attribute_type).toBe(ShortStringAttribute.instance)
         expect(new_attr_def?.constraints.size).toBe(0)
         expect(new_attr_def?.require_constraint).toBeNull()
         expect(new_attr_def?.id).toBe(num_attr_def.id)

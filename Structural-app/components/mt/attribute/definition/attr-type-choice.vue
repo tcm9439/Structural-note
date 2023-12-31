@@ -2,7 +2,7 @@
 /**
  * A component that represent an attribute type and can be selected.
  */
-import { IntegerAttribute, DecimalAttribute, StringAttribute, BooleanAttribute, MarkdownAttribute, AttributeType } from "structural-core"
+import { IntegerAttribute, DecimalAttribute, ShortStringAttribute, LongStringAttribute, BooleanAttribute, MarkdownAttribute, AttributeType } from "structural-core"
 import { tran } from "~/composables/app/translate"
 
 const props = defineProps<{
@@ -27,8 +27,10 @@ function typeChosen(){
 
 function getIcon(){
     switch(props.attr?.type){
-        case StringAttribute.TYPE:
+        case ShortStringAttribute.TYPE:
             return "mdi:format-text"
+        case LongStringAttribute.TYPE:
+            return "mdi:text-long"
         case IntegerAttribute.TYPE:
             return "mdi:numeric"
         case DecimalAttribute.TYPE:

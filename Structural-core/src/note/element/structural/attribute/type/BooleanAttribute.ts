@@ -1,5 +1,5 @@
 import { AttributeType, AttributeTypeEnum } from "./AttributeType.js"
-import { StringAttribute } from "./StringAttribute.js"
+import { ShortStringAttribute } from "./StringAttribute.js"
 
 export class BooleanAttribute extends AttributeType<boolean> {
     public static readonly TYPE: string = AttributeTypeEnum.BOOLEAN
@@ -7,7 +7,7 @@ export class BooleanAttribute extends AttributeType<boolean> {
 
     constructor() {
         super(BooleanAttribute.TYPE)
-        this.addConvertibleType(StringAttribute.TYPE, BooleanAttribute.convertToString)
+        this.addConvertibleType(ShortStringAttribute.TYPE, BooleanAttribute.convertToString)
     }
 
     get default_value(): boolean {

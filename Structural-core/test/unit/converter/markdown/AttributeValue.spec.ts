@@ -3,11 +3,10 @@ import { ModuleInit } from "@/index.js"
 import { AttributeValueMarkdownConverter } from "@/converter/markdown/AttributeValue.js"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
+import { ShortStringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
 import { BooleanAttribute } from "@/note/element/structural/attribute/type/BooleanAttribute.js"
 import { IntegerAttribute, DecimalAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
 import { MarkdownAttribute } from "@/note/element/structural/attribute/type/MarkdownAttribute.js"
-import { RequireConstraint } from "@/note/element/structural/attribute/constraint/RequireConstraint.js"
 
 describe("AttributeValueMarkdownConverter", () => {
     beforeAll(async () => {
@@ -15,7 +14,7 @@ describe("AttributeValueMarkdownConverter", () => {
     })
 
     it("convert", () => {
-        let attr_def: AttributeDefinition<any> = new AttributeDefinition("test", new StringAttribute())
+        let attr_def: AttributeDefinition<any> = new AttributeDefinition("test", new ShortStringAttribute())
         let value = new AttributeValue(attr_def, "test")
         expect(AttributeValueMarkdownConverter.convert(attr_def, value)).toBe("**test**: test")
 

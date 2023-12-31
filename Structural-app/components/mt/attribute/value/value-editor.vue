@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IntegerAttribute, DecimalAttribute, StringAttribute, BooleanAttribute, MarkdownAttribute } from "structural-core"
+import { IntegerAttribute, DecimalAttribute, ShortStringAttribute, LongStringAttribute, BooleanAttribute, MarkdownAttribute } from "structural-core"
 
 const props = defineProps<{
     value: any,
@@ -23,7 +23,10 @@ const emit = defineEmits<{
     (event: 'update:full_width', full_width: boolean): void
 }>()
 
-if (props.type === MarkdownAttribute.TYPE){
+const full_width_form_item_list = [
+    LongStringAttribute.TYPE, MarkdownAttribute.TYPE
+]
+if (full_width_form_item_list.includes(props.type)){
     full_width.value = true
 }
 
@@ -42,13 +45,26 @@ if (props.type === MarkdownAttribute.TYPE){
             :active-change="false"
         />
     </template>
-    <template v-else-if="props.type === StringAttribute.TYPE">
+    <template v-else-if="props.type === ShortStringAttribute.TYPE">
         <Input v-model="value"/>
+    </template>
+    <template v-else-if="props.type === LongStringAttribute.TYPE">
+        <div class="mt-full-width-attr">
+            <Input type="textarea" :autosize="{ minRows: 1 }" v-model="value"/> 
+        </div>
     </template>
     <template v-else-if="props.type === BooleanAttribute.TYPE">
         <Switch v-model="value" />
     </template>
     <template v-else-if="props.type === MarkdownAttribute.TYPE">
-        <mt-editor-markdown v-model:content="value" />
+        <div class="mt-full-width-attr">
+            <mt-editor-markdown v-model:content="value" />
+        </div>
     </template>
 </template>
+
+<style scoped>
+.mt-full-width-attr {
+    width: 100%;
+}
+</style>

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
+import { ShortStringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
 import { IntegerAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
 import { StructureDefinition } from "@/note/element/structural/StructureDefinition.js"
 import { StructuralElement } from "@/note/element/structural/StructuralElement.js"
@@ -14,7 +14,7 @@ describe("DisplayKey", () => {
 
     beforeEach(() => {
         definition = new StructureDefinition()
-        string_attr = new AttributeDefinition("test str", StringAttribute.instance)  
+        string_attr = new AttributeDefinition("test str", ShortStringAttribute.instance)  
         int_attr = new AttributeDefinition("test int", IntegerAttribute.instance) 
         element = new StructuralElement(definition) 
         element.values.set(string_attr.id, new AttributeValue(string_attr, "ABC"))

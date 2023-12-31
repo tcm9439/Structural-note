@@ -68,7 +68,8 @@ const en = {
             attribute: "Attribute",
             type: {
                 type: "Type",
-                string: "String",
+                string: "Text",
+                long_string: "Long Text",
                 int: "Integer",
                 boolean: "Boolean",
                 decimal: "Decimal",

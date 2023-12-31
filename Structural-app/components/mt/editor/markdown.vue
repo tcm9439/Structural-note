@@ -53,7 +53,7 @@ function getEditorId(){
 </script>
 
 <template>
-    <div @dblclick="onFocus" ref="md_div" class="md-element full-width-attr">
+    <div @dblclick="onFocus" ref="md_div" class="md-element">
         <!-- Editor -->
         <MdEditor v-if="focus" :editorId="getEditorId()" v-model="editor_content" :toolbarsExclude="md_editor_exclude"
         :tabWidth="4" codeTheme="github" language="en-US"/>
@@ -69,10 +69,6 @@ function getEditorId(){
 </template>
 
 <style scoped>
-.full-width-attr {
-    width: 100%;
-}
-
 .md-element {
     border: 1px solid #ddd;
     border-radius: 5px;

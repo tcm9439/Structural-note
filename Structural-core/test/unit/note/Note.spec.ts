@@ -4,7 +4,7 @@ import { NoteSection } from '@/note/section/NoteSection'
 import { StructuralSection } from '@/note/section/StructuralSection'
 import { EditPath } from "@/note/util/EditPath.js"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
-import { StringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
+import { ShortStringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
 import { BooleanAttribute } from "@/note/element/structural/attribute/type/BooleanAttribute.js"
 import { TextElement } from "@/note/element/TextElement.js"
 import { StructuralElement } from "@/note/element/structural/StructuralElement.js"
@@ -89,7 +89,7 @@ describe("Save & load Note", () => {
 
         // add definition
         let definition = section2.definition
-        let str_attr = new AttributeDefinition("Str Attr", StringAttribute.instance)
+        let str_attr = new AttributeDefinition("Str Attr", ShortStringAttribute.instance)
         definition.attributes.add(str_attr)
         let bool_attr = new AttributeDefinition("Bool Attr", BooleanAttribute.instance)
         definition.attributes.add(bool_attr)
