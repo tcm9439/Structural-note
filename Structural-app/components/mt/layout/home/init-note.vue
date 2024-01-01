@@ -14,7 +14,7 @@ const opening_note = ref(false)
 async function openNote(){
     opening_note.value = true
     try {
-        await NoteFileHandler.openNote(appWindow.label, true)
+        await NoteFileHandler.openNote()
     } catch (error) {
         exceptionHandler(error, "error.general.open_note")
     }
@@ -30,13 +30,8 @@ function toggleCreateNoteMode(value: boolean){
 
 function createNote(){
     try {
-        if (new_note_title.value == ""){
-            AppState.logger.debug("Creating note using default title.")
-            NoteFileHandler.createNote(tran("structural.file.untitled"))
-        } else {
-            AppState.logger.debug(`Creating note: ${new_note_title.value}`)
-            NoteFileHandler.createNote(new_note_title.value)
-        }
+        AppState.logger.debug(`Creating note: ${new_note_title.value ?? "default title"}`)
+        NoteFileHandler.createNote(new_note_title.value)
     } catch (error) {
         exceptionHandler(error, "error.general.create_note")
     }
@@ -85,4 +80,4 @@ function createNote(){
             </div>
         </template>
     </Modal>
-</template>~/composables/handler/NoteFileHandler
+</template>

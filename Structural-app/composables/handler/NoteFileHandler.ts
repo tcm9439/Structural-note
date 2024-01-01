@@ -25,16 +25,12 @@ export class NoteFileHandler {
      * @param filename The path of the file to load.
      */
     private static async loadFile(filename: string): Promise<Note> {
-        try {
-            let title: string = await NoteFileHandler.getTitle(filename)
-            let content: string = await TauriFileSystem.instance.readTextFile(filename)
-            let content_json = JSON.parse(content)
-            let loaded_note = Note.loadFromJson(title, content_json)
-            
-            return Promise.resolve(loaded_note)
-        } catch (error) {
-            return Promise.reject(error)
-        }
+        let title: string = await NoteFileHandler.getTitle(filename)
+        let content: string = await TauriFileSystem.instance.readTextFile(filename)
+        let content_json = JSON.parse(content)
+        let loaded_note = Note.loadFromJson(title, content_json)
+        
+        return Promise.resolve(loaded_note)
     }
 
     /**
@@ -113,6 +109,7 @@ export class NoteFileHandler {
             // if this is not save-as operation & update the save path
             if (!save_as_mode){
                 $viewState.save_path = this_save_path
+                $viewState.setSaveNote()
             }
             $Message.info(tran("structural.file.saved"))
             AppState.logger.debug("File saved successfully.")
@@ -121,20 +118,16 @@ export class NoteFileHandler {
         }
     }
 
-    static async createNote(title: string){
+    static async createNote(title?: string){
         try {
-            if (title.trim() === ""){
-                return Promise.reject("Filename cannot be empty")
+            if (title === undefined || title.trim() === ""){
+                title = tran("structural.file.untitled")
             }
-            const { $viewState, $emitter } = useNuxtApp()
 
             // create a new note
             let new_note = new Note(title)
             AppState.logger.info(`Created note with title ${title}`)
-            $viewState.setOpenNote(new_note)
-
-            appWindow.setTitle(new_note.title)
-            $emitter.emit(EventConstant.NOTE_OPENED)
+            this.openNote(new_note)
         } catch (err) {
             AppState.logger.error("Error when trying to create Note.", err)
         }
@@ -146,12 +139,11 @@ export class NoteFileHandler {
     static async closeNote(
             close_success_callback?: () => void, 
             close_cancel_callback?: () => void){
-        const { $viewState, $emitter, $Modal } = useNuxtApp()
+        const { $viewState, $emitter } = useNuxtApp()
         if ($viewState.editing_note === null){
             AppState.logger.warn("No note is opened to close.")
             return
         }
-
         
         let closeNoteCallback = () => {
             // throw away the note instance
@@ -160,12 +152,21 @@ export class NoteFileHandler {
             invoke("remove_opened_file", { windowId: window_id })
             appWindow.setTitle("New Window")
             $emitter.emit(EventConstant.NOTE_CLOSED)
-            if (close_success_callback){
-                close_success_callback()
-            }
+            if (close_success_callback){ close_success_callback() }
         }
 
-    // display a dialog to ask for save
+        if ($viewState.isNoteChange()){
+            AppState.logger.debug("Note is changed. Ask for save before closing window.")
+            this.showAskForSaveBeforeCloseModal(closeNoteCallback, close_cancel_callback)
+        } else {
+            // close directly
+            AppState.logger.debug("Note is not changed. Close window directly.")
+            closeNoteCallback()
+        }
+    }
+
+    private static showAskForSaveBeforeCloseModal(close_success_callback?: () => void, close_cancel_callback?: () => void){
+        const { $Modal } = useNuxtApp()
         $Modal.confirm({
             title: tran("common.save_confirm_window.title", null, {
                 target: tran("structural.file.note")
@@ -174,7 +175,7 @@ export class NoteFileHandler {
             onOk: async () => {
                 // button for closing with saving
                 await NoteFileHandler.saveNote()
-                closeNoteCallback()
+                if (close_success_callback){ close_success_callback() }
             },
             cancelText: tran("common.cancel"),
             onCancel: () => {
@@ -197,7 +198,7 @@ export class NoteFileHandler {
                                 type: 'error',
                                 onclick: () => {
                                     $Modal.remove() // close the modal
-                                    closeNoteCallback()
+                                    if (close_success_callback){ close_success_callback() }
                                 }
                             }, { 
                                 default: () => h('span', tran("common.save_confirm_window.do_not_save"))
@@ -212,13 +213,15 @@ export class NoteFileHandler {
      * Call when app init.
      * Check if there is a note for this window to open.
      */
-    static async openInitNoteForThisWindow(this_window_id: string): Promise<boolean>{
+    static async openInitNoteForThisWindow(): Promise<boolean>{
         try {
+            const { $viewState } = useNuxtApp()
+            const this_window_id = $viewState.window_id
             let note_path: string = await invoke("get_opened_note_for_window", { windowId: this_window_id })
-            AppState.logger.debug(`Init window with note path: ${note_path}`)
+            AppState.logger.debug(`Init window ${this_window_id} with note path: ${note_path}`)
             if (note_path != ""){
                 AppState.logger.debug("Has opened note.")
-                await NoteFileHandler.openNote(this_window_id, true, note_path, true)
+                await NoteFileHandler.openNote(null, note_path, true)
                 return true
             } else {
                 AppState.logger.debug("No opened note.")
@@ -236,63 +239,87 @@ export class NoteFileHandler {
      * The chosen path is kept as save-path which is used to save current file.
      * If this window already has a note opened, open it in another window.
      */
-    static async openNote(this_window_id: string, open_in_this_window: boolean, filepath?: string | null, init_mode: boolean = false){
+    static async openNote(note?: Note | null, filepath?: string | null, init_window_mode: boolean = false){
         const { $viewState, $emitter, $Message } = useNuxtApp()
+        AppState.logger.trace(`Start openNote. note: ${note} | filepath: ${filepath} | init-window-mode: ${init_window_mode}`)
 
         try {
             // get the filepath from argument or dialog
-            let selected_open_path: string | string[] | null
-            if (filepath != null){
-                selected_open_path = filepath
+            let selected_open_path: string | string[] | null = null
+            if (note == null){
+                // open file mode
+                AppState.logger.trace("Load note from file mode.")
+                if (filepath != null){
+                    selected_open_path = filepath
+                } else {
+                    selected_open_path = await open({
+                        title: "Open",
+                        multiple: false,
+                        directory: false,
+                        filters: [
+                            { name: "Note", extensions: [ struct_note_file_extension ] },
+                        ]
+                    })
+                    selected_open_path = this.getPathFromSelectedFiles(selected_open_path)
+                    if (selected_open_path === null){
+                        // cancel operation
+                        $Message.info(tran("common.cancel"))
+                        return
+                    }
+                }
+
+                if (!init_window_mode){
+                    AppState.logger.trace("Checking if the file is already opened...")
+                    // check if the path is already opened in some window
+                    // if init mode => skip as the file must be marked as "opened" in current window
+                    let already_opened: boolean = await invoke("is_file_already_open", { filepath: selected_open_path })
+                    if (already_opened){
+                        return Promise.reject(new FileAlreadyOpened(selected_open_path))
+                    }
+                }
+            }
+
+            let window_id = $viewState.window_id
+            let open_in_this_window = true
+            if ($viewState.hasOpenNote()){
+                AppState.logger.debug("This window has open note. Creating new window...")
+                open_in_this_window = false
+                window_id = WindowUtil.generateNewWindowId()
+                WindowUtil.createNewWindow(window_id)
             } else {
-                selected_open_path = await open({
-                    title: "Open",
-                    multiple: false,
-                    directory: false,
-                    filters: [
-                        { name: "Note", extensions: [ struct_note_file_extension ] },
-                    ]
-                })
-                selected_open_path = this.getPathFromSelectedFiles(selected_open_path)
-                if (selected_open_path === null){
-                    // cancel operation
-                    $Message.info(tran("common.cancel"))
+                AppState.logger.debug("Open the note in current window.")
+                if (selected_open_path != null){
+                    note = await NoteFileHandler.loadFile(selected_open_path)
+                    AppState.logger.debug(`note loaded ${note}`)
+                    if (note == null){
+                        AppState.logger.error("Fail to load note.")
+                        return
+                    }
+                }
+
+                if (note != null){
+                    AppState.logger.debug(`Setting opened note...`)
+                    $viewState.setOpenNote(note)
+                    appWindow.setTitle(note.title)
+                    $viewState.save_path = selected_open_path
+                } else {
+                    AppState.logger.debug(`No available note.`)
                     return
                 }
-            }
-
-            // check if the path is already opened
-            if (!init_mode){
-                let already_opened: boolean = await invoke("is_file_already_open", { filepath: selected_open_path })
-                if (already_opened){
-                    return Promise.reject(new FileAlreadyOpened(selected_open_path))
-                }
-            }
-
-            let window_id = this_window_id
-            if (open_in_this_window){
-                // selected_open_path === String
-                const loaded_note = await NoteFileHandler.loadFile(selected_open_path)
-                $viewState.setOpenNote(loaded_note)
-                // set default save path as the open path
-                $viewState.save_path = selected_open_path
                 // emit the open note event
                 $emitter.emit(EventConstant.NOTE_OPENED)
                 appWindow.setTitle($viewState.editing_note.title)
-            } else {
-                AppState.logger.debug("Creating new window...")
-                window_id = WindowUtil.generateNewWindowId()
-                WindowUtil.createNewWindow(window_id)
             }
 
             // update the file state
-            if (!init_mode){
-                // init mode => already added to file list
+            if (!init_window_mode){
                 AppState.logger.trace("add file")
                 await invoke("add_file", { windowId: window_id, filepath: selected_open_path })
-            } 
-            AppState.logger.trace("init_file")
-            await invoke("init_file", { windowId: window_id })
+            }
+            if (open_in_this_window){
+                AppState.logger.trace("init_file")
+                await invoke("init_file", { windowId: window_id })
+            }
         } catch (error) {
             AppState.logger.error("Error when trying to open Note.", error)
             return Promise.reject(error)

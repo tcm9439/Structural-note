@@ -2,7 +2,9 @@
 const { $emitter } = useNuxtApp()
 import { AppState, EventConstant } from "structural-core"
 import { ShortcutHandler } from "~/composables/handler/ShortcutHandler"
+import { WindowUtil } from "~/composables/app/window"
 
+WindowUtil.setWindowId()
 const reload_key = ref(0)
 function reloadPage(){
     AppState.logger.debug("Setting updated. Reload page.")

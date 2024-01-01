@@ -32,6 +32,7 @@ export class AppPageUtil {
 const COMMAND_HISTORY_SIZE = 5
 
 export class MainViewState {
+    private _window_id: string = ""
     private _last_saved_note: Note | null = null
     private _editing_note: Note | null = null
     private _save_path: string | null = null
@@ -66,10 +67,14 @@ export class MainViewState {
 
     isNoteChange(): boolean {
         if (this._editing_note && this._last_saved_note){
-            return this._editing_note.equals(this._last_saved_note)
+            return !this._editing_note.equals(this._last_saved_note)
         }
         // no open note
         return false
+    }
+
+    hasOpenNote(): boolean {
+        return this._editing_note != null
     }
 
     get editing_note(): Note | null {
@@ -94,5 +99,13 @@ export class MainViewState {
 
     get history(): CommandHistory {
         return this._command_history
+    }
+
+    set window_id(id: string){
+        this._window_id = id
+    }
+
+    get window_id(): string {
+        return this._window_id
     }
 }

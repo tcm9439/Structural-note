@@ -2,7 +2,6 @@
 import { AppState, EventConstant, AppPage, AppPageUtil } from "structural-core"
 // import { Icon } from "view-ui-plus"
 import { NoteFileHandler, NoteExportHandler, EditHistoryHandler } from "@/composables/handler/NoteFileHandler"
-import { appWindow } from "@tauri-apps/api/window"
 import { tran } from "@/composables/app/translate"
 import { exceptionHandler } from "@/composables/app/exception"
 
@@ -43,9 +42,12 @@ async function saveNoteBeforeUpdateSetting(){
 async function menuSelectHandler(menu_item: string){
     try {
         switch (menu_item){
+            case "new-window":
+                await NoteFileHandler.createNote()
+                break
             case "open-file":
                 // without await, the catch block will not work
-                await NoteFileHandler.openNote(appWindow.label, !has_open_note.value)
+                await NoteFileHandler.openNote()
                 break
             case "close-file":
                 if (has_open_note.value) {
@@ -139,8 +141,7 @@ onBeforeUnmount(() => {
                     </Submenu>
                     <Submenu name="edit-operation">
                         <template #title>
-                            <!-- <Icon type="md-create" /> -->
-                            {{ tran("structural.header.edit") }}
+                            {{ tran("structural.header.edit_menu") }}
                         </template>
                         <MenuItem name="undo">
                             {{ tran("structural.header.edit_undo") }}
@@ -149,8 +150,15 @@ onBeforeUnmount(() => {
                             {{ tran("structural.header.edit_redo") }}
                         </MenuItem>
                     </Submenu>
+                    <Submenu name="window-operation">
+                        <template #title>
+                            {{ tran("structural.header.window_menu") }}
+                        </template>
+                        <MenuItem name="new-window">
+                            {{ tran("structural.header.window_new") }}
+                        </MenuItem>
+                    </Submenu>
                     <MenuItem name="setting">
-                        <!-- <Icon type="md-settings" /> -->
                         {{ tran("structural.header.setting_menu") }}
                     </MenuItem>
                 </Menu>

@@ -5,13 +5,11 @@
 [ ] edit markdown when export to md 
 [ ] create note from template (also as tutorial)
 [ ] Decimal to int
-[ ] New file header menu item
 [ ] Export to csv
 [ ] attr constrains
     [ ] regex
 [ ] value.vue
     [ ] enum (dropdown list)
-    [ ] Long text short text
     [ ] date
     [ ] time
     [ ] date-time

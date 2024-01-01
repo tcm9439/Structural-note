@@ -55,7 +55,7 @@ type RootTranslation = {
 			/**
 			 * E​d​i​t
 			 */
-			edit: string
+			edit_menu: string
 			/**
 			 * U​n​d​o
 			 */
@@ -64,6 +64,14 @@ type RootTranslation = {
 			 * R​e​d​o
 			 */
 			edit_redo: string
+			/**
+			 * W​i​n​d​o​w
+			 */
+			window_menu: string
+			/**
+			 * N​e​w​ ​W​i​n​d​o​w
+			 */
+			window_new: string
 		}
 		file: {
 			/**
@@ -212,18 +220,6 @@ type RootTranslation = {
 			 * C​h​o​o​s​e​ ​A​t​t​r​i​b​u​t​e​ ​T​y​p​e
 			 */
 			edit_attr_choose_type_label: string
-			/**
-			 * C​u​r​r​e​n​t​ ​A​t​t​r​i​b​u​t​e​ ​T​y​p​e
-			 */
-			edit_attr_current_type_label: string
-			/**
-			 * C​h​a​n​g​e​ ​A​t​t​r​i​b​u​t​e​ ​T​y​p​e​ ​T​o
-			 */
-			edit_attr_change_to_type_label: string
-			/**
-			 * T​h​i​s​ ​a​t​t​r​i​b​u​t​e​ ​t​y​p​e​ ​c​a​n​n​o​t​ ​b​e​ ​c​h​a​n​g​e​d​.
-			 */
-			edit_attr_cannot_be_change: string
 			/**
 			 * D​e​f​i​n​i​t​i​o​n​ ​U​p​d​a​t​e​d
 			 */
@@ -654,7 +650,7 @@ export type TranslationFunctions = {
 			/**
 			 * Edit
 			 */
-			edit: () => LocalizedString
+			edit_menu: () => LocalizedString
 			/**
 			 * Undo
 			 */
@@ -663,6 +659,14 @@ export type TranslationFunctions = {
 			 * Redo
 			 */
 			edit_redo: () => LocalizedString
+			/**
+			 * Window
+			 */
+			window_menu: () => LocalizedString
+			/**
+			 * New Window
+			 */
+			window_new: () => LocalizedString
 		}
 		file: {
 			/**
@@ -811,18 +815,6 @@ export type TranslationFunctions = {
 			 * Choose Attribute Type
 			 */
 			edit_attr_choose_type_label: () => LocalizedString
-			/**
-			 * Current Attribute Type
-			 */
-			edit_attr_current_type_label: () => LocalizedString
-			/**
-			 * Change Attribute Type To
-			 */
-			edit_attr_change_to_type_label: () => LocalizedString
-			/**
-			 * This attribute type cannot be changed.
-			 */
-			edit_attr_cannot_be_change: () => LocalizedString
 			/**
 			 * Definition Updated
 			 */

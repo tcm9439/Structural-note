@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import { Note, EventConstant, AppState, AppPage } from "structural-core"
 import { NoteFileHandler } from "@/composables/handler/NoteFileHandler"
-const { $emitter, $viewState, $Modal } = useNuxtApp()
+const { $emitter, $viewState } = useNuxtApp()
 import { appWindow } from "@tauri-apps/api/window"
 import { invoke } from "@tauri-apps/api/tauri"
 import { Icon } from "view-ui-plus"
@@ -28,14 +28,13 @@ $emitter.on(EventConstant.NOTE_OPENED, openedNoteChangeHandler)
 $emitter.on(EventConstant.NOTE_CLOSED, openedNoteChangeHandler)
 
 // # init page: check if there is any opened note for this window
-const window_id = appWindow.label
 try {
     if ($viewState.editing_note != null){
         // already opened a note (probably from go back in this page from another page)
         editing_note.value = $viewState.editing_note
         has_open_note.value = true
     } else {
-        has_open_note.value = await NoteFileHandler.openInitNoteForThisWindow(window_id)
+        has_open_note.value = await NoteFileHandler.openInitNoteForThisWindow()
         AppState.logger.debug(`Has open note: ${has_open_note.value}`)
     }
 } catch (error) {
@@ -51,7 +50,7 @@ const unlisten_drop_file = await appWindow.onFileDropEvent(async (event) => {
         }
         let selected_open_path = NoteFileHandler.getPathFromSelectedFiles(event.payload.paths)
         AppState.logger.debug(`Selected open path: ${selected_open_path}`)
-        await NoteFileHandler.openNote(window_id, !has_open_note.value, selected_open_path)
+        await NoteFileHandler.openNote(null, selected_open_path)
     } catch (error) {
         exceptionHandler(error, "error.general.open_note")
     }
@@ -82,7 +81,7 @@ onBeforeUnmount(() => {
     $emitter.off(EventConstant.NOTE_CLOSED, openedNoteChangeHandler)
     unlisten_drop_file()
     unlisten_close_window()
-    invoke("remove_opened_file", { windowId: window_id })
+    invoke("remove_opened_file", { windowId: $viewState.window_id })
 })
 
 </script>

@@ -3,7 +3,7 @@
 
 mod open_file;
 use open_file::{OpenedFile, OpenedFileList};
-use tauri::Manager;
+use tauri::{Manager, Menu};
 use tauri_plugin_log::{LogTarget, Builder, TimezoneStrategy};
 use log::{LevelFilter, info, debug, error, warn};
 use std::sync::Mutex;
@@ -105,11 +105,11 @@ fn get_logger_plugin_builder() -> Builder {
 
 fn main() {
     let app_state = AppState::new();
-
-    // init the logger
     let logger = get_logger_plugin_builder().build();
+    let menu = Menu::new();
     
     tauri::Builder::default()
+        .menu(menu)
         // logger
         .plugin(logger)
         // single instance
