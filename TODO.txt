@@ -2,7 +2,6 @@
 
 ## Pending Features
 [ ] check what if i write some invalid value & save
-[ ] edit markdown when export to md 
 [ ] create note from template (also as tutorial)
 [ ] Decimal to int
 [ ] Export to csv

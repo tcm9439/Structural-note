@@ -27,6 +27,10 @@ const zh_HK = {
             note_name: "筆記名稱",
             untitled: "未命名",
             saved: "已儲存",
+            export: {
+                export: "匯出",
+                preview_title: "預覽匯出檔案：",
+            }
         },
         section: {
             section: "段落",
@@ -141,6 +145,10 @@ const zh_HK = {
             open_note: "開啟筆記失敗。",
             create_note: "新增筆記失敗。",
             message: "發生錯誤，請檢查程式記錄檔。",
+            unsupported: {
+                title: "無效操作",
+                message: "「{0}」為不支援或未實作的功能。",
+            },
         },
         attribute: {
             invalid_type_conversion: {

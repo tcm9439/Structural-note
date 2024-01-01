@@ -1,11 +1,13 @@
+import { Note, EventConstant, AppState, FileAlreadyOpened } from "structural-core"
 import { TauriFileSystem } from "tauri-fs-util"
+import { tran } from "@/composables/app/translate"
+import { WindowUtil } from "@/composables/app/window"
+
 import { open, save } from "@tauri-apps/api/dialog"
 import { basename } from "@tauri-apps/api/path"
-import { Note, EventConstant, NoteMarkdownConverter, AppState, FileAlreadyOpened } from "structural-core"
-import { WindowUtil } from "@/composables/app/window"
 import { appWindow } from "@tauri-apps/api/window"
 import { invoke } from '@tauri-apps/api/tauri'
-import { tran } from "@/composables/app/translate"
+
 import { Button } from "view-ui-plus"
 
 const struct_note_file_extension = "structnote"
@@ -323,49 +325,6 @@ export class NoteFileHandler {
         } catch (error) {
             AppState.logger.error("Error when trying to open Note.", error)
             return Promise.reject(error)
-        }
-    }
-}
-
-export class NoteExportHandler {
-    private static async askForSavePath(export_file_extension: string, default_note_filename: string): Promise<string | null> {
-        const save_path = await save({
-            title: "Save",
-            filters: [
-                { name: "Export File Type", extensions: [ export_file_extension ] },
-            ],
-            defaultPath: default_note_filename
-        })
-
-        return save_path
-    }
-
-    /**
-     * Convert the Note to a markdown file.
-     * Open a dialog for choosing a path to save the markdown file.
-     */
-    static async exportToMarkdown(){
-        try {
-            const { $viewState, $emitter } = useNuxtApp();
-
-            if ($viewState.editing_note === null){
-                AppState.logger.warn("No note is opened to save.")
-                return
-            }
-
-            const selected_export_path = await this.askForSavePath("md", $viewState.editing_note.title)
-            
-            if (selected_export_path === null){
-                AppState.logger.warn("No path is chosen to open.")
-                return
-            } 
-    
-            // selected_open_path === String
-            const converter = new NoteMarkdownConverter()
-            const converted_content = converter.convert($viewState.editing_note)
-            await TauriFileSystem.instance.writeTextFile(selected_export_path, converted_content, false, true)
-        } catch (err) {
-            AppState.logger.error(err);
         }
     }
 }

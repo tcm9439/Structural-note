@@ -27,6 +27,10 @@ const en = {
             note_name: "Note Name",
             untitled: "Untitled",
             saved: "Saved",
+            export: {
+                export: "Export",
+                preview_title: "Preview export file:",
+            },
         },
         section: {
             section: "Section",
@@ -141,6 +145,10 @@ const en = {
             open_note: "Fail to open note.",
             create_note: "Fail to open note.",
             message: "Something went wrong.",
+            unsupported: {
+                title: "Unsupported operation",
+                message: "Operation '{0}' not implemented or not supported.",
+            },
         },
         attribute: {
             invalid_type_conversion: {

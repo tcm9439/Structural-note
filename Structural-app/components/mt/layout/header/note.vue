@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { AppState, EventConstant, AppPage, AppPageUtil } from "structural-core"
+import { AppState, EventConstant, AppPage, AppPageUtil, ConverterType } from "structural-core"
 // import { Icon } from "view-ui-plus"
-import { NoteFileHandler, NoteExportHandler, EditHistoryHandler } from "@/composables/handler/NoteFileHandler"
+import { NoteFileHandler, EditHistoryHandler } from "@/composables/handler/NoteFileHandler"
+import { NoteExportHandler } from "@/composables/handler/NoteExportHandler"
 import { tran } from "@/composables/app/translate"
 import { exceptionHandler } from "@/composables/app/exception"
 
@@ -66,7 +67,7 @@ async function menuSelectHandler(menu_item: string){
                 break
             case "export-md":
                 if (has_open_note.value){
-                    await NoteExportHandler.exportToMarkdown()
+                    await NoteExportHandler.emitShowConvertPreviewEvent(ConverterType.MARKDOWN)
                 }
                 break
             case "setting":

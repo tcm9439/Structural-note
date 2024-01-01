@@ -106,6 +106,16 @@ type RootTranslation = {
 			 * S​a​v​e​d
 			 */
 			saved: string
+			'export': {
+				/**
+				 * E​x​p​o​r​t
+				 */
+				'export': string
+				/**
+				 * P​r​e​v​i​e​w​ ​e​x​p​o​r​t​ ​f​i​l​e​:
+				 */
+				preview_title: string
+			}
 		}
 		section: {
 			/**
@@ -471,6 +481,17 @@ type RootTranslation = {
 			 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​.
 			 */
 			message: string
+			unsupported: {
+				/**
+				 * U​n​s​u​p​p​o​r​t​e​d​ ​o​p​e​r​a​t​i​o​n
+				 */
+				title: string
+				/**
+				 * O​p​e​r​a​t​i​o​n​ ​'​{​0​}​'​ ​n​o​t​ ​i​m​p​l​e​m​e​n​t​e​d​ ​o​r​ ​n​o​t​ ​s​u​p​p​o​r​t​e​d​.
+				 * @param {unknown} 0
+				 */
+				message: RequiredParams<'0'>
+			}
 		}
 		attribute: {
 			invalid_type_conversion: {
@@ -701,6 +722,16 @@ export type TranslationFunctions = {
 			 * Saved
 			 */
 			saved: () => LocalizedString
+			'export': {
+				/**
+				 * Export
+				 */
+				'export': () => LocalizedString
+				/**
+				 * Preview export file:
+				 */
+				preview_title: () => LocalizedString
+			}
 		}
 		section: {
 			/**
@@ -1055,6 +1086,16 @@ export type TranslationFunctions = {
 			 * Something went wrong.
 			 */
 			message: () => LocalizedString
+			unsupported: {
+				/**
+				 * Unsupported operation
+				 */
+				title: () => LocalizedString
+				/**
+				 * Operation '{0}' not implemented or not supported.
+				 */
+				message: (arg0: unknown) => LocalizedString
+			}
 		}
 		attribute: {
 			invalid_type_conversion: {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AttributeDefinition, ConstraintType } from "structural-core"
+import { AttributeDefinition } from "structural-core"
 import { type AttrConstraintEditComponent } from "@/composables/active-data/Constraint"
 
 const props = defineProps<{

@@ -4,3 +4,8 @@
 export abstract class Converter<E, R>{
     abstract convert(element: E): R
 }
+
+export enum ConverterType {
+    MARKDOWN,
+    TEXT,
+}

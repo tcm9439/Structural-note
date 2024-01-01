@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, Note, InjectConstant, type ComponentVForElement, EventConstant, SectionTypeMapper, SectionType, RemoveComponentsCommand, AddComponentsCommand } from "structural-core"
+import { EditPath, Note, InjectConstant, type ComponentVForElement, EventConstant, SectionTypeMapper, SectionType, RemoveComponentsCommand, AddComponentsCommand, ConverterType } from "structural-core"
 import { elementListGetter } from "@/composables/active-data/Element"
 import { sectionComponentMapper } from "@/composables/active-data/Section"
 import { getAvailableSection } from "@/composables/active-data/Note"
@@ -50,12 +50,21 @@ function moveDownSection(section_id: string){
     rerender_section.value += 1
 }
 
+const converter_preview_enable = ref(false)
+let converter_type = ConverterType.MARKDOWN
+function enableExportPreview(type: ConverterType){
+    converter_preview_enable.value = true
+    converter_type = type
+}
+
+$emitter.on("EventConstant.EXPORT", enableExportPreview)
 $emitter.on(EventConstant.ADD_SECTION, addSection)
 $emitter.on(EventConstant.REMOVE_SECTION, removeSection)
 $emitter.on(EventConstant.MV_UP_SECTION, moveUpSection)
 $emitter.on(EventConstant.MV_DOWN_SECTION, moveDownSection)
 
 onBeforeUnmount(() => {
+    $emitter.off("EventConstant.EXPORT", enableExportPreview)
     $emitter.off(EventConstant.ADD_SECTION, addSection)
     $emitter.off(EventConstant.REMOVE_SECTION, removeSection)
     $emitter.off(EventConstant.MV_UP_SECTION, moveUpSection)
@@ -91,6 +100,12 @@ onBeforeUnmount(() => {
             </template>
         </Dropdown>
     </div>
+
+    <mt-export-base
+        v-if="converter_preview_enable"
+        :type="converter_type"
+        @complete="converter_preview_enable = false"
+    ></mt-export-base>
 </template>
 
 <style>
