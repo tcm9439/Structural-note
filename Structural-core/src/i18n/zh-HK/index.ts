@@ -32,6 +32,12 @@ const zh_HK = {
                 preview_title: "預覽匯出檔案：",
             }
         },
+        template: {
+            template: "範本",
+            select_template: "選擇範本",
+            blank: "空白筆記",
+            tutorial: "教學",
+        },
         section: {
             section: "段落",
             add_section: "新增段落",

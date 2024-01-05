@@ -9,7 +9,7 @@ use std::fs;
 #[derive(PartialEq,Clone,Debug)]
 pub struct OpenedFile {
     // Abs path to file
-    pub file_path: PathBuf,
+    pub file_path: Option<PathBuf>,
     pub window_id: String,
     pub finish_init: bool,
 }
@@ -17,16 +17,32 @@ pub struct OpenedFile {
 impl OpenedFile {
     pub fn new(file_path: &String, window_id: String) -> Result<OpenedFile, Error> {
         Ok(OpenedFile {
-            file_path: OpenedFile::get_full_path(file_path)?,
+            file_path: Some(OpenedFile::get_full_path(file_path)?),
             window_id,
             finish_init: false,
         })
+    }
+
+    pub fn new_unsaved(window_id: String) -> OpenedFile {
+        OpenedFile {
+            file_path: None,
+            window_id,
+            finish_init: false,
+        }
     }
 
     /// Get the absolute path of a file
     pub fn get_full_path(file_path: &str) -> Result<PathBuf, Error> {
         // fs::canonicalize(file_path).expect("Invalid file path").to_path_buf()
         fs::canonicalize(file_path)
+    }
+
+    pub fn get_file_path_in_string(&self) -> String {
+        if let Some(file_path) = &self.file_path {
+            file_path.to_str().unwrap().to_string()
+        } else {
+            String::from("")
+        }
     }
 }
 
@@ -46,14 +62,18 @@ impl OpenedFileList {
     }
 
     pub fn add_file(&mut self, file: OpenedFile) {
-        self.filepath_to_window_id.insert(file.file_path.clone(), file.window_id.clone());
+        if let Some(file_path) = &file.file_path {
+            self.filepath_to_window_id.insert(file_path.clone(), file.window_id.clone());
+        }
         self.window_id_to_opened_file.insert(file.window_id.clone(), file);
     }
 
     pub fn remove_file_by_window_id(&mut self, window_id: &str) {
         match self.window_id_to_opened_file.get(window_id) {
             Some(file) => {
-                self.filepath_to_window_id.remove(&file.file_path);
+                if let Some(file_path) = &file.file_path {
+                    self.filepath_to_window_id.remove(file_path);
+                }
             },
             None => (),
         }
@@ -125,7 +145,7 @@ mod tests {
     fn test_new_opened_file() {
         let file = OpenedFile::new(&String::from("./src/main.rs"), String::from("TEST")).unwrap();
         assert_eq!("TEST", file.window_id);
-        assert!(file.file_path.to_str().unwrap().ends_with("src/main.rs"));
+        assert!(file.file_path.unwrap().to_str().unwrap().ends_with("src/main.rs"));
 
         let not_exist_file_result = OpenedFile::new(&String::from("./src/main9999.rs"), String::from("TEST"));
         assert!(not_exist_file_result.is_err())

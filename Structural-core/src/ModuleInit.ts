@@ -23,12 +23,15 @@ export class ModuleInit {
     }
 
     private static async tryRegisterKeybinding(key: string, callback?: Consumer){
+        AppState.logger.debug(`Try register keybinding: ${key}`)
         if (callback){
             // Some hotkey may already been registered by the web view 
             const is_registered = await isRegistered(key)
             if (is_registered){
+                AppState.logger.debug(`Keybinding: ${key} already registered, unregister now...`)
                 await unregister(key)
             }
+            AppState.logger.debug(`Registering keybinding: ${key}...`)
             register(key, callback)
         }
     }

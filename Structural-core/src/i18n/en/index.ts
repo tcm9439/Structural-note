@@ -32,6 +32,12 @@ const en = {
                 preview_title: "Preview export file:",
             },
         },
+        template: {
+            template: "Template",
+            select_template: "Select A Template",
+            blank: "Blank",
+            tutorial: "Tutorial",
+        },
         section: {
             section: "Section",
             add_section: "Add Section",

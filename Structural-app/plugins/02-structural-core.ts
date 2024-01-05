@@ -2,6 +2,12 @@ import { MainViewState, ModuleInit } from "structural-core"
 import { ShortcutKeyPressEvent } from "structural-core"
 import { emit } from '@tauri-apps/api/event'
 
+declare module "#app" {
+    interface NuxtApp {
+        $viewState: MainViewState;
+    }
+}
+
 export default defineNuxtPlugin(async (nuxtApp) => {
     await ModuleInit.init(useRuntimeConfig(), [{
         key: "CommandOrControl+S",

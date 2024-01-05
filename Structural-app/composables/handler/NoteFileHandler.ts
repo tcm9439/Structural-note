@@ -2,6 +2,7 @@ import { Note, EventConstant, AppState, FileAlreadyOpened } from "structural-cor
 import { TauriFileSystem } from "tauri-fs-util"
 import { tran } from "@/composables/app/translate"
 import { WindowUtil } from "@/composables/app/window"
+import { NOTE_TEMPLATES } from "@/composables/assets-helper/template-helper"
 
 import { open, save } from "@tauri-apps/api/dialog"
 import { basename } from "@tauri-apps/api/path"
@@ -29,10 +30,14 @@ export class NoteFileHandler {
     private static async loadFile(filename: string): Promise<Note> {
         let title: string = await NoteFileHandler.getTitle(filename)
         let content: string = await TauriFileSystem.instance.readTextFile(filename)
-        let content_json = JSON.parse(content)
-        let loaded_note = Note.loadFromJson(title, content_json)
+        let loaded_note = NoteFileHandler.loadFromFileContent(title, content)
         
         return Promise.resolve(loaded_note)
+    }
+
+    private static loadFromFileContent(title: string, file_content: string): Note {
+        let content_json = JSON.parse(file_content)
+        return Note.loadFromJson(title, content_json)
     }
 
     /**
@@ -82,20 +87,17 @@ export class NoteFileHandler {
     static async saveNote(save_as_mode: boolean = false){
         AppState.logger.debug("Start saveNote. save-as-mode: " + save_as_mode)
         try {
-            const { $viewState, $Message } = useNuxtApp()
+            const { $viewState, $Message, $emitter } = useNuxtApp()
             if ($viewState.editing_note === null){
                 AppState.logger.info("No note is opened to save.")
                 return
             }
 
-            if (!$viewState.isNoteChange() && !save_as_mode){
-                // no change to the note, not need to save
-                return
-            }
-
             // get the save path
             let this_save_path = $viewState.save_path
+            let must_save = false
             if (this_save_path === null || save_as_mode){
+                must_save = true // must save as the save path will changed
                 // there is no save path set or this is a save-as operation
                 AppState.logger.debug("No save path is set or this is a save-as operation.")
                 const default_note_filename = $viewState.editing_note.title + "." + struct_note_file_extension
@@ -103,10 +105,22 @@ export class NoteFileHandler {
             }
 
             if (this_save_path === null){
-                return Promise.reject("No path is chosen to save.")
+                $Message.info(tran("common.cancel"))
+                return
+            } 
+
+            // update the note title
+            let note_title = await NoteFileHandler.getTitle(this_save_path)
+            $viewState.editing_note.title = note_title
+            $emitter.emit(EventConstant.NOTE_SAVED)
+
+            if (!must_save && !$viewState.isNoteChange() && !save_as_mode){
+                // no change to the note && path not changed, not need to save
+                AppState.logger.debug("No change to the note and save path not changed. Not need actual saving.")
+            } else {
+                AppState.logger.debug("Saving note to file system...")
+                await NoteFileHandler.saveToFile($viewState.editing_note, this_save_path)
             }
-            
-            await NoteFileHandler.saveToFile($viewState.editing_note, this_save_path)
     
             // if this is not save-as operation & update the save path
             if (!save_as_mode){
@@ -120,14 +134,35 @@ export class NoteFileHandler {
         }
     }
 
-    static async createNote(title?: string){
+    private static createNoteFromTemplate(title: string, template_id: string): Note {
+        let template = NOTE_TEMPLATES.find(template => template.id === template_id)
+        if (template !== undefined){
+            return NoteFileHandler.loadFromFileContent(title, template.file_content)
+        }
+        return new Note(title)
+    }
+
+    static async createNote(title?: string, template_id?: string){
         try {
+            // if no template is chosen, use blank template
+            if (template_id === undefined){
+                template_id = "blank"
+            }
+
+            // use default translated title
             if (title === undefined || title.trim() === ""){
                 title = tran("structural.file.untitled")
             }
 
             // create a new note
-            let new_note = new Note(title)
+            let new_note: Note
+            if (template_id === "blank"){
+                // create a blank note
+                new_note = new Note(title)
+            } else {
+                // create a note from template
+                new_note = NoteFileHandler.createNoteFromTemplate(title, template_id)
+            }
             AppState.logger.info(`Created note with title ${title}`)
             this.openNote(new_note)
         } catch (err) {
@@ -224,15 +259,14 @@ export class NoteFileHandler {
             if (note_path != ""){
                 AppState.logger.debug("Has opened note.")
                 await NoteFileHandler.openNote(null, note_path, true)
-                return true
+                return Promise.resolve(true)
             } else {
                 AppState.logger.debug("No opened note.")
-                return false
+                return Promise.resolve(false)
             }
         } catch (error){
-            Promise.reject(error)
+            return Promise.reject(error)
         }
-        return false
     }
     
     /**
@@ -316,7 +350,7 @@ export class NoteFileHandler {
             // update the file state
             if (!init_window_mode){
                 AppState.logger.trace("add file")
-                await invoke("add_file", { windowId: window_id, filepath: selected_open_path })
+                await invoke("add_file", { windowId: window_id, filepath: selected_open_path ?? "" })
             }
             if (open_in_this_window){
                 AppState.logger.trace("init_file")

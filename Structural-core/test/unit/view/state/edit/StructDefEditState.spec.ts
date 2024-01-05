@@ -50,7 +50,7 @@ describe("StructEditQueue", () => {
         queue.commit()
         expect(queue["_pending_items"].length).toBe(0)
         expect(queue["_confirmed_items"].length).toBe(1)
-        expect(queue["_confirmed_items"][0].operation).toBe(StructEditOperation.CHANGE_ATTR)
+        expect(queue["_confirmed_items"][0].operation).toBe(StructEditOperation.ADD_ATTR)
     })
 
     it("rollback", () => {

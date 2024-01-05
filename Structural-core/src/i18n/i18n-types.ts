@@ -117,6 +117,24 @@ type RootTranslation = {
 				preview_title: string
 			}
 		}
+		template: {
+			/**
+			 * T​e​m​p​l​a​t​e
+			 */
+			template: string
+			/**
+			 * S​e​l​e​c​t​ ​A​ ​T​e​m​p​l​a​t​e
+			 */
+			select_template: string
+			/**
+			 * B​l​a​n​k
+			 */
+			blank: string
+			/**
+			 * T​u​t​o​r​i​a​l
+			 */
+			tutorial: string
+		}
 		section: {
 			/**
 			 * S​e​c​t​i​o​n
@@ -732,6 +750,24 @@ export type TranslationFunctions = {
 				 */
 				preview_title: () => LocalizedString
 			}
+		}
+		template: {
+			/**
+			 * Template
+			 */
+			template: () => LocalizedString
+			/**
+			 * Select A Template
+			 */
+			select_template: () => LocalizedString
+			/**
+			 * Blank
+			 */
+			blank: () => LocalizedString
+			/**
+			 * Tutorial
+			 */
+			tutorial: () => LocalizedString
 		}
 		section: {
 			/**

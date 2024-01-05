@@ -65,7 +65,7 @@ export class StructEditQueue {
             // if operation == delete => remove all previous operations for the same attr
             this._confirmed_items = this.removeAllOperationForAttr(this._confirmed_items, item.attr_id)
         } else if (item.operation == StructEditOperation.CHANGE_ATTR) {
-            if (this.uncommittedItemsInclude(item.attr_id, StructEditOperation.ADD_ATTR)) {
+            if (this.committedItemsInclude(item.attr_id, StructEditOperation.ADD_ATTR)) {
                 // if the attr is newly added, skip this change operation
                 return
             } 
@@ -119,6 +119,10 @@ export class StructEditQueue {
 
     uncommittedItemsInclude(attr_id: UUID, operation: StructEditOperation): boolean {
         return this._pending_items.some(item => item.attr_id == attr_id && item.operation == operation)
+    }
+
+    committedItemsInclude(attr_id: UUID, operation: StructEditOperation): boolean {
+        return this._confirmed_items.some(item => item.attr_id == attr_id && item.operation == operation)
     }
 
     /**

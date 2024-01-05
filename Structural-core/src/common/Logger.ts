@@ -1,7 +1,7 @@
 import { LogOptions, trace, debug, info, warn, error, attachConsole } from "tauri-plugin-log-api"
 
 export abstract class Logger {
-    abstract error(message: string, error_obj?: Error, options?: LogOptions): void
+    abstract error(message: string, error_obj?: any, options?: LogOptions): void
     abstract warn(message: string, options?: LogOptions): void
     abstract info(message: string, options?: LogOptions): void
     abstract debug(message: string, options?: LogOptions): void
@@ -21,7 +21,7 @@ export class WebLogger extends Logger {
         return new WebLogger()
     }
 
-    error(message: string, error_obj?: Error, options?: LogOptions){
+    error(message: string, error_obj?: any, options?: LogOptions){
         console.error(message, error_obj)
     }
 
@@ -62,7 +62,7 @@ export class TauriLogger extends Logger {
         return new TauriLogger()
     }
 
-    error(message: string, error_obj?: Error, options?: LogOptions) {
+    error(message: string, error_obj?: any, options?: LogOptions) {
         if (error_obj === undefined) {
             error(message, options)
         } else {

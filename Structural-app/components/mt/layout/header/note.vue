@@ -15,29 +15,37 @@ const has_open_note = computed(() => $viewState.editing_note != null)
 const refresh_menu = ref(0)
 
 async function saveNoteBeforeUpdateSetting(){
-    const { $Modal } = useNuxtApp()
+    const { $Modal, $viewState } = useNuxtApp()
 
-    // ask to save file
-    // choice: 1. save and go to setting 2. give up operation
-    await $Modal.confirm({
-        title: tran("common.save_confirm_window.title", null, {
-            target: tran("structural.file.note")
-        }),
-        content: tran("structural.setting.save_before.content"),
-        okText: tran("common.save_confirm_window.save"),
-        onOk: async () => {
-            try {
-                await NoteFileHandler.saveNote()
-                AppState.logger.debug(`Note saved before setting update.`)
-                let setting_page_route = AppPageUtil.getPageRoute(AppPage.SETTING)
-                AppState.logger.debug(`Navigate to setting page: ${setting_page_route}`)
-                await navigateTo(setting_page_route)
-            } catch (error) {
-                exceptionHandler(error)
-            }
-        },
-        cancelText: tran("common.cancel"),
-    })
+    let go_to_setting_callback = async () => {
+        let setting_page_route = AppPageUtil.getPageRoute(AppPage.SETTING)
+        AppState.logger.debug(`Navigate to setting page: ${setting_page_route}`)
+        await navigateTo(setting_page_route)
+    }
+
+    if ($viewState.isNoteChange()){
+        // ask to save file if the file is changed
+        // choice: 1. save and go to setting 2. give up operation
+        await $Modal.confirm({
+            title: tran("common.save_confirm_window.title", null, {
+                target: tran("structural.file.note")
+            }),
+            content: tran("structural.setting.save_before.content"),
+            okText: tran("common.save_confirm_window.save"),
+            onOk: async () => {
+                try {
+                    await NoteFileHandler.saveNote()
+                    AppState.logger.debug(`Note saved before setting update.`)
+                    go_to_setting_callback()
+                } catch (error) {
+                    exceptionHandler(error)
+                }
+            },
+            cancelText: tran("common.cancel"),
+        })
+    } else {
+        go_to_setting_callback()
+    }
 }
 
 async function menuSelectHandler(menu_item: string){
@@ -90,14 +98,20 @@ async function menuSelectHandler(menu_item: string){
 
 // # listen to open / close note event (from here or the menu)
 function openedNoteChangeHandler(){
+    updateNoteNameInHeader()
+}
+
+function updateNoteNameInHeader(){
     editing_note_name.value = $viewState.editing_note_name
 }
 
 $emitter.on(EventConstant.NOTE_OPENED, openedNoteChangeHandler)
 $emitter.on(EventConstant.NOTE_CLOSED, openedNoteChangeHandler)
+$emitter.on(EventConstant.NOTE_SAVED, updateNoteNameInHeader)
 onBeforeUnmount(() => {
     $emitter.off(EventConstant.NOTE_OPENED, openedNoteChangeHandler)
     $emitter.off(EventConstant.NOTE_CLOSED, openedNoteChangeHandler)
+    $emitter.off(EventConstant.NOTE_SAVED, updateNoteNameInHeader)
 })
 </script>
 

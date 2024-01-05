@@ -7,5 +7,5 @@ $emitter.emit(EventConstant.LAYOUT_UPDATE, AppPage.HOME)
 </script>
 
 <template>
-    <mt-layout-home />
+    <mt-home />
 </template>
