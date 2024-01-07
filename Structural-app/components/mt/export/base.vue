@@ -14,7 +14,7 @@ const emit = defineEmits<{
 }>()
 
 const converter_type = NoteExportHandler.getConverter(props.type)
-const converted_content = ref(converter_type.converter.convert($viewState.editing_note))
+const converted_content = ref(converter_type.converter.convert($viewState.editing_note!))
 const loading = ref(false)
 function save(){
     loading.value = true
@@ -46,6 +46,13 @@ function cancel(){
     <div class="mt-convert-preview-container">
         <template v-if="props.type === ConverterType.MARKDOWN">
             <mt-editor-markdown v-model:content="converted_content" />
+        </template>
+        <template v-if="props.type === ConverterType.TEXT">
+            <mt-attribute-value-editor 
+                type="LONG_STRING"
+                v-model:value="converted_content" 
+                full_width
+            />
         </template>
         <Spin size="large" fix :show="loading"></Spin>
     </div>

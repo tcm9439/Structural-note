@@ -78,6 +78,11 @@ async function menuSelectHandler(menu_item: string){
                     await NoteExportHandler.emitShowConvertPreviewEvent(ConverterType.MARKDOWN)
                 }
                 break
+            case "export-txt":
+                if (has_open_note.value){
+                    await NoteExportHandler.emitShowConvertPreviewEvent(ConverterType.TEXT)
+                }
+                break
             case "setting":
                 if (has_open_note.value){
                     await saveNoteBeforeUpdateSetting()

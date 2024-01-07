@@ -1,4 +1,4 @@
-import { ConverterType, AppState, UnimplementedException, NoteMarkdownConverter, Converter, Note } from "structural-core"
+import { ConverterType, AppState, UnimplementedException, NoteMarkdownConverter, Converter, Note, NoteTxtConverter } from "structural-core"
 import { TauriFileSystem } from "tauri-fs-util"
 import { save } from "@tauri-apps/api/dialog"
 import { tran } from "~/composables/app/translate"
@@ -33,6 +33,11 @@ export class NoteExportHandler {
                     converter: new NoteMarkdownConverter(),
                     file_extension: "md",
                 }
+            case ConverterType.TEXT:
+                return {
+                    converter: new NoteTxtConverter(),
+                    file_extension: "txt",
+                }
             default:
                 throw new UnimplementedException(`export to type ${type}`)
         }
@@ -48,7 +53,7 @@ export class NoteExportHandler {
         try {
             const { $viewState, $Message } = useNuxtApp()
 
-            const selected_export_path = await this.askForSavePath(file_extension, $viewState.editing_note.title)
+            const selected_export_path = await this.askForSavePath(file_extension, $viewState.editing_note!.title)
             if (selected_export_path === null){
                 AppState.logger.warn("No path is chosen to open.")
                 $Message.info(tran("common.cancel"))

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll } from "vitest"
 import { ModuleInit } from "@/index.js"
-import { NoteMarkdownConverter } from "@/converter/markdown/Note.js"
-import { SectionMarkdownConverter } from "@/converter/markdown/Section.js"
+import { NoteTxtConverter } from "@/converter/txt/Note.js"
+import { SectionTxtConverter } from "@/converter/txt/Section.js"
 import { Note } from "@/note/Note.js"
 import { NoteSection } from "@/note/section/NoteSection.js"
 import { StructuralSection } from "@/note/section/StructuralSection.js"
@@ -14,41 +14,50 @@ import { BooleanAttribute } from "@/note/element/structural/attribute/type/Boole
 import { MarkdownAttribute } from "@/note/element/structural/attribute/type/MarkdownAttribute.js"
 import { MarkdownElement } from "@/note/element/MarkdownElement.js"
 
-const section1_converter_expected_result = `## Section 1
+const section1_converter_expected_result = `Section 1
+==================================================
 
 Content 1
-<hr/>
+
+--------------------------------------------------
 
 Content 2
-<hr/>
 
-### Element
+--------------------------------------------------
 
-#### test
+# Element
+
+## test
 ABC`
 
-const section2_converter_expected_result = `## Section 2
+const section2_converter_expected_result = `Section 2
+==================================================
 
-**Str Attr**: test value 1
-**Bool Attr**: true
-**Markdown Attr**: 
-#### test
-**markdown**
+Str Attr: test value 1
+Bool Attr: true
+Markdown Attr: 
+# test
+markdown
 
-##### test 2
+## test 2
 ABC
-<hr/>
+
+--------------------------------------------------
 
 Content 5
-<hr/>
 
-**Str Attr**: test value 2`
+--------------------------------------------------
 
-const section3_converter_expected_result = `## Section 3
+Str Attr: test value 2`
+
+const section3_converter_expected_result = `Section 3
+==================================================
 
 Content in section 3`
 
-const note_converter_expected_result = `# Converter Test
+const note_converter_expected_result = `##################################################
+Converter Test
+##################################################
 
 ${section1_converter_expected_result}
 
@@ -94,7 +103,7 @@ describe("Note", () => {
         section2.elements.add(element2)
         element2.setValue(str_attr, new AttributeValue(str_attr, "test value 1"))
         element2.setValue(bool_attr, new AttributeValue(bool_attr, true))
-        element2.setValue(md_attr, new AttributeValue(md_attr, "# test\n**markdown**\n\n## test 2\nABC"))
+        element2.setValue(md_attr, new AttributeValue(md_attr, "# test\nmarkdown\n\n## test 2\nABC"))
         
         let element5 = new TextElement("Content 5")
         section2.elements.add(element5)
@@ -108,15 +117,15 @@ describe("Note", () => {
         section3.elements.add(element6)
 
         // section 1
-        let result = SectionMarkdownConverter.convert(section1)
+        let result = SectionTxtConverter.convert(section1)
         expect(result).toBe(section1_converter_expected_result)
 
         // section 2
-        result = SectionMarkdownConverter.convert(section2)
+        result = SectionTxtConverter.convert(section2)
         expect(result).toBe(section2_converter_expected_result)
         
-        // Note to markdown
-        let converter = new NoteMarkdownConverter
+        // Note to Txt
+        let converter = new NoteTxtConverter
         result = converter.convert(note)
         expect(result).toBe(note_converter_expected_result)
 	})

@@ -7,7 +7,7 @@ export class SectionMarkdownConverter{
         let result = new StringBuilder()
         result.appendLine("## " + section.title)
         section.elements.ordered_components.forEach((element) => {
-            result.appendLine(ElementMarkdownConverter.convert(element)).appendHorizontalRow()
+            result.appendLine((new ElementMarkdownConverter).convert(element)).appendHorizontalRow()
         })
         return result.removeLastRow().toString()
     }

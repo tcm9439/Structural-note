@@ -10,7 +10,7 @@ const en = {
             file_save_as: "Save As",
             file_export_submenu: "Export",
             file_export_md: "Export to Markdown",
-            file_export_txt: "Export to Text (TODO)",
+            file_export_txt: "Export to Text",
             setting_menu: "Setting",
             edit_menu: "Edit",
             edit_undo: "Undo",
