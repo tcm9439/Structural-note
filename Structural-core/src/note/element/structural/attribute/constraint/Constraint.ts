@@ -8,6 +8,7 @@ export enum ConstraintType {
     MIN = "MIN",
     MAX = "MAX",
     UNIQUE = "UNIQUE",
+    ENUM = "ENUM",
     REGEX = "REGEX",
 }
 
@@ -61,7 +62,7 @@ export abstract class Constraint extends ComponentBase implements EditPathNode {
     /**
      * Check if this constraint is valid
      */
-    constraintIsValid(): OperationResult {
+    isConstraintValid(): OperationResult {
         return OperationResult.valid()
     }
 

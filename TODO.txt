@@ -1,15 +1,13 @@
 ## KNOWN BUG
 
 ## Pending Features
+[ ] reload iviewui lang when lang setting changed
 [ ] check what if i write some invalid value & save
 [ ] complete the tutorial template
-[ ] create note from template (also as tutorial)
+[ ] test page that init by a debug template with all elements
 [ ] Decimal to int
 [ ] Export to csv
-[ ] attr constrains
-    [ ] regex
 [ ] value.vue
-    [ ] enum (dropdown list)
     [ ] date
     [ ] time
     [ ] date-time

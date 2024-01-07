@@ -18,7 +18,7 @@ const constraint_type = props.attr_def.attribute_type?.type || ""
 </script>
 
 <template>
-    <FormItem prop="min" label-width="20">
+    <FormItem prop="min" :label-width="20">
         <mt-attribute-value-editor :type="constraint_type" v-model:value="constraint.min" />
     </FormItem>
     <div class="mt-inclusive-label">{{ tran("structural.attribute.constraint.param.inclusive_label") }}</div>

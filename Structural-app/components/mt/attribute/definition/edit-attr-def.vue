@@ -122,7 +122,7 @@ const default_value = computed({
     <Tabs v-model="active_tab">
         <!-- Tab to choose the attr basic info. -->
         <TabPane :label="tran('structural.struct_def.edit_attr_basic_tab_title')" name="basic">
-            <Form label-position="top" v-if="attr_def !== null">
+            <Form label-position="top" v-if="attr_def !== null" @submit.prevent>
                 <FormItem :label="tran('structural.struct_def.edit_attr_basic_name_label')" prop="name">
                     <Input v-model="attr_def.name" />
                 </FormItem>
@@ -157,7 +157,7 @@ const default_value = computed({
         <!-- Tab that only show after the type is set  -->
         <template v-if="attr_has_type">
             <TabPane :label="tran('structural.attribute.constraint.constraint')" name="constraint">
-                <Form inline>
+                <Form inline @submit.prevent>
                     <!-- Default value editor -->
                     <FormItem prop="default_value_checkbox">
                         <Checkbox v-model="has_default_value" >

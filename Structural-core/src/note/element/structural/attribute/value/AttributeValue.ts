@@ -99,7 +99,7 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
         this._validate_result = value
     }
 
-    static convertValueForNewAttrDef<O,N>(value: O | null, old_attr_def: AttributeDefinition<O>, new_attr_def: AttributeDefinition<N>, mode: ID = 0): N | null {
+    static convertValueForNewAttrDef<O,N>(value: O | null, old_attr_def: AttributeDefinition<O>, new_attr_def: AttributeDefinition<N>, param: object = {}): N | null {
         if (value === null){
             return null
         }
@@ -109,7 +109,7 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
         }
 
         try {
-            return old_attr_def.attribute_type.convertTo(new_attr_def.attribute_type, value, mode)
+            return old_attr_def.attribute_type.convertTo(new_attr_def.attribute_type, value, param)
         } catch (error) {
             if (error instanceof InvalidTypeConversionForDataException) {
                 LoggerManager.logger.warn(`Failed to convert attribute value with id ${old_attr_def.id} to new type: ${error.message}`)
@@ -118,8 +118,8 @@ export class AttributeValue<T> extends ComponentBase implements EditPathNode {
         }
     }
 
-    convertTo<N>(new_attr_def: AttributeDefinition<N>, mode: ID = 0): AttributeValue<N> {
-        const conversion_result = AttributeValue.convertValueForNewAttrDef<T, N>(this.value, this.definition, new_attr_def, mode)
+    convertTo<N>(new_attr_def: AttributeDefinition<N>, param: object = {}): AttributeValue<N> {
+        const conversion_result = AttributeValue.convertValueForNewAttrDef<T, N>(this.value, this.definition, new_attr_def, param)
         return new AttributeValue(new_attr_def, conversion_result)
     }
 

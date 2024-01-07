@@ -83,6 +83,7 @@ const en = {
                 boolean: "Boolean",
                 decimal: "Decimal",
                 markdown: "Markdown",
+                enum: "Enumeration",
             },
             constraint: {
                 constraint: "Constraint",
@@ -91,16 +92,20 @@ const en = {
                 min: "Minimum",
                 max: "Maximum",
                 regex: "Pattern (Regex)",
+                enum: "Enumeration List",
                 param: {
                     inclusive_label: "(inclusive)",
                 },
                 error: {
                     min_val_is_null: "The minimum value is not set.",
                     max_val_is_null: "The maximum value is not set.",
+                    invalid_regex: "Invalid regex pattern",
                     val_less_than_min: "Value < minimum",
                     val_larger_than_max: "Value > maximum",
                     val_not_unique: "Value is duplicated",
                     attr_is_required: "This attribute is required",
+                    val_not_match_regex: "Not matching pattern",
+                    val_not_in_enum: "Not in set",
                 }
             },
             value: {
@@ -111,8 +116,10 @@ const en = {
                 empty_attr_name: "Attribute name cannot be empty.",
                 empty_attr_type: "Attribute type cannot be empty for attribute '{name: string}'.",
                 attr_name_duplicated: "The attribute name '{name:string}' is not unique.",
+                general_invalid_attr: "Invalid attribute '{attr_name:string}'",
                 invalid_value_for_attr: "Invalid value for attribute '{attr_name:string}':",
                 invalid_default_value_for_attr: "Invalid default value for attribute '{attr_name:string}':",
+                missing_constraint_for_attr_type: "Missing constraint '{constraint:string}' for this attribute type",
                 invalid_constraint_for_attr: "Constraint '{constraint:string}' for attribute '{attr_name:string}' is invalid:",
                 incompatible_constraint_for_attr: "Constraint '{constraint_a:string}' is not compatible to constraint {constraint_b:string} for attribute '{attr_name:string}'",
             },

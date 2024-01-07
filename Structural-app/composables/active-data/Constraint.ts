@@ -1,6 +1,8 @@
 import { ConstraintType, EditPath, AttributeDefinition, ArrayUtil, Constraint } from "structural-core"
 import MtAttributeConstraintMin from "@/components/mt/attribute/constraint/min.vue"
 import MtAttributeConstraintMax from "@/components/mt/attribute/constraint/max.vue"
+import MtAttributeConstraintEnum from "@/components/mt/attribute/constraint/enum.vue"
+import MtAttributeConstraintRegex from "@/components/mt/attribute/constraint/regex.vue"
 import MtAttributeConstraintNoParam from "@/components/mt/attribute/constraint/no-param.vue"
 import { tran } from "~/composables/app/translate"
 
@@ -11,11 +13,16 @@ export type AttrConstraintEditComponent = {
     component_type: any,
     constraint_type: ConstraintType,
     no_param: boolean,
+    shorter_label: boolean,
 }
 
 const NO_PARAM_CONSTRAINT = [
     ConstraintType.REQUIRE,
     ConstraintType.UNIQUE,
+]
+
+const SHORTER_LABEL_CONSTRAINT = [
+    ConstraintType.ENUM,
 ]
 
 export function getAttrConstraintEditComponents(attr_def_edit_path: EditPath, attr_def: AttributeDefinition<any>): Map<ConstraintType, AttrConstraintEditComponent> {
@@ -31,6 +38,7 @@ export function getAttrConstraintEditComponents(attr_def_edit_path: EditPath, at
             component_type: markRaw(constraintMapper(constraint_type)),
             constraint_type: constraint_type,
             no_param: isNoParamConstraint(constraint_type),
+            shorter_label: withShorterLabel(constraint_type),
         }
         
         attr_constraint_edit_components.set(constraint_type, component)
@@ -46,6 +54,7 @@ export function getAttrConstraintEditComponents(attr_def_edit_path: EditPath, at
             component_type: markRaw(constraintMapper(constraint_type)),
             constraint_type: constraint_type,
             no_param: isNoParamConstraint(constraint_type),
+            shorter_label: withShorterLabel(constraint_type),
         }
         attr_constraint_edit_components.set(constraint_type, component)
     })
@@ -62,7 +71,9 @@ function constraintMapper(type: ConstraintType){
         case ConstraintType.UNIQUE:
             return MtAttributeConstraintNoParam
         case ConstraintType.REGEX:
-            return MtAttributeConstraintMax
+            return MtAttributeConstraintRegex
+        case ConstraintType.ENUM:
+            return MtAttributeConstraintEnum
     }
     throw new Error("ConstraintType not defined: " + type)
 }
@@ -71,7 +82,12 @@ function isNoParamConstraint(type: ConstraintType){
     return NO_PARAM_CONSTRAINT.includes(type)
 }
 
+function withShorterLabel(type: ConstraintType){
+    return SHORTER_LABEL_CONSTRAINT.includes(type)
+}
+
 const ungrouped_type_order = [
+    ConstraintType.ENUM,
     ConstraintType.REQUIRE,
     ConstraintType.UNIQUE,
     ConstraintType.MIN,

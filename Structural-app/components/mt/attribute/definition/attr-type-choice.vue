@@ -2,7 +2,7 @@
 /**
  * A component that represent an attribute type and can be selected.
  */
-import { IntegerAttribute, DecimalAttribute, ShortStringAttribute, LongStringAttribute, BooleanAttribute, MarkdownAttribute, AttributeType } from "structural-core"
+import { AttributeType, AttributeTypeEnum } from "structural-core"
 import { tran } from "~/composables/app/translate"
 
 const props = defineProps({
@@ -46,18 +46,20 @@ function typeChosen(){
 
 function getIcon(){
     switch(props.attr?.type){
-        case ShortStringAttribute.TYPE:
+        case AttributeTypeEnum.STRING:
             return "mdi:format-text"
-        case LongStringAttribute.TYPE:
+        case AttributeTypeEnum.LONG_STRING:
             return "mdi:text-long"
-        case IntegerAttribute.TYPE:
+        case AttributeTypeEnum.INT:
             return "mdi:numeric"
-        case DecimalAttribute.TYPE:
+        case AttributeTypeEnum.DECIMAL:
             return "mdi:decimal"
-        case BooleanAttribute.TYPE:
+        case AttributeTypeEnum.BOOLEAN:
             return "mdi:toggle-switch"
-        case MarkdownAttribute.TYPE:
+        case AttributeTypeEnum.MARKDOWN:
             return "mdi:language-markdown"
+        case AttributeTypeEnum.ENUM:
+            return "mdi:form-dropdown"
     }
     // unknown type
     return "mdi:help-box"

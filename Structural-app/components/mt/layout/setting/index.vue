@@ -58,7 +58,7 @@ async function cancelSetting() {
 
 <template>
     <Card :title="tran('structural.setting.title')" class="mt-setting-card" dis-hover>
-        <Form inline label-position="top">
+        <Form inline label-position="top" @submit.prevent>
             <FormItem :label="tran('structural.setting.lang')" prop="lang" >
                 <Select v-model="setting.language" style="width:200px">
                     <Option v-for="lang in language_list" :value="lang.value" :key="lang.value">

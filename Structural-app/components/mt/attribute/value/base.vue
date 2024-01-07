@@ -65,7 +65,8 @@ onBeforeUnmount(() => {
             :error="attr_value.validate_result.invalid_message" >
             <mt-attribute-value-editor 
                 :key="props.render"
-                :type="props.type" 
+                :type="props.type"
+                :attr_def="attr_value.definition"
                 v-model:value="attr_value.value" 
                 v-model:full_width="full_width_form_item"
             />

@@ -37,7 +37,7 @@ describe("MaxConstraint", () => {
         expect(max_constraint.inclusive).toBe(false)
     })
 
-    it("constraintIsValid", () => {
+    it("isConstraintValid", () => {
         expect(max_constraint.validate_constraint_result.valid).toBe(true)
 
         max_constraint.max = null

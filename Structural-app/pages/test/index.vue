@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, ShortStringAttribute, StructuralElement, MarkdownElement, MarkdownAttribute, AppPage, EventConstant, RequireConstraint, UniqueConstraint } from "structural-core"
+import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, ShortStringAttribute, StructuralElement, MarkdownElement, MarkdownAttribute, AppPage, EventConstant, RequireConstraint, UniqueConstraint, EnumAttribute, ConstraintType, EnumConstraint } from "structural-core"
 
 const { $viewState, $emitter } = useNuxtApp()
 $viewState.last_page = AppPage.TEST
@@ -30,10 +30,17 @@ attr_definition2.addConstraint(new RequireConstraint())
 let md_attr_definition = new AttributeDefinition("test markdown attr", MarkdownAttribute.instance)
 md_attr_definition.setGetAllRelatedValuesFunc(section2.getValuesOfAttr.bind(section2))
 
+let enum_attr_definition = new AttributeDefinition("test enum attr", EnumAttribute.instance)
+let enum_constraint = enum_attr_definition.getConstraint(ConstraintType.ENUM) as EnumConstraint
+enum_constraint.addAvailableValue("EnumOne")
+enum_constraint.addAvailableValue("EnumTwo")
+enum_attr_definition.setGetAllRelatedValuesFunc(section2.getValuesOfAttr.bind(section2))
+
 section2.definition.display_key.addKey(attr_definition)
 section2.definition.attributes.add(attr_definition)
 section2.definition.attributes.add(attr_definition2)
 section2.definition.attributes.add(md_attr_definition)
+section2.definition.attributes.add(enum_attr_definition)
 
 let ele_struct = new StructuralElement(section2.definition)
 let value = new AttributeValue(attr_definition, "Random value")

@@ -71,7 +71,7 @@ export class DisplayKey {
                         result.push(value.value)
                         break
                     case AttributeTypeEnum.INT:
-                        result.push(NumberAttribute.convertToString(value.value, 0))
+                        result.push(NumberAttribute.convertToString(value.value, { precision: 0 }))
                         break
                 }
             }

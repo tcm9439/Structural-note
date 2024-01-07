@@ -9,10 +9,16 @@ describe('NumberAttribute', () => {
     })
 
     it("convertToString", () => {
-        expect(NumberAttribute.convertToString(109)).toBe("109")
-        expect(NumberAttribute.convertToString(109.8)).toBe("110")
-        expect(NumberAttribute.convertToString(-9)).toBe("-9")
-        expect(NumberAttribute.convertToString(NaN)).toBe("")
+        let param = {precision: -1}
+        expect(NumberAttribute.convertToString(109, param)).toBe("109")
+        expect(NumberAttribute.convertToString(109.888888888, param)).toBe("109.888888888")
+        expect(NumberAttribute.convertToString(109.8, param)).toBe("109.8")
+        expect(NumberAttribute.convertToString(-9, param)).toBe("-9")
+        expect(NumberAttribute.convertToString(NaN, param)).toBe("")
+
+        param = {precision: 2}
+        expect(NumberAttribute.convertToString(109, param)).toBe("109.00")
+        expect(NumberAttribute.convertToString(109.888888888, param)).toBe("109.89")
     })
 
     it("create", () => {
@@ -27,13 +33,5 @@ describe('NumberAttribute', () => {
 describe('DecimalAttribute', () => {
 	it("instance", () => {
         expect(DecimalAttribute.instance).not.toBeNull()
-    })
-
-    it("convertToString", () => {
-        expect(DecimalAttribute.convertToString(109, -1)).toBe("109")
-        expect(DecimalAttribute.convertToString(109.888888888, -1)).toBe("109.888888888")
-        expect(DecimalAttribute.convertToString(109.8, -1)).toBe("109.8")
-        expect(DecimalAttribute.convertToString(-9, -1)).toBe("-9")
-        expect(DecimalAttribute.convertToString(NaN, -1)).toBe("")
     })
 })

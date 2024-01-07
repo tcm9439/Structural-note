@@ -292,6 +292,10 @@ type RootTranslation = {
 				 * M​a​r​k​d​o​w​n
 				 */
 				markdown: string
+				/**
+				 * E​n​u​m​e​r​a​t​i​o​n
+				 */
+				'enum': string
 			}
 			constraint: {
 				/**
@@ -318,6 +322,10 @@ type RootTranslation = {
 				 * P​a​t​t​e​r​n​ ​(​R​e​g​e​x​)
 				 */
 				regex: string
+				/**
+				 * V​a​l​u​e​ ​S​e​t
+				 */
+				'enum': string
 				param: {
 					/**
 					 * (​i​n​c​l​u​s​i​v​e​)
@@ -334,6 +342,10 @@ type RootTranslation = {
 					 */
 					max_val_is_null: string
 					/**
+					 * I​n​v​a​l​i​d​ ​r​e​g​e​x​ ​p​a​t​t​e​r​n
+					 */
+					invalid_regex: string
+					/**
 					 * V​a​l​u​e​ ​<​ ​m​i​n​i​m​u​m
 					 */
 					val_less_than_min: string
@@ -349,6 +361,14 @@ type RootTranslation = {
 					 * T​h​i​s​ ​a​t​t​r​i​b​u​t​e​ ​i​s​ ​r​e​q​u​i​r​e​d
 					 */
 					attr_is_required: string
+					/**
+					 * N​o​t​ ​m​a​t​c​h​i​n​g​ ​p​a​t​t​e​r​n
+					 */
+					val_not_match_regex: string
+					/**
+					 * N​o​t​ ​i​n​ ​s​e​t
+					 */
+					val_not_in_enum: string
 				}
 			}
 			value: {
@@ -377,6 +397,11 @@ type RootTranslation = {
 				 */
 				attr_name_duplicated: RequiredParams<'name'>
 				/**
+				 * I​n​v​a​l​i​d​ ​a​t​t​r​i​b​u​t​e​ ​'​{​a​t​t​r​_​n​a​m​e​}​'
+				 * @param {string} attr_name
+				 */
+				general_invalid_attr: RequiredParams<'attr_name'>
+				/**
 				 * I​n​v​a​l​i​d​ ​v​a​l​u​e​ ​f​o​r​ ​a​t​t​r​i​b​u​t​e​ ​'​{​a​t​t​r​_​n​a​m​e​}​'​:
 				 * @param {string} attr_name
 				 */
@@ -386,6 +411,11 @@ type RootTranslation = {
 				 * @param {string} attr_name
 				 */
 				invalid_default_value_for_attr: RequiredParams<'attr_name'>
+				/**
+				 * M​i​s​s​i​n​g​ ​c​o​n​s​t​r​a​i​n​t​ ​'​{​c​o​n​s​t​r​a​i​n​t​}​'​ ​f​o​r​ ​t​h​i​s​ ​a​t​t​r​i​b​u​t​e​ ​t​y​p​e
+				 * @param {string} constraint
+				 */
+				missing_constraint_for_attr_type: RequiredParams<'constraint'>
 				/**
 				 * C​o​n​s​t​r​a​i​n​t​ ​'​{​c​o​n​s​t​r​a​i​n​t​}​'​ ​f​o​r​ ​a​t​t​r​i​b​u​t​e​ ​'​{​a​t​t​r​_​n​a​m​e​}​'​ ​i​s​ ​i​n​v​a​l​i​d​:
 				 * @param {string} attr_name
@@ -925,6 +955,10 @@ export type TranslationFunctions = {
 				 * Markdown
 				 */
 				markdown: () => LocalizedString
+				/**
+				 * Enumeration
+				 */
+				'enum': () => LocalizedString
 			}
 			constraint: {
 				/**
@@ -951,6 +985,10 @@ export type TranslationFunctions = {
 				 * Pattern (Regex)
 				 */
 				regex: () => LocalizedString
+				/**
+				 * Value Set
+				 */
+				'enum': () => LocalizedString
 				param: {
 					/**
 					 * (inclusive)
@@ -967,6 +1005,10 @@ export type TranslationFunctions = {
 					 */
 					max_val_is_null: () => LocalizedString
 					/**
+					 * Invalid regex pattern
+					 */
+					invalid_regex: () => LocalizedString
+					/**
 					 * Value < minimum
 					 */
 					val_less_than_min: () => LocalizedString
@@ -982,6 +1024,14 @@ export type TranslationFunctions = {
 					 * This attribute is required
 					 */
 					attr_is_required: () => LocalizedString
+					/**
+					 * Not matching pattern
+					 */
+					val_not_match_regex: () => LocalizedString
+					/**
+					 * Not in set
+					 */
+					val_not_in_enum: () => LocalizedString
 				}
 			}
 			value: {
@@ -1008,6 +1058,10 @@ export type TranslationFunctions = {
 				 */
 				attr_name_duplicated: (arg: { name: string }) => LocalizedString
 				/**
+				 * Invalid attribute '{attr_name}'
+				 */
+				general_invalid_attr: (arg: { attr_name: string }) => LocalizedString
+				/**
 				 * Invalid value for attribute '{attr_name}':
 				 */
 				invalid_value_for_attr: (arg: { attr_name: string }) => LocalizedString
@@ -1015,6 +1069,10 @@ export type TranslationFunctions = {
 				 * Invalid default value for attribute '{attr_name}':
 				 */
 				invalid_default_value_for_attr: (arg: { attr_name: string }) => LocalizedString
+				/**
+				 * Missing constraint '{constraint}' for this attribute type
+				 */
+				missing_constraint_for_attr_type: (arg: { constraint: string }) => LocalizedString
 				/**
 				 * Constraint '{constraint}' for attribute '{attr_name}' is invalid:
 				 */

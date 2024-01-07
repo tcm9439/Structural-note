@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest"
-import { ModuleInit } from "@/index.js"
+import { ConstraintType, EnumAttribute, EnumConstraint, ModuleInit } from "@/index.js"
 import { AttributeValueMarkdownConverter } from "@/converter/markdown/AttributeValue.js"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
@@ -33,11 +33,17 @@ describe("AttributeValueMarkdownConverter", () => {
 
         attr_def = new AttributeDefinition("test", new DecimalAttribute())
         value = new AttributeValue(attr_def, 42.42)
-        expect(AttributeValueMarkdownConverter.convert(attr_def, value)).toBe("**test**: 42.4200")
+        expect(AttributeValueMarkdownConverter.convert(attr_def, value)).toBe("**test**: 42.42")
 
         attr_def = new AttributeDefinition("test", new MarkdownAttribute())
         value = new AttributeValue(attr_def, "# title\ncontent\n## code section\n`code`")
         expect(AttributeValueMarkdownConverter.convert(attr_def, value)).toBe("**test**: \n#### title\ncontent\n##### code section\n`code`")
+
+        attr_def = new AttributeDefinition("test", new EnumAttribute())
+        let constraint = attr_def.getConstraint(ConstraintType.ENUM) as EnumConstraint
+        constraint.available_values = ["testEnum1", "testEnum2"]
+        value = new AttributeValue(attr_def, 0)
+        expect(AttributeValueMarkdownConverter.convert(attr_def, value)).toBe("**test**: testEnum1")
     })
 
     it("fromBoolean", () => {
@@ -54,7 +60,7 @@ describe("AttributeValueMarkdownConverter", () => {
 
     it("fromDecimal", () => {
         let value = new AttributeValue(new AttributeDefinition("test", new DecimalAttribute()), 42.42)
-        expect(AttributeValueMarkdownConverter.fromDecimal(value)).toBe("42.4200")
+        expect(AttributeValueMarkdownConverter.fromDecimal(value)).toBe("42.42")
     })
 
 	it("fromMarkdown", () => {

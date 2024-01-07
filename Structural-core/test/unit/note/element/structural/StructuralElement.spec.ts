@@ -23,7 +23,7 @@ describe('StructuralElement', () => {
     })
 
     beforeEach(() => {
-        definition = new StructureDefinition()
+        definition = new StructureDefinition(() => [])
         str_attr = new AttributeDefinition("str", ShortStringAttribute.instance)
         definition.attributes.add(str_attr)
         num_attr = new AttributeDefinition("num", IntegerAttribute.instance)

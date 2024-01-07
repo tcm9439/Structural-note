@@ -4,14 +4,15 @@ import { ConstraintType } from "../constraint/Constraint.js"
 
 export class StringAttribute extends AttributeType<string> {    
     constructor(type: string) {
-        super(type)        
+        super(type)
+        this.addAvailableConstraint(ConstraintType.REGEX)
     }
 
     get default_value(): string {
         return ""
     }
 
-    static convertToDecimal(value: string, mode?: any): number {
+    static convertToDecimal(value: string, param?: object): number {
         let num = Number(value)
         if (isNaN(num)){
             throw new InvalidTypeConversionException(AttributeTypeEnum.INT, AttributeTypeEnum.STRING, "not a number")
@@ -19,7 +20,7 @@ export class StringAttribute extends AttributeType<string> {
         return num
     }
 
-    static convertToInteger(value: string, mode?: any): number {
+    static convertToInteger(value: string, param?: object): number {
         return Math.round(StringAttribute.convertToDecimal(value))
     }
 }
@@ -39,7 +40,6 @@ export class ShortStringAttribute extends StringAttribute {
         this.addConvertibleType(AttributeTypeEnum.DECIMAL, StringAttribute.convertToDecimal.bind(this))
         this.addConvertibleType(AttributeTypeEnum.LONG_STRING, (value: string) => value)
 
-        this.addAvailableConstraint(ConstraintType.REGEX)
         this.addAvailableConstraint(ConstraintType.UNIQUE)
     }
 

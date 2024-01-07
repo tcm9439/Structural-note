@@ -37,7 +37,7 @@ describe("MinConstraint", () => {
         expect(min_constraint.inclusive).toBe(false)
     })
 
-    it("constraintIsValid", () => {
+    it("isConstraintValid", () => {
         expect(min_constraint.validate_constraint_result.valid).toBe(true)
 
         min_constraint.min = null

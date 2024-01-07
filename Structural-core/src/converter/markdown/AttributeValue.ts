@@ -3,6 +3,9 @@ import { AttributeTypeEnum } from "@/note/element/structural/attribute/type/Attr
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
 import { NumberAttribute } from "@/note/element/structural/attribute/type/NumberAttribute.js"
 import { ConverterHelper } from "../ConverterHelper.js"
+import { ConstraintType } from "@/note/element/structural/attribute/constraint/Constraint.js"
+import { EnumConstraint } from "@/note/element/structural/attribute/constraint/EnumConstraint.js"
+import { EnumAttribute } from "@/note/element/structural/attribute/type/EnumAttribute.js"
 
 export class AttributeValueMarkdownConverter {
     static convert(attr_def: AttributeDefinition<any>, element: AttributeValue<any>): string {
@@ -28,6 +31,9 @@ export class AttributeValueMarkdownConverter {
                 break
             case AttributeTypeEnum.MARKDOWN:
                 value = this.fromMarkdown(element)
+                break
+            case AttributeTypeEnum.ENUM:
+                value = this.fromEnum(attr_def, element)
                 break
         }
 
@@ -56,7 +62,7 @@ export class AttributeValueMarkdownConverter {
         if (element.value === null){
             return ""
         }
-        return NumberAttribute.convertToString(element.value, 4)
+        return NumberAttribute.convertToString(element.value)
     }
 
     static fromString(element: AttributeValue<string>): string {
@@ -71,5 +77,22 @@ export class AttributeValueMarkdownConverter {
             return ""
         }
         return "\n" + ConverterHelper.indentMarkdownHeader(element.value, 3)
+    }
+
+    static fromEnum(attr_def: AttributeDefinition<any>, element: AttributeValue<number>): string {
+        // get the enumConstrain from the attr_def
+        const enum_constraint = attr_def.getConstraint(ConstraintType.ENUM) as EnumConstraint | null
+        if (element.value === null || enum_constraint === null){
+            return "default"
+        }
+
+        const converter_param = { 
+            enum: enum_constraint.getAvailableValuesMap()
+        }
+
+        return EnumAttribute.convertToString(
+            element.value, 
+            converter_param
+        )
     }
 }

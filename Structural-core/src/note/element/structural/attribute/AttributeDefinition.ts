@@ -8,11 +8,12 @@ import { OperationResult } from "@/common/OperationResult.js"
 import { InvalidJsonFormatException } from "@/exception/ConversionException.js"
 import { ForbiddenConstraint, IncompatibleConstraint } from "@/exception/AttributeException.js"
 import { Constraint, ConstraintType, ConstraintJson } from "./constraint/Constraint.js"
-import { AttributeType } from "./type/AttributeType.js"
+import { AttributeType, AttributeTypeEnum } from "./type/AttributeType.js"
 import { RequireConstraint } from "./constraint/RequireConstraint.js"
 import { UniqueConstraint } from "./constraint/UniqueConstraint.js"
 import { MaxConstraint } from "./constraint/MaxConstraint.js"
 import { MinConstraint } from "./constraint/MinConstraint.js"
+import { EnumConstraint } from "./constraint/EnumConstraint.js"
 import { AttributeValue } from "./value/AttributeValue.js"
 import { getAllRelatedValuesFunc } from "@/note/section/StructuralSection.js"
 import { z } from "zod"
@@ -34,7 +35,7 @@ export const AttributeDefinitionJson = z.object({
 export class AttributeDefinition<T> extends ComponentBase implements EditPathNode, Cloneable<AttributeDefinition<T>> {
     private _name: string
     private _description: string
-    private _attribute_type: AttributeType<T> | null
+    private _attribute_type: AttributeType<T> | null = null
     private _default_value: T | null = null
 
     private _constraints: Map<UUID, Constraint> = new Map()
@@ -50,8 +51,12 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     constructor(name?: string, attribute_type?: AttributeType<T>, description?: string, get_all_related_values_func?: getAllRelatedValuesFunc) {
         super()
         this._name = name || ""
-        this._attribute_type = attribute_type || null
         this._description = description || ""
+
+        if (attribute_type !== undefined) {
+            this.attribute_type = attribute_type
+        }
+        
         this._get_all_related_values_func = get_all_related_values_func || ((id) => [])
     }
 
@@ -114,7 +119,11 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
     }
 
     set attribute_type(value: AttributeType<T> ) {
-		this._attribute_type = value;
+		this._attribute_type = value
+        let missing_constraints = this._attribute_type.findMissingConstraint([...this.constraints.values()])
+        missing_constraints.forEach((constraint) => {
+            this.addConstraint(constraint)
+        })
 	}
 
     get name(): string {
@@ -197,6 +206,15 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
             this._num_constraints_related_to_other_values -= 1
         }
         this._constraints.delete(constraint_id)
+    }
+
+    getConstraint(constraint_type: ConstraintType): Constraint | null {
+        for (const [id, constraint] of this.constraints) {
+            if (constraint.getType() === constraint_type) {
+                return constraint
+            }
+        }
+        return null
     }
 
     getIsRelatedToOtherValues(): boolean {
@@ -340,6 +358,8 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
                 constraint = MaxConstraint.loadFromJson(constraint_json)
             } else if (constraint_json.type === "UniqueConstraint") {
                 constraint = UniqueConstraint.loadFromJson(constraint_json)
+            } else if (constraint_json.type === "EnumConstraint") {
+                constraint = EnumConstraint.loadFromJson(constraint_json)
             } else {
                 throw new InvalidJsonFormatException("AttributeDefinition", `Unknown constraint type: ${constraint_json.type}`)
             }
@@ -363,6 +383,17 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
             return OperationResult.invalid("structural.attribute.error.empty_attr_type", {
                 name: this.name
             })
+        }
+
+        // constraints validate with the attribute type
+        const constraint_type_validate_result = this.attribute_type.validateWithConstraintDef([...this.constraints.values()])
+        if (!constraint_type_validate_result.valid) {
+            let error_text = TranslatableText.new("structural.attribute.error.general_invalid_attr", {
+                    attr_name: this.name
+                }).addElement(TranslatableText.new('symbol.colon'))
+                .addElement(constraint_type_validate_result.getRawInvalidMessage()!)
+
+            return OperationResult.invalidText(error_text)
         }
 
         // constraints valid

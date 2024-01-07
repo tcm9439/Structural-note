@@ -13,6 +13,7 @@ const emit = defineEmits<{
 }>()
 
 const constraint_enabled = ref(false)
+const constraint_is_required = props.attr_def.attribute_type!.requiresConstraint(props.params.constraint_type)
 const label = ref("")
 
 watch(
@@ -25,17 +26,27 @@ watch(
 )
 
 function onToggleConstraint() {
-    emit("update", constraint_enabled.value, props.params)
+    if (constraint_is_required){
+        // must has this constrain
+        constraint_enabled.value = true
+    } else {
+        // tell the parent to remove / create the constraint
+        emit("update", constraint_enabled.value, props.params)
+    }
 }
 
 function onInitNoParamConstraint(enable: boolean) {
     // init the constraint enable checkbox by the constraint init value
     constraint_enabled.value = enable
 }
+
+function getLabelHeightClass(){
+    return props.params.shorter_label ? "mt-shorter-label" : ""
+}
 </script>
 
 <template>
-    <FormItem :prop="label + '_checkbox'">
+    <FormItem :prop="label + '_checkbox'" :class="getLabelHeightClass()">
         <Checkbox v-model="constraint_enabled" @on-change="onToggleConstraint">
             {{ label }}
         </Checkbox>
@@ -51,3 +62,10 @@ function onInitNoParamConstraint(enable: boolean) {
         />
     </template>
 </template>
+
+
+<style scoped>
+.mt-shorter-label.ivu-form-item {
+    margin-bottom: 2px;
+}
+</style>

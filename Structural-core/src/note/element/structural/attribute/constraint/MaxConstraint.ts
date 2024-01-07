@@ -23,7 +23,7 @@ export class MaxConstraint<T> extends Constraint {
 
     set max(max: T | null) {
         this._max = max
-        this.constraintIsValid()
+        this.isConstraintValid()
     }
 
     get max(): T | null {
@@ -38,7 +38,7 @@ export class MaxConstraint<T> extends Constraint {
         this._inclusive = inclusive
     }
 
-    constraintIsValid(): OperationResult {
+    isConstraintValid(): OperationResult {
         if (this.max == null) {
             this._validate_constraint_result = OperationResult.invalid("structural.attribute.constraint.error.max_val_is_null")
         } else {

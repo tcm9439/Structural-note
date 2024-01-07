@@ -21,7 +21,7 @@ class TestAttribute extends AttributeType<number> {
         throw "test-string"
     }
 
-    convertToString(value: number, mode?: any): string {
+    convertToString(value: number, param?: object): string {
         if (value === TestAttribute.INVALID_VALUE) {
             throw new InvalidTypeConversionForDataException(this.type, ShortStringAttribute.TYPE, value)
         }
@@ -86,10 +86,6 @@ describe('AttributeType', () => {
         expect(TestAttribute.instance.isConvertibleTo("TEST2")).toBe(false)
         TestAttribute.instance.addConvertibleType("TEST2", x => x)
         expect(TestAttribute.instance.isConvertibleTo("TEST2")).toBe(true)
-    })
-
-    it('addConvertibleType of different mode', () => {
-        // TODO
     })
 
     it('convertTo', () => {

@@ -2,6 +2,7 @@ import { LongStringAttribute, ShortStringAttribute } from "./StringAttribute.js"
 import { IntegerAttribute, DecimalAttribute } from "./NumberAttribute.js"
 import { BooleanAttribute } from "./BooleanAttribute.js"
 import { MarkdownAttribute } from "./MarkdownAttribute.js"
+import { EnumAttribute } from "./EnumAttribute.js"
 
 
 export class AttributeTypeInitializer {
@@ -12,5 +13,6 @@ export class AttributeTypeInitializer {
         DecimalAttribute.instance
         BooleanAttribute.instance
         MarkdownAttribute.instance
+        EnumAttribute.instance
     }
 }

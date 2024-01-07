@@ -23,7 +23,7 @@ export class MinConstraint<T> extends Constraint {
 
     set min(min: T | null) {
         this._min = min
-        this.constraintIsValid()
+        this.isConstraintValid()
     }
 
     get min(): T | null {
@@ -38,7 +38,7 @@ export class MinConstraint<T> extends Constraint {
         this._inclusive = inclusive
     }
 
-    constraintIsValid(): OperationResult {
+    isConstraintValid(): OperationResult {
         if (this.min == null) {
             this._validate_constraint_result = OperationResult.invalid("structural.attribute.constraint.error.min_val_is_null")
         } else {

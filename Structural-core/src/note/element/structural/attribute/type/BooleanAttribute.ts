@@ -14,7 +14,7 @@ export class BooleanAttribute extends AttributeType<boolean> {
         return false
     }
 
-    static convertToString(value: boolean, mode?: any): string {
+    static convertToString(value: boolean, param?: object): string {
         return String(value)
     }
 
