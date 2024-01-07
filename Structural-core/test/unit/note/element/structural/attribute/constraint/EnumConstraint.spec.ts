@@ -1,10 +1,11 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { EnumConstraint, ValidOperationResult } from "@/index.js"
+import { EnumConstraint, ModuleInit, ValidOperationResult } from "@/index.js"
 
 describe("EnumConstraint", () => {
     let enum_constraint: EnumConstraint
 
     beforeEach(() => {
+        ModuleInit.init()
         enum_constraint = new EnumConstraint(["a", "b", "c"], 5)
     })
 
@@ -65,6 +66,27 @@ describe("EnumConstraint", () => {
         let saved_json = enum_constraint.saveAsJson()
         let loaded_enum_constraint = EnumConstraint.loadFromJson(saved_json)
         expect(loaded_enum_constraint).toEqual(enum_constraint)
+    })
+
+    it("json with no enum value", () => {
+        let enum_constraint2 = new EnumConstraint()
+        let saved_json = enum_constraint2.saveAsJson()
+        console.log(saved_json)
+        let loaded_enum_constraint = EnumConstraint.loadFromJson(saved_json)
+        expect(loaded_enum_constraint).toEqual(enum_constraint2)
+
+        let enum_constraint3_json = {
+            "id": "20992a6a-f90c-45f5-bd76-3472e7171c0c",
+            "type": "EnumConstraint",
+            "values": {
+                2: "a",
+            },
+            "max_index": 3
+        }
+        let expected_enum_constraint3 = new EnumConstraint([], 2)
+        expected_enum_constraint3.addAvailableValue("a")
+        expected_enum_constraint3["id"] = "20992a6a-f90c-45f5-bd76-3472e7171c0c"
+        expect(EnumConstraint.loadFromJson(enum_constraint3_json)).toEqual(expected_enum_constraint3)
     })
 })
 

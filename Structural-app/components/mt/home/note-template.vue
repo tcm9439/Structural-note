@@ -14,7 +14,9 @@ function selectTemplate(id: string){
 </script>
 
 <template>
-    <div>{{ tran("structural.template.select_template") }}</div>
+    <div class="mt-template-label">
+        {{ tran("structural.template.select_template") }}
+    </div>
     <div class="mt-template-list-container">
         <mt-common-image-choice 
         v-for="template in templates"
@@ -27,6 +29,10 @@ function selectTemplate(id: string){
 </template>
 
 <style lang="less" scoped>
+.mt-template-label {
+    margin: 4px 0px;
+}
+
 .mt-template-list-container {
     display: flex;
     flex-wrap: wrap;

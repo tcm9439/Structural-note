@@ -3,6 +3,7 @@ import { EditPath, StructuralSection, Note, InjectConstant, ElementType, Structu
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 import { type AvailableSection } from "@/composables/active-data/Note"
 import { Icon } from "view-ui-plus"
+import { tran } from "~/composables/app/translate"
 
 const props = defineProps<{
     edit_path: EditPath,
@@ -69,7 +70,7 @@ watch(edit_def_mode, () => {
                     class="mt-add-definition-button" type="primary"
                     @click="startEditDef"
                 >
-                    Add Definition
+                    {{ tran("structural.section.add_section_definition") }}
                 </Button>
             </div>
         </template>

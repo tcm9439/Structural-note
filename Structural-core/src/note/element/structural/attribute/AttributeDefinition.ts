@@ -311,6 +311,7 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
         this._attribute_type = CloneUtil.cloneDeepWithCloneable(other._attribute_type)
         this._default_value = CloneUtil.cloneDeepWithCloneable(other._default_value)
         this._constraints = CloneUtil.cloneDeepWithCloneable(other._constraints)
+        this._require_constraint = other._require_constraint
         this.setGetAllRelatedValuesFunc(other.getGetAllRelatedValuesFunc())
         this._num_constraints_related_to_other_values = other._num_constraints_related_to_other_values
     }

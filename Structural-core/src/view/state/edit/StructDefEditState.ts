@@ -373,7 +373,7 @@ export class StructDefEditEventElementHandler {
         // get the definition
         const attr_def = element.definition.attributes.get(attr_id)
         if (attr_def == null){
-            throw new Error(`Attribute with id ${attr_id} not found`)
+            throw new Error(`Attribute with id ${attr_id} is not found`)
         }
         // create a new value and add it to the element
         let attr_value = new AttributeValue(attr_def)

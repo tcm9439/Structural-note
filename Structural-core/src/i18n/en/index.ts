@@ -122,6 +122,16 @@ const en = {
                 missing_constraint_for_attr_type: "Missing constraint '{constraint:string}' for this attribute type",
                 invalid_constraint_for_attr: "Constraint '{constraint:string}' for attribute '{attr_name:string}' is invalid:",
                 incompatible_constraint_for_attr: "Constraint '{constraint_a:string}' is not compatible to constraint {constraint_b:string} for attribute '{attr_name:string}'",
+                json: {
+                    invalid_format : {
+                        title: "Invalid JSON Format",
+                        message: "Invalid JSON format for component {component:string}.",
+                    },
+                    invalid_data : {
+                        title: "Invalid Data",
+                        message: "Invalid Data for component {component:string}.",
+                    },
+                },
             },
         },
         setting: {
@@ -140,6 +150,7 @@ const en = {
             save: "Save",
             do_not_save: "Don't Save",
         },
+        tag_editor_tooltip: "Click to input new item. Press enter to add.",
         create: "Create",
         cancel: "Cancel",
         success: "Success",

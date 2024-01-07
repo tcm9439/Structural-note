@@ -49,12 +49,15 @@ describe('AttributeDefinition', () => {
     })
 
     it("clone", () => {
+        definition.addConstraint(new RequireConstraint())
         let clone = definition.clone()
         expect(clone).not.toBe(definition)
         expect(clone.id).toEqual(definition.id)
         expect(clone.name).toEqual(definition.name)
         expect(clone.description).toEqual(definition.description)
         expect(clone.attribute_type).toBe(definition.attribute_type)
+        expect(clone.require_constraint).not.toBeNull()
+        expect(clone.require_constraint).toEqual(definition.require_constraint)
 
         clone.name = "clone"
         clone.description = "clone"
@@ -69,6 +72,7 @@ describe('AttributeDefinition', () => {
 
     it("cloneFrom", () => {
         // create a new definition
+        definition.addConstraint(new RequireConstraint())
         let clone = new AttributeDefinition("clone", IntegerAttribute.instance, "clone")
 
         clone.cloneFrom(definition)
@@ -77,6 +81,7 @@ describe('AttributeDefinition', () => {
         expect(clone.description).toEqual(definition.description)
         expect(clone.attribute_type).toEqual(definition.attribute_type)
         expect(clone["_num_constraints_related_to_other_values"]).toEqual(definition["_num_constraints_related_to_other_values"])
+        expect(clone.require_constraint).toEqual(definition.require_constraint)
 
         clone.name = "clone"
         expect(clone.name).not.toEqual(definition.name)

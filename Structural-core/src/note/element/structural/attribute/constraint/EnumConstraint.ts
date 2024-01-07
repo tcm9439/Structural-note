@@ -2,10 +2,11 @@ import { Constraint, ConstraintJson, ConstraintType } from "./Constraint.js"
 import { OperationResult } from "@/common/OperationResult.js"
 import { InvalidJsonFormatException } from "@/exception/ConversionException.js"
 import { z } from "zod"
+import _ from "lodash"
 
 export const EnumConstraintJson = ConstraintJson.extend({
     type: z.literal("EnumConstraint"),
-    values: z.map(z.number(), z.string()),
+    values: z.record(z.string(), z.string()),
     max_index: z.number(),
 }).required()
 
@@ -17,7 +18,7 @@ export class EnumConstraint extends Constraint {
 
     private _max_index: number = 0
 
-    constructor(available_values: string[] | Map<number, string> = [], max_index: number = 0) {
+    constructor(available_values: string[] | object | Map<number, string> = [], max_index: number = 0) {
         super()
         this.available_values = available_values
         this._max_index = max_index
@@ -35,14 +36,19 @@ export class EnumConstraint extends Constraint {
         return this._available_values
     }
 
-    set available_values(values: string[] | Set<string> | Map<number, string>) {
+    set available_values(values: string[] | object | Set<string> | Map<number, string>) {
         // if values is a map
         if (values instanceof Map) {
             this._available_values = values
             this._max_index = Math.max(...values.keys())
-        } else {
+        } else if (values instanceof Set || Array.isArray(values)) {
             this._available_values.clear()
             values.forEach(value => this.addAvailableValue(value))
+        } else {
+            this._available_values.clear()
+            Object.entries(values).forEach(([key, value]) => {
+                this._available_values.set(parseInt(key), value)
+            })
         }
     }
 
@@ -85,7 +91,7 @@ export class EnumConstraint extends Constraint {
         return {
             id: this.id,
             type: "EnumConstraint",
-            values: this._available_values,
+            values: Object.fromEntries(this.getAvailableValuesMap()),
             max_index: this._max_index,
         }
     }

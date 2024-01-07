@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Icon } from 'view-ui-plus'
+import { tran } from '~/composables/app/translate'
 
 const props = defineProps<{
     tags: [number, string][]
@@ -41,10 +42,15 @@ function toggleValueContainerClass(editing: boolean){
         value_container_class.value = "mt-tag-values-container"
     }
 }
+
+const tooltip_content = tran("common.tag_editor_tooltip")
 </script>
 
 <template>
     <div class="mt-tag-value-editor" ref="tag_editor">
+        <Tooltip placement="top" :content="tooltip_content" style="margin-right: 2px;">
+            <Icon type="md-information-circle" />
+        </Tooltip>
         <div :class="value_container_class" @click="focusToInput">
             <div v-for="value in props.tags" class="mt-tag-value">
                 {{ value[1] }}
@@ -82,8 +88,8 @@ function toggleValueContainerClass(editing: boolean){
 }
 
 .mt-tag-values-container {
-    display: block;
-    width: 95%;
+    display: inline-block;
+    width: calc(95% - 15px);
     outline: none;
     user-select: none;
     cursor: pointer;

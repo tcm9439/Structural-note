@@ -48,7 +48,7 @@ function getAvailableType(){
     let current_choice: string | null = current_attr_type.value?.type ?? null
     if (ori_attr_type === null){
         // new attr, can choose any types
-        return AttrTypeHelper.getGroupedTypes(current_choice, 2)
+        return AttrTypeHelper.getGroupedTypes(current_choice, 2, null)
     } else {
         // type can only be changed to convertible types
         let types = AttrTypeHelper.getGroupedConvertibleTypes(ori_attr_type, current_choice, 2, null)

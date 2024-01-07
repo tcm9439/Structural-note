@@ -1,4 +1,5 @@
 export class EventConstant {
+    public static readonly WINDOW_CLOSED_REQUEST = "WINDOW_CLOSED_REQUEST_EVENT"
     public static readonly LAYOUT_UPDATE = "LAYOUT_UPDATE_EVENT"
     
     public static readonly SETTING_UPDATED = "SETTING_UPDATED_EVENT"

@@ -19,6 +19,9 @@ const editing_note = ref<Note|null>(null) as Ref<Note|null>
 const has_open_note = ref<boolean>(false)
 const loading = ref<boolean>(true)
 const no_error = ref<boolean>(true)
+const closing_note = ref<boolean>(false)
+const closing_note_success_callback = ref(() => {})
+const closing_note_cancel_callback = ref(() => {})
 
 // # listen to the note open / close event (from here or the menu)
 function openedNoteChangeHandler(){
@@ -26,8 +29,15 @@ function openedNoteChangeHandler(){
     editing_note.value = $viewState.editing_note
     has_open_note.value = editing_note.value != null
 }
+function windowCloseRequestHandler(close_success_callback?: () => void, close_cancel_callback?: () => void){
+    AppState.logger.debug("Window close request event.")
+    closing_note.value = true
+    closing_note_success_callback.value = close_success_callback ?? (() => {})
+    closing_note_cancel_callback.value = close_cancel_callback ?? (() => {})
+}
 $emitter.on(EventConstant.NOTE_OPENED, openedNoteChangeHandler)
 $emitter.on(EventConstant.NOTE_CLOSED, openedNoteChangeHandler)
+$emitter.on(EventConstant.WINDOW_CLOSED_REQUEST, windowCloseRequestHandler)
 
 // # init page: check if there is any opened note for this window
 onMounted(async () => {
@@ -96,6 +106,7 @@ const unlisten_close_window = await appWindow.onCloseRequested(async (event) => 
 onBeforeUnmount(() => {
     $emitter.off(EventConstant.NOTE_OPENED, openedNoteChangeHandler)
     $emitter.off(EventConstant.NOTE_CLOSED, openedNoteChangeHandler)
+    $emitter.off(EventConstant.WINDOW_CLOSED_REQUEST, windowCloseRequestHandler)
     unlisten_drop_file()
     unlisten_close_window()
     invoke("remove_opened_file", { windowId: $viewState.window_id })
@@ -110,6 +121,13 @@ onBeforeUnmount(() => {
         <!-- For creating / opening a note -->
         <!-- !loading && no_error => won't show two Modal (this + error Modal) at once which cause scroll bug -->
         <mt-home-init-note v-if="!loading && no_error && !has_open_note" />
+
+        <mt-home-close-note 
+            v-if="closing_note" 
+            v-model:enabled="closing_note"
+            :close_success_callback="closing_note_success_callback"
+            :close_cancel_callback="closing_note_cancel_callback"
+        />
 
         <!-- After a note is opened -->
         <div v-if="has_open_note">

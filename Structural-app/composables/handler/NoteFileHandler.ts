@@ -203,47 +203,8 @@ export class NoteFileHandler {
     }
 
     private static showAskForSaveBeforeCloseModal(close_success_callback?: () => void, close_cancel_callback?: () => void){
-        const { $Modal } = useNuxtApp()
-        $Modal.confirm({
-            title: tran("common.save_confirm_window.title", null, {
-                target: tran("structural.file.note")
-            }),
-            okText: tran("common.save_confirm_window.save"),
-            onOk: async () => {
-                // button for closing with saving
-                await NoteFileHandler.saveNote()
-                if (close_success_callback){ close_success_callback() }
-            },
-            cancelText: tran("common.cancel"),
-            onCancel: () => {
-                // button for canceling the close operation
-                if (close_cancel_callback){
-                    close_cancel_callback()
-                }
-            },
-            render: (h: any) => {
-                // button for closing without saving
-                return h('div', [
-                        h('div', tran("common.save_confirm_window.content")),
-                        h('div', [
-                            h(Button, {
-                                class: 'ivu-fr',
-                                style: {
-                                    "margin-top": "20px",
-                                    "margin-left": "10px",
-                                },
-                                type: 'error',
-                                onclick: () => {
-                                    $Modal.remove() // close the modal
-                                    if (close_success_callback){ close_success_callback() }
-                                }
-                            }, { 
-                                default: () => h('span', tran("common.save_confirm_window.do_not_save"))
-                            })
-                        ])
-                    ])
-            }
-        })
+        const { $emitter } = useNuxtApp()
+        $emitter.emit(EventConstant.WINDOW_CLOSED_REQUEST, close_success_callback, close_cancel_callback)
     }
 
     /**

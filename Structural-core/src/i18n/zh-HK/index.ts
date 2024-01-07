@@ -122,6 +122,16 @@ const zh_HK = {
                 invalid_constraint_for_attr: "欄目「{attr_name}」的「{constraint}」限制無效：",
                 missing_constraint_for_attr_type: "欄目缺少限制「{constraint}」。",
                 incompatible_constraint_for_attr: "欄目「{attr_name}」的「{constraint_a}」限制與「{constraint_b}」限制不相容。",
+                json: {
+                    invalid_format : {
+                        title: "錯誤的 JSON 格式",
+                        message: "組件「{component}」的 JSON 格式無效。",
+                    },
+                    invalid_data : {
+                        title: "錯誤的資料",
+                        message: "組件「{component}」的資料無效。",
+                    },
+                },
             },
         },
         setting: {
@@ -140,6 +150,7 @@ const zh_HK = {
             save: "儲存",
             do_not_save: "不儲存",
         },
+        tag_editor_tooltip: "點擊以選入新項目；按下 Enter 以新增。",
         create: "新增",
         cancel: "取消",
         success: "成功",

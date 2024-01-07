@@ -3,11 +3,15 @@ import { OrderedComponents } from "@/note/util/OrderedComponents.js"
 import { AttributeTypeEnum } from "./type/AttributeType.js"
 import { AttributeDefinition } from "./AttributeDefinition.js"
 import { NumberAttribute } from "./type/NumberAttribute.js"
+import { EnumAttribute } from "./type/EnumAttribute.js"
+import { ConstraintType } from "./constraint/Constraint.js"
+import { EnumConstraint } from "./constraint/EnumConstraint.js"
 
 export class DisplayKey {
     public static readonly available_type: AttributeTypeEnum[] = [
         AttributeTypeEnum.STRING,
-        AttributeTypeEnum.INT
+        AttributeTypeEnum.INT,
+        AttributeTypeEnum.ENUM,
     ]
 
     private _keys: OrderedComponents<AttributeDefinition<any>> = new OrderedComponents()
@@ -72,6 +76,12 @@ export class DisplayKey {
                         break
                     case AttributeTypeEnum.INT:
                         result.push(NumberAttribute.convertToString(value.value, { precision: 0 }))
+                        break
+                    case AttributeTypeEnum.ENUM:
+                        const enum_constraint = key.getConstraint(ConstraintType.ENUM) as EnumConstraint
+                        result.push(EnumAttribute.convertToString(value.value, { 
+                            enum: enum_constraint.getAvailableValuesMap()
+                        }))
                         break
                 }
             }

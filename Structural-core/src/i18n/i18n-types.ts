@@ -45,7 +45,7 @@ type RootTranslation = {
 			 */
 			file_export_md: string
 			/**
-			 * E​x​p​o​r​t​ ​t​o​ ​T​e​x​t​ ​(​T​O​D​O​)
+			 * E​x​p​o​r​t​ ​t​o​ ​T​e​x​t
 			 */
 			file_export_txt: string
 			/**
@@ -323,7 +323,7 @@ type RootTranslation = {
 				 */
 				regex: string
 				/**
-				 * V​a​l​u​e​ ​S​e​t
+				 * E​n​u​m​e​r​a​t​i​o​n​ ​L​i​s​t
 				 */
 				'enum': string
 				param: {
@@ -429,6 +429,30 @@ type RootTranslation = {
 				 * @param {string} constraint_b
 				 */
 				incompatible_constraint_for_attr: RequiredParams<'attr_name' | 'constraint_a' | 'constraint_b'>
+				json: {
+					invalid_format: {
+						/**
+						 * I​n​v​a​l​i​d​ ​J​S​O​N​ ​F​o​r​m​a​t
+						 */
+						title: string
+						/**
+						 * I​n​v​a​l​i​d​ ​J​S​O​N​ ​f​o​r​m​a​t​ ​f​o​r​ ​c​o​m​p​o​n​e​n​t​ ​{​c​o​m​p​o​n​e​n​t​}​.
+						 * @param {string} component
+						 */
+						message: RequiredParams<'component'>
+					}
+					invalid_data: {
+						/**
+						 * I​n​v​a​l​i​d​ ​D​a​t​a
+						 */
+						title: string
+						/**
+						 * I​n​v​a​l​i​d​ ​D​a​t​a​ ​f​o​r​ ​c​o​m​p​o​n​e​n​t​ ​{​c​o​m​p​o​n​e​n​t​}​.
+						 * @param {string} component
+						 */
+						message: RequiredParams<'component'>
+					}
+				}
 			}
 		}
 		setting: {
@@ -472,6 +496,10 @@ type RootTranslation = {
 			 */
 			do_not_save: string
 		}
+		/**
+		 * C​l​i​c​k​ ​t​o​ ​i​n​p​u​t​ ​n​e​w​ ​i​t​e​m​.​ ​P​r​e​s​s​ ​e​n​t​e​r​ ​t​o​ ​a​d​d​.
+		 */
+		tag_editor_tooltip: string
 		/**
 		 * C​r​e​a​t​e
 		 */
@@ -709,7 +737,7 @@ export type TranslationFunctions = {
 			 */
 			file_export_md: () => LocalizedString
 			/**
-			 * Export to Text (TODO)
+			 * Export to Text
 			 */
 			file_export_txt: () => LocalizedString
 			/**
@@ -986,7 +1014,7 @@ export type TranslationFunctions = {
 				 */
 				regex: () => LocalizedString
 				/**
-				 * Value Set
+				 * Enumeration List
 				 */
 				'enum': () => LocalizedString
 				param: {
@@ -1081,6 +1109,28 @@ export type TranslationFunctions = {
 				 * Constraint '{constraint_a}' is not compatible to constraint {constraint_b} for attribute '{attr_name}'
 				 */
 				incompatible_constraint_for_attr: (arg: { attr_name: string, constraint_a: string, constraint_b: string }) => LocalizedString
+				json: {
+					invalid_format: {
+						/**
+						 * Invalid JSON Format
+						 */
+						title: () => LocalizedString
+						/**
+						 * Invalid JSON format for component {component}.
+						 */
+						message: (arg: { component: string }) => LocalizedString
+					}
+					invalid_data: {
+						/**
+						 * Invalid Data
+						 */
+						title: () => LocalizedString
+						/**
+						 * Invalid Data for component {component}.
+						 */
+						message: (arg: { component: string }) => LocalizedString
+					}
+				}
 			}
 		}
 		setting: {
@@ -1123,6 +1173,10 @@ export type TranslationFunctions = {
 			 */
 			do_not_save: () => LocalizedString
 		}
+		/**
+		 * Click to input new item. Press enter to add.
+		 */
+		tag_editor_tooltip: () => LocalizedString
 		/**
 		 * Create
 		 */
