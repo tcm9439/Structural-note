@@ -4,9 +4,9 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build --dotenv config/tauri.env",
-    "dev": "MT_APP_ENV=test nuxt dev --dotenv config/nuxt.env",
+    "dev": "cross-env MT_APP_ENV=test nuxt dev --dotenv config/nuxt.env",
     "tauri-nuxt-dev": "nuxt dev --dotenv config/tauri.env",
-    "generate": "nuxt generate --dotenv config/nuxt.env",
+    "generate": "nuxt generate --dotenv config/tauri.env",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "tauri": "tauri"
@@ -17,6 +17,7 @@
     "@types/node": "^18.17.0",
     "@vueuse/core": "^10.5.0",
     "@vueuse/nuxt": "^10.5.0",
+    "cross-env": "^7.0.3",
     "less": "^4.2.0",
     "nuxt": "^3.6.5",
     "nuxt-icon": "^0.5.0"
