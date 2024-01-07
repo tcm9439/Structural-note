@@ -4,7 +4,7 @@ import { EditPath, EditPathNode } from "@/note/util/EditPath.js"
 import { Cloneable, CloneUtil } from "@/common/Cloneable.js"
 import { OperationResult, ValidOperationResult } from "@/common/OperationResult.js"
 import { AttributeDefinition, AttributeDefinitionJson } from "./attribute/AttributeDefinition.js"
-import { DisplayKey } from "./attribute/DisplayKey.js"
+import { DisplayKey, DisplayKeyJson } from "./attribute/DisplayKey.js"
 import { InvalidJsonFormatException, InvalidDataException } from "@/exception/ConversionException.js"
 import { getAllRelatedValuesFunc } from "@/note/section/StructuralSection.js"
 
@@ -13,7 +13,8 @@ import { z } from "zod"
 export const StructureDefinitionJson = z.object({
     id: z.string(),
     attribute_order: ComponentsOrderJson,
-    attributes: z.array(AttributeDefinitionJson)
+    attributes: z.array(AttributeDefinitionJson),
+    display_key: DisplayKeyJson,
 }).required()
 
 /**
@@ -103,7 +104,8 @@ export class StructureDefinition extends ComponentBase implements EditPathNode, 
         return {
             id: this.id,
             attribute_order: this.attributes.saveAsJson(),
-            attributes: attributes
+            attributes: attributes,
+            display_key: this.display_key.saveAsJson(),
         }
     }
 
@@ -133,6 +135,9 @@ export class StructureDefinition extends ComponentBase implements EditPathNode, 
             }
             definition.attributes.add(attr_def)
         }
+
+        // load the display key
+        definition._display_key = DisplayKey.loadFromJson(valid_json.display_key, definition)
 
         return definition
     }

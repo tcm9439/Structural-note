@@ -133,6 +133,10 @@ describe('StructureDefinition', () => {
         expect(json).toEqual({
             id: definition.id,
             attribute_order: [str_attr.id, bool_attr.id],
+            display_key: {
+                keys: [],
+                separator: "-"
+            },
             attributes: [
                 {
                     id: str_attr.id,

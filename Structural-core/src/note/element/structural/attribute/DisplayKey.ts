@@ -6,6 +6,15 @@ import { NumberAttribute } from "./type/NumberAttribute.js"
 import { EnumAttribute } from "./type/EnumAttribute.js"
 import { ConstraintType } from "./constraint/Constraint.js"
 import { EnumConstraint } from "./constraint/EnumConstraint.js"
+import { InvalidDataException, InvalidJsonFormatException } from "@/exception/ConversionException.js"
+import { StructureDefinition } from "@/note/element/structural/StructureDefinition.js"
+
+import { z } from "zod"
+
+export const DisplayKeyJson = z.object({
+    keys: z.array(z.string()), // list of attribute definition id
+    separator: z.string()
+}).required()
 
 export class DisplayKey {
     public static readonly available_type: AttributeTypeEnum[] = [
@@ -87,5 +96,37 @@ export class DisplayKey {
             }
         })
         return result.join(this._separator)
+    }
+
+    saveAsJson(): z.infer<typeof DisplayKeyJson> {
+        let keys = this.keys.ordered_components.flatMap((key) => {
+            return key.id
+        })
+
+        return {
+            keys: keys,
+            separator: this._separator
+        }
+    }
+
+    static loadFromJson(json: object, struct_def: StructureDefinition): DisplayKey {
+        const result = DisplayKeyJson.safeParse(json)
+        if (!result.success) {
+            throw new InvalidJsonFormatException("Display Key", result.error.toString())
+        }
+        const valid_json = result.data
+
+        let display_key = new DisplayKey()
+        display_key.separator = valid_json.separator
+        valid_json.keys.forEach((key_id: string) => {
+            let key = struct_def.attributes.get(key_id)
+            if (key === undefined){
+                throw new InvalidDataException("Display Key", `Attribute definition with id ${key_id} not found in loaded attributes`)
+            } else {
+                display_key.addKey(key)
+            }
+        })
+
+        return display_key
     }
 }

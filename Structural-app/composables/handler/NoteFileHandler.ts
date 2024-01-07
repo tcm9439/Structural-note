@@ -9,8 +9,6 @@ import { basename } from "@tauri-apps/api/path"
 import { appWindow } from "@tauri-apps/api/window"
 import { invoke } from '@tauri-apps/api/tauri'
 
-import { Button } from "view-ui-plus"
-
 const struct_note_file_extension = "structnote"
 
 export class NoteFileHandler {
