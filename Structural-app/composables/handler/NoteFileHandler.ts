@@ -84,8 +84,8 @@ export class NoteFileHandler {
      */
     static async saveNote(save_as_mode: boolean = false){
         AppState.logger.debug("Start saveNote. save-as-mode: " + save_as_mode)
+        const { $viewState, $Message, $emitter } = useNuxtApp()
         try {
-            const { $viewState, $Message, $emitter } = useNuxtApp()
             if ($viewState.editing_note === null){
                 AppState.logger.info("No note is opened to save.")
                 return
@@ -105,7 +105,7 @@ export class NoteFileHandler {
             if (this_save_path === null){
                 $Message.info(tran("common.cancel"))
                 return
-            } 
+            }
 
             // update the note title
             let note_title = await NoteFileHandler.getTitle(this_save_path)
@@ -128,6 +128,7 @@ export class NoteFileHandler {
             $Message.info(tran("structural.file.saved"))
             AppState.logger.debug("File saved successfully.")
         } catch (err) {
+            $Message.error(tran("common.error"))
             AppState.logger.error("Error when trying to save Note.", err)
         }
     }

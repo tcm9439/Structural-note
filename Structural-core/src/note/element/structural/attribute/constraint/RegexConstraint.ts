@@ -3,7 +3,6 @@ import { OperationResult } from "@/common/OperationResult.js"
 import { InvalidJsonFormatException } from "@/exception/ConversionException.js"
 import { LoggerManager } from "@/common/Logger.js"
 import { z } from "zod"
-import _ from "lodash"
 
 export const RegexConstraintJson = ConstraintJson.extend({
     type: z.literal("RegexConstraint"),
@@ -23,7 +22,7 @@ export class RegexConstraint extends Constraint {
     set pattern(pattern: string) {
         try {
             this._pattern = pattern
-            this._regex = new RegExp(`^${pattern}$`)
+            this._regex = new RegExp("^" + pattern + "$")
             this._validate_constraint_result = OperationResult.valid()
         } catch (e) {
             LoggerManager.logger.info(`RegexConstraint: invalid pattern: ${pattern} | ${e}`)

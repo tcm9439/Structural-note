@@ -58,4 +58,25 @@ export class ConverterHelper {
         // remove the last \n
         return result.slice(0, -1)
     }
+
+    static markdown_replacements: [RegExp, string][] = [
+        [/\*/g, '\\*'],
+        [/#/g, '\\#'],
+        [/\//g, '\\/'],
+        [/\(/g, '\\('],
+        [/\)/g, '\\)'],
+        [/\[/g, '\\['],
+        [/\]/g, '\\]'],
+        [/</g, '&lt;'],
+        [/>/g, '&gt;'],
+        [/_/g, '\\_'],
+        [/`/g, '\\`'],
+    ]
+
+    static escapeMarkdown(content: string): string {
+        for (let replacement of this.markdown_replacements){
+            content = content.replace(replacement[0], replacement[1])
+        }
+        return content
+    }
 }

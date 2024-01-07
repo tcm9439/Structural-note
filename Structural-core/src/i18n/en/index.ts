@@ -27,6 +27,7 @@ const en = {
             note_name: "Note Name",
             untitled: "Untitled",
             saved: "Saved",
+            saving: "Saving...",
             export: {
                 export: "Export",
                 preview_title: "Preview export file:",
@@ -110,6 +111,8 @@ const en = {
             },
             value: {
                 double_click_to_edit: "Double click to edit",
+                true: "True",
+                false: "False",
             },
             error: {
                 no_attr: "There must be at least one attribute definition.",
@@ -122,16 +125,6 @@ const en = {
                 missing_constraint_for_attr_type: "Missing constraint '{constraint:string}' for this attribute type",
                 invalid_constraint_for_attr: "Constraint '{constraint:string}' for attribute '{attr_name:string}' is invalid:",
                 incompatible_constraint_for_attr: "Constraint '{constraint_a:string}' is not compatible to constraint {constraint_b:string} for attribute '{attr_name:string}'",
-                json: {
-                    invalid_format : {
-                        title: "Invalid JSON Format",
-                        message: "Invalid JSON format for component {component:string}.",
-                    },
-                    invalid_data : {
-                        title: "Invalid Data",
-                        message: "Invalid Data for component {component:string}.",
-                    },
-                },
             },
         },
         setting: {
@@ -214,6 +207,16 @@ const en = {
             io: {
                 title: "File IO Error",
                 message: "Something went wrong when accessing the file.",
+            },
+        },
+        json: {
+            invalid_format : {
+                title: "Invalid JSON Format",
+                message: "Invalid JSON format for component {component:string}.",
+            },
+            invalid_data : {
+                title: "Invalid Data",
+                message: "Invalid Data for component {component:string}.",
             },
         },
     },

@@ -6,6 +6,7 @@ import { ConverterHelper } from "./ConverterHelper.js"
 import { ConstraintType } from "@/note/element/structural/attribute/constraint/Constraint.js"
 import { EnumConstraint } from "@/note/element/structural/attribute/constraint/EnumConstraint.js"
 import { EnumAttribute } from "@/note/element/structural/attribute/type/EnumAttribute.js"
+import { AppState } from "@/view/state/AppState.js"
 
 export type AttributeValueConverter = (attr_def: AttributeDefinition<any>, element: AttributeValue<any>) => string
 export type AttrKeyValueFormatter = (attr_name: string, value: string) => string
@@ -20,6 +21,7 @@ export class BaseAttributeValueConverter {
         converter_map.set(AttributeTypeEnum.INT, BaseAttributeValueConverter.fromInteger)
         converter_map.set(AttributeTypeEnum.DECIMAL, BaseAttributeValueConverter.fromDecimal)
         converter_map.set(AttributeTypeEnum.STRING, BaseAttributeValueConverter.fromString)
+        converter_map.set(AttributeTypeEnum.LONG_STRING, BaseAttributeValueConverter.fromString)
         converter_map.set(AttributeTypeEnum.MARKDOWN, BaseAttributeValueConverter.fromMarkdown)
         converter_map.set(AttributeTypeEnum.ENUM, BaseAttributeValueConverter.fromEnum)
         return converter_map
@@ -48,9 +50,9 @@ export class BaseAttributeValueConverter {
 
     static fromBoolean(attr_def: AttributeDefinition<any>, element: AttributeValue<boolean>): string {
         if (element.value){
-            return "true" // TODO translate
+            return AppState.translationManager.translate("structural.attribute.value.true")
         } else {
-            return "false"
+            return AppState.translationManager.translate("structural.attribute.value.false")
         }
     }
 

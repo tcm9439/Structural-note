@@ -16,7 +16,7 @@ describe("AttributeValueTxtConverter", () => {
 
         attr_def = new AttributeDefinition("test", new BooleanAttribute())
         value = new AttributeValue(attr_def, true)
-        expect(converter.convert(attr_def, value)).toBe("test: true")
+        expect(converter.convert(attr_def, value)).toBe("test: True")
 
         attr_def = new AttributeDefinition("test", new IntegerAttribute())
         value = new AttributeValue(attr_def, 42)

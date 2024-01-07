@@ -34,7 +34,7 @@ const section2_converter_expected_result = `Section 2
 ==================================================
 
 Str Attr: test value 1
-Bool Attr: true
+Bool Attr: True
 Markdown Attr: 
 # test
 markdown

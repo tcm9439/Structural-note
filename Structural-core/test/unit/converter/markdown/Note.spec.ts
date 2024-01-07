@@ -16,7 +16,7 @@ import { MarkdownElement } from "@/note/element/MarkdownElement.js"
 
 const section1_converter_expected_result = `## Section 1
 
-Content 1
+Content 1 &lt;escape&gt;
 <hr/>
 
 Content 2
@@ -30,7 +30,7 @@ ABC`
 const section2_converter_expected_result = `## Section 2
 
 **Str Attr**: test value 1
-**Bool Attr**: true
+**Bool Attr**: True
 **Markdown Attr**: 
 #### test
 **markdown**
@@ -82,7 +82,7 @@ describe("Note", () => {
         definition.attributes.add(md_attr)
 
         // section 1
-        let element1 = new TextElement("Content 1")
+        let element1 = new TextElement("Content 1 <escape>")
         section1.elements.add(element1)
         element1 = new TextElement("Content 2")
         section1.elements.add(element1)

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { StringBuilder } from "@/converter/ConverterHelper.js"
+import { StringBuilder, ConverterHelper } from "@/converter/ConverterHelper.js"
 
-describe("ConverterHelper", () => {
+describe("StringBuilder", () => {
 	it("append", () => {
         let builder = new StringBuilder()
         builder.append("abc")
@@ -31,4 +31,11 @@ describe("ConverterHelper", () => {
         builder.append("abc").appendLine("line2").appendHorizontalRow().removeLastRow()
         expect(builder.toString()).toBe("abc\nline2")
     })
+})
+
+describe("ConverterHelper", () => {
+	it("escapeMarkdown", () => {
+        let result = ConverterHelper.escapeMarkdown("<abc>")
+        expect(result).toBe("&lt;abc&gt;")
+	})
 })

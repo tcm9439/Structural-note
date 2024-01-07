@@ -11,7 +11,7 @@ const props = defineProps<{
 
 const editing_note = inject(InjectConstant.EDITING_NOTE) as Note
 const struct_element = activeDataGetter(editing_note, props.edit_path) as StructuralElement
-const collapse_open_panel = ref(struct_element.id)
+const collapse_open_panel = ref(struct_element.id) // open the panel by default
 
 // reload the values in this element
 function getElementsValues(){
@@ -23,6 +23,8 @@ const element_display_key = computed(() => struct_element.definition.display_key
 // on structural section definition change
 const render_value_components = ref(0)
 function attributeDefinitionUpdateHandler(ori_struct_def: StructureDefinition, edit_queue: StructEditQueue){
+    if (ori_struct_def.id !== struct_element.definition.id) return // not for this section
+
     // All elements' attributeDefinitionUpdateHandler share the same edit_queue so it must be clone() before consume
     StructDefEditEventElementHandler.editQueueConsumer(struct_element, ori_struct_def, edit_queue.clone())
     // reload the elements & DOM

@@ -9,10 +9,10 @@ describe("BaseAttributeValueConverter", () => {
     it("fromBoolean", () => {
         let attr_def = new AttributeDefinition("test", new BooleanAttribute())
         let value = new AttributeValue(attr_def, true)
-        expect(BaseAttributeValueConverter.fromBoolean(attr_def, value)).toBe("true")
+        expect(BaseAttributeValueConverter.fromBoolean(attr_def, value)).toBe("True")
 
         value = new AttributeValue(attr_def, false)
-        expect(BaseAttributeValueConverter.fromBoolean(attr_def, value)).toBe("false")
+        expect(BaseAttributeValueConverter.fromBoolean(attr_def, value)).toBe("False")
     })
 
     it("fromInteger", () => {

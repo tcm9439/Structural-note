@@ -27,6 +27,7 @@ const zh_HK = {
             note_name: "筆記名稱",
             untitled: "未命名",
             saved: "已儲存",
+            saving: "儲存中...",
             export: {
                 export: "匯出",
                 preview_title: "預覽匯出檔案：",
@@ -101,7 +102,7 @@ const zh_HK = {
                     max_val_is_null: "最大值尚未設定。",
                     invalid_regex: "無效的正則表達式。",
                     val_less_than_min: "低於最少值",
-                    val_larger_than_max: "大於最大值",
+                    val_larger_than_max: "高於最大值",
                     attr_is_required: "此欄目必須填寫",
                     val_not_unique: "資料重覆",
                     val_not_in_enum: "非限定值之一",
@@ -110,6 +111,8 @@ const zh_HK = {
             },
             value: {
                 double_click_to_edit: "雙擊以編輯",
+                true: "是",
+                false: "非",
             },
             error: {
                 no_attr: "結構定義至少要有一個欄目。",
@@ -122,16 +125,6 @@ const zh_HK = {
                 invalid_constraint_for_attr: "欄目「{attr_name}」的「{constraint}」限制無效：",
                 missing_constraint_for_attr_type: "欄目缺少限制「{constraint}」。",
                 incompatible_constraint_for_attr: "欄目「{attr_name}」的「{constraint_a}」限制與「{constraint_b}」限制不相容。",
-                json: {
-                    invalid_format : {
-                        title: "錯誤的 JSON 格式",
-                        message: "組件「{component}」的 JSON 格式無效。",
-                    },
-                    invalid_data : {
-                        title: "錯誤的資料",
-                        message: "組件「{component}」的資料無效。",
-                    },
-                },
             },
         },
         setting: {
@@ -150,7 +143,7 @@ const zh_HK = {
             save: "儲存",
             do_not_save: "不儲存",
         },
-        tag_editor_tooltip: "點擊以選入新項目；按下 Enter 以新增。",
+        tag_editor_tooltip: "點擊以選入項目；按 Enter 以新增",
         create: "新增",
         cancel: "取消",
         success: "成功",
@@ -214,6 +207,16 @@ const zh_HK = {
             io: {
                 title: "檔案存取錯誤",
                 message: "檔案存取錯誤，請檢查程式記錄檔。"
+            },
+        },
+        json: {
+            invalid_format : {
+                title: "錯誤的 JSON 格式",
+                message: "組件「{component}」的 JSON 格式無效。",
+            },
+            invalid_data : {
+                title: "錯誤的資料",
+                message: "組件「{component}」的資料無效。",
             },
         },
     },

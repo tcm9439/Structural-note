@@ -106,6 +106,10 @@ type RootTranslation = {
 			 * S​a​v​e​d
 			 */
 			saved: string
+			/**
+			 * S​a​v​i​n​g​.​.​.
+			 */
+			saving: string
 			'export': {
 				/**
 				 * E​x​p​o​r​t
@@ -376,6 +380,14 @@ type RootTranslation = {
 				 * D​o​u​b​l​e​ ​c​l​i​c​k​ ​t​o​ ​e​d​i​t
 				 */
 				double_click_to_edit: string
+				/**
+				 * T​r​u​e
+				 */
+				'true': string
+				/**
+				 * F​a​l​s​e
+				 */
+				'false': string
 			}
 			error: {
 				/**
@@ -429,30 +441,6 @@ type RootTranslation = {
 				 * @param {string} constraint_b
 				 */
 				incompatible_constraint_for_attr: RequiredParams<'attr_name' | 'constraint_a' | 'constraint_b'>
-				json: {
-					invalid_format: {
-						/**
-						 * I​n​v​a​l​i​d​ ​J​S​O​N​ ​F​o​r​m​a​t
-						 */
-						title: string
-						/**
-						 * I​n​v​a​l​i​d​ ​J​S​O​N​ ​f​o​r​m​a​t​ ​f​o​r​ ​c​o​m​p​o​n​e​n​t​ ​{​c​o​m​p​o​n​e​n​t​}​.
-						 * @param {string} component
-						 */
-						message: RequiredParams<'component'>
-					}
-					invalid_data: {
-						/**
-						 * I​n​v​a​l​i​d​ ​D​a​t​a
-						 */
-						title: string
-						/**
-						 * I​n​v​a​l​i​d​ ​D​a​t​a​ ​f​o​r​ ​c​o​m​p​o​n​e​n​t​ ​{​c​o​m​p​o​n​e​n​t​}​.
-						 * @param {string} component
-						 */
-						message: RequiredParams<'component'>
-					}
-				}
 			}
 		}
 		setting: {
@@ -673,6 +661,30 @@ type RootTranslation = {
 				message: string
 			}
 		}
+		json: {
+			invalid_format: {
+				/**
+				 * I​n​v​a​l​i​d​ ​J​S​O​N​ ​F​o​r​m​a​t
+				 */
+				title: string
+				/**
+				 * I​n​v​a​l​i​d​ ​J​S​O​N​ ​f​o​r​m​a​t​ ​f​o​r​ ​c​o​m​p​o​n​e​n​t​ ​{​c​o​m​p​o​n​e​n​t​}​.
+				 * @param {string} component
+				 */
+				message: RequiredParams<'component'>
+			}
+			invalid_data: {
+				/**
+				 * I​n​v​a​l​i​d​ ​D​a​t​a
+				 */
+				title: string
+				/**
+				 * I​n​v​a​l​i​d​ ​D​a​t​a​ ​f​o​r​ ​c​o​m​p​o​n​e​n​t​ ​{​c​o​m​p​o​n​e​n​t​}​.
+				 * @param {string} component
+				 */
+				message: RequiredParams<'component'>
+			}
+		}
 	}
 	test: {
 		/**
@@ -798,6 +810,10 @@ export type TranslationFunctions = {
 			 * Saved
 			 */
 			saved: () => LocalizedString
+			/**
+			 * Saving...
+			 */
+			saving: () => LocalizedString
 			'export': {
 				/**
 				 * Export
@@ -1067,6 +1083,14 @@ export type TranslationFunctions = {
 				 * Double click to edit
 				 */
 				double_click_to_edit: () => LocalizedString
+				/**
+				 * True
+				 */
+				'true': () => LocalizedString
+				/**
+				 * False
+				 */
+				'false': () => LocalizedString
 			}
 			error: {
 				/**
@@ -1109,28 +1133,6 @@ export type TranslationFunctions = {
 				 * Constraint '{constraint_a}' is not compatible to constraint {constraint_b} for attribute '{attr_name}'
 				 */
 				incompatible_constraint_for_attr: (arg: { attr_name: string, constraint_a: string, constraint_b: string }) => LocalizedString
-				json: {
-					invalid_format: {
-						/**
-						 * Invalid JSON Format
-						 */
-						title: () => LocalizedString
-						/**
-						 * Invalid JSON format for component {component}.
-						 */
-						message: (arg: { component: string }) => LocalizedString
-					}
-					invalid_data: {
-						/**
-						 * Invalid Data
-						 */
-						title: () => LocalizedString
-						/**
-						 * Invalid Data for component {component}.
-						 */
-						message: (arg: { component: string }) => LocalizedString
-					}
-				}
 			}
 		}
 		setting: {
@@ -1339,6 +1341,28 @@ export type TranslationFunctions = {
 				 * Something went wrong when accessing the file.
 				 */
 				message: () => LocalizedString
+			}
+		}
+		json: {
+			invalid_format: {
+				/**
+				 * Invalid JSON Format
+				 */
+				title: () => LocalizedString
+				/**
+				 * Invalid JSON format for component {component}.
+				 */
+				message: (arg: { component: string }) => LocalizedString
+			}
+			invalid_data: {
+				/**
+				 * Invalid Data
+				 */
+				title: () => LocalizedString
+				/**
+				 * Invalid Data for component {component}.
+				 */
+				message: (arg: { component: string }) => LocalizedString
 			}
 		}
 	}

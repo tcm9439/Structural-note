@@ -15,6 +15,7 @@ import { MaxConstraint } from "./constraint/MaxConstraint.js"
 import { MinConstraint } from "./constraint/MinConstraint.js"
 import { EnumConstraint } from "./constraint/EnumConstraint.js"
 import { AttributeValue } from "./value/AttributeValue.js"
+import { RegexConstraint } from "./constraint/RegexConstraint.js"
 import { getAllRelatedValuesFunc } from "@/note/section/StructuralSection.js"
 import { z } from "zod"
 
@@ -361,6 +362,8 @@ export class AttributeDefinition<T> extends ComponentBase implements EditPathNod
                 constraint = UniqueConstraint.loadFromJson(constraint_json)
             } else if (constraint_json.type === "EnumConstraint") {
                 constraint = EnumConstraint.loadFromJson(constraint_json)
+            } else if (constraint_json.type === "RegexConstraint") {
+                constraint = RegexConstraint.loadFromJson(constraint_json)
             } else {
                 throw new InvalidJsonFormatException("AttributeDefinition", `Unknown constraint type: ${constraint_json.type}`)
             }
