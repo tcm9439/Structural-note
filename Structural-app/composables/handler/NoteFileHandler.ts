@@ -133,11 +133,13 @@ export class NoteFileHandler {
         }
     }
 
-    private static createNoteFromTemplate(title: string, template_id: string): Note {
+    static createNoteFromTemplate(title: string, template_id: string): Note {
         let template = NOTE_TEMPLATES.find(template => template.id === template_id)
-        if (template !== undefined){
+        if (template !== undefined && template.file_content !== ""){
+            AppState.logger.debug(`Create note from template ${template_id}`)
             return NoteFileHandler.loadFromFileContent(title, template.file_content)
         }
+        AppState.logger.warn(`No template found for id ${template_id}. Create a blank note.`)
         return new Note(title)
     }
 

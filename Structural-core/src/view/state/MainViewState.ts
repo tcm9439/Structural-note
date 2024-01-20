@@ -10,6 +10,7 @@ export enum AppPage {
     // === TEST ===
     TEST = "test",
     TEST_EMPTY = "test-empty",
+    TEST_TEMPLATE = "test-template",
 }
 
 export class AppPageUtil {
@@ -21,6 +22,8 @@ export class AppPageUtil {
                 return "/test"
             case AppPage.TEST_EMPTY:
                 return "/test/empty"
+            case AppPage.TEST_TEMPLATE:
+                return "/test/template"
             case AppPage.SETTING:
                 return "/setting"
             default:

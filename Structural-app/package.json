@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build --dotenv config/tauri.env",
+    "build-demo": "cross-env MT_APP_ENV=demo nuxt generate --dotenv config/nuxt.env",
     "dev": "cross-env MT_APP_ENV=test nuxt dev --dotenv config/nuxt.env",
     "tauri-nuxt-dev": "nuxt dev --dotenv config/tauri.env",
     "generate": "nuxt generate --dotenv config/tauri.env",
