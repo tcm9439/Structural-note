@@ -1,10 +1,8 @@
 ## KNOWN BUG
 
 ## Pending Features
+[ ] CI/CD with Github Action
 [ ] reload iviewui lang when lang setting changed
-[ ] check what if i write some invalid value & save
-[ ] complete the tutorial template
-[ ] test page that init by a debug template with all elements
 [ ] Decimal to int
 [ ] Export to csv
 [ ] value.vue
@@ -13,7 +11,6 @@
     [ ] date-time
 [ ] struct element key attr as panel name & breadcrumb
 [ ] breadcrumb & Anchor
-[ ] help page
 [ ] Right click menu
 
 ## Features that I want to have but it more difficult 
