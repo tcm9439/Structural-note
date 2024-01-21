@@ -1,5 +1,5 @@
 {
-    "name": "structural-core",
+    "name": "@structural-note/structural-core",
     "version": "0.1.0",
     "files": [
         "lib/**/*"
@@ -15,13 +15,11 @@
         "build-types": "api-extractor run",
         "build-all": "npm run build && npm run build-types && npm run minify",
         "minify": "minify-all-js ./lib",
-        "dep": "ts_dependency_graph --start src/index.ts --graph_folder | dot -T svg > test/out/dependency-graph.svg",
-        "i18n": "typesafe-i18n",
-        "typesafe-i18n": "typesafe-i18n"
+        "i18n": "typesafe-i18n"
     },
     "keywords": [],
     "author": "MaisyT",
-    "description": "",
+    "description": "The core logic package for the front-end of the Structural app.",
     "devDependencies": {
         "@microsoft/api-extractor": "^7.36.3",
         "@types/lodash": "^4.14.197",
@@ -31,7 +29,6 @@
         "@vitest/coverage-v8": "^0.34.1",
         "@vitest/ui": "^0.33.0",
         "minify-all-js": "^0.1.9",
-        "ts_dependency_graph": "^2.0.0",
         "tsc-alias": "^1.8.7",
         "typescript": "^5.1.6",
         "vitest": "^0.33.0"
@@ -45,5 +42,14 @@
         "typesafe-i18n": "^5.26.2",
         "uuid": "^9.0.0",
         "zod": "^3.22.2"
-    }
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/tcm9439/Structural-note.git"
+    },
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/tcm9439/Structural-note/issues"
+    },
+    "homepage": "https://github.com/tcm9439/Structural-note#readme"
 }
