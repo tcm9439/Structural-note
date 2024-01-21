@@ -21,6 +21,9 @@ jobs:
         platform: [macos-latest, windows-latest]
 
     runs-on: ${{ matrix.platform }}
+    defaults:
+      run:
+        working-directory: ./Structural-app
     steps:
       # Checkout the repository 
       - uses: actions/checkout@v4
@@ -42,7 +45,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          projectPath: './Structural-app'
           tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
           releaseName: 'Structural Note App v__VERSION__'
           releaseBody: 'See the assets to download this version and install.'
