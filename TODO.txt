@@ -1,7 +1,6 @@
 ## KNOWN BUG
 
 ## Pending Features
-[ ] CI/CD with Github Action
 [ ] reload iviewui lang when lang setting changed
 [ ] Decimal to int
 [ ] Export to csv
