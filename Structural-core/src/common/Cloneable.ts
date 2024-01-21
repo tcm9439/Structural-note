@@ -1,4 +1,4 @@
-import _ from "lodash"
+import { cloneDeepWith, isFunction, isObject } from "lodash-es"
 
 export interface Cloneable<T> {
     /**
@@ -30,8 +30,8 @@ export class CloneUtil {
      * If the value is not a object that implements Cloneable, the lodash cloneDeepWith function is used.
      */
     static cloneDeepWithCloneable<T>(value_to_clone: T): T {
-        return _.cloneDeepWith(value_to_clone, (value) => {
-            if (_.isObject(value) && "cloneDeepWithCustomizer" in value && _.isFunction(value.cloneDeepWithCustomizer)) {
+        return cloneDeepWith(value_to_clone, (value) => {
+            if (isObject(value) && "cloneDeepWithCustomizer" in value && isFunction(value.cloneDeepWithCustomizer)) {
                 // if the value is a object that implements Cloneable
                 return value.cloneDeepWithCustomizer()
             }

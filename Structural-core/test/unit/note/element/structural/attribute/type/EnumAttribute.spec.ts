@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest"
-import { EnumAttribute, AttributeDefinition, InvalidTypeConversionException, AttributeValue, ConstraintType, EnumConstraint, ModuleInit } from "@/index"
+import { EnumAttribute, AttributeDefinition, InvalidTypeConversionException, AttributeValue, ConstraintType, EnumConstraint, ModuleInit } from "@/index.js"
 
 describe("EnumAttribute", () => {
     beforeAll(async () => {

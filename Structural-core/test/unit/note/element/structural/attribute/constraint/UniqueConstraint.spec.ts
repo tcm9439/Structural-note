@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { ValidOperationResult, StructuralSection, AttributeDefinition, StringAttribute, UniqueConstraint, StructuralElement, AttributeValue, ShortStringAttribute } from "@/index"
+import { ValidOperationResult, StructuralSection, AttributeDefinition, StringAttribute, UniqueConstraint, StructuralElement, AttributeValue, ShortStringAttribute } from "@/index.js"
 
 
 class TempClass {

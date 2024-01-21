@@ -1,6 +1,6 @@
 import type { Locales } from "@/i18n/i18n-types.js"
 import L from '@/i18n/i18n-node.js'
-import _ from "lodash"
+import {  } from "lodash-es"
 import { locales } from "@/i18n/i18n-util.js"
 import { LoggerManager } from "./Logger.js"
 

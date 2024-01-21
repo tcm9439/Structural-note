@@ -2,7 +2,7 @@ import { Constraint, ConstraintType, ConstraintJson } from "./Constraint.js"
 import { OperationResult } from "@/common/OperationResult.js"
 import { InvalidJsonFormatException } from "@/exception/ConversionException.js"
 import { z } from "zod"
-import _ from "lodash"
+import { get, gte, gt } from "lodash-es"
 
 export const MaxConstraintJson = ConstraintJson.extend({
     type: z.literal("MaxConstraint"),
@@ -59,7 +59,7 @@ export class MaxConstraint<T> extends Constraint {
         }
 
         if (constraint.getType() == ConstraintType.MIN) {
-            let min = _.get(constraint, "min") as unknown
+            let min = get(constraint, "min") as unknown
             if (this.max != null && min != null) {
                 return this.max >= min
             }
@@ -73,7 +73,7 @@ export class MaxConstraint<T> extends Constraint {
     }
     
     validate(value: T): OperationResult {
-        let compare_func = this.inclusive ? _.gt : _.gte
+        let compare_func = this.inclusive ? gt : gte
         if (this.max != null && compare_func(value, this.max)){
             return OperationResult.invalid("structural.attribute.constraint.error.val_larger_than_max")
         }

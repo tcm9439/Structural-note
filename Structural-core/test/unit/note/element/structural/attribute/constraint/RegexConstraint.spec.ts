@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { RegexConstraint, ValidOperationResult } from "@/index"
-import _ from "lodash"
+import { RegexConstraint, ValidOperationResult } from "@/index.js"
+import {  } from "lodash-es"
 
 describe("RegexConstraint", () => {
     let regex_constraint: RegexConstraint

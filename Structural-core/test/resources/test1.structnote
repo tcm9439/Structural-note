@@ -1,1 +1,60 @@
-{"id":"5cf21b52-b0a5-4e58-8116-74e847eca668","section_order":["1b1a9bd6-a062-4988-8612-a041dff78d74","6677b02c-acf4-42f5-ab9e-4657e3154ec2"],"sections":[{"type":"NoteSection","id":"1b1a9bd6-a062-4988-8612-a041dff78d74","title":"Section A","elements_order":["dcacfeae-83de-4c39-a603-9efb93370700","1407b1f9-8459-4dc7-ab76-ecb8746b19b5"],"elements":[{"type":"TextElement","id":"dcacfeae-83de-4c39-a603-9efb93370700","content":"Some text.\nLine 2\nLine 3."},{"type":"MdElement","id":"1407b1f9-8459-4dc7-ab76-ecb8746b19b5","content":"# Some Markdwon\n\n```rust\nprintln!(\"Hi\")\n```"}]},{"type":"StructuralSection","id":"6677b02c-acf4-42f5-ab9e-4657e3154ec2","title":"Structural Section!","elements_order":["8ba5721e-477b-472a-9b4a-bf6be6bfe8cb","3a19e6b0-9cf4-4de1-ad66-d1c114e752a9"],"elements":[{"type":"StructuralElement","id":"8ba5721e-477b-472a-9b4a-bf6be6bfe8cb","definition_id":"b0cabc91-08cb-4fc9-b2af-2af8f0a57c4f","values":[{"id":"f7cd3622-e242-49eb-8b06-59d58837917b","definition_id":"8c5c0f25-21e8-4a8e-8c19-aecb226906bd","value":"default"}]},{"type":"TextElement","id":"3a19e6b0-9cf4-4de1-ad66-d1c114e752a9","content":"Finally"}],"definition":{"id":"b0cabc91-08cb-4fc9-b2af-2af8f0a57c4f","attribute_order":["8c5c0f25-21e8-4a8e-8c19-aecb226906bd"],"attributes":[{"id":"8c5c0f25-21e8-4a8e-8c19-aecb226906bd","name":"Name","description":"Some string attr","attribute_type":"STRING","default_value":"default","constraints":[{"id":"33ada973-fe1d-4cf5-bb2a-015da16ae62f","type":"RequireConstraint","required":true}]}]}}]}
+{
+    "id": "5cf21b52-b0a5-4e58-8116-74e847eca668",
+    "section_order": ["1b1a9bd6-a062-4988-8612-a041dff78d74", "6677b02c-acf4-42f5-ab9e-4657e3154ec2"],
+    "sections": [
+        {
+            "type": "NoteSection",
+            "id": "1b1a9bd6-a062-4988-8612-a041dff78d74",
+            "title": "Section A",
+            "elements_order": ["dcacfeae-83de-4c39-a603-9efb93370700", "1407b1f9-8459-4dc7-ab76-ecb8746b19b5"],
+            "elements": [
+                {
+                    "type": "TextElement",
+                    "id": "dcacfeae-83de-4c39-a603-9efb93370700",
+                    "content": "Some text.\nLine 2\nLine 3."
+                },
+                {
+                    "type": "MdElement",
+                    "id": "1407b1f9-8459-4dc7-ab76-ecb8746b19b5",
+                    "content": "# Some Markdwon\n\n```rust\nprintln!(\"Hi\")\n```"
+                }
+            ]
+        },
+        {
+            "type": "StructuralSection",
+            "id": "6677b02c-acf4-42f5-ab9e-4657e3154ec2",
+            "title": "Structural Section!",
+            "elements_order": ["8ba5721e-477b-472a-9b4a-bf6be6bfe8cb", "3a19e6b0-9cf4-4de1-ad66-d1c114e752a9"],
+            "elements": [
+                {
+                    "type": "StructuralElement",
+                    "id": "8ba5721e-477b-472a-9b4a-bf6be6bfe8cb",
+                    "definition_id": "b0cabc91-08cb-4fc9-b2af-2af8f0a57c4f",
+                    "values": [
+                        {
+                            "id": "f7cd3622-e242-49eb-8b06-59d58837917b",
+                            "definition_id": "8c5c0f25-21e8-4a8e-8c19-aecb226906bd",
+                            "value": "default"
+                        }
+                    ]
+                },
+                { "type": "TextElement", "id": "3a19e6b0-9cf4-4de1-ad66-d1c114e752a9", "content": "Finally" }
+            ],
+            "definition": {
+                "id": "b0cabc91-08cb-4fc9-b2af-2af8f0a57c4f",
+                "attribute_order": ["8c5c0f25-21e8-4a8e-8c19-aecb226906bd"],
+                "display_key": { "keys": [], "separator": "-" },
+                "attributes": [
+                    {
+                        "id": "8c5c0f25-21e8-4a8e-8c19-aecb226906bd",
+                        "name": "Name",
+                        "description": "Some string attr",
+                        "attribute_type": "STRING",
+                        "default_value": "default",
+                        "constraints": [{ "id": "33ada973-fe1d-4cf5-bb2a-015da16ae62f", "type": "RequireConstraint" }]
+                    }
+                ]
+            }
+        }
+    ]
+}

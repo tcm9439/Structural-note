@@ -7,7 +7,7 @@ import { NoteSection, NoteSectionJson } from "./section/NoteSection.js"
 import { StructuralSection } from "./section/StructuralSection.js"
 
 import { z } from "zod"
-import _ from "lodash"
+import { isEqual } from "lodash-es"
 
 export const NoteJson = z.object({
     id: z.string(),
@@ -112,6 +112,6 @@ export class Note extends ComponentBase implements EditPathNode {
         }
         let this_json = this.saveAsJson()
         let that_json = other_note.saveAsJson()
-        return _.isEqual(this_json, that_json)
+        return isEqual(this_json, that_json)
     }
 }

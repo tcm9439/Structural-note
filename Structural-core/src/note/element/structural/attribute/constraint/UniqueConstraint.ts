@@ -2,7 +2,7 @@ import { Constraint, ConstraintJson, ConstraintType } from "./Constraint.js"
 import { OperationResult } from "@/common/OperationResult.js"
 import { InvalidJsonFormatException } from "@/exception/ConversionException.js"
 import { z } from "zod"
-import _ from "lodash"
+import { isObject, isFunction } from "lodash-es"
 
 export const UniqueConstraintJson = ConstraintJson.extend({
     type: z.literal("UniqueConstraint"),
@@ -20,7 +20,7 @@ export class UniqueConstraint extends Constraint {
     }
 
     static isEquals(value_a: any, value_b: any){
-        if (_.isObject(value_a) && "equals" in value_a && _.isFunction(value_a.equals)) {
+        if (isObject(value_a) && "equals" in value_a && isFunction(value_a.equals)) {
             return value_a.equals(value_b)
         }
         return value_a == value_b

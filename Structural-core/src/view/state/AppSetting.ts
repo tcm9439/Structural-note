@@ -1,6 +1,6 @@
 import { LanguageCode } from "@/common/CommonTypes.js"
-import { AppState } from "@/view/state/AppState"
-import _ from "lodash"
+import { AppState } from "@/view/state/AppState.js"
+import { cloneDeep } from "lodash-es"
 
 import { z } from "zod"
 
@@ -25,7 +25,7 @@ export class AppSetting {
     }
 
     public clone(): AppSetting {
-        return _.cloneDeep(this)
+        return cloneDeep(this)
     }
 
     public equals(other: AppSetting): boolean {

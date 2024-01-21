@@ -1,7 +1,7 @@
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
-import { BaseAttributeValueConverter } from "@/converter/BaseAttributeValueConverter"
-import { AttributeTypeEnum } from "@/note/element/structural/attribute/type/AttributeType"
+import { BaseAttributeValueConverter } from "@/converter/BaseAttributeValueConverter.js"
+import { AttributeTypeEnum } from "@/note/element/structural/attribute/type/AttributeType.js"
 
 export class AttributeValueTxtConverter extends BaseAttributeValueConverter {
     convert(attr_def: AttributeDefinition<any>, element: AttributeValue<any>): string {

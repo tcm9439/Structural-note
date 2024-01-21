@@ -2,7 +2,7 @@ import { Constraint, ConstraintJson, ConstraintType } from "./Constraint.js"
 import { OperationResult } from "@/common/OperationResult.js"
 import { InvalidJsonFormatException } from "@/exception/ConversionException.js"
 import { z } from "zod"
-import _ from "lodash"
+import {  } from "lodash-es"
 
 export const EnumConstraintJson = ConstraintJson.extend({
     type: z.literal("EnumConstraint"),

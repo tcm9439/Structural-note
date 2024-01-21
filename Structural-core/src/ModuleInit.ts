@@ -1,4 +1,4 @@
-import { TranslatableText } from "@/common/Translatable"
+import { TranslatableText } from "@/common/Translatable.js"
 import { AttributeTypeInitializer } from "@/note/element/structural/attribute/type/AttributeTypeInitializer.js"
 import { AppState, NuxtRuntimeConfig, AppRuntimeEnvironment } from "@/view/state/AppState.js"
 import { Consumer } from "@/common/CommonTypes.js"

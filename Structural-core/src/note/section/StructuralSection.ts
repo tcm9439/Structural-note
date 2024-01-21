@@ -7,7 +7,7 @@ import { StructuralElement } from "@/note/element/structural/StructuralElement.j
 import { StructureDefinition, StructureDefinitionJson } from "@/note/element/structural/StructureDefinition.js"
 import { NoteSection, NoteSectionJson } from "./NoteSection.js"
 
-import _ from "lodash"
+import { set } from "lodash-es"
 import { z } from "zod"
 
 export type getAllRelatedValuesFunc = (attr_id: UUID) => any[]
@@ -81,7 +81,7 @@ export class StructuralSection extends NoteSection {
     saveAsJson(): z.infer<typeof StructuralSectionJson> {
         let json_base = super.saveAsJson()
         json_base["type"] = "StructuralSection"
-        _.set(json_base, "definition", this._definition.saveAsJson())
+        set(json_base, "definition", this._definition.saveAsJson())
         return json_base as z.infer<typeof StructuralSectionJson>
     }
 

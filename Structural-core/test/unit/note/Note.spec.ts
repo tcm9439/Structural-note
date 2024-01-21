@@ -10,7 +10,8 @@ import { TextElement } from "@/note/element/TextElement.js"
 import { StructuralElement } from "@/note/element/structural/StructuralElement.js"
 import { AttributeValue } from "@/note/element/structural/attribute/value/AttributeValue.js"
 import fs from "fs"
-import { assertEqualExceptLambda } from "@test/util/TestUtil"
+import { assertEqualExceptLambda } from "@test/util/TestUtil.js"
+import { ModuleInit } from "@/index.js"
 
 describe('Note', () => {
     let note: Note 
@@ -131,6 +132,10 @@ describe("Save & load Note", () => {
 })
 
 describe("More loading Note test", () => {
+    beforeAll(() => {
+        ModuleInit.init()
+    })
+
     it("load from test1.structnote", () => {
         fs.readFile("./test/resources/test1.structnote", (err, data) => {
             if (err) throw err;

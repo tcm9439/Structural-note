@@ -25,6 +25,7 @@
     "devDependencies": {
         "@microsoft/api-extractor": "^7.36.3",
         "@types/lodash": "^4.14.197",
+        "@types/lodash-es": "^4.17.12",
         "@types/node": "^20.4.5",
         "@types/uuid": "^9.0.2",
         "@vitest/coverage-v8": "^0.34.1",
@@ -37,7 +38,7 @@
     },
     "dependencies": {
         "@tauri-apps/api": "^1.4.0",
-        "lodash": "^4.17.21",
+        "lodash-es": "^4.17.21",
         "tauri-fs-util": "file:/Users/maisytse/Documents/Workspace/ts-util/tauri-fs-util",
         "tauri-plugin-log-api": "github:tauri-apps/tauri-plugin-log#v1",
         "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#v1",

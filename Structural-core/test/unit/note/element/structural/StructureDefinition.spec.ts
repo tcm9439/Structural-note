@@ -5,8 +5,8 @@ import { ShortStringAttribute } from "@/note/element/structural/attribute/type/S
 import { BooleanAttribute } from "@/note/element/structural/attribute/type/BooleanAttribute.js"
 import { EditPath } from "@/note/util/EditPath.js"
 import { InvalidJsonFormatException, ModuleInit } from "@/index.js"
-import _ from "lodash"
-import { assertEqualExceptLambda } from "@test/util/TestUtil"
+import {  } from "lodash-es"
+import { assertEqualExceptLambda } from "@test/util/TestUtil.js"
 
 describe('StructureDefinition', () => {
 	let definition: StructureDefinition

@@ -11,9 +11,9 @@ import { ValidOperationResult } from "@/common/OperationResult.js"
 import { ConstraintType } from "@/note/element/structural/attribute/constraint/Constraint.js"
 import { InvalidJsonFormatException } from "@/exception/ConversionException.js"
 import { AppState, ModuleInit, UniqueConstraint } from "@/index.js"
-import { assertEqualExceptLambda } from "@test/util/TestUtil"
+import { assertEqualExceptLambda } from "@test/util/TestUtil.js"
 
-import _ from "lodash"
+import { set } from "lodash-es"
 
 describe('AttributeDefinition', () => {
 	let definition: AttributeDefinition<number>
@@ -107,7 +107,7 @@ describe('AttributeDefinition', () => {
 
     it("loadFromJson with null attribute type", () => {
         let json = definition.saveAsJson()
-        _.set(json, "attribute_type", null)
+        set(json, "attribute_type", null)
         expect(() => AttributeDefinition.loadFromJson(json, (id) => [])).toThrow(InvalidJsonFormatException)
     })
 

@@ -1,5 +1,5 @@
 import { ITranslationManager, TranslationParameter } from "./TranslationManager.js"
-import _ from "lodash"
+import { set, cloneDeep} from "lodash-es"
 
 export class TranslatableTextElement {
     private _translation_key: string
@@ -13,13 +13,13 @@ export class TranslatableTextElement {
     toDisplayText(tran: ITranslationManager, lang?: string){
         // map the param to displayText if it is a TranslatableText
         if (typeof this._tran_prams === "object"){
-            let new_tran_prams = _.cloneDeep(this._tran_prams)
+            let new_tran_prams = cloneDeep(this._tran_prams)
             // for each property
             for (const [key, value] of Object.entries(new_tran_prams)) {
                 // if the property is TranslatableText
                 if (value instanceof TranslatableText){
                     // replace the property with the displayText
-                    _.set(new_tran_prams, key, value.toDisplayText(tran, lang))
+                    set(new_tran_prams, key, value.toDisplayText(tran, lang))
                 }
             }
             return tran.translate(this._translation_key, lang, new_tran_prams)

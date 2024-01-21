@@ -4,8 +4,8 @@ import { EditPath } from "@/note/util/EditPath.js"
 import { AttributeDefinition } from "@/note/element/structural/attribute/AttributeDefinition.js"
 import { ShortStringAttribute } from "@/note/element/structural/attribute/type/StringAttribute.js"
 import { TextElement } from "@/note/element/TextElement.js"
-import { assertEqualExceptLambda } from "@test/util/TestUtil"
-import { AttributeValue, StructuralElement } from "@/index"
+import { assertEqualExceptLambda } from "@test/util/TestUtil.js"
+import { AttributeValue, StructuralElement } from "@/index.js"
 
 describe('StructuralSection', () => {
     let section : StructuralSection
