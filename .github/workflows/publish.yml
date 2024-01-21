@@ -21,9 +21,6 @@ jobs:
         platform: [macos-latest, windows-latest]
 
     runs-on: ${{ matrix.platform }}
-    defaults:
-      run:
-        working-directory: ./Structural-app
     steps:
       # Checkout the repository 
       - uses: actions/checkout@v4
@@ -39,12 +36,16 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: install frontend dependencies
-        run: npm install
+        run: |
+          cd ./Structural-app
+          npm install
+          cd ../
 
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          projectPath: './Structural-app'
           tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
           releaseName: 'Structural Note App v__VERSION__'
           releaseBody: 'See the assets to download this version and install.'
