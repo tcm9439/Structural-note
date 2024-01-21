@@ -1,6 +1,6 @@
 # Structural Note
 
-A desktop app for creating note with structural data. It is like having a small database inside a text file which you can define schema structure and edit corresping records. In between the structural records, you can insert note in plain text or markdown format. 
+A desktop app for creating note with structural data. It is like having a small database inside a text file which you can define schema structure and edit corresponding records. In between the structural records, you can insert note in plain text or markdown format. 
 
 ## Demo
 [Online Demo](https://tcm9439.github.io/structural-note-demo/test/template/) for note editing functions.

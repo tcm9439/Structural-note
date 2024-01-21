@@ -1,7 +1,7 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
-    "beforeBuildCommand": "npm run generate",
+    "beforeBuildCommand": "npm run tauri-generate",
     "beforeDevCommand": "npm run tauri-nuxt-dev",
     "devPath": "http://localhost:3000",
     "distDir": "../dist"
@@ -51,7 +51,7 @@
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
+      "category": "Productivity",
       "copyright": "",
       "deb": {
         "depends": []
@@ -65,7 +65,7 @@
         "icons/icon.ico"
       ],
       "identifier": "mt.structural",
-      "longDescription": "",
+      "longDescription": "A desktop app for creating note with structural data. It is like having a small database inside a text file which you can define schema structure and edit corresponding records.",
       "macOS": {
         "entitlements": null,
         "exceptionDomain": "",
@@ -74,8 +74,8 @@
         "signingIdentity": null
       },
       "resources": [],
-      "shortDescription": "",
-      "targets": "all",
+      "shortDescription": "A desktop app for creating note with structural data.",
+      "targets": ["nsis", "dmg"],
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
