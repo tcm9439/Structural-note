@@ -1,4 +1,4 @@
-import { TranslatableText, Note } from "structural-core"
+import { TranslatableText, Note } from "@structural-note/structural-core"
 import tutorial_template from "@/assets/template/tutorial.structnote?raw"
 // import testImgUrl from './assets/template/tutorial.png'
 

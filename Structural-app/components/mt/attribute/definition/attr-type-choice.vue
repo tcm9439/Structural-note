@@ -2,7 +2,7 @@
 /**
  * A component that represent an attribute type and can be selected.
  */
-import { AttributeType, AttributeTypeEnum } from "structural-core"
+import { AttributeType, AttributeTypeEnum } from "@structural-note/structural-core"
 import { tran } from "~/composables/app/translate"
 
 const props = defineProps({

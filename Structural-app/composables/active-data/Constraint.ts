@@ -1,4 +1,4 @@
-import { ConstraintType, EditPath, AttributeDefinition, ArrayUtil, Constraint } from "structural-core"
+import { ConstraintType, EditPath, AttributeDefinition, ArrayUtil, Constraint } from "@structural-note/structural-core"
 import MtAttributeConstraintMin from "@/components/mt/attribute/constraint/min.vue"
 import MtAttributeConstraintMax from "@/components/mt/attribute/constraint/max.vue"
 import MtAttributeConstraintEnum from "@/components/mt/attribute/constraint/enum.vue"

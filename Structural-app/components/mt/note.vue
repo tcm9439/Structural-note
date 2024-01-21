@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, Note, InjectConstant, type ComponentVForElement, EventConstant, SectionTypeMapper, SectionType, RemoveComponentsCommand, AddComponentsCommand, ConverterType } from "structural-core"
+import { EditPath, Note, InjectConstant, type ComponentVForElement, EventConstant, SectionTypeMapper, SectionType, RemoveComponentsCommand, AddComponentsCommand, ConverterType } from "@structural-note/structural-core"
 import { elementListGetter } from "@/composables/active-data/Element"
 import { sectionComponentMapper } from "@/composables/active-data/Section"
 import { getAvailableSection } from "@/composables/active-data/Note"

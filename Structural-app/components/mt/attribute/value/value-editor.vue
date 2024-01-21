@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AttributeTypeEnum, AttributeDefinition, ConstraintType, EnumConstraint } from "structural-core"
+import { AttributeTypeEnum, AttributeDefinition, ConstraintType, EnumConstraint } from "@structural-note/structural-core"
 
 const props = defineProps<{
     value: any,

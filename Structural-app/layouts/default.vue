@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EventConstant, AppPage, AppState } from "structural-core"
+import { EventConstant, AppPage, AppState } from "@structural-note/structural-core"
 const { $emitter } = useNuxtApp()
 
 const layout_type = ref("note")

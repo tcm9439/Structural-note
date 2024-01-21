@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MarkdownElement, EditPath, InjectConstant, Note } from "structural-core"
+import { MarkdownElement, EditPath, InjectConstant, Note } from "@structural-note/structural-core"
 import { activeDataGetter } from '@/composables/active-data/ActiveDataGetter'
 
 const props = defineProps<{

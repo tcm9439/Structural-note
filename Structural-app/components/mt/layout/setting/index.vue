@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AppState, EventConstant, AppPage, AppPageUtil } from "structural-core"
+import { AppState, EventConstant, AppPage, AppPageUtil } from "@structural-note/structural-core"
 import { tran } from "@/composables/app/translate"
 const { $emitter, $Modal, $viewState, $Message } = useNuxtApp()
 

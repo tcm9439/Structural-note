@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { NoteFileHandler } from "@/composables/handler/NoteFileHandler"
 import { tran } from "@/composables/app/translate"
-import { AppState } from "structural-core"
+import { AppState } from "@structural-note/structural-core"
 import { exceptionHandler } from "@/composables/app/exception"
 
 // # open note button

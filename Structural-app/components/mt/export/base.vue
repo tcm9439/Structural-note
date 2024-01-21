@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ConverterType } from "structural-core"
+import { ConverterType } from "@structural-note/structural-core"
 import { tran } from "~/composables/app/translate"
 import { NoteExportHandler } from "~/composables/handler/NoteExportHandler"
 

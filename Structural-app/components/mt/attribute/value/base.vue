@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, Note, AttributeValue, InjectConstant, EventConstant } from "structural-core"
+import { EditPath, Note, AttributeValue, InjectConstant, EventConstant } from "@structural-note/structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 const { $emitter } = useNuxtApp()
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, StructureDefinition, StructuralElement, StructEditQueue, EventConstant, StructDefEditEventElementHandler, InjectConstant, Note } from "structural-core"
+import { EditPath, StructureDefinition, StructuralElement, StructEditQueue, EventConstant, StructDefEditEventElementHandler, InjectConstant, Note } from "@structural-note/structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 import { elementListGetter } from "@/composables/active-data/Element"
 import { attrValueComponentMapper } from "@/composables/active-data/AttrValue"

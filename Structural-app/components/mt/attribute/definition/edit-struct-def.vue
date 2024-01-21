@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, Note, StructureDefinition, EventConstant, StructDefEditContext, StructDefEditState, StructDefEditEvent, InjectConstant, AttributeDefinition, StructuralSection } from "structural-core"
+import { EditPath, Note, StructureDefinition, EventConstant, StructDefEditContext, StructDefEditState, StructDefEditEvent, InjectConstant, AttributeDefinition, StructuralSection } from "@structural-note/structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 import { Icon } from "view-ui-plus"
 import { tran } from "~/composables/app/translate"

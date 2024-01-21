@@ -1,4 +1,4 @@
-import { type IViewUITableColumn, AppState } from "structural-core"
+import { type IViewUITableColumn, AppState } from "@structural-note/structural-core"
 
 /**
  * Translate the column title

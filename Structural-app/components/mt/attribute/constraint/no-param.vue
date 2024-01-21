@@ -2,7 +2,7 @@
     Constrain that has no parameters, just a checkbox to enable/disable it.
  -->
 <script setup lang="ts">
-import { EditPath, Constraint, AttributeDefinition } from "structural-core"
+import { EditPath, Constraint, AttributeDefinition } from "@structural-note/structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 
 const props = defineProps<{

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { $emitter } = useNuxtApp()
-import { AppState, EventConstant } from "structural-core"
+import { AppState, EventConstant } from "@structural-note/structural-core"
 import { ShortcutHandler } from "~/composables/handler/ShortcutHandler"
 import { WindowUtil } from "~/composables/app/window"
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElementType } from "structural-core"
+import { ElementType } from "@structural-note/structural-core"
 import { Icon } from "view-ui-plus"
 
 const props = defineProps<{

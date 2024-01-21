@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, ShortStringAttribute, StructuralElement, MarkdownElement, MarkdownAttribute, AppPage, EventConstant, RequireConstraint, UniqueConstraint, EnumAttribute, ConstraintType, EnumConstraint } from "structural-core"
+import { Note, NoteSection, StructuralSection, TextElement, AttributeDefinition, AttributeValue, ShortStringAttribute, StructuralElement, MarkdownElement, MarkdownAttribute, AppPage, EventConstant, RequireConstraint, UniqueConstraint, EnumAttribute, ConstraintType, EnumConstraint } from "@structural-note/structural-core"
 
 const { $viewState, $emitter } = useNuxtApp()
 $viewState.last_page = AppPage.TEST

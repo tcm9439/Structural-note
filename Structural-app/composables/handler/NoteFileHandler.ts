@@ -1,4 +1,4 @@
-import { Note, EventConstant, AppState, FileAlreadyOpened } from "structural-core"
+import { Note, EventConstant, AppState, FileAlreadyOpened } from "@structural-note/structural-core"
 import { TauriFileSystem } from "@maisyt/tauri-fs-util"
 import { tran } from "@/composables/app/translate"
 import { WindowUtil } from "@/composables/app/window"

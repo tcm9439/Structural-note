@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, AttributeDefinition, EnumConstraint } from "structural-core"
+import { EditPath, AttributeDefinition, EnumConstraint } from "@structural-note/structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 
 const props = defineProps<{

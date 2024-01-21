@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { StructureDefinition, StructuralDefinitionHelper } from "structural-core"
+import { StructureDefinition, StructuralDefinitionHelper } from "@structural-note/structural-core"
 import { Icon } from "view-ui-plus"
 import { TableColumnParser } from "@/composables/active-data/TableColParser"
 import { tran } from "~/composables/app/translate"

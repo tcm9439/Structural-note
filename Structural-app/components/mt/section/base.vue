@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NoteSection, EditPath, Note, NoteElement, InjectConstant, type ComponentVForElement, TextElement, ElementType, EventConstant, MarkdownElement, RemoveComponentsCommand, AddComponentsCommand } from "structural-core"
+import { NoteSection, EditPath, Note, NoteElement, InjectConstant, type ComponentVForElement, TextElement, ElementType, EventConstant, MarkdownElement, RemoveComponentsCommand, AddComponentsCommand } from "@structural-note/structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 import { elementListGetter, availableElementComponentGetter, elementComponentMapper, type AvailableElementComponent } from "@/composables/active-data/Element"
 import { Icon } from "view-ui-plus"

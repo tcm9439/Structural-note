@@ -1,4 +1,4 @@
-import { SectionType } from "structural-core"
+import { SectionType } from "@structural-note/structural-core"
 import { tran } from "~/composables/app/translate"
 
 export type AvailableSection = {

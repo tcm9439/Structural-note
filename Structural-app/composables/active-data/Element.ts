@@ -1,4 +1,4 @@
-import { type ComponentVForElement, EditPath, type EditPathNode, EndOfEditPathError, Note, ElementType, NoteSection, StructuralElement, TextElement, MarkdownElement, StructuralSection, AppState } from "structural-core"
+import { type ComponentVForElement, EditPath, type EditPathNode, EndOfEditPathError, Note, ElementType, NoteSection, StructuralElement, TextElement, MarkdownElement, StructuralSection, AppState } from "@structural-note/structural-core"
 import MtElementText from "@/components/mt/element/text.vue"
 import MtElementMarkdown from "@/components/mt/element/markdown.vue"
 import MtElementStructural from "@/components/mt/element/structural.vue"

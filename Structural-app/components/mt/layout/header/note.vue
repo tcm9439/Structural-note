@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AppState, EventConstant, AppPage, AppPageUtil, ConverterType } from "structural-core"
+import { AppState, EventConstant, AppPage, AppPageUtil, ConverterType } from "@structural-note/structural-core"
 // import { Icon } from "view-ui-plus"
 import { NoteFileHandler, EditHistoryHandler } from "@/composables/handler/NoteFileHandler"
 import { NoteExportHandler } from "@/composables/handler/NoteExportHandler"

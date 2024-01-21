@@ -1,4 +1,4 @@
-import { AppRuntimeEnvironment, AppState, ShortcutKeyPressEvent } from "structural-core"
+import { AppRuntimeEnvironment, AppState, ShortcutKeyPressEvent } from "@structural-note/structural-core"
 import { EditHistoryHandler, NoteFileHandler } from "./NoteFileHandler"
 import { appWindow } from "@tauri-apps/api/window"
 import { listen } from '@tauri-apps/api/event'

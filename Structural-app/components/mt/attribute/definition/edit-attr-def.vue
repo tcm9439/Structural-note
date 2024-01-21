@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, AttributeDefinition, AttrTypeHelper, AttributeType, ConstraintTypeToClassMap, ValidOperationResult, AppState } from "structural-core"
+import { EditPath, AttributeDefinition, AttrTypeHelper, AttributeType, ConstraintTypeToClassMap, ValidOperationResult, AppState } from "@structural-note/structural-core"
 import { getAttrConstraintEditComponents, type AttrConstraintEditComponent, getGroupedAttrConstraint } from "@/composables/active-data/Constraint"
 import { tran } from "~/composables/app/translate"
 

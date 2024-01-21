@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AppState } from "structural-core"
+import { AppState } from "@structural-note/structural-core"
 import { tran } from '~/composables/app/translate'
 import { NoteFileHandler } from '~/composables/handler/NoteFileHandler'
 

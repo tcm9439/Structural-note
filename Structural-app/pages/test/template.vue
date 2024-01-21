@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Note, AppPage, EventConstant } from "structural-core"
+import { Note, AppPage, EventConstant } from "@structural-note/structural-core"
 import { tran } from "~/composables/app/translate"
 import { NoteFileHandler } from "~/composables/handler/NoteFileHandler"
 import { NOTE_TEMPLATES } from "@/composables/assets-helper/template-helper"

@@ -1,5 +1,4 @@
-import { MainViewState, ModuleInit } from "structural-core"
-import { ShortcutKeyPressEvent } from "structural-core"
+import { MainViewState, ModuleInit, ShortcutKeyPressEvent } from "@structural-note/structural-core"
 import { emit } from '@tauri-apps/api/event'
 
 declare module "#app" {

@@ -5,7 +5,7 @@ import EN_US from 'view-ui-plus/dist/locale/en-US'
 import ZH_TW from 'view-ui-plus/dist/locale/zh-TW'
 
 import { Modal, Message } from "view-ui-plus"
-import { AppState } from "structural-core"
+import { AppState } from "@structural-note/structural-core"
 
 declare module "#app" {
     interface NuxtApp {

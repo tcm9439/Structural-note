@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Note, AppPage, EventConstant } from "structural-core"
+import { Note, AppPage, EventConstant } from "@structural-note/structural-core"
 const { $viewState, $emitter } = useNuxtApp()
 $viewState.last_page = AppPage.TEST_EMPTY
 $emitter.emit(EventConstant.LAYOUT_UPDATE, AppPage.TEST_EMPTY)

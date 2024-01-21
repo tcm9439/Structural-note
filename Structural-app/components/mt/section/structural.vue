@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, StructuralSection, Note, InjectConstant, ElementType, StructuralElement, AppState } from "structural-core"
+import { EditPath, StructuralSection, Note, InjectConstant, ElementType, StructuralElement, AppState } from "@structural-note/structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 import { type AvailableSection } from "@/composables/active-data/Note"
 import { Icon } from "view-ui-plus"

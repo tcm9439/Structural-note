@@ -1,6 +1,6 @@
 import { WebviewWindow } from "@tauri-apps/api/window"
 import { appWindow } from "@tauri-apps/api/window"
-import { AppState, AppRuntimeEnvironment } from "structural-core"
+import { AppState, AppRuntimeEnvironment } from "@structural-note/structural-core"
 import { v4 as uuidv4 } from "uuid"
 
 export class WindowUtil {

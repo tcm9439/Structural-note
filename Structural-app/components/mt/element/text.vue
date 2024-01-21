@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TextElement, EditPath, InjectConstant, Note } from "structural-core"
+import { TextElement, EditPath, InjectConstant, Note } from "@structural-note/structural-core"
 import { activeDataGetter } from '@/composables/active-data/ActiveDataGetter'
 
 const props = defineProps<{

@@ -1,4 +1,4 @@
-import { AppException, AppState, EventConstant } from "structural-core"
+import { AppException, AppState, EventConstant } from "@structural-note/structural-core"
 import { tran } from "~/composables/app/translate"
 
 export function exceptionHandler(error: any, fallback_title_key?: string) {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditPath, MinConstraint, AttributeDefinition } from "structural-core"
+import { EditPath, MinConstraint, AttributeDefinition } from "@structural-note/structural-core"
 import { activeDataGetter } from "@/composables/active-data/ActiveDataGetter"
 import { tran } from "~/composables/app/translate"
 
