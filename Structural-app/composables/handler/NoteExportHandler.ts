@@ -1,5 +1,5 @@
 import { ConverterType, AppState, UnimplementedException, NoteMarkdownConverter, Converter, Note, NoteTxtConverter } from "structural-core"
-import { TauriFileSystem } from "tauri-fs-util"
+import { TauriFileSystem } from "@maisyt/tauri-fs-util"
 import { save } from "@tauri-apps/api/dialog"
 import { tran } from "~/composables/app/translate"
 

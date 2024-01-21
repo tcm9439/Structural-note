@@ -1,5 +1,5 @@
 import { Note, EventConstant, AppState, FileAlreadyOpened } from "structural-core"
-import { TauriFileSystem } from "tauri-fs-util"
+import { TauriFileSystem } from "@maisyt/tauri-fs-util"
 import { tran } from "@/composables/app/translate"
 import { WindowUtil } from "@/composables/app/window"
 import { NOTE_TEMPLATES } from "@/composables/assets-helper/template-helper"
