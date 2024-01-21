@@ -1,6 +1,6 @@
 {
     "name": "@structural-note/structural-core",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "files": [
         "lib/**/*"
     ],
@@ -36,7 +36,7 @@
     "dependencies": {
         "@tauri-apps/api": "^1.4.0",
         "lodash-es": "^4.17.21",
-        "tauri-fs-util": "file:/Users/maisytse/Documents/Workspace/ts-util/tauri-fs-util",
+        "@maisyt/tauri-fs-util": "^0.1.0",
         "tauri-plugin-log-api": "github:tauri-apps/tauri-plugin-log#v1",
         "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#v1",
         "typesafe-i18n": "^5.26.2",
