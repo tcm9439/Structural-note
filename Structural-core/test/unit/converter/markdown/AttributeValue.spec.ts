@@ -36,7 +36,7 @@ describe("AttributeValueMarkdownConverter", () => {
 
         attr_def = new AttributeDefinition("test", new MarkdownAttribute())
         value = new AttributeValue(attr_def, "# title\ncontent\n## code section\n`code`")
-        expect(converter.convert(attr_def, value)).toBe("**test**: \n#### title\ncontent\n##### code section\n`code`")
+        expect(converter.convert(attr_def, value)).toBe("**test**: \n#### title\ncontent\n##### code section\n`code`\n")
 
         attr_def = new AttributeDefinition("test", new EnumAttribute())
         let constraint = attr_def.getConstraint(ConstraintType.ENUM) as EnumConstraint

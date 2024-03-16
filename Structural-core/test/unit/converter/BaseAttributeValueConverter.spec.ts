@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeAll } from "vitest"
 import { BaseAttributeValueConverter } from "@/converter/BaseAttributeValueConverter.js"
 import { AttributeValue, ModuleInit, AttributeDefinition, BooleanAttribute, IntegerAttribute, DecimalAttribute, MarkdownAttribute, ConstraintType, EnumConstraint, EnumAttribute } from '@/index.js'
+
 describe("BaseAttributeValueConverter", () => {
     beforeAll(async () => {
         await ModuleInit.init()
@@ -30,7 +31,7 @@ describe("BaseAttributeValueConverter", () => {
 	it("fromMarkdown", () => {
         let attr_def = new AttributeDefinition("test", new MarkdownAttribute())
         let value = new AttributeValue(attr_def, "# title\ncontent\n## code section\n`code`")
-        expect(BaseAttributeValueConverter.fromMarkdown(attr_def, value)).toBe("\n#### title\ncontent\n##### code section\n`code`")
+        expect(BaseAttributeValueConverter.fromMarkdown(attr_def, value)).toBe("\n#### title\ncontent\n##### code section\n`code`\n")
 	})
 
     it("fromEnum", () => {

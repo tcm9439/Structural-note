@@ -45,6 +45,12 @@ export class StringBuilder {
 }
 
 export class ConverterHelper {
+    /**
+     * Indent markdown header by adding #*level before each header
+     * @param content markdown content
+     * @param level number of # to add before the header
+     * @returns markdown content with #*level added before each header
+     */
     static indentMarkdownHeader(content: string, level: number){
         // if there is a line start with #, add #*level before it
         let lines = content.split("\n")
@@ -55,8 +61,8 @@ export class ConverterHelper {
             }
             result += line + "\n"
         }
-        // remove the last \n
-        return result.slice(0, -1)
+        // keep the last \n
+        return result
     }
 
     static markdown_replacements: [RegExp, string][] = [

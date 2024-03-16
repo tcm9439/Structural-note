@@ -25,7 +25,8 @@ Content 2
 ### Element
 
 #### test
-ABC`
+ABC
+`
 
 const section2_converter_expected_result = `## Section 2
 
@@ -37,6 +38,7 @@ const section2_converter_expected_result = `## Section 2
 
 ##### test 2
 ABC
+
 <hr/>
 
 Content 5
