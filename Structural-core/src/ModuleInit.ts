@@ -36,6 +36,8 @@ export class ModuleInit {
         }
     }
 
+    // This key binding is GLOBAL!!
+    // so even the app is not focused, it still trigger the callback
     private static initKeybinding(shortcut_list: {key: string, callback: Consumer}[]){
         AppState.logger.debug("Initializing keybinding...")
         if (AppState.environment === AppRuntimeEnvironment.TARUI){
