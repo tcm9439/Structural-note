@@ -48,7 +48,7 @@ const tooltip_content = tran("common.tag_editor_tooltip")
 
 <template>
     <div class="mt-tag-value-editor" ref="tag_editor">
-        <Tooltip placement="top" :content="tooltip_content" style="margin-right: 2px;">
+        <Tooltip placement="top" :content="tooltip_content" style="margin-right: 2px;" max-width="250">
             <Icon type="md-information-circle" />
         </Tooltip>
         <div :class="value_container_class" @click="focusToInput">

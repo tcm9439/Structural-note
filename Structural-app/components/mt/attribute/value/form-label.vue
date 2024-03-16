@@ -12,7 +12,10 @@ const empty_description = computed(() => {
 </script>
 
 <template>
-    <Tooltip :disabled="empty_description" placement="top" :content="props.description" :delay="500">
+    <Tooltip 
+        :disabled="empty_description" placement="top" 
+        max-width="250"
+        :content="props.description" :delay="500">
         <span v-if="props.required" class="mt-form-item-required">* </span>
         <span class="form-item-label">{{ props.label }}</span>
     </Tooltip>

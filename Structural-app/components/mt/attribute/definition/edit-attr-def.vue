@@ -169,6 +169,7 @@ const default_value = computed({
                         :error="default_value_validate_result.invalid_message" >
                         <mt-attribute-value-editor 
                             :type="current_attr_type?.type ?? ''" 
+                            :attr_def="attr_def"
                             v-model:value="default_value" />
                     </FormItem>
 
