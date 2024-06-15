@@ -66,5 +66,8 @@ export * from "./view/vue-helper/StructuralDefinitionHelper.js"
 export * from "./view/GlobalConstant.js"
 
 export * from "./converter/Converter.js"
+export * from "./converter/ConverterFactory.js"
+export * from "./converter/ConverterType.js"
 export * from "./converter/markdown/Note.js"
 export * from "./converter/txt/Note.js"
+export * from "./converter/csv/Note.js"

@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@maisyt/tauri-fs-util": "^0.1.0",
-    "@structural-note/structural-core": "file:../Structural-core",
+    "@structural-note/structural-core": "^0.1.0",
     "md-editor-v3": "^4.8.1",
     "tiny-emitter": "^2.1.0",
     "uuid": "^9.0.1",

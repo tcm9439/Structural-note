@@ -11,6 +11,8 @@ const zh_HK = {
             file_export_submenu: "匯出",
             file_export_md: "匯出成 Markdown",
             file_export_txt: "匯出成純文字",
+            file_export_csv: "匯出成 CSV",
+            file_export_excel: "匯出成 Excel",
             setting_menu: "設定",
             edit_menu: "編輯",
             edit_undo: "復原",
@@ -30,6 +32,7 @@ const zh_HK = {
             saving: "儲存中...",
             export: {
                 export: "匯出",
+                no_preview: "此檔案無法預覽",
                 preview_title: "預覽匯出檔案：",
             }
         },

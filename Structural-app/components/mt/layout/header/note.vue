@@ -75,12 +75,22 @@ async function menuSelectHandler(menu_item: string){
                 break
             case "export-md":
                 if (has_open_note.value){
-                    await NoteExportHandler.emitShowConvertPreviewEvent(ConverterType.MARKDOWN)
+                    NoteExportHandler.emitShowConvertPreviewEvent(ConverterType.MARKDOWN)
                 }
                 break
             case "export-txt":
                 if (has_open_note.value){
-                    await NoteExportHandler.emitShowConvertPreviewEvent(ConverterType.TEXT)
+                    NoteExportHandler.emitShowConvertPreviewEvent(ConverterType.TEXT)
+                }
+                break
+            case "export-csv":
+                if (has_open_note.value){
+                    NoteExportHandler.emitShowConvertPreviewEvent(ConverterType.CSV)
+                }
+                break
+            case "export-excel":
+                if (has_open_note.value){
+                    NoteExportHandler.emitShowConvertPreviewEvent(ConverterType.EXCEL)
                 }
                 break
             case "setting":
@@ -156,6 +166,12 @@ onBeforeUnmount(() => {
                             </MenuItem>
                             <MenuItem name="export-txt">
                                 {{ tran("structural.header.file_export_txt") }}
+                            </MenuItem>
+                            <MenuItem name="export-csv">
+                                {{ tran("structural.header.file_export_csv") }}
+                            </MenuItem>
+                            <MenuItem name="export-excel">
+                                {{ tran("structural.header.file_export_excel") }}
                             </MenuItem>
                         </MenuGroup>
                     </Submenu>

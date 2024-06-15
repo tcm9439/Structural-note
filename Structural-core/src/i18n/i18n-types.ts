@@ -49,6 +49,14 @@ type RootTranslation = {
 			 */
 			file_export_txt: string
 			/**
+			 * E​x​p​o​r​t​ ​t​o​ ​C​S​V
+			 */
+			file_export_csv: string
+			/**
+			 * E​x​p​o​r​t​ ​t​o​ ​E​x​c​e​l
+			 */
+			file_export_excel: string
+			/**
 			 * S​e​t​t​i​n​g
 			 */
 			setting_menu: string
@@ -115,6 +123,10 @@ type RootTranslation = {
 				 * E​x​p​o​r​t
 				 */
 				'export': string
+				/**
+				 * N​o​ ​p​r​e​v​i​e​w​ ​a​v​a​i​l​a​b​l​e
+				 */
+				no_preview: string
 				/**
 				 * P​r​e​v​i​e​w​ ​e​x​p​o​r​t​ ​f​i​l​e​:
 				 */
@@ -753,6 +765,14 @@ export type TranslationFunctions = {
 			 */
 			file_export_txt: () => LocalizedString
 			/**
+			 * Export to CSV
+			 */
+			file_export_csv: () => LocalizedString
+			/**
+			 * Export to Excel
+			 */
+			file_export_excel: () => LocalizedString
+			/**
 			 * Setting
 			 */
 			setting_menu: () => LocalizedString
@@ -819,6 +839,10 @@ export type TranslationFunctions = {
 				 * Export
 				 */
 				'export': () => LocalizedString
+				/**
+				 * No preview available
+				 */
+				no_preview: () => LocalizedString
 				/**
 				 * Preview export file:
 				 */

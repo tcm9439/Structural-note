@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ConverterType } from "@structural-note/structural-core"
+import { ConverterType, ConverterFactory } from "@structural-note/structural-core"
 import { tran } from "~/composables/app/translate"
 import { NoteExportHandler } from "~/composables/handler/NoteExportHandler"
 
@@ -13,12 +13,12 @@ const emit = defineEmits<{
     (event: 'complete'): void
 }>()
 
-const converter_type = NoteExportHandler.getConverter(props.type)
-const converted_content = ref(converter_type.converter.convert($viewState.editing_note!))
+const converter_type = ConverterFactory.getConverter(props.type)
+const converted_content = ref(converter_type.convert($viewState.editing_note!))
 const loading = ref(false)
 function save(){
     loading.value = true
-    NoteExportHandler.exportToFile(converted_content.value, converter_type.file_extension, 
+    NoteExportHandler.exportToFile(props.type, converted_content.value, 
         () => {
             loading.value = false
         },
@@ -53,6 +53,12 @@ function cancel(){
                 v-model:value="converted_content" 
                 full_width
             />
+        </template>
+        <template v-if="props.type === ConverterType.CSV">
+            <div>{{ tran("structural.file.export.no_preview") }}</div>
+        </template>
+        <template v-if="props.type === ConverterType.EXCEL">
+            <div>{{ tran("structural.file.export.no_preview") }}</div>
         </template>
         <Spin size="large" fix :show="loading"></Spin>
     </div>

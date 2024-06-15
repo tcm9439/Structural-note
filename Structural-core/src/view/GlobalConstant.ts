@@ -20,12 +20,6 @@ export class EventConstant {
     public static readonly ERROR_MODAL_CLOSED = "ERROR_MODAL_CLOSED_EVENT"
 }
 
-export class ShortcutKeyPressEvent {
-    public static readonly SAVE = "SAVE_SHORTCUT_PRESS_EVENT"
-    public static readonly UNDO = "UNDO_SHORTCUT_PRESS_EVENT"
-    public static readonly REDO = "REDO_SHORTCUT_PRESS_EVENT"
-}
-
 export class InjectConstant {
     public static readonly EDITING_NOTE = "EDITING_NOTE"
 }

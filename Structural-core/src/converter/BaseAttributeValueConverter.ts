@@ -27,7 +27,7 @@ export class BaseAttributeValueConverter {
         return converter_map
     }
 
-    protected static convert(attr_def: AttributeDefinition<any>, element: AttributeValue<any>, 
+    public static convert(attr_def: AttributeDefinition<any>, element: AttributeValue<any>, 
             converter?: Map<string, AttributeValueConverter> | null, 
             attr_key_value_formatter?: AttrKeyValueFormatter | null): string {
 

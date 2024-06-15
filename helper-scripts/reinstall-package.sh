@@ -42,9 +42,3 @@ echo "Installing..."
 echo ======================
 npm install $PACKAGE_PATH 
 npm install --install-links
-
-echo
-echo ======================
-echo "Checking..."
-echo ======================
-ls -lah ./node_modules/ | grep $PACKAGE_NAME

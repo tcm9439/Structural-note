@@ -1,9 +1,9 @@
 ## KNOWN BUG
 
 ## Pending Features
+[ ] Drag & drop list for editing the attr order
 [ ] reload iviewui lang when lang setting changed
 [ ] Decimal to int
-[ ] Export to csv
 [ ] value.vue
     [ ] date
     [ ] time
@@ -15,4 +15,4 @@
 ## Features that I want to have but it more difficult 
 [ ] search function
 [ ] multi attr constrain
-    [ ] UNIQUE (e.g. attrA join attrB is UNIQUE among the section)    
+    [ ] UNIQUE (e.g. attrA join attrB is UNIQUE among the section)

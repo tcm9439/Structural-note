@@ -34,6 +34,7 @@
     "dependencies": {
         "@maisyt/tauri-fs-util": "^0.1.0",
         "@tauri-apps/api": "^1.4.0",
+        "exceljs": "^4.4.0",
         "lodash-es": "^4.17.21",
         "tauri-plugin-log-api": "github:tauri-apps/tauri-plugin-log#v1",
         "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#v1",
